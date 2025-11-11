@@ -11,10 +11,6 @@ Formula 1 tracking application for Android.
 - F1 news from ESPN
 - Auto-scrolling stats cards
 
-## Screenshots
-
-
-
 ## Data Sources
 
 - [Ergast F1 API](http://ergast.com/mrd/) - Race data, schedules, standings
