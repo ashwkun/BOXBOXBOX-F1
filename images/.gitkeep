@@ -1,0 +1,3 @@
+# This file ensures the images directory is tracked by git
+# Actual image files can be added here when migrating from external URLs
+

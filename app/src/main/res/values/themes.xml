@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.F1Tracker" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Status bar color (top) -->
+        <item name="android:statusBarColor">@color/f1_red</item>
+        <item name="android:windowLightStatusBar">false</item>
+        
+        <!-- Navigation bar color (bottom) -->
+        <item name="android:navigationBarColor">@color/f1_red</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        
+        <!-- Edge to edge -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+</resources>
+
