@@ -13,7 +13,7 @@ Formula 1 tracking application for Android.
 
 ## Screenshots
 
-![Home Screen](screenshots/home.png)
+
 
 ## Data Sources
 
