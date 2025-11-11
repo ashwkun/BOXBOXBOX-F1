@@ -85,8 +85,17 @@ dependencies {
     // Gson for JSON parsing
     implementation("com.google.code.gson:gson:2.10.1")
     
+    // XML parsing for RSS feeds
+    implementation("com.squareup.retrofit2:converter-simplexml:2.9.0")
+    implementation("org.simpleframework:simple-xml:2.7.1")
+    
     // Coil for image loading
     implementation("io.coil-kt:coil-compose:2.5.0")
+    
+    // ExoPlayer for audio playback
+    implementation("androidx.media3:media3-exoplayer:1.2.0")
+    implementation("androidx.media3:media3-ui:1.2.0")
+    implementation("androidx.media3:media3-session:1.2.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")

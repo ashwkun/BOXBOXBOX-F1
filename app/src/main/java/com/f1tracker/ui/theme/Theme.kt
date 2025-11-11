@@ -93,10 +93,14 @@ fun F1TrackerTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            // Set status bar (top) to F1 red
-            window.statusBarColor = colorScheme.primary.toArgb()
-            // Set navigation bar (bottom) to F1 red
-            window.navigationBarColor = colorScheme.primary.toArgb()
+            // Only set colors if they're not already black (from video player)
+            // This prevents overriding when returning from video player
+            if (window.statusBarColor != android.graphics.Color.BLACK) {
+                // Set status bar (top) to F1 red
+                window.statusBarColor = colorScheme.primary.toArgb()
+                // Set navigation bar (bottom) to F1 red
+                window.navigationBarColor = colorScheme.primary.toArgb()
+            }
             // Use light icons on dark red background
             WindowCompat.getInsetsController(window, view).apply {
                 isAppearanceLightStatusBars = false

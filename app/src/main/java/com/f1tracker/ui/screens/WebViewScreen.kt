@@ -25,15 +25,9 @@ import com.f1tracker.ui.components.AnimatedHeader
 
 @Composable
 fun WebViewScreen(
-    url: String,
-    onBackClick: () -> Unit
+    url: String
 ) {
     var isLoading by remember { mutableStateOf(true) }
-    
-    // Handle system back button
-    BackHandler {
-        onBackClick()
-    }
     
     Box(
         modifier = Modifier
@@ -43,27 +37,8 @@ fun WebViewScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // App header with back button
-            Box(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Animated header
-                AnimatedHeader()
-                
-                // Back button overlay
-                IconButton(
-                    onClick = onBackClick,
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = Color.White
-                    )
-                }
-            }
+            // App header
+            AnimatedHeader()
             
             // WebView content
             AndroidView(

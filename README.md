@@ -41,9 +41,9 @@ Formula 1 tracking application for Android.
 Download the latest APK from [Releases](https://github.com/ashwkun/BOXBOXBOX-F1/releases)
 
 ### Build from Source
-```bash
+   ```bash
 git clone https://github.com/ashwkun/BOXBOXBOX-F1.git
-cd "BOXBOXBOX APP"
+   cd "BOXBOXBOX APP"
 ./gradlew assembleDebug
 ```
 

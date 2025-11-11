@@ -17,6 +17,10 @@ import java.time.format.DateTimeFormatter
 
 class HomeViewModel : ViewModel() {
     
+    init {
+        Log.d("HomeViewModel", "HomeViewModel initialized")
+    }
+    
     private val _raceWeekendState = MutableStateFlow<RaceWeekendState>(RaceWeekendState.Loading)
     val raceWeekendState: StateFlow<RaceWeekendState> = _raceWeekendState.asStateFlow()
     
@@ -35,9 +39,17 @@ class HomeViewModel : ViewModel() {
     private val _allRaces = MutableStateFlow<List<Race>>(emptyList())
     val allRaces: StateFlow<List<Race>> = _allRaces.asStateFlow()
     
+    private val _youtubeVideos = MutableStateFlow<List<F1Video>>(emptyList())
+    val youtubeVideos: StateFlow<List<F1Video>> = _youtubeVideos.asStateFlow()
+    
+    private val _podcasts = MutableStateFlow<List<Podcast>>(emptyList())
+    val podcasts: StateFlow<List<Podcast>> = _podcasts.asStateFlow()
+    
     private val f1ApiService = RetrofitClient.f1ApiService
     private val weatherApiService = RetrofitClient.weatherApiService
     private val espnNewsApiService = RetrofitClient.espnNewsApiService
+    private val youtubeRssApiService = RetrofitClient.youtubeRssApiService
+    private val podcastApiService = RetrofitClient.podcastApiService
     private var allRacesCache: List<Race> = emptyList()
     
     // Add flag to track if already loading
@@ -60,12 +72,17 @@ class HomeViewModel : ViewModel() {
             return instance ?: synchronized(this) {
                 instance ?: HomeViewModel().also { 
                     instance = it
+                    Log.d("HomeViewModel", "getInstance() called - triggering all loads")
                     // Trigger initial load
                     it.loadRaceWeekendState()
                     it.loadLastRaceResult()
                     it.loadDriverStandings()
                     it.loadConstructorStandings()
                     it.loadNews()
+                    it.loadYouTubeVideos()
+                    Log.d("HomeViewModel", "About to call loadPodcasts()")
+                    it.loadPodcasts()
+                    Log.d("HomeViewModel", "loadPodcasts() called")
                 }
             }
         }
@@ -468,6 +485,191 @@ class HomeViewModel : ViewModel() {
             minutes > 0 -> "${minutes}m ${seconds}s"
             else -> "${seconds}s"
         }
+    }
+    
+    fun loadYouTubeVideos() {
+        viewModelScope.launch {
+            try {
+                Log.d("HomeViewModel", "Loading YouTube videos from RSS feed...")
+                val feed = youtubeRssApiService.getPlaylistVideos("UULFB_qr75-ydFVKSF9Dmo6izg")
+                
+                // Show all videos from the feed (no filtering)
+                val videos = feed.entries
+                    ?.mapNotNull { entry ->
+                        val videoId = entry.videoId
+                        val title = entry.title
+                        val thumbnailUrl = entry.mediaGroup?.thumbnail?.url
+                        val views = entry.mediaGroup?.community?.statistics?.views
+                        val published = entry.published
+                        val durationSeconds = entry.mediaGroup?.content?.duration
+                        
+                        if (videoId != null && title != null && thumbnailUrl != null) {
+                            // Enhance thumbnail quality - use maxresdefault for highest quality
+                            // YouTube thumbnail quality options: maxresdefault > sddefault > hqdefault > mqdefault > default
+                            val highQualityThumbnail = "https://i.ytimg.com/vi/$videoId/maxresdefault.jpg"
+                            
+                            F1Video(
+                                videoId = videoId,
+                                title = title,
+                                thumbnailUrl = highQualityThumbnail,
+                                views = formatViews(views ?: "0"),
+                                publishedDate = published ?: "",
+                                duration = formatDuration(durationSeconds ?: 0)
+                            )
+                        } else null
+                    } ?: emptyList()
+                
+                _youtubeVideos.value = videos
+                Log.d("HomeViewModel", "Loaded ${videos.size} YouTube videos")
+            } catch (e: Exception) {
+                Log.e("HomeViewModel", "Error loading YouTube videos", e)
+                _youtubeVideos.value = emptyList()
+            }
+        }
+    }
+    
+    private fun formatViews(views: String): String {
+        return try {
+            val viewCount = views.toLongOrNull() ?: 0L
+            when {
+                viewCount >= 1_000_000 -> "${viewCount / 1_000_000}M views"
+                viewCount >= 1_000 -> "${viewCount / 1_000}K views"
+                else -> "$viewCount views"
+            }
+        } catch (e: Exception) {
+            views
+        }
+    }
+    
+    private fun formatDuration(seconds: Int): String {
+        if (seconds == 0) return ""
+        
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
+        val secs = seconds % 60
+        
+        return when {
+            hours > 0 -> String.format("%d:%02d:%02d", hours, minutes, secs)
+            minutes > 0 -> String.format("%d:%02d", minutes, secs)
+            else -> String.format("0:%02d", secs)
+        }
+    }
+    
+    fun loadPodcasts() {
+        viewModelScope.launch {
+            try {
+                Log.d("HomeViewModel", "Starting to load podcasts from RSS feeds...")
+                val podcastFeeds = listOf(
+                    "https://audioboom.com/channels/4964339.rss",
+                    "https://feeds.megaphone.fm/NYOOM4196406795",
+                    "https://feeds.acast.com/public/shows/67a4d8a83ef0b176ea9b64e1"
+                )
+                
+                val podcasts = mutableListOf<Podcast>()
+                
+                podcastFeeds.forEachIndexed { index, feedUrl ->
+                    try {
+                        Log.d("HomeViewModel", "Fetching podcast ${index + 1}/${podcastFeeds.size} from: $feedUrl")
+                        val feed = podcastApiService.getPodcastFeed(feedUrl)
+                        Log.d("HomeViewModel", "Received feed data for: $feedUrl")
+                        
+                        val channel = feed.channel
+                        
+                        if (channel == null) {
+                            Log.e("HomeViewModel", "Channel is null for $feedUrl")
+                            return@forEachIndexed
+                        }
+                        
+                        val podcastName = channel.title ?: "F1 Podcast"
+                        val podcastImage = channel.getFinalImageUrl() ?: ""
+                        val itemCount = channel.items?.size ?: 0
+                        
+                        Log.d("HomeViewModel", "Podcast: $podcastName, Image: $podcastImage, Items: $itemCount")
+                        
+                        if (channel.items.isNullOrEmpty()) {
+                            Log.w("HomeViewModel", "No items found for podcast: $podcastName")
+                            return@forEachIndexed
+                        }
+                        
+                        val episodes = channel.items?.mapNotNull { item ->
+                            val title = item.title ?: return@mapNotNull null
+                            val audioUrl = item.enclosure?.url ?: return@mapNotNull null
+                            val description = stripHtml(item.description ?: "")
+                            val duration = formatPodcastDuration(item.duration ?: "")
+                            val publishedDate = item.pubDate ?: ""
+                            val episodeImage = item.image?.href ?: podcastImage
+                            
+                            PodcastEpisode(
+                                title = title,
+                                description = description,
+                                audioUrl = audioUrl,
+                                duration = duration,
+                                publishedDate = publishedDate,
+                                imageUrl = episodeImage
+                            )
+                        } ?: emptyList()
+                        
+                        Log.d("HomeViewModel", "Parsed ${episodes.size} episodes for $podcastName")
+                        
+                        if (episodes.isNotEmpty()) {
+                            podcasts.add(
+                                Podcast(
+                                    name = podcastName,
+                                    imageUrl = podcastImage,
+                                    episodes = episodes
+                                )
+                            )
+                            Log.d("HomeViewModel", "Added podcast: $podcastName with ${episodes.size} episodes")
+                        }
+                    } catch (e: Exception) {
+                        Log.e("HomeViewModel", "Error loading podcast from $feedUrl: ${e.message}", e)
+                        e.printStackTrace()
+                    }
+                }
+                
+                _podcasts.value = podcasts
+                Log.d("HomeViewModel", "Successfully loaded ${podcasts.size} podcasts total")
+            } catch (e: Exception) {
+                Log.e("HomeViewModel", "Error in loadPodcasts: ${e.message}", e)
+                e.printStackTrace()
+                _podcasts.value = emptyList()
+            }
+        }
+    }
+    
+    private fun formatPodcastDuration(duration: String): String {
+        return try {
+            // Duration can be in seconds (3533) or HH:MM:SS format
+            val seconds = duration.toLongOrNull()
+            if (seconds != null) {
+                val hours = seconds / 3600
+                val minutes = (seconds % 3600) / 60
+                val secs = seconds % 60
+                
+                when {
+                    hours > 0 -> String.format("%dh %dm", hours, minutes)
+                    minutes > 0 -> String.format("%dm", minutes)
+                    else -> String.format("%ds", secs)
+                }
+            } else {
+                // Already formatted or parse time string
+                duration
+            }
+        } catch (e: Exception) {
+            duration
+        }
+    }
+    
+    private fun stripHtml(html: String): String {
+        return html
+            .replace(Regex("<[^>]*>"), "")
+            .replace(Regex("\\[CDATA\\[|\\]\\]"), "")
+            .replace(Regex("&nbsp;"), " ")
+            .replace(Regex("&amp;"), "&")
+            .replace(Regex("&lt;"), "<")
+            .replace(Regex("&gt;"), ">")
+            .replace(Regex("\\s+"), " ")
+            .trim()
     }
 }
 

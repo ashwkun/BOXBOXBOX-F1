@@ -123,18 +123,18 @@ fun LastRaceCard(
                     }
                 }
                 
-                // Main card divided into 3 columns - driver images fill each column
-                Row(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    race.results.take(3).forEachIndexed { index, result ->
-                        DriverColumn(
-                            result = result,
-                            position = index + 1,
-                            michromaFont = michromaFont,
-                            brigendsFont = brigendsFont,
-                            modifier = Modifier.weight(1f)
-                        )
+            // Main card divided into 3 columns - driver images fill each column
+            Row(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                race.results.take(3).forEachIndexed { index, result ->
+                    DriverColumn(
+                        result = result,
+                        position = index + 1,
+                        michromaFont = michromaFont,
+                        brigendsFont = brigendsFont,
+                        modifier = Modifier.weight(1f)
+                    )
                     }
                 }
             }
@@ -206,18 +206,18 @@ private fun DriverColumn(
             modifier = Modifier.fillMaxSize()
         ) {
             // Position number overlay - positioned bottom left, above the bottom strip
-            Text(
-                text = position.toString(),
-                fontFamily = michromaFont,
+                        Text(
+                            text = position.toString(),
+                            fontFamily = michromaFont,
                 fontSize = 32.sp,
-                fontWeight = FontWeight.Black,
-                color = when (position) {
-                    1 -> Color(0xFFFFD700) // Gold
-                    2 -> Color(0xFFC0C0C0) // Silver
-                    3 -> Color(0xFFCD7F32) // Bronze
-                    else -> Color.White
+                            fontWeight = FontWeight.Black,
+                            color = when (position) {
+                                1 -> Color(0xFFFFD700) // Gold
+                                2 -> Color(0xFFC0C0C0) // Silver
+                                3 -> Color(0xFFCD7F32) // Bronze
+                                else -> Color.White
                 },
-                modifier = Modifier
+                    modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(start = 12.dp, bottom = 42.dp) // Shifted down slightly
             )
@@ -246,13 +246,13 @@ private fun DriverColumn(
                     )
                     
                     // Team abbreviation only
-                    Text(
-                        text = teamInfo?.abbreviation ?: "",
-                        fontFamily = michromaFont,
+                        Text(
+                            text = teamInfo?.abbreviation ?: "",
+                            fontFamily = michromaFont,
                         fontSize = 9.sp,
-                        color = Color.White.copy(alpha = 0.9f),
-                        fontWeight = FontWeight.Bold
-                    )
+                            color = Color.White.copy(alpha = 0.9f),
+                            fontWeight = FontWeight.Bold
+                        )
                 }
             }
         }

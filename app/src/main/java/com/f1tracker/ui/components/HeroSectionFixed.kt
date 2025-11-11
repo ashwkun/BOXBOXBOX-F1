@@ -3,6 +3,7 @@ package com.f1tracker.ui.components
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -38,7 +39,8 @@ import java.time.format.DateTimeFormatter
 fun HeroSectionFixed(
     state: RaceWeekendState,
     getCountdown: (LocalDateTime) -> String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onRaceClick: (Race) -> Unit = {}
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
@@ -57,7 +59,8 @@ fun HeroSectionFixed(
                     getCountdown = getCountdown,
                     brigendsFont = brigendsFont,
                     michromaFont = michromaFont,
-                    accentColor = accentColor
+                    accentColor = accentColor,
+                    onRaceClick = onRaceClick
                 )
             }
             is RaceWeekendState.Active -> {
@@ -66,7 +69,8 @@ fun HeroSectionFixed(
                     getCountdown = getCountdown,
                     brigendsFont = brigendsFont,
                     michromaFont = michromaFont,
-                    accentColor = accentColor
+                    accentColor = accentColor,
+                    onRaceClick = onRaceClick
                 )
             }
             is RaceWeekendState.Loading -> {
@@ -85,7 +89,8 @@ private fun ComingUpHeroFixed(
     getCountdown: (LocalDateTime) -> String,
     brigendsFont: FontFamily,
     michromaFont: FontFamily,
-    accentColor: Color
+    accentColor: Color,
+    onRaceClick: (Race) -> Unit
 ) {
     val targetDateTime = parseISTDateTimeFixed(state.nextMainEvent.date, state.nextMainEvent.time)
     var countdown by remember { mutableStateOf("") }
@@ -121,6 +126,7 @@ private fun ComingUpHeroFixed(
                 color = Color.White.copy(alpha = 0.08f),
                 shape = RoundedCornerShape(20.dp)
             )
+            .clickable { onRaceClick(state.race) }
     ) {
         // Circuit track layout as background (very subtle)
         val circuitDrawable = getCircuitDrawableById(state.race.circuit.circuitId)
@@ -300,7 +306,8 @@ private fun ActiveWeekendHeroFixed(
     getCountdown: (LocalDateTime) -> String,
     brigendsFont: FontFamily,
     michromaFont: FontFamily,
-    accentColor: Color
+    accentColor: Color,
+    onRaceClick: (Race) -> Unit
 ) {
     val countryCode = getCountryCodeFixed(state.race.circuit.location.country)
     val flagUrl = "https://flagcdn.com/w320/$countryCode.png"
@@ -320,6 +327,7 @@ private fun ActiveWeekendHeroFixed(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
+            .clickable { onRaceClick(state.race) }
     ) {
         Box(
             modifier = Modifier

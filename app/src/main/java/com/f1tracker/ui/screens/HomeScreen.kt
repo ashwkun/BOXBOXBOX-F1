@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -42,13 +43,21 @@ import kotlinx.coroutines.delay
 fun HomeScreen(
     viewModel: HomeViewModel = remember { HomeViewModel.getInstance() },
     onNewsClick: (String?) -> Unit = {},
-    onNavigateToNews: () -> Unit = {}
+    onNavigateToNews: () -> Unit = {},
+    onRaceClick: (Race) -> Unit = {},
+    onVideoClick: (String) -> Unit = {},
+    onEpisodeClick: (com.f1tracker.data.models.PodcastEpisode) -> Unit = {},
+    onPlayPause: () -> Unit = {},
+    currentlyPlayingEpisode: com.f1tracker.data.models.PodcastEpisode? = null,
+    isPlaying: Boolean = false
 ) {
     val raceWeekendState by viewModel.raceWeekendState.collectAsState()
     val lastRaceResult by viewModel.lastRaceResult.collectAsState()
     val driverStandings by viewModel.driverStandings.collectAsState()
     val constructorStandings by viewModel.constructorStandings.collectAsState()
     val newsArticles by viewModel.newsArticles.collectAsState()
+    val youtubeVideos by viewModel.youtubeVideos.collectAsState()
+    val podcasts by viewModel.podcasts.collectAsState()
     val scrollState = rememberScrollState()
     
     // Refresh data if stale when screen is displayed
@@ -67,7 +76,8 @@ fun HomeScreen(
             state = raceWeekendState,
             getCountdown = { targetDateTime ->
                 viewModel.getCountdownTo(targetDateTime)
-            }
+            },
+            onRaceClick = onRaceClick
         )
         
         Spacer(modifier = Modifier.height(12.dp))
@@ -89,6 +99,27 @@ fun HomeScreen(
             )
         }
         
+        // YouTube Highlights Section
+        if (youtubeVideos.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(12.dp))
+            com.f1tracker.ui.components.YouTubeHighlightsSection(
+                videos = youtubeVideos,
+                onVideoClick = onVideoClick
+            )
+        }
+        
+        // Podcasts Section
+        if (podcasts.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(12.dp))
+            com.f1tracker.ui.components.PodcastsSection(
+                podcasts = podcasts,
+                currentlyPlayingEpisode = currentlyPlayingEpisode,
+                isPlaying = isPlaying,
+                onEpisodeClick = onEpisodeClick,
+                onPlayPause = onPlayPause
+            )
+        }
+        
         Spacer(modifier = Modifier.height(20.dp))
     }
 }
@@ -100,37 +131,41 @@ private fun HorizontalCardsSection(
     constructorStandings: List<ConstructorStanding>?
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded))
-    val michromaFont = FontFamily(Font(R.font.michroma))
     val scrollState = rememberScrollState()
+    val density = LocalDensity.current
     
     // Auto-scroll state
     var isUserInteracting by remember { mutableStateOf(false) }
-    var currentCardIndex by remember { mutableStateOf(0) }
-    val cardCount = 3
-    val cardWidth = 280.dp
+    var currentPage by remember { mutableStateOf(0) }
+    val cardWidth = 340.dp // Actual card width from LastRaceCard
     val cardSpacing = 12.dp
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
+    val sidePadding = 20.dp
+    val totalCards = 3
     
-    // Calculate scroll position to center card
-    val centerOffset = (screenWidth - cardWidth) / 2 - 20.dp
+    // Convert to pixels properly - full card width including spacing
+    val cardWithSpacingPx = with(density) { (cardWidth + cardSpacing).toPx() }
     
     // Auto-scroll effect
-    LaunchedEffect(isUserInteracting, currentCardIndex) {
-        if (!isUserInteracting) {
+    LaunchedEffect(Unit) {
+        while (true) {
             delay(3000) // Wait 3 seconds
-            val nextIndex = (currentCardIndex + 1) % cardCount
-            val targetScroll = (nextIndex * (cardWidth + cardSpacing).value).toInt() - centerOffset.value.toInt()
-            
-            // Smooth scroll to next card
-            scrollState.animateScrollTo(
-                targetScroll.coerceAtLeast(0),
-                animationSpec = tween(
-                    durationMillis = 800,
-                    easing = FastOutSlowInEasing
+            if (!isUserInteracting) {
+                // Move to next card
+                currentPage = (currentPage + 1) % totalCards
+                
+                // Calculate exact pixel position for this card
+                // Each card needs to move by full card width + spacing
+                val targetPosition = (currentPage * cardWithSpacingPx).toInt()
+                
+                // Smooth scroll to exact position
+                scrollState.animateScrollTo(
+                    targetPosition,
+                    animationSpec = tween(
+                        durationMillis = 800,
+                        easing = FastOutSlowInEasing
+                    )
                 )
-            )
-            currentCardIndex = nextIndex
+            }
         }
     }
     

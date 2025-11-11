@@ -1,0 +1,27 @@
+{
+  "albert_park": "au-1953.geojson",
+  "bahrain": "bh-2002.geojson",
+  "shanghai": "cn-2004.geojson",
+  "suzuka": "jp-1962.geojson",
+  "jeddah": "sa-2021.geojson",
+  "miami": "us-2022.geojson",
+  "imola": "it-1953.geojson",
+  "monaco": "mc-1929.geojson",
+  "catalunya": "es-1991.geojson",
+  "villeneuve": "ca-1978.geojson",
+  "red_bull_ring": "at-1969.geojson",
+  "silverstone": "gb-1948.geojson",
+  "hungaroring": "hu-1986.geojson",
+  "spa": "be-1925.geojson",
+  "zandvoort": "nl-1948.geojson",
+  "monza": "it-1922.geojson",
+  "baku": "az-2016.geojson",
+  "marina_bay": "sg-2008.geojson",
+  "americas": "us-2012.geojson",
+  "rodriguez": "mx-1962.geojson",
+  "interlagos": "br-1940.geojson",
+  "vegas": "us-2023.geojson",
+  "losail": "qa-2004.geojson",
+  "yas_marina": "ae-2009.geojson"
+}
+

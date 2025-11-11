@@ -35,8 +35,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun RaceDetailScreen(
-    race: Race,
-    onBackClick: () -> Unit
+    race: Race
 ) {
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
@@ -46,25 +45,8 @@ fun RaceDetailScreen(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        // Header with back button
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            AnimatedHeader()
-            
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
-            }
-        }
+        // Header
+        AnimatedHeader()
         
         // Content
         LazyColumn(
