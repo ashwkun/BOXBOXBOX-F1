@@ -15,9 +15,6 @@ Formula 1 tracking application for Android.
 
 <p align="center">
   <img src="screenshots/1-home.png" width="200" />
-  <img src="screenshots/2-schedule.png" width="200" />
-  <img src="screenshots/3-live.png" width="200" />
-  <img src="screenshots/4-standings.png" width="200" />
 </p>
 
 ## Data Sources
