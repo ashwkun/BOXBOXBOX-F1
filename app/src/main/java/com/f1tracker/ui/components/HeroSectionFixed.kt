@@ -546,17 +546,40 @@ private fun PrioritySessionCard(
 ) {
     val eventDateTime = parseISTDateTimeFixed(event.sessionInfo.date, event.sessionInfo.time)
     val isHighPriority = event.sessionType.isMainEvent()
+    val isCompleted = event.isCompleted
     
-    // Wide card with 2 rows only
+    // Wide card with fixed height
     Column(
         modifier = Modifier
             .width(220.dp)
+            .height(76.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(
-                if (isHighPriority) 
-                    accentColor.copy(alpha = 0.12f)
-                else 
-                    Color.White.copy(alpha = 0.05f)
+                when {
+                    isCompleted -> Brush.horizontalGradient(
+                        colors = listOf(
+                            Color(0xFF00FF41).copy(alpha = 0.06f),
+                            Color(0xFF00AA30).copy(alpha = 0.04f)
+                        )
+                    )
+                    isHighPriority -> Brush.horizontalGradient(
+                        colors = listOf(
+                            accentColor.copy(alpha = 0.12f),
+                            accentColor.copy(alpha = 0.12f)
+                        )
+                    )
+                    else -> Brush.horizontalGradient(
+                        colors = listOf(
+                            Color.White.copy(alpha = 0.05f),
+                            Color.White.copy(alpha = 0.05f)
+                        )
+                    )
+                }
+            )
+            .border(
+                width = if (isCompleted) 1.dp else 0.dp,
+                color = if (isCompleted) Color(0xFF00FF41).copy(alpha = 0.15f) else Color.Transparent,
+                shape = RoundedCornerShape(10.dp)
             )
             .padding(horizontal = 14.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -567,25 +590,65 @@ private fun PrioritySessionCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = event.sessionType.displayName(),
-                fontFamily = michromaFont,
-                fontSize = 13.sp,
-                fontWeight = if (isHighPriority) FontWeight.Bold else FontWeight.Normal,
-                color = if (isHighPriority) accentColor else Color.White.copy(alpha = 0.9f),
-                maxLines = 1,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
                 modifier = Modifier.weight(1f)
-            )
+            ) {
+                if (isCompleted) {
+                    // Subtle green checkmark icon
+                    Box(
+                        modifier = Modifier
+                            .size(16.dp)
+                            .background(
+                                Color(0xFF00FF41).copy(alpha = 0.25f),
+                                RoundedCornerShape(8.dp)
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "✓",
+                            fontSize = 10.sp,
+                            color = Color(0xFF00FF41),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                Text(
+                    text = event.sessionType.displayName(),
+                    fontFamily = michromaFont,
+                    fontSize = 13.sp,
+                    fontWeight = if (isHighPriority && !isCompleted) FontWeight.Bold else FontWeight.Normal,
+                    color = when {
+                        isCompleted -> Color(0xFF00FF41).copy(alpha = 0.8f)
+                        isHighPriority -> accentColor
+                        else -> Color.White.copy(alpha = 0.9f)
+                    },
+                    maxLines = 1
+                )
+            }
             Text(
                 text = formatDayTime(eventDateTime),
                 fontFamily = michromaFont,
                 fontSize = 11.sp,
-                color = Color.White.copy(alpha = 0.5f)
+                color = when {
+                    isCompleted -> Color(0xFF00FF41).copy(alpha = 0.5f)
+                    else -> Color.White.copy(alpha = 0.5f)
+                }
             )
         }
         
-        // Row 2: Weather info
-        if (event.weather != null) {
+        // Row 2: Weather info or "COMPLETED" text
+        if (isCompleted) {
+            Text(
+                text = "COMPLETED",
+                fontFamily = michromaFont,
+                fontSize = 9.sp,
+                color = Color(0xFF00FF41).copy(alpha = 0.7f),
+                letterSpacing = 1.sp,
+                fontWeight = FontWeight.Bold
+            )
+        } else if (event.weather != null) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,

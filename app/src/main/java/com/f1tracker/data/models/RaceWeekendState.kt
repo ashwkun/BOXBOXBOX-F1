@@ -25,7 +25,8 @@ data class UpcomingEvent(
     val sessionType: SessionType,
     val sessionInfo: SessionInfo,
     val isNext: Boolean = false,
-    val weather: SessionWeather? = null
+    val weather: SessionWeather? = null,
+    val isCompleted: Boolean = false
 )
 
 data class CompletedEvent(

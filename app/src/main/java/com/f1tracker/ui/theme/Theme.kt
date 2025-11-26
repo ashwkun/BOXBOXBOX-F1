@@ -96,10 +96,10 @@ fun F1TrackerTheme(
             // Only set colors if they're not already black (from video player)
             // This prevents overriding when returning from video player
             if (window.statusBarColor != android.graphics.Color.BLACK) {
-                // Set status bar (top) to F1 red
-                window.statusBarColor = colorScheme.primary.toArgb()
-                // Set navigation bar (bottom) to F1 red
-                window.navigationBarColor = colorScheme.primary.toArgb()
+            // Set status bar (top) to F1 red
+            window.statusBarColor = colorScheme.primary.toArgb()
+            // Set navigation bar (bottom) to F1 red
+            window.navigationBarColor = colorScheme.primary.toArgb()
             }
             // Use light icons on dark red background
             WindowCompat.getInsetsController(window, view).apply {

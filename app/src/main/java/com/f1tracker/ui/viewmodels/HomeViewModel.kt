@@ -58,6 +58,7 @@ class HomeViewModel : ViewModel() {
     // Cache data to prevent loss on sleep/resume
     private var cachedRaceState: RaceWeekendState? = null
     private var lastUpdateTime: Long = 0
+    private val weatherCache = mutableMapOf<String, SessionWeather>()
     
     init {
         // Start periodic update (for countdown refresh)
@@ -104,8 +105,16 @@ class HomeViewModel : ViewModel() {
     
     fun refreshIfStale() {
         val now = System.currentTimeMillis()
-        // If data is older than 5 minutes or if we're in Loading state, refresh
-        if (now - lastUpdateTime > 300000 || _raceWeekendState.value is RaceWeekendState.Loading) {
+        
+        // Always restore cached state first if available
+        if (cachedRaceState != null && _raceWeekendState.value is RaceWeekendState.Loading) {
+            Log.d("HomeViewModel", "Restoring cached race state")
+            _raceWeekendState.value = cachedRaceState!!
+        }
+        
+        // Only refresh if data is older than 5 minutes
+        if (now - lastUpdateTime > 300000) {
+            Log.d("HomeViewModel", "Data is stale, refreshing...")
             if (allRacesCache.isEmpty()) {
                 loadRaceWeekendState()
             } else {
@@ -113,9 +122,6 @@ class HomeViewModel : ViewModel() {
                     updateRaceWeekendState()
                 }
             }
-        } else if (cachedRaceState != null && _raceWeekendState.value is RaceWeekendState.Loading) {
-            // Restore cached state immediately if available
-            _raceWeekendState.value = cachedRaceState!!
         }
     }
     
@@ -342,6 +348,15 @@ class HomeViewModel : ViewModel() {
         longitude: Double,
         sessionDateTime: LocalDateTime
     ): SessionWeather? {
+        // Create cache key
+        val cacheKey = "${latitude}_${longitude}_${sessionDateTime}"
+        
+        // Return cached weather if available
+        weatherCache[cacheKey]?.let {
+            Log.d("HomeViewModel", "Using cached weather for $sessionDateTime")
+            return it
+        }
+        
         return try {
             Log.d("HomeViewModel", "Fetching weather for lat=$latitude, lon=$longitude, time=$sessionDateTime")
             
@@ -389,12 +404,18 @@ class HomeViewModel : ViewModel() {
                 
                 Log.d("HomeViewModel", "Weather found: temp=$temp, rain=$rainChance%, code=$weatherCode")
                 
-                SessionWeather(
+                val weather = SessionWeather(
                     temperature = temp,
                     rainChance = rainChance,
                     weatherCode = weatherCode,
                     weatherIcon = WeatherIcon.fromWMOCode(weatherCode)
                 )
+                
+                // Cache the weather data
+                weatherCache[cacheKey] = weather
+                Log.d("HomeViewModel", "Cached weather for session at $sessionDateTime")
+                
+                weather
             } else {
                 Log.w("HomeViewModel", "No matching weather data found (closest was $minDiff minutes away)")
                 null
@@ -411,18 +432,22 @@ class HomeViewModel : ViewModel() {
     ): List<UpcomingEvent> {
         val latitude = race.circuit.location.lat.toDouble()
         val longitude = race.circuit.location.long.toDouble()
+        val now = LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
         
         Log.d("HomeViewModel", "Fetching weather for ${events.size} events at circuit: ${race.circuit.circuitName}")
         
         return events.map { (type, session) ->
             val sessionDateTime = parseDateTime(session.date, session.time)
-            val weather = fetchWeatherForSession(latitude, longitude, sessionDateTime)
+            val sessionEndTime = sessionDateTime.plusHours(2) // Assume 2 hour session duration
+            val isCompleted = now.isAfter(sessionEndTime)
+            val weather = if (!isCompleted) fetchWeatherForSession(latitude, longitude, sessionDateTime) else null
             
             UpcomingEvent(
                 sessionType = type,
                 sessionInfo = session,
                 isNext = false,
-                weather = weather
+                weather = weather,
+                isCompleted = isCompleted
             )
         }
     }
@@ -472,7 +497,7 @@ class HomeViewModel : ViewModel() {
         val now = LocalDateTime.now()
         val duration = Duration.between(now, targetDateTime)
         
-        if (duration.isNegative) return "0s"
+        if (duration.isNegative) return "00d 00h 00m 00s"
         
         val days = duration.toDays()
         val hours = duration.toHours() % 24
@@ -481,9 +506,9 @@ class HomeViewModel : ViewModel() {
         
         return when {
             days > 0 -> "${days}d ${hours}h ${minutes}m ${seconds}s"
-            hours > 0 -> "${hours}h ${minutes}m ${seconds}s"
-            minutes > 0 -> "${minutes}m ${seconds}s"
-            else -> "${seconds}s"
+            hours > 0 -> "00d ${hours}h ${minutes}m ${seconds}s"
+            minutes > 0 -> "00d 00h ${minutes}m ${seconds}s"
+            else -> "00d 00h 00m ${seconds}s"
         }
     }
     
