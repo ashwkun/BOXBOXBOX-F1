@@ -28,7 +28,11 @@ import com.f1tracker.ui.components.NavDestination
 import com.f1tracker.R
 
 @Composable
-fun MainAppScreen() {
+fun MainAppScreen(
+    updateStatus: com.f1tracker.util.UpdateStatus?,
+    showUpdateDialog: Boolean,
+    onShowUpdateDialogChange: (Boolean) -> Unit
+) {
     var currentDestination by remember { mutableStateOf(NavDestination.HOME) }
     var webViewUrl by remember { mutableStateOf<String?>(null) }
     var selectedRace by remember { mutableStateOf<com.f1tracker.data.models.Race?>(null) }
@@ -120,11 +124,18 @@ fun MainAppScreen() {
         )
     } else if (webViewUrl != null) {
         // Show WebView if URL is set
-        WebViewScreen(url = webViewUrl!!)
+        WebViewScreen(
+            url = webViewUrl!!,
+            isUpdateAvailable = updateStatus is com.f1tracker.util.UpdateStatus.UpdateAvailable,
+            onUpdateClick = { onShowUpdateDialogChange(true) }
+        )
     } else {
     Column(modifier = Modifier.fillMaxSize()) {
         // Top header (reduced height inside the composable)
-        AnimatedHeader()
+        AnimatedHeader(
+            isUpdateAvailable = updateStatus is com.f1tracker.util.UpdateStatus.UpdateAvailable,
+            onUpdateClick = { onShowUpdateDialogChange(true) }
+        )
 
         // Main content area
         Box(
@@ -172,10 +183,32 @@ fun MainAppScreen() {
             }
         }
 
+        // Secret Notification State
+        var liveTabClickCount by remember { androidx.compose.runtime.mutableIntStateOf(0) }
+        var lastLiveTabClickTime by remember { mutableLongStateOf(0L) }
+
         // Fixed bottom navigation bar
         BottomNavBar(
             currentDestination = currentDestination,
-            onNavigate = { destination -> currentDestination = destination }
+            onNavigate = { destination -> 
+                if (destination == NavDestination.LIVE) {
+                    val currentTime = System.currentTimeMillis()
+                    if (currentTime - lastLiveTabClickTime > 2000) {
+                        liveTabClickCount = 0 // Reset if too slow
+                    }
+                    liveTabClickCount++
+                    lastLiveTabClickTime = currentTime
+                    
+                    if (liveTabClickCount == 5) {
+                        liveTabClickCount = 0
+                        Toast.makeText(context, "🏎️ Secret Test Notification Sent!", Toast.LENGTH_SHORT).show()
+                        sendTestNotification(context)
+                    }
+                } else {
+                    liveTabClickCount = 0 // Reset if switched tab
+                }
+                currentDestination = destination 
+            }
         )
         
         // Mini Audio Player (appears above bottom nav when playing)
@@ -201,6 +234,52 @@ fun MainAppScreen() {
         )
         }
     }
+}
+
+private fun sendTestNotification(context: android.content.Context) {
+    val channelId = "f1_updates_channel_v3" // Use same channel to test sound/icon
+    val notificationManager = context.getSystemService(android.content.Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+    
+    // Ensure channel exists (it should, but good practice)
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        val existingChannel = notificationManager.getNotificationChannel(channelId)
+        if (existingChannel == null) {
+            // Re-create if missing (simplified version of Service logic)
+            val soundUri = android.net.Uri.parse("android.resource://" + context.packageName + "/" + R.raw.notification_sound)
+            val audioAttributes = android.media.AudioAttributes.Builder()
+                .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
+                .build()
+                
+            val channel = android.app.NotificationChannel(
+                channelId,
+                "F1 Updates",
+                android.app.NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                setSound(soundUri, audioAttributes)
+                enableLights(true)
+                lightColor = android.graphics.Color.RED
+                enableVibration(true)
+            }
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    val largeIcon = android.graphics.BitmapFactory.decodeResource(context.resources, R.drawable.ic_notification_large)
+    val soundUri = android.net.Uri.parse("android.resource://" + context.packageName + "/" + R.raw.notification_sound)
+
+    val notificationBuilder = androidx.core.app.NotificationCompat.Builder(context, channelId)
+        .setSmallIcon(R.drawable.ic_notification_small)
+        .setLargeIcon(largeIcon)
+        .setColor(android.graphics.Color.parseColor("#FF0080"))
+        .setContentTitle("Hello World")
+        .setContentText("Surprise! You found the secret button. Now get back to watching the race, you nerd! 🏎️💨")
+        .setStyle(androidx.core.app.NotificationCompat.BigTextStyle().bigText("Surprise! You found the secret button. Now get back to watching the race, you nerd! 🏎️💨"))
+        .setAutoCancel(true)
+        .setSound(soundUri)
+        .setPriority(androidx.core.app.NotificationCompat.PRIORITY_DEFAULT)
+
+    notificationManager.notify(999, notificationBuilder.build())
 }
 
 @Composable

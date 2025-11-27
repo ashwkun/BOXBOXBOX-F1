@@ -5,7 +5,11 @@ import com.f1tracker.ui.screens.SplashScreen
 import com.f1tracker.ui.screens.MainAppScreen
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    updateStatus: com.f1tracker.util.UpdateStatus? = null,
+    showUpdateDialog: Boolean = false,
+    onShowUpdateDialogChange: (Boolean) -> Unit = {}
+) {
     var showSplash by remember { mutableStateOf(true) }
     
     if (showSplash) {
@@ -15,7 +19,11 @@ fun AppNavigation() {
             }
         )
     } else {
-        MainAppScreen()
+        MainAppScreen(
+            updateStatus = updateStatus,
+            showUpdateDialog = showUpdateDialog,
+            onShowUpdateDialogChange = onShowUpdateDialogChange
+        )
     }
 }
 

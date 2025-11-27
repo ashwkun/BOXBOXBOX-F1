@@ -25,7 +25,9 @@ import com.f1tracker.ui.components.AnimatedHeader
 
 @Composable
 fun WebViewScreen(
-    url: String
+    url: String,
+    isUpdateAvailable: Boolean = false,
+    onUpdateClick: () -> Unit = {}
 ) {
     var isLoading by remember { mutableStateOf(true) }
     
@@ -38,7 +40,10 @@ fun WebViewScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             // App header
-            AnimatedHeader()
+            AnimatedHeader(
+                isUpdateAvailable = isUpdateAvailable,
+                onUpdateClick = onUpdateClick
+            )
             
             // WebView content
             AndroidView(

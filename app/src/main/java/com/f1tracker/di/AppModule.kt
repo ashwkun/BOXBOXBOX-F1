@@ -35,6 +35,10 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideGitHubApiService(): GitHubApiService = RetrofitClient.gitHubApiService
+
+    @Provides
+    @Singleton
     fun provideF1Repository(
         f1ApiService: F1ApiService,
         weatherApiService: WeatherApiService,

@@ -71,6 +71,18 @@ object RetrofitClient {
     val weatherApiService: WeatherApiService = weatherRetrofit.create(WeatherApiService::class.java)
     val espnNewsApiService: ESPNNewsApiService = espnRetrofit.create(ESPNNewsApiService::class.java)
     val youtubeRssApiService: YouTubeRssApiService = youtubeRssRetrofit.create(YouTubeRssApiService::class.java)
-    val podcastApiService: PodcastApiService = podcastRetrofit.create(PodcastApiService::class.java)
-}
+    val podcastApiService: PodcastApiService by lazy {
+        podcastRetrofit.create(PodcastApiService::class.java)
+    }
 
+    private val githubRetrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://api.github.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    val gitHubApiService: GitHubApiService by lazy {
+        githubRetrofit.create(GitHubApiService::class.java)
+    }
+}
