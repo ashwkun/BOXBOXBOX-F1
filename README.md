@@ -77,17 +77,7 @@
 
 ## 📸 Screenshots
 
-<div align="center">
 
-| Home Screen | Live Timing | Standings |
-|:-----------:|:-----------:|:---------:|
-| <img src="screenshots/1-home.png" width="200" alt="Home Screen"/> | <img src="screenshots/3-live.png" width="200" alt="Live Timing"/> | <img src="screenshots/4-standings.png" width="200" alt="Standings"/> |
-
-| Race Weekend | Schedule | News & Videos |
-|:------------:|:--------:|:-------------:|
-| <img src="screenshots/2-schedule.png" width="200" alt="Schedule"/> | <img src="screenshots/2-schedule.png" width="200" alt="Race Weekend"/> | <img src="screenshots/1-home.png" width="200" alt="News"/> |
-
-</div>
 
 ---
 
