@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.LocalDateTime
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.f1tracker.R
 import com.f1tracker.data.models.ConstructorStanding
 import com.f1tracker.data.models.DriverStanding
@@ -36,33 +37,40 @@ import com.f1tracker.ui.components.ConstructorStandingsCard
 import com.f1tracker.ui.components.DriverStandingsCard
 import com.f1tracker.ui.components.HeroSectionFixed
 import com.f1tracker.ui.components.LastRaceCard
-import com.f1tracker.ui.viewmodels.HomeViewModel
+import com.f1tracker.ui.viewmodels.MultimediaViewModel
+import com.f1tracker.ui.viewmodels.NewsViewModel
+import com.f1tracker.ui.viewmodels.RaceViewModel
+import com.f1tracker.ui.viewmodels.StandingsViewModel
 import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = remember { HomeViewModel.getInstance() },
+    raceViewModel: RaceViewModel = hiltViewModel(),
+    standingsViewModel: StandingsViewModel = hiltViewModel(),
+    newsViewModel: NewsViewModel = hiltViewModel(),
+    multimediaViewModel: MultimediaViewModel = hiltViewModel(),
     onNewsClick: (String?) -> Unit = {},
     onNavigateToNews: () -> Unit = {},
     onRaceClick: (Race) -> Unit = {},
     onVideoClick: (String) -> Unit = {},
     onEpisodeClick: (com.f1tracker.data.models.PodcastEpisode) -> Unit = {},
     onPlayPause: () -> Unit = {},
+    onNavigateToStandings: (Int) -> Unit = {}, // 0 for Drivers, 1 for Constructors
     currentlyPlayingEpisode: com.f1tracker.data.models.PodcastEpisode? = null,
     isPlaying: Boolean = false
 ) {
-    val raceWeekendState by viewModel.raceWeekendState.collectAsState()
-    val lastRaceResult by viewModel.lastRaceResult.collectAsState()
-    val driverStandings by viewModel.driverStandings.collectAsState()
-    val constructorStandings by viewModel.constructorStandings.collectAsState()
-    val newsArticles by viewModel.newsArticles.collectAsState()
-    val youtubeVideos by viewModel.youtubeVideos.collectAsState()
-    val podcasts by viewModel.podcasts.collectAsState()
+    val raceWeekendState by raceViewModel.raceWeekendState.collectAsState()
+    val lastRaceResult by raceViewModel.lastRaceResult.collectAsState()
+    val driverStandings by standingsViewModel.driverStandings.collectAsState()
+    val constructorStandings by standingsViewModel.constructorStandings.collectAsState()
+    val newsArticles by newsViewModel.newsArticles.collectAsState()
+    val youtubeVideos by multimediaViewModel.youtubeVideos.collectAsState()
+    val podcasts by multimediaViewModel.podcasts.collectAsState()
     val scrollState = rememberScrollState()
     
     // Refresh data if stale when screen is displayed
     LaunchedEffect(Unit) {
-        viewModel.refreshIfStale()
+        raceViewModel.refreshIfStale()
     }
     
     Column(
@@ -75,7 +83,7 @@ fun HomeScreen(
         HeroSectionFixed(
             state = raceWeekendState,
             getCountdown = { targetDateTime ->
-                viewModel.getCountdownTo(targetDateTime)
+                raceViewModel.getCountdownTo(targetDateTime)
             },
             onRaceClick = onRaceClick
         )
@@ -86,7 +94,9 @@ fun HomeScreen(
         HorizontalCardsSection(
             lastRaceResult = lastRaceResult,
             driverStandings = driverStandings,
-            constructorStandings = constructorStandings
+            constructorStandings = constructorStandings,
+            onRaceClick = onRaceClick,
+            onNavigateToStandings = onNavigateToStandings
         )
         
         // News Section
@@ -128,7 +138,9 @@ fun HomeScreen(
 private fun HorizontalCardsSection(
     lastRaceResult: Race?,
     driverStandings: List<DriverStanding>?,
-    constructorStandings: List<ConstructorStanding>?
+    constructorStandings: List<ConstructorStanding>?,
+    onRaceClick: (Race) -> Unit = {},
+    onNavigateToStandings: (Int) -> Unit = {}
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded))
     val scrollState = rememberScrollState()
@@ -218,13 +230,22 @@ private fun HorizontalCardsSection(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             // Last Race Card
-            LastRaceCard(race = lastRaceResult)
+            LastRaceCard(
+                race = lastRaceResult,
+                onClick = { lastRaceResult?.let { onRaceClick(it) } }
+            )
             
             // Driver Standings Card
-            DriverStandingsCard(standings = driverStandings)
+            DriverStandingsCard(
+                standings = driverStandings,
+                onClick = { onNavigateToStandings(0) }
+            )
             
             // Constructor Standings Card
-            ConstructorStandingsCard(standings = constructorStandings)
+            ConstructorStandingsCard(
+                standings = constructorStandings,
+                onClick = { onNavigateToStandings(1) }
+            )
         }
     }
 }

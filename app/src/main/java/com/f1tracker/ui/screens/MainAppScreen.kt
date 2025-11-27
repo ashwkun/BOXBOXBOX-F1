@@ -34,6 +34,8 @@ fun MainAppScreen() {
     var selectedRace by remember { mutableStateOf<com.f1tracker.data.models.Race?>(null) }
     var selectedVideoId by remember { mutableStateOf<String?>(null) }
     var backPressedTime by remember { mutableLongStateOf(0L) }
+    var scheduleSelectedTab by remember { mutableStateOf(0) } // Persist schedule tab state here
+    var standingsSelectedTab by remember { mutableStateOf(0) } // Persist standings tab state here
     val context = LocalContext.current
     
     // Podcast audio player state
@@ -112,7 +114,10 @@ fun MainAppScreen() {
         YouTubePlayerScreen(videoId = selectedVideoId!!)
     } else if (selectedRace != null) {
         // Show Race Detail if race is selected
-        RaceDetailScreen(race = selectedRace!!)
+        RaceDetailScreen(
+            race = selectedRace!!,
+            onBackClick = { selectedRace = null }
+        )
     } else if (webViewUrl != null) {
         // Show WebView if URL is set
         WebViewScreen(url = webViewUrl!!)
@@ -145,11 +150,22 @@ fun MainAppScreen() {
                             }
                         },
                         currentlyPlayingEpisode = currentEpisode,
-                        isPlaying = isPlaying
+                        isPlaying = isPlaying,
+                        onNavigateToStandings = { tabIndex ->
+                            standingsSelectedTab = tabIndex
+                            currentDestination = NavDestination.STANDINGS
+                        }
                 )
-                    NavDestination.SCHEDULE -> ScheduleScreen()
+                    NavDestination.SCHEDULE -> ScheduleScreen(
+                        selectedTab = scheduleSelectedTab,
+                        onTabChange = { tab -> scheduleSelectedTab = tab },
+                        onRaceClick = { race -> selectedRace = race }
+                    )
                     NavDestination.LIVE -> LiveScreen()
-                    NavDestination.STANDINGS -> StandingsScreen()
+                    NavDestination.STANDINGS -> StandingsScreen(
+                        selectedTab = standingsSelectedTab,
+                        onTabChange = { standingsSelectedTab = it }
+                    )
                     NavDestination.NEWS -> NewsScreen(
                         onNewsClick = { url -> webViewUrl = url }
                 )

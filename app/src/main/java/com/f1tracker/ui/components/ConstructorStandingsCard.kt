@@ -3,15 +3,20 @@ package com.f1tracker.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -27,6 +32,7 @@ import com.f1tracker.data.models.ConstructorStanding
 @Composable
 fun ConstructorStandingsCard(
     standings: List<ConstructorStanding>?,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded))
@@ -37,7 +43,15 @@ fun ConstructorStandingsCard(
             .width(340.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF0A0A0A))
+            .clickable { onClick() } // Make clickable
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF161616),
+                        Color(0xFF000000)
+                    )
+                )
+            )
             .border(
                 width = 1.dp,
                 color = Color.White.copy(alpha = 0.08f),
@@ -70,13 +84,27 @@ fun ConstructorStandingsCard(
                         .background(Color.Black.copy(alpha = 0.7f))
                         .padding(horizontal = 8.dp, vertical = 6.dp)
                 ) {
-                    Text(
-                        text = "CONSTRUCTOR STANDINGS",
-                        fontFamily = michromaFont,
-                        fontSize = 9.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = Color.White
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "CONSTRUCTOR STANDINGS",
+                            fontFamily = michromaFont,
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White
+                        )
+                        
+                        // Arrow Indicator
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowRight,
+                            contentDescription = null,
+                            tint = Color.White.copy(alpha = 0.5f),
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
                 }
                 
                 // Main card divided into 3 rows - team cars fill each row

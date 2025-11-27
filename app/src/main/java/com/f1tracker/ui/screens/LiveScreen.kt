@@ -28,7 +28,9 @@ import com.f1tracker.data.live.SignalRLiveTimingClient
 import com.f1tracker.data.local.F1DataProvider
 
 @Composable
-fun LiveScreen() {
+fun LiveScreen(
+    raceViewModel: com.f1tracker.ui.viewmodels.RaceViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
     
@@ -38,6 +40,9 @@ fun LiveScreen() {
     val isConnected by liveClient.isConnected.collectAsState()
     val connectionError by liveClient.connectionError.collectAsState()
     val rawData by liveClient.rawData.collectAsState()
+    
+    // Race weekend state for session detection
+    val raceWeekendState by raceViewModel.raceWeekendState.collectAsState()
     
     var showRawView by remember { mutableStateOf(false) }
     var countdown by remember { mutableStateOf(30) }
@@ -58,9 +63,23 @@ fun LiveScreen() {
         }
     }
     
-    // Auto-connect on screen load
-    LaunchedEffect(Unit) {
-        liveClient.connect()
+    // Determine if we should connect to SignalR
+    val shouldConnect = remember(raceWeekendState) {
+        when (val state = raceWeekendState) {
+            is com.f1tracker.data.models.RaceWeekendState.Active -> {
+                state.currentEvent?.isLive == true
+            }
+            else -> false
+        }
+    }
+    
+    // Auto-connect only if session is live
+    LaunchedEffect(shouldConnect) {
+        if (shouldConnect) {
+            liveClient.connect()
+        } else {
+            liveClient.disconnect()
+        }
     }
     
     // Disconnect when leaving screen
@@ -82,8 +101,9 @@ fun LiveScreen() {
                 )
             )
     ) {
-        // Header
-        Column {
+        // Header - only show when connecting/connected to live session
+        if (shouldConnect) {
+            Column {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -216,9 +236,19 @@ fun LiveScreen() {
                     }
                 }
             }
+            }
         }
         
         when {
+            // No active session - show countdown
+            !shouldConnect -> {
+                NoSessionActiveScreen(
+                    raceWeekendState = raceWeekendState,
+                    raceViewModel = raceViewModel,
+                    brigendsFont = brigendsFont,
+                    michromaFont = michromaFont
+                )
+            }
             // Show raw table view
             showRawView && liveDrivers.isNotEmpty() -> {
                 androidx.compose.foundation.lazy.LazyRow(
@@ -766,4 +796,298 @@ private fun LiveDriverRow(
             )
         }
     }
+}
+
+@Composable
+private fun NoSessionActiveScreen(
+    raceWeekendState: com.f1tracker.data.models.RaceWeekendState,
+    raceViewModel: com.f1tracker.ui.viewmodels.RaceViewModel,
+    brigendsFont: FontFamily,
+    michromaFont: FontFamily
+) {
+    val accentColor = Color(0xFFFF0080)
+    
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF0A0A0A),
+                        Color.Black
+                    )
+                )
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        when (val state = raceWeekendState) {
+            is com.f1tracker.data.models.RaceWeekendState.Active ->  {
+                // Get FIRST session from ALL sessions (including practices, not filtered by main events)
+                val allSessions = state.upcomingEvents + state.completedEvents.map { 
+                    com.f1tracker.data.models.UpcomingEvent(
+                        sessionType = it.sessionType,
+                        sessionInfo = com.f1tracker.data.models.SessionInfo("", ""),
+                        isCompleted = true
+                    )
+                }
+                val nextSession = state.upcomingEvents.firstOrNull()
+                
+                if (nextSession != null) {
+                    val sessionDateTime = parseSessionDateTime(nextSession.sessionInfo)
+                    var countdown by remember { mutableStateOf("") }
+                    
+                    LaunchedEffect(sessionDateTime) {
+                        while (true) {
+                            countdown = raceViewModel.getCountdownTo(sessionDateTime)
+                            kotlinx.coroutines.delay(1000)
+                        }
+                    }
+                    
+                    CountdownDisplay(
+                        title = "NEXT SESSION",
+                        sessionName = nextSession.sessionType.displayName(),
+                        countdown = countdown,
+                        dateTime = sessionDateTime,
+                        brigendsFont = brigendsFont,
+                        michromaFont = michromaFont,
+                        accentColor = accentColor
+                    )
+                } else {
+                    NoUpcomingSessionsDisplay(brigendsFont, michromaFont)
+                }
+            }
+            is com.f1tracker.data.models.RaceWeekendState.ComingUp -> {
+                // Show countdown to FIRST session (could be Practice 1)
+                val firstSession = state.upcomingEvents.firstOrNull()
+                if (firstSession != null) {
+                    val sessionDateTime = parseSessionDateTime(firstSession.sessionInfo)
+                    var countdown by remember { mutableStateOf("") }
+                    
+                    LaunchedEffect(sessionDateTime) {
+                        while (true) {
+                            countdown = raceViewModel.getCountdownTo(sessionDateTime)
+                            kotlinx.coroutines.delay(1000)
+                        }
+                    }
+                    
+                    CountdownDisplay(
+                        title = "NEXT SESSION",
+                        sessionName = firstSession.sessionType.displayName(),
+                        countdown = countdown,
+                        dateTime = sessionDateTime,
+                        brigendsFont = brigendsFont,
+                        michromaFont = michromaFont,
+                        accentColor = accentColor
+                    )
+                } else {
+                    // Fallback to main event if upcomingEvents is empty
+                    val sessionDateTime = parseSessionDateTime(state.nextMainEvent)
+                    var countdown by remember { mutableStateOf("") }
+                    
+                    LaunchedEffect(sessionDateTime) {
+                        while (true) {
+                            countdown = raceViewModel.getCountdownTo(sessionDateTime)
+                            kotlinx.coroutines.delay(1000)
+                        }
+                    }
+                    
+                    CountdownDisplay(
+                        title = "NEXT SESSION",
+                        sessionName = state.nextMainEventType.displayName(),
+                        countdown = countdown,
+                        dateTime = sessionDateTime,
+                        brigendsFont = brigendsFont,
+                        michromaFont = michromaFont,
+                        accentColor = accentColor
+                    )
+                }
+            }
+            is com.f1tracker.data.models.RaceWeekendState.Loading -> {
+                CircularProgressIndicator(color = accentColor)
+            }
+            is com.f1tracker.data.models.RaceWeekendState.Error -> {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = null,
+                        tint = Color(0xFFFF0040),
+                        modifier = Modifier.size(48.dp)
+                    )
+                    Text(
+                        text = state.message,
+                        fontFamily = michromaFont,
+                        fontSize = 12.sp,
+                        color = Color.White.copy(alpha = 0.7f),
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CountdownDisplay(
+    title: String,
+    sessionName: String,
+    countdown: String,
+    dateTime: java.time.LocalDateTime,
+    brigendsFont: FontFamily,
+    michromaFont: FontFamily,
+    accentColor: Color
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(
+            text = title,
+            fontFamily = brigendsFont,
+            fontSize = 10.sp,
+            color = accentColor.copy(alpha = 0.8f),
+            letterSpacing = 2.sp
+        )
+        
+        Text(
+            text = sessionName.uppercase(),
+            fontFamily = michromaFont,
+            fontSize = 20.sp,
+            color = Color.White,
+            letterSpacing = 1.sp,
+            fontWeight = FontWeight.Bold
+        )
+        
+        CountdownBoxLive(
+            countdown = countdown,
+            michromaFont = michromaFont,
+            accentColor = accentColor
+        )
+        
+        Text(
+            text = formatFullDateTime(dateTime),
+            fontFamily = michromaFont,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White.copy(alpha = 0.8f)
+        )
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        Text(
+            text = "Live timing will be available when a session is active",
+            fontFamily = michromaFont,
+            fontSize = 10.sp,
+            color = Color.White.copy(alpha = 0.5f),
+            letterSpacing = 0.5.sp,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun CountdownBoxLive(
+    countdown: String,
+    michromaFont: FontFamily,
+    accentColor: Color
+) {
+    val parts = countdown.split(" ")
+    val timeUnits = mutableListOf<Pair<String, String>>()
+    
+    parts.forEach { part ->
+        when {
+            part.endsWith("d") -> timeUnits.add(part.removeSuffix("d") to "D")
+            part.endsWith("h") -> timeUnits.add(part.removeSuffix("h") to "H")
+            part.endsWith("m") -> timeUnits.add(part.removeSuffix("m") to "M")
+            part.endsWith("s") -> timeUnits.add(part.removeSuffix("s") to "S")
+        }
+    }
+    
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 8.dp)
+    ) {
+        timeUnits.forEach { (value, unit) ->
+            Row(
+                modifier = Modifier
+                    .background(Color.White.copy(alpha = 0.08f), androidx.compose.foundation.shape.RoundedCornerShape(6.dp))
+                    .padding(horizontal = 8.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Text(
+                    text = value.padStart(2, '0'),
+                    fontFamily = michromaFont,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = accentColor,
+                    letterSpacing = (-0.5).sp
+                )
+                Text(
+                    text = unit,
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.White.copy(alpha = 0.6f),
+                    letterSpacing = 0.sp,
+                    modifier = Modifier.padding(start = 1.dp, bottom = 1.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun NoUpcomingSessionsDisplay(
+    brigendsFont: FontFamily,
+    michromaFont: FontFamily
+) {
+    Column(
+        modifier = Modifier.padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Info,
+            contentDescription = null,
+            tint = Color.White.copy(alpha = 0.5f),
+            modifier = Modifier.size(64.dp)
+        )
+        Text(
+            text = "NO UPCOMING SESSIONS",
+            fontFamily = brigendsFont,
+            fontSize = 16.sp,
+            color = Color.White,
+            letterSpacing = 2.sp
+        )
+        Text(
+            text = "The current race weekend has ended.\nCheck back soon for the next event!",
+            fontFamily = michromaFont,
+            fontSize = 12.sp,
+            color = Color.White.copy(alpha = 0.7f),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        )
+    }
+}
+
+private fun parseSessionDateTime(sessionInfo: com.f1tracker.data.models.SessionInfo): java.time.LocalDateTime {
+    return try {
+        val dateStr = sessionInfo.date
+        val timeStr = sessionInfo.time
+        val dateTimeStr = "${dateStr}T${timeStr}"
+        java.time.ZonedDateTime.parse(dateTimeStr).toLocalDateTime()
+    } catch (e: Exception) {
+        java.time.LocalDateTime.now()
+    }
+}
+
+private fun formatFullDateTime(dateTime: java.time.LocalDateTime): String {
+    val formatter = java.time.format.DateTimeFormatter.ofPattern("EEE, dd MMM yyyy • hh:mm a")
+    return dateTime.format(formatter)
 }

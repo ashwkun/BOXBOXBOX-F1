@@ -8,11 +8,14 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,47 +30,45 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.f1tracker.R
 import com.f1tracker.data.models.Race
-import com.f1tracker.ui.viewmodels.HomeViewModel
+import com.f1tracker.ui.viewmodels.RaceViewModel
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun ScheduleScreen(
-    viewModel: HomeViewModel = remember { HomeViewModel.getInstance() }
+    selectedTab: Int = 0,
+    onTabChange: (Int) -> Unit = {},
+    viewModel: RaceViewModel = hiltViewModel(),
+    onRaceClick: (Race) -> Unit = {}
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
 
-    val allRaces by viewModel.allRaces.collectAsState()
-    var selectedTab by remember { mutableStateOf(0) } // 0 = Upcoming, 1 = Completed
-
-    // Filter races
-    val nowUTC = LocalDateTime.now(ZoneId.of("UTC"))
-    val upcomingRaces = remember(allRaces, nowUTC) {
-        allRaces.filter { race ->
-            try {
-                val raceDateTime = LocalDateTime.parse("${race.date}T${race.time}", DateTimeFormatter.ISO_DATE_TIME)
-                raceDateTime.isAfter(nowUTC)
-            } catch (e: Exception) {
-                false
-            }
+    val upcomingRaces by viewModel.upcomingRaces.collectAsState()
+    val completedRaces by viewModel.completedRaces.collectAsState()
+    
+    // Pager state for swipe navigation
+    val pagerState = androidx.compose.foundation.pager.rememberPagerState(initialPage = selectedTab) { 2 }
+    
+    // Sync external selectedTab with Pager
+    LaunchedEffect(selectedTab) {
+        if (pagerState.currentPage != selectedTab) {
+            pagerState.animateScrollToPage(selectedTab)
         }
     }
     
-    val completedRaces = remember(allRaces, nowUTC) {
-        allRaces.filter { race ->
-            try {
-                val raceDateTime = LocalDateTime.parse("${race.date}T${race.time}", DateTimeFormatter.ISO_DATE_TIME)
-                raceDateTime.isBefore(nowUTC)
-            } catch (e: Exception) {
-                false
-            }
-        }.reversed() // Most recent first
+    // Sync Pager change to external onTabChange
+    LaunchedEffect(pagerState.currentPage) {
+        if (pagerState.currentPage != selectedTab) {
+            onTabChange(pagerState.currentPage)
+        }
     }
     
     Column(
@@ -75,125 +76,30 @@ fun ScheduleScreen(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        // Innovative Tab Switcher with sliding indicator
-        BoxWithConstraints(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 20.dp)
-        ) {
-            val tabWidth = maxWidth / 2
+        // Tab Selector
+        com.f1tracker.ui.components.TabSelector(
+            tabs = listOf("UPCOMING", "COMPLETED"),
+            selectedTab = selectedTab,
+            onTabSelected = { index ->
+                onTabChange(index)
+            },
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)
+        )
+        
+        // Horizontal Pager for swipeable tabs
+        androidx.compose.foundation.pager.HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
+        ) { page ->
+            val displayRaces = if (page == 0) upcomingRaces else completedRaces
             
-            // Background container
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        Color(0xFF0F0F0F),
-                        RoundedCornerShape(50.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = Color.White.copy(alpha = 0.05f),
-                        shape = RoundedCornerShape(50.dp)
-                    )
-                    .padding(4.dp)
-            ) {
-                // Animated sliding indicator
-                val indicatorOffset by animateDpAsState(
-                    targetValue = if (selectedTab == 0) 0.dp else tabWidth,
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessMedium
-                    ),
-                    label = "tab_indicator"
-                )
-                
-                Box(
-                    modifier = Modifier
-                        .width(tabWidth - 8.dp)
-                        .height(40.dp)
-                        .offset(x = indicatorOffset)
-                        .background(
-                            Color(0xFFE6007E).copy(alpha = 0.4f), // Further reduced opacity
-                            RoundedCornerShape(50.dp)
-                        )
-                )
-                
-                // Tab buttons
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    // Upcoming Tab
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable { selectedTab = 0 }
-                            .padding(vertical = 10.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "UPCOMING",
-                            fontFamily = brigendsFont,
-                            fontSize = 11.sp,
-                            color = Color.White,
-                            letterSpacing = 1.2.sp,
-                            fontWeight = if (selectedTab == 0) FontWeight.Bold else FontWeight.Normal
-                        )
-                    }
-                    
-                    // Completed Tab
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable { selectedTab = 1 }
-                            .padding(vertical = 10.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "COMPLETED",
-                            fontFamily = brigendsFont,
-                            fontSize = 11.sp,
-                            color = Color.White,
-                            letterSpacing = 1.2.sp,
-                            fontWeight = if (selectedTab == 1) FontWeight.Bold else FontWeight.Normal
-                        )
-                    }
-                }
-            }
-        }
-        
-        // Race list based on selected tab with swipe gesture
-        val displayRaces = if (selectedTab == 0) upcomingRaces else completedRaces
-        var swipeOffset by remember { mutableStateOf(0f) }
-        
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    detectHorizontalDragGestures(
-                        onDragEnd = {
-                            if (swipeOffset > 150 && selectedTab == 1) {
-                                // Swipe right - go to upcoming
-                                selectedTab = 0
-                            } else if (swipeOffset < -150 && selectedTab == 0) {
-                                // Swipe left - go to completed
-                                selectedTab = 1
-                            }
-                            swipeOffset = 0f
-                        },
-                        onHorizontalDrag = { _, dragAmount ->
-                            swipeOffset += dragAmount
-                        }
-                    )
-                }
-        ) {
             if (displayRaces.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = if (selectedTab == 0) "No upcoming races" else "No completed races",
+                        text = if (page == 0) "No upcoming races" else "No completed races",
                         fontFamily = michromaFont,
                         fontSize = 11.sp,
                         color = Color.White.copy(alpha = 0.5f)
@@ -206,11 +112,23 @@ fun ScheduleScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(displayRaces) { race ->
-                        UpcomingRaceCard(
-                            race = race,
-                            michromaFont = michromaFont,
-                            brigendsFont = brigendsFont
-                        )
+                        if (page == 0) {
+                            UpcomingRaceCard(
+                                race = race,
+                                michromaFont = michromaFont,
+                                brigendsFont = brigendsFont,
+                                onClick = { onRaceClick(race) }
+                            )
+                        } else {
+                            // Use CompletedRaceCard for completed races (if available) or fallback to UpcomingRaceCard
+                            // For now reusing UpcomingRaceCard but logic might differ
+                            UpcomingRaceCard(
+                                race = race,
+                                michromaFont = michromaFont,
+                                brigendsFont = brigendsFont,
+                                onClick = { onRaceClick(race) }
+                            )
+                        }
                     }
                 }
             }
@@ -222,7 +140,8 @@ fun ScheduleScreen(
 private fun UpcomingRaceCard(
     race: Race,
     michromaFont: FontFamily,
-    brigendsFont: FontFamily
+    brigendsFont: FontFamily,
+    onClick: () -> Unit
 ) {
     // Calculate time until race
     val nowUTC = LocalDateTime.now(ZoneId.of("UTC"))
@@ -233,6 +152,7 @@ private fun UpcomingRaceCard(
     }
 
     val daysUntil = raceDateTime?.let { ChronoUnit.DAYS.between(nowUTC, it) } ?: 0
+    val isCompleted = raceDateTime?.isBefore(nowUTC) ?: false
 
     // Get flag colors
     val flagColors = getFlagColors(race.circuit.location.country)
@@ -263,6 +183,7 @@ private fun UpcomingRaceCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .background(
                 Brush.radialGradient(
                     colors = listOf(
@@ -355,50 +276,95 @@ private fun UpcomingRaceCard(
                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
             )
 
-            // Bottom: Time info
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Column {
-                    Text(
-                        text = getTimeUntilText(daysUntil),
-                        fontFamily = michromaFont,
-                        fontSize = 8.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = accent,
-                        letterSpacing = 0.3.sp
-                    )
-                    if (weekDatesText.isNotEmpty()) {
+            // Bottom: Time info or Podium
+            if (isCompleted && race.results?.isNotEmpty() == true) {
+                // Show podium for completed races
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    race.results?.take(3)?.forEachIndexed { index, result ->
+                        val driverInfo = com.f1tracker.data.local.F1DataProvider.getDriverByApiId(result.driver.driverId)
+                        val position = index + 1
+                        Box(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                // Position
+                                Text(
+                                    text = "P$position",
+                                    fontFamily = michromaFont,
+                                    fontSize = 8.sp,
+                                    color = when (position) {
+                                        1 -> Color(0xFFFFD700)
+                                        2 -> Color(0xFFC0C0C0)
+                                        3 -> Color(0xFFCD7F32)
+                                        else -> Color.White
+                                    },
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(modifier = Modifier.height(2.dp))
+                                // Driver code
+                                Text(
+                                    text = result.driver.code,
+                                    fontFamily = brigendsFont,
+                                    fontSize = 11.sp,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+                }
+            } else if (!isCompleted) {
+                // Show time info for upcoming races
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Column {
                         Text(
-                            text = weekDatesText,
+                            text = getTimeUntilText(daysUntil),
+                            fontFamily = michromaFont,
+                            fontSize = 8.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = accent,
+                            letterSpacing = 0.3.sp
+                        )
+                        if (weekDatesText.isNotEmpty()) {
+                            Text(
+                                text = weekDatesText,
+                                fontFamily = michromaFont,
+                                fontSize = 12.sp,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.3.sp
+                            )
+                        }
+                    }
+
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(
+                            text = "RACE TIME",
+                            fontFamily = michromaFont,
+                            fontSize = 8.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = accent,
+                            letterSpacing = 0.3.sp
+                        )
+                        Text(
+                            text = raceTimeIST.ifEmpty { race.time },
                             fontFamily = michromaFont,
                             fontSize = 12.sp,
-                            color = Color.White,
                             fontWeight = FontWeight.Bold,
+                            color = Color.White,
                             letterSpacing = 0.3.sp
                         )
                     }
-                }
-
-                Column(horizontalAlignment = Alignment.End) {
-                    Text(
-                        text = "RACE TIME",
-                        fontFamily = michromaFont,
-                        fontSize = 8.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = accent,
-                        letterSpacing = 0.3.sp
-                    )
-                    Text(
-                        text = raceTimeIST.ifEmpty { race.time },
-                        fontFamily = michromaFont,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        letterSpacing = 0.3.sp
-                    )
                 }
             }
         }

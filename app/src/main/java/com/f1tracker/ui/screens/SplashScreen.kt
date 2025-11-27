@@ -1,5 +1,7 @@
 package com.f1tracker.ui.screens
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -21,18 +23,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.f1tracker.R
 import com.f1tracker.data.models.RaceWeekendState
-import com.f1tracker.ui.viewmodels.HomeViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.f1tracker.ui.viewmodels.RaceViewModel
 
 @Composable
 fun SplashScreen(
-    onSplashComplete: () -> Unit
+    onSplashComplete: () -> Unit,
+    viewModel: RaceViewModel = hiltViewModel()
 ) {
     var startAnimation by remember { mutableStateOf(false) }
     
     // Preload data during splash
-    val viewModel = remember { HomeViewModel.getInstance() }
     val raceState by viewModel.raceWeekendState.collectAsState()
     
     // Keep system bars black during splash

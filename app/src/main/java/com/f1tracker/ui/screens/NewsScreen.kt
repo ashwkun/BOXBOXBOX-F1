@@ -21,13 +21,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.f1tracker.R
 import com.f1tracker.data.models.NewsArticle
-import com.f1tracker.ui.viewmodels.HomeViewModel
+import com.f1tracker.ui.viewmodels.NewsViewModel
 
 @Composable
 fun NewsScreen(
-    viewModel: HomeViewModel = remember { HomeViewModel.getInstance() },
+    viewModel: NewsViewModel = hiltViewModel(),
     onNewsClick: (String?) -> Unit = {}
 ) {
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))

@@ -2,6 +2,7 @@ package com.f1tracker.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -14,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.geometry.Offset
@@ -27,10 +29,15 @@ import coil.compose.AsyncImage
 import com.f1tracker.R
 import com.f1tracker.data.local.F1DataProvider
 import com.f1tracker.data.models.DriverStanding
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 
 @Composable
 fun DriverStandingsCard(
     standings: List<DriverStanding>?,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded))
@@ -41,7 +48,15 @@ fun DriverStandingsCard(
             .width(340.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF0A0A0A))
+            .clickable { onClick() } // Make clickable
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF161616),
+                        Color(0xFF000000)
+                    )
+                )
+            )
             .border(
                 width = 1.dp,
                 color = Color.White.copy(alpha = 0.08f),
@@ -74,13 +89,27 @@ fun DriverStandingsCard(
                         .background(Color.Black.copy(alpha = 0.7f))
                         .padding(horizontal = 8.dp, vertical = 6.dp)
                 ) {
-                    Text(
-                        text = "DRIVER STANDINGS",
-                        fontFamily = michromaFont,
-                        fontSize = 9.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = Color.White
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "DRIVER STANDINGS",
+                            fontFamily = michromaFont,
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = Color.White
+                        )
+                        
+                        // Arrow Indicator
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowRight,
+                            contentDescription = null,
+                            tint = Color.White.copy(alpha = 0.5f),
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
                 }
                 
                 // Main card divided into 3 columns - driver images fill each column

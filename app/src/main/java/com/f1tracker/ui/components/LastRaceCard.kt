@@ -2,9 +2,13 @@ package com.f1tracker.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.runtime.Composable
@@ -29,10 +33,12 @@ import com.f1tracker.R
 import com.f1tracker.data.local.F1DataProvider
 import com.f1tracker.data.models.Race
 import com.f1tracker.data.models.RaceResult
+import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
 fun LastRaceCard(
     race: Race?,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded))
@@ -43,7 +49,15 @@ fun LastRaceCard(
             .width(340.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF0A0A0A))
+            .clickable { onClick() } // Make clickable
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF161616),
+                        Color(0xFF000000)
+                    )
+                )
+            )
             .border(
                 width = 1.dp,
                 color = Color.White.copy(alpha = 0.08f),
@@ -101,24 +115,21 @@ fun LastRaceCard(
                             )
                             
                             Text(
-                                text = race.raceName,
+                                text = race.raceName.uppercase(),
                                 fontFamily = michromaFont,
                                 fontSize = 9.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = Color.White
+                                color = Color.White.copy(alpha = 0.8f),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.widthIn(max = 180.dp)
                             )
                         }
-                        
-                        // Flat flag image aligned to right
-                        val countryCode = getCountryCodeForFlag(race.circuit.location.country)
-                        AsyncImage(
-                            model = "https://flagcdn.com/w40/$countryCode.png",
-                            contentDescription = race.circuit.location.country,
-                            modifier = Modifier
-                                .width(16.dp)
-                                .height(12.dp)
-                                .clip(RoundedCornerShape(2.dp)),
-                            contentScale = ContentScale.Crop
+                        // Arrow Indicator
+                        androidx.compose.material3.Icon(
+                            imageVector = androidx.compose.material.icons.Icons.Default.KeyboardArrowRight,
+                            contentDescription = null,
+                            tint = Color.White.copy(alpha = 0.5f),
+                            modifier = Modifier.size(16.dp)
                         )
                     }
                 }
@@ -193,8 +204,8 @@ private fun DriverColumn(
                     contentDescription = result.driver.familyName,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .scale(2f) // 2x zoom maintained
-                        .offset(y = 36.dp), // Adjusted to 36dp
+                        .scale(2.2f) // Increased scale
+                        .offset(y = 40.dp), // Adjusted offset
                     contentScale = ContentScale.FillWidth,
                     alignment = Alignment.TopCenter // Top edge aligned, no top clipping
                 )

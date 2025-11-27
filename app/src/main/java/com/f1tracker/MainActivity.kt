@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import com.f1tracker.data.local.F1DataProvider
 import com.f1tracker.ui.navigation.AppNavigation
 import com.f1tracker.ui.theme.F1TrackerTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
