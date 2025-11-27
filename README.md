@@ -1,6 +1,6 @@
-# BOX. BOX. - The Ultimate F1 Companion
+# BOX BOX•BOX. - Because antigravity is free and i love f1
 
-**BOX. BOX.** is a modern, high-performance Android application designed to provide Formula 1 enthusiasts with a comprehensive and immersive race weekend experience. Built with cutting-edge Android technologies, it delivers real-time data, news, and multimedia content in a sleek, dark-themed interface.
+**BOX BOX•BOX.** is a modern, high-performance Android application designed to provide Formula 1 enthusiasts with a comprehensive and immersive race weekend experience. Built with cutting-edge Android technologies, it delivers real-time data, news, and multimedia content in a sleek, dark-themed interface.
 
 ## 📱 Application Overview
 
@@ -57,6 +57,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## ⚖️ Disclaimer
 
-**BOX. BOX.** is an unofficial application and is not associated in any way with the Formula 1 companies. F1, FORMULA ONE, FORMULA 1, FIA FORMULA ONE WORLD CHAMPIONSHIP, GRAND PRIX and related marks are trade marks of Formula One Licensing B.V.
+**BOX BOX•BOX.** is an unofficial application and is not associated in any way with the Formula 1 companies. F1, FORMULA ONE, FORMULA 1, FIA FORMULA ONE WORLD CHAMPIONSHIP, GRAND PRIX and related marks are trade marks of Formula One Licensing B.V.
 
 All images and team logos used within the application are for identification purposes only and remain the property of their respective owners.
