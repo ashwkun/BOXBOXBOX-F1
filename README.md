@@ -1,242 +1,62 @@
-<div align="center">
+# BOX. BOX. - The Ultimate F1 Companion
 
-# 🏎️ BOXBOXBOX
-### The Ultimate Formula 1 Companion App
+**BOX. BOX.** is a modern, high-performance Android application designed to provide Formula 1 enthusiasts with a comprehensive and immersive race weekend experience. Built with cutting-edge Android technologies, it delivers real-time data, news, and multimedia content in a sleek, dark-themed interface.
 
-**Real-time F1 tracking, live timing, race schedules, standings, and more — all in one sleek Android app.**
+## 📱 Application Overview
 
-[![Release](https://img.shields.io/github/v/release/ashwkun/BOXBOXBOX-F1?style=for-the-badge&label=Latest%20Release)](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest)
-[![Android](https://img.shields.io/badge/Android-8.0%2B-green.svg?style=for-the-badge&logo=android)](https://www.android.com/)
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.9-blue.svg?style=for-the-badge&logo=kotlin)](https://kotlinlang.org/)
-[![License](https://img.shields.io/badge/License-Educational-lightgrey.svg?style=for-the-badge)](LICENSE)
+This application serves as a central hub for all things Formula 1, offering users instant access to schedules, standings, live session data, and team updates. It is engineered with a focus on performance, aesthetics, and user experience, leveraging the power of Jetpack Compose and Material 3 Design.
 
-[📥 **Download Latest APK**](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest) • [📸 Screenshots](#-screenshots) • [✨ Features](#-features) • [🛠️ Build](#-build-from-source)
+### Key Features
 
----
+*   **Live Race Control**: Real-time session tracking with intelligent countdowns and live status updates.
+*   **Comprehensive Schedule**: Detailed weekend schedules for all Grand Prix events, including Practice, Qualifying, and Sprint sessions.
+*   **Circuit Intelligence**: In-depth circuit data including layout maps, lap records, and track specifications.
+*   **Championship Standings**: Interactive Driver and Constructor standings with detailed points breakdowns and visual podiums.
+*   **News & Multimedia Hub**: Aggregated news feeds and curated video highlights to keep users informed.
+*   **Integrated Audio Player**: Built-in podcast player for listening to F1 content directly within the app.
+*   **Push Notifications**: Real-time alerts for session starts and important updates via Firebase Cloud Messaging.
+*   **Offline Capable**: Smart caching ensures essential data is available even without an active connection.
 
-</div>
+## 📸 Visual Tour
 
-## 🚀 Quick Start
+| **Live Session** | **Race Schedule** | **Circuit Details** | **Race Results** |
+|:---:|:---:|:---:|:---:|
+| <img src="docs/images/live_session.jpg" width="200"/> | <img src="docs/images/schedule_overview.jpg" width="200"/> | <img src="docs/images/circuit_details.jpg" width="200"/> | <img src="docs/images/race_results.jpg" width="200"/> |
 
-<div align="center">
+| **Driver Standings** | **Constructor Standings** | **News Hub** | **Audio Player** |
+|:---:|:---:|:---:|:---:|
+| <img src="docs/images/driver_standings.jpg" width="200"/> | <img src="docs/images/constructor_standings.jpg" width="200"/> | <img src="docs/images/news_hub.jpg" width="200"/> | <img src="docs/images/audio_player.jpg" width="200"/> |
 
-### **Get Started in Seconds**
+## 🛠 Technical Architecture
 
-[![Download APK](https://img.shields.io/badge/Download-APK-brightgreen.svg?style=for-the-badge&logo=android)](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest)
+The project follows modern Android development best practices, utilizing a **Model-View-ViewModel (MVVM)** architecture pattern with **Clean Architecture** principles to ensure scalability, testability, and maintainability.
 
-**Latest Version: v1.2** | Requires Android 8.0+
+### Tech Stack
 
-</div>
+*   **Language**: Kotlin (100%)
+*   **UI Framework**: Jetpack Compose (Material 3)
+*   **Dependency Injection**: Dagger Hilt
+*   **Asynchronous Processing**: Kotlin Coroutines & Flow
+*   **Network**: Retrofit 2 & OkHttp 4
+*   **Image Loading**: Coil
+*   **Media Playback**: ExoPlayer (Media3)
+*   **Notifications**: Firebase Cloud Messaging (FCM)
+*   **Build System**: Gradle (Kotlin DSL)
 
----
+### Data Sources & APIs
 
-## ✨ Features
+This application aggregates data from multiple public sources to provide a unified experience:
 
-<div align="center">
-
-### **Everything You Need for F1 Weekend** 🏁
-
-</div>
-
-### ⚡ **Real-Time Live Timing**
-- 🟢 **Live F1 positions** with SignalR WebSocket integration
-- 📊 **Driver positions, lap times, gaps, and pit stops** in real-time
-- 🔌 Connection status indicators
-- 📱 Terminal-style RAW data view
-- ⚡ Automatic updates during live sessions
-
-### 🏎️ **Race Weekend Tracking**
-- 📅 **Complete session schedules** (Practice, Qualifying, Sprint, Race)
-- ✅ **Session completion markers** with visual indicators
-- ⏱️ **Real-time countdown timers** for upcoming sessions
-- 🌤️ **Weather forecasts** for each session
-- 🗺️ **Circuit track layouts** with country flag gradients
-
-### 📊 **Standings & Results**
-- 🥇 **Driver standings** with team colors
-- 🏭 **Constructor standings**
-- 🏆 **Last race results** with top 3 podium
-- 🎯 **Completed qualifying and sprint results** during race weekends
-
-### 📰 **F1 Content Hub**
-- 📰 **F1 news** from ESPN
-- ▶️ **YouTube highlights** with in-app video player
-- 🎧 **F1 podcasts** with in-app audio player
-  - The Fast and the Curious
-  - The F1 Podcast
-  - Autosport F1 Podcast
-
-### 🎨 **Beautiful Design**
-- 🌙 **Dark theme** with sharp, modern aesthetic
-- ✨ **Smooth animations** and transitions
-- 📱 **Auto-scrolling stats cards**
-- 🔤 **Custom fonts** (Brigends Expanded, Michroma)
-- 🎯 **Material Design 3** principles
-
----
-
-## 📸 Screenshots
-
-
-
----
-
-## 🛠️ Tech Stack
-
-<div align="center">
-
-Built with modern Android technologies
-
-</div>
-
-| Category | Technology |
-|----------|-----------|
-| **Language** | ![Kotlin](https://img.shields.io/badge/Kotlin-1.9-blue?logo=kotlin) |
-| **UI Framework** | ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-1.5-blue?logo=android) |
-| **Networking** | ![Retrofit](https://img.shields.io/badge/Retrofit-2.9-red) • ![OkHttp](https://img.shields.io/badge/OkHttp-4.12-green) |
-| **Media** | ![ExoPlayer](https://img.shields.io/badge/ExoPlayer-3.19-orange) • ![Coil](https://img.shields.io/badge/Coil-2.5-purple) |
-| **Async** | ![Coroutines](https://img.shields.io/badge/Coroutines-1.7-green) • ![Flow](https://img.shields.io/badge/StateFlow-1.7-blue) |
-
-**Key Libraries:**
-- **Retrofit** - REST API client
-- **OkHttp** - WebSocket client (SignalR)
-- **SimpleXML** - XML/RSS parsing
-- **ExoPlayer (AndroidX Media3)** - Audio/video playback
-- **Coil** - Image loading
-- **Coroutines & Flow** - Asynchronous programming
-- **StateFlow** - Reactive state management
-
----
-
-## 📡 Data Sources
-
-<div align="center">
-
-Powered by official and reliable F1 data sources
-
-</div>
-
-| Source | Purpose |
-|--------|---------|
-| [Ergast F1 API](http://ergast.com/mrd/) | Race data, schedules, standings, results |
-| [Planet F1 Live Timing](https://live.planetf1.com) | Real-time live timing via SignalR WebSocket |
-| [ESPN F1 API](https://site.api.espn.com) | News articles |
-| [Open-Meteo Weather API](https://open-meteo.com) | Weather forecasts for sessions |
-| [flagcdn.com](https://flagcdn.com) | Country flags |
-| YouTube RSS | Video highlights |
-| Podcast RSS | F1 podcasts |
-
----
-
-## 📥 Installation
-
-### **Option 1: Download APK (Recommended)**
-
-<div align="center">
-
-[![Download Latest APK](https://img.shields.io/badge/Download-v1.2-APK-brightgreen.svg?style=for-the-badge&logo=android)](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest)
-
-1. Download the latest APK from [Releases](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest)
-2. Enable "Install from Unknown Sources" on your Android device
-3. Open the APK file and install
-4. Enjoy! 🎉
-
-</div>
-
-### **Option 2: Build from Source**
-
-   ```bash
-# Clone the repository
-git clone https://github.com/ashwkun/BOXBOXBOX-F1.git
-   cd "BOXBOXBOX APP"
-
-# Build debug APK
-./gradlew assembleDebug
-
-# Or build release APK
-./gradlew assembleRelease
-```
-
-The APK will be located at:
-- Debug: `app/build/outputs/apk/debug/app-debug.apk`
-- Release: `app/build/outputs/apk/release/app-release-unsigned.apk`
-
----
-
-## ⚙️ Requirements
-
-- **Android 8.0 (API 26)** or higher
-- **Internet connection** for live data
-- **Storage:** ~50MB for app installation
-
----
-
-## 📋 Changelog
-
-### 🎉 **v1.2 (Latest)** - Live Timing Update
-- ✨ **Real-time F1 Live Timing** with SignalR WebSocket integration
-- ✨ **Session completion markers** with green gradient theme
-- ✨ **Weather data caching** (no loss on screen off/on)
-- 🎨 Redesigned Live Timing page with connection status
-- 🎨 Short driver codes (VER, HAM, LEC, etc.)
-- 🎨 Fixed card heights for consistent display
-- 🎨 Improved countdown with 00 padding
-- 🔧 Enhanced state management and error handling
-
-### 🚀 **v1.1** - Initial Release
-- Core features and functionality
-- Race schedules and standings
-- News and content sections
-
-[View full changelog →](https://github.com/ashwkun/BOXBOXBOX-F1/releases)
-
----
-
-## 📁 Project Structure
-
-```
-app/
-├── data/
-│   ├── api/          # Retrofit services
-│   ├── local/        # Local data providers
-│   ├── live/         # SignalR WebSocket client
-│   └── models/       # Data models
-├── ui/
-│   ├── components/   # Reusable UI components
-│   ├── screens/      # App screens
-│   ├── viewmodels/   # ViewModels
-│   └── theme/        # Theme configuration
-└── res/
-    ├── drawable/     # Team logos, circuit maps
-    └── font/         # Custom fonts
-```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! If you'd like to contribute:
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
+*   **Ergast Developer API**: Provides historical race data, schedules, and standings.
+*   **OpenF1 API**: Supplies real-time session data and telemetry.
+*   **RSS Feeds**: News content aggregated from major F1 publications.
 
 ## 📄 License
 
-This project is for **educational purposes only**.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
----
+## ⚖️ Disclaimer
 
-<div align="center">
+**BOX. BOX.** is an unofficial application and is not associated in any way with the Formula 1 companies. F1, FORMULA ONE, FORMULA 1, FIA FORMULA ONE WORLD CHAMPIONSHIP, GRAND PRIX and related marks are trade marks of Formula One Licensing B.V.
 
-### **Made with ❤️ for F1 Fans**
-
-[⬆ Back to Top](#-boxboxbox)
-
-**⭐ Star this repo if you find it useful!**
-
-</div>
+All images and team logos used within the application are for identification purposes only and remain the property of their respective owners.
