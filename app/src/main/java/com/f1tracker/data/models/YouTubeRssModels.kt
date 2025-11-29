@@ -95,6 +95,7 @@ data class F1Video(
     val thumbnailUrl: String,
     val views: String,
     val publishedDate: String,
-    val duration: String = ""
+    val duration: String = "",
+    val viewCount: Long = 0
 )
 

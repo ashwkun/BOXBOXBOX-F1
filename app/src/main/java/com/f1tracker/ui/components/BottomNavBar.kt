@@ -111,14 +111,14 @@ fun BottomNavBar(
                 onClick = { onNavigate(NavDestination.STANDINGS) }
             )
             
-            // News (5th)
+            // Social (5th)
             NavItemWithLabel(
-                icon = Icons.Default.Article,
-                label = "NEWS",
+                icon = Icons.Default.DynamicFeed,
+                label = "SOCIAL",
                 brigendsFont = brigendsFont,
-                isSelected = currentDestination == NavDestination.NEWS,
+                isSelected = currentDestination == NavDestination.SOCIAL,
                 accentColor = accentColor,
-                onClick = { onNavigate(NavDestination.NEWS) }
+                onClick = { onNavigate(NavDestination.SOCIAL) }
             )
         }
     }

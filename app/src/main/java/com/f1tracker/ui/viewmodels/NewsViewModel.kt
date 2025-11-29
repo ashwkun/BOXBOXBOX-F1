@@ -20,12 +20,16 @@ class NewsViewModel @Inject constructor(
     private val _newsArticles = MutableStateFlow<List<NewsArticle>>(emptyList())
     val newsArticles: StateFlow<List<NewsArticle>> = _newsArticles.asStateFlow()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
     init {
         loadNews()
     }
 
     fun loadNews() {
         viewModelScope.launch {
+            _isRefreshing.value = true
             val result = repository.getF1News()
             result.onSuccess { articles ->
                 _newsArticles.value = articles
@@ -33,6 +37,25 @@ class NewsViewModel @Inject constructor(
             }.onFailure { e ->
                 Log.e("NewsViewModel", "Failed to load news", e)
             }
+            _isRefreshing.value = false
         }
+    }
+    
+    fun refreshNews() {
+        loadNews()
+    }
+
+    // Scroll Persistence
+    var newsScrollIndex = 0
+    var newsScrollOffset = 0
+
+    fun updateScrollPosition(index: Int, offset: Int) {
+        newsScrollIndex = index
+        newsScrollOffset = offset
+    }
+
+    fun resetScrollPosition() {
+        newsScrollIndex = 0
+        newsScrollOffset = 0
     }
 }

@@ -24,6 +24,11 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.f1tracker.R
 import com.f1tracker.data.models.NewsArticle
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.foundation.border
+import androidx.compose.ui.graphics.Brush
 
 val michromaFont = FontFamily(
     Font(R.font.michroma, FontWeight.Normal)
@@ -137,21 +142,11 @@ fun NewsSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "LATEST NEWS",
+                text = "NEWS >",
                 fontFamily = brigendsFont,
                 fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
                 color = Color.White.copy(alpha = 0.6f),
                 letterSpacing = 2.sp
-            )
-            
-            Spacer(modifier = Modifier.width(8.dp))
-            
-            Text(
-                text = ">",
-                fontFamily = brigendsFont,
-                fontSize = 16.sp,
-                color = Color.White.copy(alpha = 0.6f)
             )
         }
         
@@ -182,44 +177,61 @@ fun NewsSection(
 private fun ViewMoreCard(
     onClick: () -> Unit
 ) {
-    Card(
+    Box(
         modifier = Modifier
-            .width(300.dp)
-            .height(320.dp)
-            .clickable { onClick() },
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF1A1A1A)
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        )
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Text(
-                    text = "VIEW MORE",
-                    fontFamily = brigendsFont,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    letterSpacing = 1.5.sp
+            .width(160.dp) // Match other sections
+            .height(320.dp) // Match NewsCard height
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF1A1A1A),
+                        Color(0xFF0A0A0A)
+                    )
                 )
-                
-                Text(
-                    text = ">",
-                    fontFamily = brigendsFont,
-                    fontSize = 40.sp,
-                    color = Color.White.copy(alpha = 0.7f)
+            )
+            .clickable(onClick = onClick)
+            .border(
+                width = 1.dp,
+                color = Color.White.copy(alpha = 0.1f),
+                shape = RoundedCornerShape(12.dp)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(
+                        Color(0xFFFF0080).copy(alpha = 0.1f),
+                        androidx.compose.foundation.shape.CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowForward,
+                    contentDescription = "View More",
+                    tint = Color(0xFFFF0080),
+                    modifier = Modifier.size(24.dp)
                 )
             }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            Text(
+                text = "View All",
+                fontFamily = michromaFont,
+                fontSize = 12.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
+
+
+
 

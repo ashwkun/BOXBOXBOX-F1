@@ -14,7 +14,8 @@ sealed class RaceWeekendState {
         val race: Race,
         val currentEvent: SessionEvent?,
         val completedEvents: List<CompletedEvent>,
-        val upcomingEvents: List<UpcomingEvent>
+        val upcomingEvents: List<UpcomingEvent>,
+        val sessionResults: List<SessionResult> = emptyList()  // ESPN session results
     ) : RaceWeekendState()
     
     object Loading : RaceWeekendState()

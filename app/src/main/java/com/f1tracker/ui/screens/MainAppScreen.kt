@@ -37,9 +37,11 @@ fun MainAppScreen(
     var webViewUrl by remember { mutableStateOf<String?>(null) }
     var selectedRace by remember { mutableStateOf<com.f1tracker.data.models.Race?>(null) }
     var selectedVideoId by remember { mutableStateOf<String?>(null) }
+    var selectedSessionResult by remember { mutableStateOf<com.f1tracker.data.models.SessionResult?>(null) }
     var backPressedTime by remember { mutableLongStateOf(0L) }
     var scheduleSelectedTab by remember { mutableStateOf(0) } // Persist schedule tab state here
     var standingsSelectedTab by remember { mutableStateOf(0) } // Persist standings tab state here
+    var socialSelectedTab by remember { mutableStateOf(0) } // Persist social tab state here
     val context = LocalContext.current
     
     // Podcast audio player state
@@ -75,6 +77,7 @@ fun MainAppScreen(
         when {
             showFullScreenPlayer -> showFullScreenPlayer = false
             selectedVideoId != null -> selectedVideoId = null
+            selectedSessionResult != null -> selectedSessionResult = null
             selectedRace != null -> selectedRace = null
             webViewUrl != null -> webViewUrl = null
             currentDestination != NavDestination.HOME -> currentDestination = NavDestination.HOME
@@ -116,6 +119,12 @@ fun MainAppScreen(
     } else if (selectedVideoId != null) {
         // Show YouTube Player if video is selected
         YouTubePlayerScreen(videoId = selectedVideoId!!)
+    } else if (selectedSessionResult != null) {
+        // Show Session Results
+        SessionResultsScreen(
+            sessionResult = selectedSessionResult!!,
+            onBackClick = { selectedSessionResult = null }
+        )
     } else if (selectedRace != null) {
         // Show Race Detail if race is selected
         RaceDetailScreen(
@@ -146,7 +155,18 @@ fun MainAppScreen(
             when (currentDestination) {
                     NavDestination.HOME -> HomeScreen(
                         onNewsClick = { url -> webViewUrl = url },
-                        onNavigateToNews = { currentDestination = NavDestination.NEWS },
+                        onNavigateToNews = { 
+                            socialSelectedTab = 1
+                            currentDestination = NavDestination.SOCIAL 
+                        },
+                        onNavigateToVideos = { 
+                            socialSelectedTab = 2
+                            currentDestination = NavDestination.SOCIAL 
+                        },
+                        onNavigateToPodcasts = { 
+                            socialSelectedTab = 3
+                            currentDestination = NavDestination.SOCIAL 
+                        },
                         onRaceClick = { race -> selectedRace = race },
                         onVideoClick = { videoId -> selectedVideoId = videoId },
                         onEpisodeClick = { episode ->
@@ -165,6 +185,12 @@ fun MainAppScreen(
                         onNavigateToStandings = { tabIndex ->
                             standingsSelectedTab = tabIndex
                             currentDestination = NavDestination.STANDINGS
+                        },
+                        onViewResults = { result ->
+                            selectedSessionResult = result
+                        },
+                        onNavigateToLive = {
+                            currentDestination = NavDestination.LIVE
                         }
                 )
                     NavDestination.SCHEDULE -> ScheduleScreen(
@@ -177,9 +203,24 @@ fun MainAppScreen(
                         selectedTab = standingsSelectedTab,
                         onTabChange = { standingsSelectedTab = it }
                     )
-                    NavDestination.NEWS -> NewsScreen(
-                        onNewsClick = { url -> webViewUrl = url }
-                )
+                    NavDestination.SOCIAL -> SocialScreen(
+                        onNewsClick = { url -> webViewUrl = url },
+                        onVideoClick = { videoId -> selectedVideoId = videoId },
+                        onEpisodeClick = { episode ->
+                            currentEpisode = episode
+                            audioPlayerManager.playEpisode(episode.audioUrl)
+                        },
+                        onPlayPause = {
+                            if (isPlaying) {
+                                audioPlayerManager.pause()
+                            } else {
+                                audioPlayerManager.play()
+                            }
+                        },
+                        currentlyPlayingEpisode = currentEpisode,
+                        isPlaying = isPlaying,
+                        initialTab = socialSelectedTab
+                    )
             }
         }
 

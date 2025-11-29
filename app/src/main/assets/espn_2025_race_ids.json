@@ -1,0 +1,152 @@
+{
+    "season": "2025",
+    "source": "ESPN F1 API",
+    "apiEndpoint": "https://site.api.espn.com/apis/site/v2/sports/racing/f1/events/{raceId}",
+    "lastUpdated": "2025-11-29",
+    "races": [
+        {
+            "round": 1,
+            "raceName": "Australian Grand Prix",
+            "espnId": "600052045",
+            "location": "Melbourne, Australia"
+        },
+        {
+            "round": 2,
+            "raceName": "Chinese Grand Prix",
+            "espnId": "600052046",
+            "location": "Shanghai, China"
+        },
+        {
+            "round": 3,
+            "raceName": "Japanese Grand Prix",
+            "espnId": "600052047",
+            "location": "Suzuka, Japan"
+        },
+        {
+            "round": 4,
+            "raceName": "Bahrain Grand Prix",
+            "espnId": "600052048",
+            "location": "Sakhir, Bahrain"
+        },
+        {
+            "round": 5,
+            "raceName": "Saudi Arabian Grand Prix",
+            "espnId": "600052049",
+            "location": "Jeddah, Saudi Arabia"
+        },
+        {
+            "round": 6,
+            "raceName": "Miami Grand Prix",
+            "espnId": "600052050",
+            "location": "Miami, USA"
+        },
+        {
+            "round": 7,
+            "raceName": "Emilia Romagna Grand Prix",
+            "espnId": "600052051",
+            "location": "Imola, Italy"
+        },
+        {
+            "round": 8,
+            "raceName": "Monaco Grand Prix",
+            "espnId": "600052052",
+            "location": "Monte-Carlo, Monaco"
+        },
+        {
+            "round": 9,
+            "raceName": "Spanish Grand Prix",
+            "espnId": "600052053",
+            "location": "Montmeló, Spain"
+        },
+        {
+            "round": 10,
+            "raceName": "Canadian Grand Prix",
+            "espnId": "600052054",
+            "location": "Montreal, Canada"
+        },
+        {
+            "round": 11,
+            "raceName": "Austrian Grand Prix",
+            "espnId": "600052055",
+            "location": "Spielberg, Austria"
+        },
+        {
+            "round": 12,
+            "raceName": "British Grand Prix",
+            "espnId": "600052056",
+            "location": "Silverstone, UK"
+        },
+        {
+            "round": 13,
+            "raceName": "Belgian Grand Prix",
+            "espnId": "600052057",
+            "location": "Spa, Belgium"
+        },
+        {
+            "round": 14,
+            "raceName": "Hungarian Grand Prix",
+            "espnId": "600052058",
+            "location": "Budapest, Hungary"
+        },
+        {
+            "round": 15,
+            "raceName": "Dutch Grand Prix",
+            "espnId": "600052059",
+            "location": "Zandvoort, Netherlands"
+        },
+        {
+            "round": 16,
+            "raceName": "Italian Grand Prix",
+            "espnId": "600052060",
+            "location": "Monza, Italy"
+        },
+        {
+            "round": 17,
+            "raceName": "Azerbaijan Grand Prix",
+            "espnId": "600052101",
+            "location": "Baku, Azerbaijan"
+        },
+        {
+            "round": 18,
+            "raceName": "Singapore Grand Prix",
+            "espnId": "600052102",
+            "location": "Marina Bay, Singapore"
+        },
+        {
+            "round": 19,
+            "raceName": "United States Grand Prix",
+            "espnId": "600052103",
+            "location": "Austin, USA"
+        },
+        {
+            "round": 20,
+            "raceName": "Mexico City Grand Prix",
+            "espnId": "600052104",
+            "location": "Mexico City, Mexico"
+        },
+        {
+            "round": 21,
+            "raceName": "São Paulo Grand Prix",
+            "espnId": "600052105",
+            "location": "São Paulo, Brazil"
+        },
+        {
+            "round": 22,
+            "raceName": "Las Vegas Grand Prix",
+            "espnId": "600052106",
+            "location": "Las Vegas, USA"
+        },
+        {
+            "round": 23,
+            "raceName": "Qatar Grand Prix",
+            "espnId": "600052107",
+            "location": "Lusail, Qatar"
+        },
+        {
+            "round": 24,
+            "raceName": "Abu Dhabi Grand Prix",
+            "espnId": "600052108",
+            "location": "Abu Dhabi, UAE"
+        }
+    ]
+}

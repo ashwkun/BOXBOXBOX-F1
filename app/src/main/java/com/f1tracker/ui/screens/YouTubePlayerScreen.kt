@@ -163,6 +163,22 @@ fun YouTubePlayerScreen(
                                                     video.muted = false;
                                                     video.volume = 1.0;
                                                     
+                                                    // Try to force high quality
+                                                    try {
+                                                        var player = document.getElementById('movie_player') || document.querySelector('.html5-video-player');
+                                                        if (player) {
+                                                            console.log('Found player, attempting to set quality to hd1080');
+                                                            if (typeof player.setPlaybackQualityRange === 'function') {
+                                                                player.setPlaybackQualityRange('hd1080');
+                                                            }
+                                                            if (typeof player.setPlaybackQuality === 'function') {
+                                                                player.setPlaybackQuality('hd1080');
+                                                            }
+                                                        }
+                                                    } catch (e) {
+                                                        console.log('Error setting quality:', e);
+                                                    }
+                                                    
                                                     // Play
                                                     if (video.paused) {
                                                         video.play().catch(e => console.log('Play error:', e));
@@ -295,7 +311,7 @@ fun YouTubePlayerScreen(
                                 }
                             }
                             
-                            val mobileYouTubeUrl = "https://m.youtube.com/watch?v=$videoId&autoplay=1"
+                            val mobileYouTubeUrl = "https://m.youtube.com/watch?v=$videoId&autoplay=1&vq=hd1080"
                             settings.userAgentString = "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
                             loadUrl(mobileYouTubeUrl)
                             

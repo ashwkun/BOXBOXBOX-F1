@@ -23,6 +23,15 @@ class MainActivity : ComponentActivity() {
     
     @Inject
     lateinit var updateChecker: UpdateChecker
+    
+    private val liveClient by lazy {
+        com.f1tracker.data.live.SignalRLiveTimingClient.getInstance()
+    }
+    
+    private val raceViewModel: com.f1tracker.ui.viewmodels.RaceViewModel by lazy {
+        androidx.lifecycle.ViewModelProvider(this)[com.f1tracker.ui.viewmodels.RaceViewModel::class.java]
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -40,6 +49,22 @@ class MainActivity : ComponentActivity() {
         // Set system bars to black initially for splash screen
         window.statusBarColor = android.graphics.Color.BLACK
         window.navigationBarColor = android.graphics.Color.BLACK
+        
+        // Manage SignalR connection based on session state (persists across navigation)
+        lifecycleScope.launch {
+            raceViewModel.raceWeekendState.collect { state ->
+                val shouldConnect = when (state) {
+                    is com.f1tracker.data.models.RaceWeekendState.Active -> state.currentEvent?.isLive == true
+                    else -> false
+                }
+                
+                if (shouldConnect) {
+                    liveClient.connect()
+                } else {
+                    liveClient.disconnect()
+                }
+            }
+        }
         
         setContent {
             var updateStatus by remember { mutableStateOf<UpdateStatus?>(null) }
@@ -104,11 +129,23 @@ class MainActivity : ComponentActivity() {
         }
     }
     
+    override fun onDestroy() {
+        super.onDestroy()
+        // Only disconnect when app is being killed (not just paused)
+        if (isFinishing) {
+            liveClient.disconnect()
+        }
+    }
+    
     private fun loadF1Data() {
         try {
             val driversJson = assets.open("f1_2025_drivers_reformed.json").bufferedReader().use { it.readText() }
             val teamsJson = assets.open("f1_2025_teams_reformed.json").bufferedReader().use { it.readText() }
             F1DataProvider.loadData(driversJson, teamsJson)
+            
+            // Load ESPN race IDs
+            val raceIdsJson = assets.open("espn_2025_race_ids.json").bufferedReader().use { it.readText() }
+            com.f1tracker.data.local.ESPNRaceIdProvider.loadData(raceIdsJson)
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "Failed to load F1 data: ${e.message}")
         }

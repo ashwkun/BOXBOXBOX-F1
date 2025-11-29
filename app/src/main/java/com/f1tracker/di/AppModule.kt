@@ -23,7 +23,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideESPNNewsApiService(): ESPNNewsApiService = RetrofitClient.espnNewsApiService
+    fun provideMotorsportApiService(): MotorsportApiService = RetrofitClient.motorsportApiService
 
     @Provides
     @Singleton
@@ -39,17 +39,29 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideESPNApiService(): ESPNApiService = RetrofitClient.espnApiService
+
+    @Provides
+    @Singleton
+    fun provideF1NewsApiService(): F1NewsApiService = RetrofitClient.f1NewsApiService
+
+    @Provides
+    @Singleton
     fun provideF1Repository(
         f1ApiService: F1ApiService,
         weatherApiService: WeatherApiService,
-        espnNewsApiService: ESPNNewsApiService,
+        motorsportApiService: MotorsportApiService,
+        f1NewsApiService: F1NewsApiService,
+        espnApiService: ESPNApiService,
         youtubeRssApiService: YouTubeRssApiService,
         podcastApiService: PodcastApiService
     ): F1Repository {
         return F1RepositoryImpl(
             f1ApiService,
             weatherApiService,
-            espnNewsApiService,
+            motorsportApiService,
+            f1NewsApiService,
+            espnApiService,
             youtubeRssApiService,
             podcastApiService
         )

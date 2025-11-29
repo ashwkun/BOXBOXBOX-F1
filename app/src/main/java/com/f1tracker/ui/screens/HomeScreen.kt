@@ -51,11 +51,15 @@ fun HomeScreen(
     multimediaViewModel: MultimediaViewModel = hiltViewModel(),
     onNewsClick: (String?) -> Unit = {},
     onNavigateToNews: () -> Unit = {},
+    onNavigateToVideos: () -> Unit = {},
+    onNavigateToPodcasts: () -> Unit = {},
     onRaceClick: (Race) -> Unit = {},
     onVideoClick: (String) -> Unit = {},
     onEpisodeClick: (com.f1tracker.data.models.PodcastEpisode) -> Unit = {},
     onPlayPause: () -> Unit = {},
     onNavigateToStandings: (Int) -> Unit = {}, // 0 for Drivers, 1 for Constructors
+    onViewResults: (com.f1tracker.data.models.SessionResult) -> Unit = {},
+    onNavigateToLive: () -> Unit = {},
     currentlyPlayingEpisode: com.f1tracker.data.models.PodcastEpisode? = null,
     isPlaying: Boolean = false
 ) {
@@ -85,7 +89,9 @@ fun HomeScreen(
             getCountdown = { targetDateTime ->
                 raceViewModel.getCountdownTo(targetDateTime)
             },
-            onRaceClick = onRaceClick
+            onRaceClick = onRaceClick,
+            onViewResults = onViewResults,
+            onLiveClick = onNavigateToLive
         )
         
         Spacer(modifier = Modifier.height(12.dp))
@@ -114,19 +120,21 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(12.dp))
             com.f1tracker.ui.components.YouTubeHighlightsSection(
                 videos = youtubeVideos,
-                onVideoClick = onVideoClick
+                onVideoClick = onVideoClick,
+                onViewMoreClick = onNavigateToVideos
             )
         }
         
         // Podcasts Section
         if (podcasts.isNotEmpty()) {
             Spacer(modifier = Modifier.height(12.dp))
-            com.f1tracker.ui.components.PodcastsSection(
+            com.f1tracker.ui.components.HomePodcastsSection(
                 podcasts = podcasts,
                 currentlyPlayingEpisode = currentlyPlayingEpisode,
                 isPlaying = isPlaying,
                 onEpisodeClick = onEpisodeClick,
-                onPlayPause = onPlayPause
+                onPlayPause = onPlayPause,
+                onViewMoreClick = onNavigateToPodcasts
             )
         }
         

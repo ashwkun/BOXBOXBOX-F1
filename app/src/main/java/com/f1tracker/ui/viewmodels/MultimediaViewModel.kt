@@ -24,6 +24,13 @@ class MultimediaViewModel @Inject constructor(
     private val _podcasts = MutableStateFlow<List<Podcast>>(emptyList())
     val podcasts: StateFlow<List<Podcast>> = _podcasts.asStateFlow()
 
+    private val _selectedTabIndex = MutableStateFlow(0)
+    val selectedTabIndex: StateFlow<Int> = _selectedTabIndex.asStateFlow()
+
+    fun setSelectedTab(index: Int) {
+        _selectedTabIndex.value = index
+    }
+
     init {
         loadYouTubeVideos()
         loadPodcasts()
@@ -37,7 +44,8 @@ class MultimediaViewModel @Inject constructor(
                 val formattedVideos = videos.map { video ->
                     video.copy(
                         views = formatViews(video.views),
-                        duration = formatDuration(video.duration.toIntOrNull() ?: 0)
+                        duration = formatDuration(video.duration.toIntOrNull() ?: 0),
+                        viewCount = video.views.toLongOrNull() ?: 0L
                     )
                 }
                 _youtubeVideos.value = formattedVideos
@@ -64,7 +72,7 @@ class MultimediaViewModel @Inject constructor(
                                 description = stripHtml(episode.description),
                                 duration = formatPodcastDuration(episode.duration)
                             )
-                        }
+                        }.sortedByDescending { parseDate(it.publishedDate) }
                     )
                 }
                 _podcasts.value = formattedPodcasts
@@ -129,5 +137,46 @@ class MultimediaViewModel @Inject constructor(
             .replace(Regex("&gt;"), ">")
             .replace(Regex("\\s+"), " ")
             .trim()
+    }
+
+    private fun parseDate(dateString: String): java.time.ZonedDateTime {
+        return try {
+            java.time.ZonedDateTime.parse(dateString, java.time.format.DateTimeFormatter.ISO_DATE_TIME)
+        } catch (e: Exception) {
+            try {
+                // Try RFC 1123 (common for RSS/Podcasts)
+                java.time.ZonedDateTime.parse(dateString, java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME)
+            } catch (e2: Exception) {
+                java.time.ZonedDateTime.now().minusYears(1) // Fallback
+            }
+        }
+    }
+
+    // Scroll Persistence for Latest Tab
+    var latestScrollIndex = 0
+    var latestScrollOffset = 0
+
+    fun updateLatestScrollPosition(index: Int, offset: Int) {
+        latestScrollIndex = index
+        latestScrollOffset = offset
+    }
+
+    fun resetLatestScrollPosition() {
+        latestScrollIndex = 0
+        latestScrollOffset = 0
+    }
+
+    // Scroll Persistence for Videos Tab
+    var videosScrollIndex = 0
+    var videosScrollOffset = 0
+
+    fun updateVideosScrollPosition(index: Int, offset: Int) {
+        videosScrollIndex = index
+        videosScrollOffset = offset
+    }
+
+    fun resetVideosScrollPosition() {
+        videosScrollIndex = 0
+        videosScrollOffset = 0
     }
 }

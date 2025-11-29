@@ -58,4 +58,10 @@ interface F1ApiService {
     suspend fun getAllRaceResultsForSeason(
         @Path("season") season: String = "2025"
     ): RacesResponse
+
+    @GET("ergast/f1/{season}/circuits/{circuitId}/sprint/")
+    suspend fun getSprintResultsByCircuit(
+        @Path("season") season: String = "2025",
+        @Path("circuitId") circuitId: String
+    ): SprintResponse
 }

@@ -70,6 +70,7 @@ object RetrofitClient {
     val f1ApiService: F1ApiService = f1Retrofit.create(F1ApiService::class.java)
     val weatherApiService: WeatherApiService = weatherRetrofit.create(WeatherApiService::class.java)
     val espnNewsApiService: ESPNNewsApiService = espnRetrofit.create(ESPNNewsApiService::class.java)
+    val espnApiService: ESPNApiService = espnRetrofit.create(ESPNApiService::class.java)
     val youtubeRssApiService: YouTubeRssApiService = youtubeRssRetrofit.create(YouTubeRssApiService::class.java)
     val podcastApiService: PodcastApiService by lazy {
         podcastRetrofit.create(PodcastApiService::class.java)
@@ -82,7 +83,31 @@ object RetrofitClient {
             .build()
     }
 
+    private val f1NewsRetrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://rss-bridge.org/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
     val gitHubApiService: GitHubApiService by lazy {
         githubRetrofit.create(GitHubApiService::class.java)
+    }
+
+    val f1NewsApiService: F1NewsApiService by lazy {
+        f1NewsRetrofit.create(F1NewsApiService::class.java)
+    }
+
+    private const val MOTORSPORT_RSS_BASE_URL = "https://www.motorsport.com/"
+
+    private val motorsportRetrofit = Retrofit.Builder()
+        .baseUrl(MOTORSPORT_RSS_BASE_URL)
+        .client(okHttpClient)
+        .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(Persister()))
+        .build()
+
+    val motorsportApiService: MotorsportApiService by lazy {
+        motorsportRetrofit.create(MotorsportApiService::class.java)
     }
 }

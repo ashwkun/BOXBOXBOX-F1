@@ -1,6 +1,7 @@
 package com.f1tracker.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.lazy.LazyColumn
@@ -108,6 +109,8 @@ fun RaceDetailScreen(
         }
     }
 
+
+
     // Scroll state for sticky header
     val listState = androidx.compose.foundation.lazy.rememberLazyListState()
     val showStickyHeader by remember {
@@ -118,12 +121,24 @@ fun RaceDetailScreen(
 
     // Get flag colors for gradient
     val flagColors = getFlagColorsForDetail(race.circuit.location.country)
+    
+    // Last Year's Results (Podium + Full List)
+    val sprintResults by viewModel.lastYearSprintResults.collectAsState()
+    var selectedResultType by remember { mutableStateOf(ResultType.RACE) }
+    val hasSprintResults = sprintResults?.isNotEmpty() == true
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
     ) {
+        com.f1tracker.ui.components.AnimatedHeader()
+        
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
         // Content
         LazyColumn(
             state = listState,
@@ -147,62 +162,116 @@ fun RaceDetailScreen(
             }
             
             // Last Year's Results (Podium + Full List)
-            if (lastYearResults != null && lastYearResults?.results?.isNotEmpty() == true) {
+            if ((lastYearResults != null && lastYearResults?.results?.isNotEmpty() == true) || hasSprintResults) {
                 item {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp)
                     ) {
-                        // Determine header text based on race completion status
-                        val isRaceCompleted = try {
-                            val nowUTC = LocalDateTime.now(java.time.ZoneId.of("UTC"))
-                            val raceDateTime = LocalDateTime.parse("${race.date}T${race.time}", DateTimeFormatter.ISO_DATE_TIME)
-                            raceDateTime.isBefore(nowUTC)
-                        } catch (e: Exception) {
-                            false
+                        // Header Row with Toggle
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            horizontalAlignment = Alignment.Start
+                        ) {
+                            // Determine header text based on race completion status
+                            val isRaceCompleted = try {
+                                val nowUTC = LocalDateTime.now(java.time.ZoneId.of("UTC"))
+                                val raceDateTime = LocalDateTime.parse("${race.date}T${race.time}", DateTimeFormatter.ISO_DATE_TIME)
+                                raceDateTime.isBefore(nowUTC)
+                            } catch (e: Exception) {
+                                false
+                            }
+                            
+                            Text(
+                                text = if (isRaceCompleted) "RESULTS" else "LAST YEAR'S RESULTS",
+                                fontFamily = brigendsFont,
+                                fontSize = 14.sp,
+                                color = Color.White.copy(alpha = 0.8f),
+                                letterSpacing = 2.sp
+                            )
+                            
+                            // Sprint/Race Toggle
+                            if (hasSprintResults) {
+                                Row(
+                                    modifier = Modifier
+                                        .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(8.dp))
+                                        .padding(4.dp)
+                                ) {
+                                    ResultType.values().forEach { type ->
+                                        val isSelected = selectedResultType == type
+                                        Box(
+                                            modifier = Modifier
+                                                .clip(RoundedCornerShape(6.dp))
+                                                .background(if (isSelected) Color(0xFFFF0080) else Color.Transparent)
+                                                .clickable { selectedResultType = type }
+                                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                                        ) {
+                                            Text(
+                                                text = type.name,
+                                                fontFamily = michromaFont,
+                                                fontSize = 10.sp,
+                                                color = if (isSelected) Color.White else Color.White.copy(alpha = 0.6f),
+                                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                                            )
+                                        }
+                                    }
+                                }
+                            }
                         }
                         
-                        Text(
-                            text = if (isRaceCompleted) "RESULTS" else "LAST YEAR'S RESULTS",
-                            fontFamily = brigendsFont,
-                            fontSize = 14.sp,
-                            color = Color.White.copy(alpha = 0.8f),
-                            letterSpacing = 2.sp,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
+                        val resultsToShow = if (selectedResultType == ResultType.RACE) lastYearResults?.results else sprintResults
                         
-                        Card(
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(16.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color(0xFF111111)),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(vertical = 16.dp),
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                        if (resultsToShow != null && resultsToShow.isNotEmpty()) {
+                            Card(
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color(0xFF111111)),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
                             ) {
-                                // Podium (Top 3)
-                                PodiumSection(
-                                    results = lastYearResults!!.results!!.take(3),
-                                    michromaFont = michromaFont,
-                                    brigendsFont = brigendsFont
-                                )
-                                
-                                androidx.compose.material3.Divider(
-                                    color = Color.White.copy(alpha = 0.05f),
-                                    thickness = 1.dp,
-                                    modifier = Modifier.padding(horizontal = 20.dp)
-                                )
-                                
-                                // Rest of the field (4+)
-                                lastYearResults!!.results!!.drop(3).forEachIndexed { index, result ->
-                                    DriverResultRow(
-                                        result = result, 
-                                        position = index + 4, 
-                                        michromaFont = michromaFont
+                                Column(
+                                    modifier = Modifier.padding(vertical = 16.dp),
+                                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                                ) {
+                                    // Podium (Top 3)
+                                    PodiumSection(
+                                        results = resultsToShow.take(3),
+                                        michromaFont = michromaFont,
+                                        brigendsFont = brigendsFont
                                     )
+                                    
+                                    androidx.compose.material3.Divider(
+                                        color = Color.White.copy(alpha = 0.05f),
+                                        thickness = 1.dp,
+                                        modifier = Modifier.padding(horizontal = 20.dp)
+                                    )
+                                    
+                                    // Rest of the field (4+)
+                                    resultsToShow.drop(3).forEachIndexed { index, result ->
+                                        DriverResultRow(
+                                            result = result, 
+                                            position = index + 4, 
+                                            michromaFont = michromaFont
+                                        )
+                                    }
                                 }
+                            }
+                        } else {
+                             Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(32.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "NO DATA AVAILABLE",
+                                    fontFamily = michromaFont,
+                                    fontSize = 12.sp,
+                                    color = Color.White.copy(alpha = 0.4f)
+                                )
                             }
                         }
                     }
@@ -219,7 +288,7 @@ fun RaceDetailScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(90.dp) // Height to cover status bar + header content
+                    .height(60.dp) // Reduced height
                     .background(
                         if (showStickyHeader) Color.Black.copy(alpha = 0.95f) else Color.Transparent
                     )
@@ -227,7 +296,7 @@ fun RaceDetailScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 40.dp, start = 16.dp, end = 16.dp, bottom = 10.dp),
+                        .padding(horizontal = 16.dp), // Removed top padding
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
@@ -267,6 +336,7 @@ fun RaceDetailScreen(
                 }
             }
         }
+    }
     }
 }
 
@@ -796,6 +866,7 @@ private fun getCountryCodeForDetail(country: String): String {
         "brazil" -> "br"
         "uae", "united arab emirates" -> "ae"
         "qatar" -> "qa"
+        "miami" -> "us"
         else -> "un"
     }
 }
@@ -855,5 +926,9 @@ private fun getCircuitImageForDetail(circuitId: String): Int {
         "zandvoort" -> R.drawable.netherlands_circuit
         else -> R.drawable.bahrain_circuit
     }
+}
+
+private enum class ResultType {
+    RACE, SPRINT
 }
 

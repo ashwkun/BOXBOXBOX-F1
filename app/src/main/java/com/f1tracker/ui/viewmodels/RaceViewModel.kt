@@ -228,6 +228,25 @@ class RaceViewModel @Inject constructor(
                 Log.e("RaceViewModel", "Failed to load last year race results", e)
                 _lastYearRaceResults.value = null
             }
+            
+            // Also load last year's sprint results
+            loadLastYearSprintResults(circuitId)
+        }
+    }
+    
+    private val _lastYearSprintResults = MutableStateFlow<List<RaceResult>?>(null)
+    val lastYearSprintResults: StateFlow<List<RaceResult>?> = _lastYearSprintResults.asStateFlow()
+    
+    private fun loadLastYearSprintResults(circuitId: String) {
+        viewModelScope.launch {
+            val lastSeason = (java.time.Year.now().value - 1).toString()
+            val result = repository.getSprintResultsByCircuit(lastSeason, circuitId)
+            result.onSuccess { results ->
+                _lastYearSprintResults.value = results
+            }.onFailure { e ->
+                Log.e("RaceViewModel", "Failed to load last year sprint results", e)
+                _lastYearSprintResults.value = null
+            }
         }
     }
 
@@ -253,8 +272,14 @@ class RaceViewModel @Inject constructor(
         }.reversed()
     }
 
+    fun forceStateRefresh() {
+        viewModelScope.launch {
+            updateRaceWeekendState()
+        }
+    }
+
     private suspend fun updateRaceWeekendState() {
-        val now = LocalDateTime.now()
+        val now = LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
         val currentOrNextRace = findCurrentOrNextRace(now)
 
         if (currentOrNextRace == null) {
@@ -283,13 +308,15 @@ class RaceViewModel @Inject constructor(
     }
 
     private fun isRaceWeekendActive(race: Race, now: LocalDateTime): Boolean {
-        val firstEvent = getFirstMainEvent(race) ?: return false
+        // Use the very first session of the weekend (e.g., FP1), not just the first "main" event
+        val allEvents = getMainEvents(race)
+        val firstEvent = allEvents.firstOrNull()?.second ?: return false
         val lastEvent = getRaceSession(race)
         
         val firstEventStart = parseDateTime(firstEvent.date, firstEvent.time)
-        val lastEventEnd = parseDateTime(lastEvent.date, lastEvent.time).plusHours(3)
+        val lastEventEnd = parseDateTime(lastEvent.date, lastEvent.time).plusHours(4) // Extended buffer
 
-        return now.isAfter(firstEventStart) && now.isBefore(lastEventEnd)
+        return !now.isBefore(firstEventStart) && now.isBefore(lastEventEnd)
     }
 
     private fun getFirstMainEvent(race: Race): SessionInfo? {
@@ -298,6 +325,16 @@ class RaceViewModel @Inject constructor(
 
     private fun getRaceSession(race: Race): SessionInfo {
         return SessionInfo(race.date, race.time)
+    }
+
+    private fun getSessionDuration(sessionType: SessionType): Duration {
+        return when (sessionType) {
+            SessionType.FP1, SessionType.FP2, SessionType.FP3 -> Duration.ofMinutes(75) // 1hr 15mins
+            SessionType.QUALIFYING -> Duration.ofMinutes(75) // 1hr 15mins
+            SessionType.SPRINT_QUALIFYING -> Duration.ofHours(1) // 1hr
+            SessionType.SPRINT -> Duration.ofMinutes(40) // 40mins
+            SessionType.RACE -> Duration.ofHours(2) // 2hrs
+        }
     }
 
     private suspend fun buildActiveState(race: Race, now: LocalDateTime): RaceWeekendState.Active {
@@ -311,19 +348,13 @@ class RaceViewModel @Inject constructor(
 
         mainEvents.forEach { (type, session) ->
             val sessionStart = parseDateTime(session.date, session.time)
-            val sessionEnd = sessionStart.plusHours(2)
+            val sessionEnd = sessionStart.plus(getSessionDuration(type))
 
             when {
                 now.isBefore(sessionStart) -> {
                     upcomingEventsList.add(type to session)
                 }
-                now.isAfter(sessionEnd) -> {
-                    // We need to fetch results here. But Repository doesn't expose granular result fetching yet.
-                    // For now, we'll skip fetching results in Active state or add methods to Repository.
-                    // The original code called f1ApiService directly.
-                    // Let's just add placeholder or skip for now to keep it simple, or add to Repository.
-                    // I'll skip result fetching for active state for now to avoid compilation errors if I missed methods.
-                    // Actually, let's just add empty list for now.
+                !now.isBefore(sessionEnd) -> { // Completed (now >= end)
                     completedEvents.add(CompletedEvent(type, emptyList()))
                 }
             }
@@ -341,25 +372,44 @@ class RaceViewModel @Inject constructor(
             )
         }
 
+        // Fetch ESPN session results for completed sessions
+        val sessionResults = try {
+            val round = race.round.toIntOrNull() ?: 0
+            if (round > 0) {
+                Log.d("RaceViewModel", "Fetching ESPN results for round $round")
+                val results = repository.getESPNSessionResults(round).getOrNull() ?: emptyList()
+                Log.d("RaceViewModel", "Fetched ${results.size} session results: ${results.map { it.sessionType }}")
+                results
+            } else {
+                Log.w("RaceViewModel", "Invalid round number: ${race.round}")
+                emptyList()
+            }
+        } catch (e: Exception) {
+            Log.e("RaceViewModel", "Error fetching ESPN session results", e)
+            emptyList()
+        }
+
         return RaceWeekendState.Active(
             race = race,
             currentEvent = currentEvent,
             completedEvents = completedEvents,
-            upcomingEvents = upcomingEvents
+            upcomingEvents = upcomingEvents,
+            sessionResults = sessionResults
         )
     }
 
     private fun findCurrentSession(events: List<Pair<SessionType, SessionInfo>>, now: LocalDateTime): SessionEvent? {
         events.forEach { (type, session) ->
-            val sessionStart = parseDateTime(session.date, session.time)
-            val sessionEnd = sessionStart.plusHours(2)
+            val sessionStartIST = parseDateTime(session.date, session.time)
+            val sessionEndIST = sessionStartIST.plus(getSessionDuration(type))
             
-            if (now.isAfter(sessionStart) && now.isBefore(sessionEnd)) {
+            // Check if current time is within the session window
+            if (!now.isBefore(sessionStartIST) && now.isBefore(sessionEndIST)) {
                 return SessionEvent(
                     sessionType = type,
                     sessionInfo = session,
                     isLive = true,
-                    endsAt = sessionEnd
+                    endsAt = sessionEndIST
                 )
             }
         }
@@ -440,8 +490,8 @@ class RaceViewModel @Inject constructor(
         
         return events.map { (type, session) ->
             val sessionDateTime = parseDateTime(session.date, session.time)
-            val sessionEndTime = sessionDateTime.plusHours(2)
-            val isCompleted = now.isAfter(sessionEndTime)
+            val sessionEndTime = sessionDateTime.plus(getSessionDuration(type))
+            val isCompleted = !now.isBefore(sessionEndTime)
             val weather = if (!isCompleted) fetchWeatherForSession(latitude, longitude, sessionDateTime) else null
             
             UpcomingEvent(
@@ -467,13 +517,26 @@ class RaceViewModel @Inject constructor(
     }
 
     private fun parseDateTime(date: String, time: String): LocalDateTime {
+        // Ergast API returns UTC (Zulu) time: "2025-11-28T13:30:00Z"
+        // Rule: Always treat as UTC, convert to IST
         val dateTimeString = "${date}T${time}"
-        val utcDateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_DATE_TIME)
-        return utcDateTime.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDateTime()
+        return try {
+            val instant = if (time.endsWith("Z")) {
+                java.time.Instant.parse(dateTimeString)
+            } else {
+                // Add Z suffix if missing (Ergast sometimes omits it)
+                java.time.Instant.parse("${dateTimeString}Z")
+            }
+            // Convert UTC to IST (Asia/Kolkata = UTC+5:30)
+            instant.atZone(ZoneId.of("Asia/Kolkata")).toLocalDateTime()
+        } catch (e: Exception) {
+            Log.e("RaceViewModel", "Error parsing Zulu time: $dateTimeString", e)
+            LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
+        }
     }
     
     fun getCountdownTo(targetDateTime: LocalDateTime): String {
-        val now = LocalDateTime.now()
+        val now = LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
         val duration = Duration.between(now, targetDateTime)
         
         if (duration.isNegative) return "00d 00h 00m 00s"

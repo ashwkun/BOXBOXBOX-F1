@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WaterDrop
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.f1tracker.R
 import com.f1tracker.data.models.*
+import com.f1tracker.data.local.F1DataProvider
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -40,7 +42,9 @@ fun HeroSectionFixed(
     state: RaceWeekendState,
     getCountdown: (LocalDateTime) -> String,
     modifier: Modifier = Modifier,
-    onRaceClick: (Race) -> Unit = {}
+    onRaceClick: (Race) -> Unit = {},
+    onViewResults: (SessionResult) -> Unit = {},
+    onLiveClick: () -> Unit = {}
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
@@ -70,7 +74,9 @@ fun HeroSectionFixed(
                     brigendsFont = brigendsFont,
                     michromaFont = michromaFont,
                     accentColor = accentColor,
-                    onRaceClick = onRaceClick
+                    onRaceClick = onRaceClick,
+                    onViewResults = onViewResults,
+                    onLiveClick = onLiveClick
                 )
             }
             is RaceWeekendState.Loading -> {
@@ -307,7 +313,9 @@ private fun ActiveWeekendHeroFixed(
     brigendsFont: FontFamily,
     michromaFont: FontFamily,
     accentColor: Color,
-    onRaceClick: (Race) -> Unit
+    onRaceClick: (Race) -> Unit,
+    onViewResults: (SessionResult) -> Unit,
+    onLiveClick: () -> Unit = {}
 ) {
     val countryCode = getCountryCodeFixed(state.race.circuit.location.country)
     val flagUrl = "https://flagcdn.com/w320/$countryCode.png"
@@ -323,22 +331,50 @@ private fun ActiveWeekendHeroFixed(
         }
     }
     
+    val flagColors = getFlagColorsFixed(state.race.circuit.location.country)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
+            .background(
+                brush = Brush.radialGradient(
+                    colors = listOf(
+                        flagColors.first.copy(alpha = 0.5f),
+                        flagColors.second.copy(alpha = 0.35f),
+                        Color(0xFF0B0B0B)
+                    ),
+                    center = androidx.compose.ui.geometry.Offset(0f, 0f),
+                    radius = 1200f
+                )
+            )
+            .border(
+                width = 1.dp,
+                color = Color.White.copy(alpha = 0.08f),
+                shape = RoundedCornerShape(20.dp)
+            )
             .clickable { onRaceClick(state.race) }
     ) {
+        // Circuit track layout as background (very subtle)
+        val circuitDrawable = getCircuitDrawableById(state.race.circuit.circuitId)
+        AsyncImage(
+            model = circuitDrawable,
+            contentDescription = null,
+            modifier = Modifier
+                .matchParentSize()
+                .alpha(0.02f),
+            contentScale = ContentScale.Crop
+        )
+        
+        // Subtle dark overlay for text readability
         Box(
             modifier = Modifier
-                .align(Alignment.TopEnd)
-                .size(150.dp)
-                .blur(60.dp)
+                .matchParentSize()
                 .background(
-                    brush = Brush.radialGradient(
+                    Brush.verticalGradient(
                         colors = listOf(
-                            Color(0xFF4FC3F7).copy(alpha = 0.12f),
-                            Color.Transparent
+                            Color.Transparent,
+                            Color(0xFF000000).copy(alpha = 0.3f)
                         )
                     )
                 )
@@ -347,14 +383,6 @@ private fun ActiveWeekendHeroFixed(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFF1A1A1A),
-                            Color(0xFF0D0D0D)
-                        )
-                    )
-                )
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -389,19 +417,32 @@ private fun ActiveWeekendHeroFixed(
                 }
             }
             
-            // Live Event
+            // Live Event or Next Session Countdown
             if (state.currentEvent != null) {
                 LiveBannerFixed(
                     event = state.currentEvent,
                     countdown = countdown,
                     brigendsFont = brigendsFont,
                     michromaFont = michromaFont,
-                    accentColor = accentColor
+                    accentColor = accentColor,
+                    onClick = onLiveClick
                 )
+            } else if (state.upcomingEvents.isNotEmpty()) {
+                // Show countdown to next session
+                val nextEvent = state.upcomingEvents.firstOrNull()
+                if (nextEvent != null) {
+                    NextSessionCountdown(
+                        event = nextEvent,
+                        getCountdown = getCountdown,
+                        brigendsFont = brigendsFont,
+                        michromaFont = michromaFont,
+                        accentColor = accentColor
+                    )
+                }
             }
             
             // Completed
-            if (state.completedEvents.isNotEmpty()) {
+            if (state.completedEvents.isNotEmpty() || state.sessionResults.isNotEmpty()) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
                         text = "COMPLETED",
@@ -411,19 +452,41 @@ private fun ActiveWeekendHeroFixed(
                         letterSpacing = 2.sp
                     )
                     
-                    state.completedEvents.forEach { completed ->
-                        CompletedCard(
-                            event = completed,
-                            brigendsFont = brigendsFont,
-                            michromaFont = michromaFont,
-                            accentColor = accentColor
-                        )
+                    // Merge completed events with ESPN results
+                    // Sort by session type priority (reversed) so last completed is first
+                    // Or rely on date/time if available
+                    val mergedEvents = state.completedEvents.map { completed ->
+                        val espnResult = state.sessionResults.find { it.sessionType == completed.sessionType }
+                        completed to espnResult
+                    }.sortedBy { (completed, _) -> 
+                        // Sort by priority (lower value = higher priority/later session)
+                        // e.g. FP2 (6) comes before FP1 (7)
+                        completed.sessionType.priority()
+                    }
+                    
+                    // Horizontal scroll for completed cards
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        mergedEvents.forEach { (completed, result) ->
+                            CompletedCard(
+                                event = completed,
+                                sessionResult = result,
+                                brigendsFont = brigendsFont,
+                                michromaFont = michromaFont,
+                                accentColor = accentColor,
+                                onViewResults = onViewResults
+                            )
+                        }
                     }
                 }
             }
             
             // Upcoming
-            if (state.upcomingEvents.isNotEmpty()) {
+            if (state.upcomingEvents.size > 1) {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
                         text = "UPCOMING",
@@ -442,6 +505,107 @@ private fun ActiveWeekendHeroFixed(
             }
         }
     }
+}
+
+@Composable
+private fun NextSessionCountdown(
+    event: UpcomingEvent,
+    getCountdown: (LocalDateTime) -> String,
+    brigendsFont: FontFamily,
+    michromaFont: FontFamily,
+    accentColor: Color
+) {
+    val targetDateTime = parseISTDateTimeFixed(event.sessionInfo.date, event.sessionInfo.time)
+    var countdown by remember { mutableStateOf("") }
+    
+    LaunchedEffect(targetDateTime) {
+        while (true) {
+            countdown = getCountdown(targetDateTime)
+            kotlinx.coroutines.delay(1000)
+        }
+    }
+    
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White.copy(alpha = 0.05f))
+            .padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = "NEXT SESSION",
+            fontFamily = brigendsFont,
+            fontSize = 12.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            letterSpacing = 2.sp
+        )
+        
+        // Use Michroma for Practice sessions (contain numbers) as Brigends doesn't support numbers
+        val sessionName = event.sessionType.displayName().uppercase()
+        val useMichroma = sessionName.any { it.isDigit() }
+        
+        Text(
+            text = sessionName,
+            fontFamily = if (useMichroma) michromaFont else brigendsFont,
+            fontSize = 20.sp,
+            fontWeight = if (useMichroma) FontWeight.Bold else FontWeight.Normal,
+            color = accentColor,
+            letterSpacing = 1.sp
+        )
+        
+        CountdownBoxFixed(
+            countdown = countdown,
+            michromaFont = michromaFont,
+            accentColor = Color.White
+        )
+        
+        Text(
+            text = formatCountdownDateTime(targetDateTime),
+            fontFamily = michromaFont,
+            fontSize = 12.sp,
+            color = Color.White.copy(alpha = 0.6f)
+        )
+        
+        // Weather Display
+        if (event.weather != null) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                MinimalWeatherIcon(
+                    weatherIcon = event.weather.weatherIcon,
+                    size = 16.dp,
+                    color = Color.White.copy(alpha = 0.8f),
+                    modifier = Modifier.size(16.dp)
+                )
+                Text(
+                    text = "${event.weather.temperature}°C",
+                    fontFamily = michromaFont,
+                    fontSize = 12.sp,
+                    color = Color.White.copy(alpha = 0.8f)
+                )
+                Icon(
+                    imageVector = Icons.Filled.WaterDrop,
+                    contentDescription = "Rain",
+                    tint = Color(0xFF4FC3F7),
+                    modifier = Modifier.size(12.dp)
+                )
+                Text(
+                    text = "${event.weather.rainChance}%",
+                    fontFamily = michromaFont,
+                    fontSize = 11.sp,
+                    color = Color(0xFF4FC3F7)
+                )
+            }
+        }
+    }
+}
+
+private fun formatCountdownDateTime(dateTime: LocalDateTime): String {
+    val formatter = DateTimeFormatter.ofPattern("EEE, d MMM • h:mm a")
+    return dateTime.format(formatter)
 }
 
 @Composable
@@ -696,7 +860,8 @@ private fun LiveBannerFixed(
     countdown: String,
     brigendsFont: FontFamily,
     michromaFont: FontFamily,
-    accentColor: Color
+    accentColor: Color,
+    onClick: () -> Unit = {}
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "livePulse")
     val dotPulse by infiniteTransition.animateFloat(
@@ -714,6 +879,7 @@ private fun LiveBannerFixed(
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(accentColor.copy(alpha = 0.15f))
+            .clickable(onClick = onClick)
             .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -760,61 +926,131 @@ private fun LiveBannerFixed(
                 )
             }
         }
+        
+        Icon(
+            imageVector = Icons.Default.ChevronRight,
+            contentDescription = "Go to Live Timing",
+            tint = accentColor,
+            modifier = Modifier.size(20.dp)
+        )
     }
 }
 
 @Composable
 private fun CompletedCard(
     event: CompletedEvent,
+    sessionResult: SessionResult?,
     brigendsFont: FontFamily,
     michromaFont: FontFamily,
-    accentColor: Color
+    accentColor: Color,
+    onViewResults: (SessionResult) -> Unit
 ) {
-    Row(
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .width(240.dp) // Compact width
             .clip(RoundedCornerShape(12.dp))
             .background(Color.White.copy(alpha = 0.04f))
-            .padding(14.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+            .clickable(enabled = sessionResult != null) { 
+                if (sessionResult != null) onViewResults(sessionResult) 
+            }
+            .padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text(
-            text = event.sessionType.displayName(),
-            fontFamily = michromaFont,
-            fontSize = 13.sp,
-            color = Color.White.copy(alpha = 0.8f)
-        )
+        // Header: Session Name + Arrow
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = event.sessionType.displayName(),
+                fontFamily = michromaFont,
+                fontSize = 12.sp,
+                color = Color.White.copy(alpha = 0.8f)
+            )
+            
+            if (sessionResult != null) {
+                Icon(
+                    imageVector = Icons.Default.ChevronRight,
+                    contentDescription = "View Results",
+                    tint = accentColor,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+        }
         
-        if (event.topThree.isNotEmpty()) {
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        // Results: Horizontal Chips
+        if (sessionResult != null) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                sessionResult.results.take(3).forEach { result ->
+                    // Get team color
+                    val teamColorHex = F1DataProvider.getTeamColorByDriverCode(result.driverCode)
+                    val teamColor = try {
+                        if (teamColorHex != null) {
+                            val colorString = if (teamColorHex.startsWith("#")) teamColorHex else "#$teamColorHex"
+                            Color(android.graphics.Color.parseColor(colorString))
+                        } else {
+                            Color.White
+                        }
+                    } catch (e: Exception) {
+                        Color.White
+                    }
+                    
+                    val displayText = if (result.driverCode == "???") {
+                        val lastName = result.driverName.split(" ").lastOrNull() ?: result.driverName
+                        lastName.take(3).uppercase()
+                    } else {
+                        result.driverCode
+                    }
+                    
+                    // Driver Chip
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(6.dp))
+                            .background(teamColor.copy(alpha = 0.15f))
+                            .border(1.dp, teamColor.copy(alpha = 0.3f), RoundedCornerShape(6.dp))
+                            .padding(vertical = 6.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "${result.position} $displayText",
+                            fontFamily = michromaFont,
+                            fontSize = 10.sp,
+                            color = Color.White.copy(alpha = 0.9f),
+                            maxLines = 1
+                        )
+                    }
+                }
+            }
+        } else if (event.topThree.isNotEmpty()) {
+            // Fallback
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 event.topThree.forEach { result ->
                     Box(
                         modifier = Modifier
+                            .weight(1f)
                             .clip(RoundedCornerShape(6.dp))
-                            .background(
-                                when (result.position) {
-                                    1 -> accentColor.copy(alpha = 0.25f)
-                                    2 -> Color.White.copy(alpha = 0.12f)
-                                    3 -> Color.White.copy(alpha = 0.08f)
-                                    else -> Color.Transparent
-                                }
-                            )
-                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                            .background(Color.White.copy(alpha = 0.1f))
+                            .padding(vertical = 6.dp),
+                        contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = result.driverCode,
-                            fontFamily = brigendsFont,
-                            fontSize = 11.sp,
-                            color = if (result.position == 1) accentColor else Color.White,
-                            letterSpacing = 0.5.sp
+                            text = "${result.position} ${result.driverCode}",
+                            fontFamily = michromaFont,
+                            fontSize = 10.sp,
+                            color = Color.White.copy(alpha = 0.9f)
                         )
                     }
                 }
             }
         } else {
-            Text(
-                text = "✓ Completed",
+             Text(
+                text = "Results pending...",
                 fontFamily = michromaFont,
                 fontSize = 10.sp,
                 color = Color.White.copy(alpha = 0.4f)
@@ -822,6 +1058,25 @@ private fun CompletedCard(
         }
     }
 }
+
+@Composable
+private fun ViewResultsButton(
+    onClick: () -> Unit,
+    michromaFont: FontFamily,
+    accentColor: Color,
+    text: String = "View Results >"
+) {
+    Text(
+        text = text,
+        fontFamily = michromaFont,
+        fontSize = 10.sp,
+        color = accentColor,
+        modifier = Modifier
+            .clickable { onClick() }
+            .padding(4.dp)
+    )
+}
+
 
 @Composable
 private fun DividerFixed() {

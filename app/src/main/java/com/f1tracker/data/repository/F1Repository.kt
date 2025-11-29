@@ -2,6 +2,7 @@ package com.f1tracker.data.repository
 
 import com.f1tracker.data.api.*
 import com.f1tracker.data.models.*
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 interface F1Repository {
@@ -14,13 +15,17 @@ interface F1Repository {
     suspend fun getYouTubeVideos(playlistId: String): Result<List<F1Video>>
     suspend fun getPodcasts(feedUrls: List<String>): Result<List<Podcast>>
     suspend fun getRaceResultsByCircuit(season: String, circuitId: String): Result<Race?>
+    suspend fun getSprintResultsByCircuit(season: String, circuitId: String): Result<List<RaceResult>>
     suspend fun getAllRaceResultsForSeason(season: String): Result<List<Race>>
+    suspend fun getESPNSessionResults(round: Int): Result<List<SessionResult>>
 }
 
 class F1RepositoryImpl @Inject constructor(
     private val f1ApiService: F1ApiService,
     private val weatherApiService: WeatherApiService,
-    private val espnNewsApiService: ESPNNewsApiService,
+    private val motorsportApiService: MotorsportApiService,
+    private val f1NewsApiService: F1NewsApiService,
+    private val espnApiService: ESPNApiService,
     private val youtubeRssApiService: YouTubeRssApiService,
     private val podcastApiService: PodcastApiService
 ) : F1Repository {
@@ -73,11 +78,92 @@ class F1RepositoryImpl @Inject constructor(
     }
 
     override suspend fun getF1News(): Result<List<NewsArticle>> {
-        return try {
-            val response = espnNewsApiService.getF1News()
-            Result.success(response.articles)
-        } catch (e: Exception) {
-            Result.failure(e)
+        return kotlinx.coroutines.coroutineScope {
+            val f1NewsDeferred = async {
+                try {
+                    val response = f1NewsApiService.getF1News()
+                    response.items.map { item ->
+                        NewsArticle(
+                            id = item.id.hashCode().toLong(),
+                            headline = item.title,
+                            description = item.contentHtml.replace(Regex("<.*?>"), ""),
+                            published = item.dateModified,
+                            images = item.attachments?.map { attachment ->
+                                NewsImage(
+                                    name = null,
+                                    url = attachment.url,
+                                    height = 0,
+                                    width = 0,
+                                    type = attachment.mimeType
+                                )
+                            },
+                            links = NewsLinks(
+                                web = NewsWebLink(href = item.url)
+                            )
+                        )
+                    }
+                } catch (e: Exception) {
+                    android.util.Log.e("F1Repository", "Error fetching F1 news", e)
+                    emptyList()
+                }
+            }
+
+            val motorsportNewsDeferred = async {
+                try {
+                    val response = motorsportApiService.getNews()
+                    response.channel?.items?.map { item ->
+                        NewsArticle(
+                            id = item.link.hashCode().toLong(),
+                            headline = item.title ?: "",
+                            description = item.description
+                                ?.replace(Regex("(<br\\s*/?>\\s*)+", RegexOption.IGNORE_CASE), " ") // Replace one or more <br> with single space
+                                ?.replace(Regex("<.*?>"), "") // Remove other tags
+                                ?.replace(Regex("&nbsp;"), " ")
+                                ?.trim() 
+                                ?: "",
+                            published = item.pubDate ?: "",
+                            images = listOfNotNull(
+                                item.enclosure?.url?.let { url ->
+                                    NewsImage(
+                                        name = null,
+                                        url = url,
+                                        height = 0,
+                                        width = 0,
+                                        type = item.enclosure?.type
+                                    )
+                                }
+                            ),
+                            links = NewsLinks(
+                                web = NewsWebLink(href = item.link ?: "")
+                            )
+                        )
+                    } ?: emptyList()
+                } catch (e: Exception) {
+                    android.util.Log.e("F1Repository", "Error fetching Motorsport news", e)
+                    emptyList()
+                }
+            }
+
+            try {
+                val f1Articles = f1NewsDeferred.await()
+                val motorsportArticles = motorsportNewsDeferred.await()
+                
+                // Combine and sort
+                val allArticles = (f1Articles + motorsportArticles).sortedByDescending { 
+                    // Simple date parsing for sorting if needed, or just rely on string comparison if ISO
+                    // Motorsport uses RFC 1123 usually, F1 uses ISO. 
+                    // For now, let's just sort. The UI handles parsing for display.
+                    it.published 
+                }
+                
+                if (allArticles.isEmpty()) {
+                    Result.failure(Exception("Failed to fetch news from all sources"))
+                } else {
+                    Result.success(allArticles)
+                }
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
 
@@ -165,6 +251,33 @@ class F1RepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getSprintResultsByCircuit(season: String, circuitId: String): Result<List<RaceResult>> {
+        return try {
+            val response = f1ApiService.getSprintResultsByCircuit(season, circuitId)
+            val raceWithSprint = response.mrData.raceTable.races.firstOrNull()
+            
+            val mappedResults = raceWithSprint?.sprintResults?.map { sprintResult ->
+                RaceResult(
+                    number = sprintResult.number,
+                    position = sprintResult.position,
+                    positionText = sprintResult.position,
+                    points = "0", // Sprint points not in model
+                    driver = sprintResult.driver,
+                    constructor = sprintResult.constructor,
+                    grid = "0",
+                    laps = "0",
+                    status = sprintResult.status,
+                    time = sprintResult.time,
+                    fastestLap = null
+                )
+            } ?: emptyList()
+            
+            Result.success(mappedResults)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
     
     override suspend fun getAllRaceResultsForSeason(season: String): Result<List<Race>> {
         return try {
@@ -173,5 +286,80 @@ class F1RepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun getESPNSessionResults(round: Int): Result<List<SessionResult>> {
+        return try {
+            // Get ESPN race ID for this round
+            val espnId = com.f1tracker.data.local.ESPNRaceIdProvider.getESPNIdForRound(round)
+                ?: return Result.failure(Exception("ESPN ID not found for round $round"))
+            
+            // Fetch scoreboard which contains the active event and its results
+            val scoreboard = espnApiService.getScoreboard()
+            
+            // Find the event matching our ID, or fallback to the first event if it looks like the right one
+            val raceEvent = scoreboard.events.find { it.id == espnId } 
+                ?: scoreboard.events.firstOrNull()
+                ?: return Result.failure(Exception("Event not found in scoreboard"))
+            
+            android.util.Log.d("F1Repository", "Found event: ${raceEvent.name} (${raceEvent.id})")
+            
+            // Process completed sessions
+            val sessionResults = raceEvent.competitions
+                .filter { it.status.type.completed }
+                .mapNotNull { competition ->
+                    val sessionType = mapESPNSessionType(competition.type.abbreviation) ?: return@mapNotNull null
+                    val competitors = competition.competitors ?: return@mapNotNull null
+                    
+                    SessionResult(
+                        sessionType = sessionType,
+                        sessionName = sessionType.displayName(),
+                        results = competitors.map { competitor ->
+                            val athleteId = competitor.athlete.id ?: ""
+                            DriverResult(
+                                position = competitor.order,
+                                driverCode = mapESPNAthleteToDriverCode(competitor.athlete) ?: "???",
+                                driverName = competitor.athlete.shortName,
+                                team = null,  // Can be added later if needed
+                                time = null,  // Can be extracted from statistics if available
+                                espnId = athleteId
+                            )
+                        }
+                    )
+                }
+            
+            Result.success(sessionResults)
+        } catch (e: Exception) {
+            android.util.Log.e("F1Repository", "Error fetching ESPN session results", e)
+            Result.failure(e)
+        }
+    }
+    
+    private fun mapESPNSessionType(abbreviation: String): SessionType? {
+        android.util.Log.d("F1Repository", "Mapping ESPN session type: $abbreviation")
+        return when (abbreviation.uppercase()) {
+            "FP1", "P1", "PRA1" -> SessionType.FP1
+            "FP2", "P2", "PRA2" -> SessionType.FP2
+            "FP3", "P3", "PRA3" -> SessionType.FP3
+            "SS", "SQ", "SPRINT SHOOTOUT", "SPRINT QUALIFYING" -> SessionType.SPRINT_QUALIFYING
+            "SR", "SPRINT", "SPR" -> SessionType.SPRINT
+            "QUAL", "Q", "QUALI", "QUALIFYING" -> SessionType.QUALIFYING
+            "RACE", "R", "GP" -> SessionType.RACE
+            else -> {
+                android.util.Log.w("F1Repository", "Unknown ESPN session type: $abbreviation")
+                null
+            }
+        }
+    }
+    
+    private fun mapESPNAthleteToDriverCode(athlete: ESPNAthlete): String? {
+        // Try ID first
+        val byId = athlete.id?.let { com.f1tracker.data.local.F1DataProvider.getDriverByESPNId(it)?.code }
+        if (byId != null) return byId
+        
+        // Fallback to name
+        return com.f1tracker.data.local.F1DataProvider.getDriverByName(athlete.fullName)?.code
+            ?: com.f1tracker.data.local.F1DataProvider.getDriverByName(athlete.displayName)?.code
+            ?: com.f1tracker.data.local.F1DataProvider.getDriverByName(athlete.shortName)?.code
     }
 }

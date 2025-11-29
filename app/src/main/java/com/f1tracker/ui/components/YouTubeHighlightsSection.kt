@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +32,8 @@ import com.f1tracker.data.models.F1Video
 @Composable
 fun YouTubeHighlightsSection(
     videos: List<F1Video>,
-    onVideoClick: (String) -> Unit
+    onVideoClick: (String) -> Unit,
+    onViewMoreClick: () -> Unit
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
@@ -46,14 +48,21 @@ fun YouTubeHighlightsSection(
             .padding(vertical = 12.dp)
     ) {
         // Section Header
-        Text(
-            text = "VIDEOS",
-            fontFamily = brigendsFont,
-            fontSize = 12.sp,
-            color = Color.White.copy(alpha = 0.6f),
-            letterSpacing = 2.sp,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onViewMoreClick() }
+                .padding(horizontal = 20.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "VIDEOS >",
+                fontFamily = brigendsFont,
+                fontSize = 12.sp,
+                color = Color.White.copy(alpha = 0.6f),
+                letterSpacing = 2.sp
+            )
+        }
         
         // Horizontal scrollable video cards
         Row(
@@ -63,13 +72,79 @@ fun YouTubeHighlightsSection(
                 .padding(start = 20.dp, end = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            videos.forEach { video ->
+            videos.take(4).forEach { video ->
                 YouTubeHighlightCard(
                     video = video,
                     michromaFont = michromaFont,
                     onClick = { onVideoClick(video.videoId) }
                 )
             }
+            
+            // View More Card
+            ViewMoreCard(
+                michromaFont = michromaFont,
+                onClick = onViewMoreClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun ViewMoreCard(
+    michromaFont: FontFamily,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .width(160.dp)
+            .height(220.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF1A1A1A),
+                        Color(0xFF0A0A0A)
+                    )
+                )
+            )
+            .clickable(onClick = onClick)
+            .border(
+                width = 1.dp,
+                color = Color.White.copy(alpha = 0.1f),
+                shape = RoundedCornerShape(16.dp)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(
+                        Color(0xFFFF0080).copy(alpha = 0.1f),
+                        androidx.compose.foundation.shape.CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowForward,
+                    contentDescription = "View More",
+                    tint = Color(0xFFFF0080),
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(12.dp))
+            
+            Text(
+                text = "View All",
+                fontFamily = michromaFont,
+                fontSize = 12.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
