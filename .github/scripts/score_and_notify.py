@@ -15,8 +15,8 @@ FCM_TOPIC = "all_users" # Target topic for notifications
 
 # --- Scoring Constants ---
 NUCLEAR_SCORE = 999
-MAJOR_THRESHOLD = 75
-DIGEST_THRESHOLD = 35
+MAJOR_THRESHOLD = 15
+DIGEST_THRESHOLD = 5
 
 # --- Patterns (Regex) ---
 # Note: Using simple lists of patterns for brevity, but implementing the full logic.
