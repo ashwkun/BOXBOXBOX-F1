@@ -1,10 +1,22 @@
 {
-    "date": "1970-01-01",
-    "nuclear_sent": [],
-    "major_sent": [],
-    "major_slots_used": 0,
-    "major_slots_remaining": 2,
-    "digest_items": [],
-    "digest_sent": false,
-    "ignored_items": []
+  "date": "2025-11-29",
+  "nuclear_sent": [],
+  "major_sent": [],
+  "major_slots_used": 0,
+  "major_slots_remaining": 2,
+  "digest_items": [
+    {
+      "id": "f0c09ec04efbcf3bf145d9c50a052a37",
+      "title": "Yuki Tsunoda tackles wild drifting masterclass with five-time Formula Drift champion James Deane",
+      "url": "https://www.motorsport.com/f1/news/yuki-tsunoda-tackles-wild-drifting-masterclass-with-five-time-formula-drift-champion-james-deane/10781079/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 40,
+      "timestamp": "2025-11-29T23:38:42.874757"
+    }
+  ],
+  "digest_sent": false,
+  "ignored_items": [
+    "34402fe046c70a9f835c01ffd513745d",
+    "1e8e3e77650456ffadb070e53f9622de",
+    "a8ba72ebc88240a793c4c3e99fbc10b6"
+  ]
 }
