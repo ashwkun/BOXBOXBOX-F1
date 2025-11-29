@@ -133,9 +133,11 @@ def generate_id(title, pub_date):
     return hashlib.md5((title + pub_date).encode('utf-8')).hexdigest()
 
 def score_headline(title):
+    print(f"  [DEBUG] Scoring: '{title}'")
     # Check Nuclear
     for pattern in NUCLEAR_PATTERNS:
         if re.search(pattern, title, re.IGNORECASE):
+            print(f"    [MATCH] Nuclear pattern: '{pattern}'")
             return NUCLEAR_SCORE, "nuclear"
 
     score = 0
@@ -143,17 +145,21 @@ def score_headline(title):
     # Add Points
     for points, pattern in MAJOR_PATTERNS:
         if re.search(pattern, title, re.IGNORECASE):
+            print(f"    [MATCH] Major pattern ({points} pts): '{pattern}'")
             score += points
     for points, pattern in MEDIUM_PATTERNS:
         if re.search(pattern, title, re.IGNORECASE):
+            print(f"    [MATCH] Medium pattern ({points} pts): '{pattern}'")
             score += points
     for points, pattern in LOW_PATTERNS:
         if re.search(pattern, title, re.IGNORECASE):
+            print(f"    [MATCH] Low pattern ({points} pts): '{pattern}'")
             score += points
             
     # Subtract Points
     for points, pattern in NEGATIVE_PATTERNS:
         if re.search(pattern, title, re.IGNORECASE):
+            print(f"    [MATCH] Negative pattern ({points} pts): '{pattern}'")
             score += points
             
     category = "ignore"
@@ -162,6 +168,7 @@ def score_headline(title):
     elif score >= DIGEST_THRESHOLD:
         category = "digest"
         
+    print(f"    [RESULT] Final Score: {score} | Category: {category}")
     return score, category
 
 def init_firebase():
@@ -171,16 +178,17 @@ def init_firebase():
             cred_dict = json.loads(cred_json)
             cred = credentials.Certificate(cred_dict)
             firebase_admin.initialize_app(cred)
-            print("Firebase initialized successfully.")
+            print("[INFO] Firebase initialized successfully.")
             return True
         except Exception as e:
-            print(f"Error initializing Firebase: {e}")
+            print(f"[ERROR] Error initializing Firebase: {e}")
             return False
     else:
-        print("FIREBASE_CREDENTIALS env var not found.")
+        print("[ERROR] FIREBASE_CREDENTIALS env var not found.")
         return False
 
 def send_fcm_notification(title, body, data, priority="high", channel_id="f1_major"):
+    print(f"[INFO] Sending FCM Notification: {title}")
     try:
         message = messaging.Message(
             notification=messaging.Notification(
@@ -198,10 +206,10 @@ def send_fcm_notification(title, body, data, priority="high", channel_id="f1_maj
             )
         )
         response = messaging.send(message)
-        print(f"Successfully sent message: {response}")
+        print(f"  [SUCCESS] Message sent: {response}")
         return True
     except Exception as e:
-        print(f"Error sending message: {e}")
+        print(f"  [ERROR] Error sending message: {e}")
         return False
 
 def generate_digest_title(items, current_date):
@@ -241,15 +249,16 @@ def get_emoji_for_item(item):
 # --- Main Logic ---
 
 def main():
-    print(f"Starting run at {datetime.datetime.utcnow()}")
+    print(f"[INFO] Starting run at {datetime.datetime.utcnow()}")
     
     # 1. Initialize
     state = load_state()
     current_date_str = datetime.datetime.utcnow().strftime('%Y-%m-%d')
+    print(f"[INFO] Loaded state. Date: {state['date']}, Major Slots Remaining: {state['major_slots_remaining']}")
     
     # Reset if new day
     if state['date'] != current_date_str:
-        print("New day detected. Resetting state.")
+        print(f"[INFO] New day detected ({current_date_str}). Resetting state.")
         state['date'] = current_date_str
         state['major_slots_used'] = 0
         state['major_slots_remaining'] = 2
@@ -260,21 +269,24 @@ def main():
         # Keep ignored items for now to avoid re-processing immediately
     
     if not init_firebase():
-        print("Firebase init failed. Exiting.")
+        print("[CRITICAL] Firebase init failed. Exiting.")
         return
 
     # 2. Fetch RSS
+    print(f"[INFO] Fetching RSS feed from {RSS_URL}...")
     try:
         response = requests.get(RSS_URL)
         response.raise_for_status()
+        print(f"[INFO] RSS fetch successful. Content length: {len(response.content)} bytes.")
         root = ET.fromstring(response.content)
     except Exception as e:
-        print(f"Error fetching RSS: {e}")
+        print(f"[ERROR] Error fetching RSS: {e}")
         return
 
     # 3. Process Headlines
     channel = root.find('channel')
     items = channel.findall('item')
+    print(f"[INFO] Found {len(items)} items in RSS feed.")
     
     current_time = datetime.datetime.utcnow()
     
@@ -282,29 +294,44 @@ def main():
         title = item.find('title').text
         link = item.find('link').text
         pub_date_str = item.find('pubDate').text
-        # Basic parsing, might need adjustment based on actual format
-        # RFC 822 format: "Sun, 19 May 2002 15:21:36 GMT"
+        
+        print(f"\n[ITEM] Processing: {title}")
+        print(f"       Link: {link}")
+        print(f"       PubDate: {pub_date_str}")
+
+        # Basic parsing
         try:
             pub_date = datetime.datetime.strptime(pub_date_str, "%a, %d %b %Y %H:%M:%S %z").replace(tzinfo=None)
-        except:
-            # Fallback or skip
+        except Exception as e:
+            print(f"       [WARN] Failed to parse date: {e}. Skipping.")
             continue
             
         # Only process last 60 mins (plus a buffer)
-        if (current_time - pub_date).total_seconds() > 3600 * 2: # 2 hours buffer
+        age_seconds = (current_time - pub_date).total_seconds()
+        print(f"       Age: {age_seconds:.0f} seconds")
+        
+        if age_seconds > 3600 * 2: # 2 hours buffer
+            print("       [SKIP] Too old (> 2 hours).")
             continue
             
         headline_id = generate_id(title, pub_date_str)
+        print(f"       ID: {headline_id}")
         
         # Check if processed
-        if (headline_id in [x['id'] for x in state['nuclear_sent']] or
-            headline_id in [x['id'] for x in state['major_sent']] or
-            headline_id in [x['id'] for x in state['digest_items']] or
-            headline_id in state['ignored_items']):
+        if headline_id in [x['id'] for x in state['nuclear_sent']]:
+            print("       [SKIP] Already sent (Nuclear).")
+            continue
+        if headline_id in [x['id'] for x in state['major_sent']]:
+            print("       [SKIP] Already sent (Major).")
+            continue
+        if headline_id in [x['id'] for x in state['digest_items']]:
+            print("       [SKIP] Already in digest queue.")
+            continue
+        if headline_id in state['ignored_items']:
+            print("       [SKIP] Already ignored.")
             continue
             
         score, category = score_headline(title)
-        print(f"Processing: {title} | Score: {score} | Category: {category}")
         
         item_data = {
             "id": headline_id,
@@ -315,6 +342,7 @@ def main():
         }
         
         if category == "nuclear":
+            print("       [ACTION] Sending NUCLEAR notification.")
             # Send Immediately
             send_fcm_notification(
                 title="🚨 F1 BREAKING NEWS",
@@ -330,8 +358,10 @@ def main():
             # Simplified time window check: 12-15 UTC or 18-21 UTC (approx for now)
             hour = current_time.hour
             in_window = (12 <= hour < 15) or (18 <= hour < 21)
+            print(f"       [ACTION] Category MAJOR. Slots: {state['major_slots_remaining']}, Window: {in_window} (Hour: {hour})")
             
             if state['major_slots_remaining'] > 0 and in_window:
+                print("       [ACTION] Sending MAJOR notification.")
                 send_fcm_notification(
                     title="🏁 F1 Major News",
                     body=title,
@@ -343,20 +373,23 @@ def main():
                 state['major_slots_remaining'] -= 1
                 state['major_sent'].append(item_data)
             else:
-                # Overflow to digest
-                print("Major overflow to digest")
+                print("       [ACTION] Overflowing to digest.")
                 state['digest_items'].append(item_data)
                 
         elif category == "digest":
+            print("       [ACTION] Adding to digest queue.")
             state['digest_items'].append(item_data)
             
         else: # ignore
+            print("       [ACTION] Ignoring.")
             state['ignored_items'].append(headline_id)
 
     # 4. Digest Check (22:00 UTC approx - adjusting for India 10PM = 16:30 UTC)
     # Let's check if it's between 16:30 and 17:00 UTC
+    print(f"\n[INFO] Checking digest status. Time: {current_time.hour}:{current_time.minute}, Sent: {state['digest_sent']}, Items: {len(state['digest_items'])}")
     if 16 <= current_time.hour < 17 and current_time.minute >= 30 and not state['digest_sent']:
         if len(state['digest_items']) > 0:
+            print("[INFO] Generating digest...")
             # Sort by score
             sorted_items = sorted(state['digest_items'], key=lambda x: x['score'], reverse=True)
             top_items = sorted_items[:6] # Max 6 items
@@ -379,10 +412,12 @@ def main():
             )
             state['digest_sent'] = True
             state['digest_items'] = [] # Clear after sending
+        else:
+            print("[INFO] No items for digest.")
 
     # 5. Save State
     save_state(state)
-    print("Run completed.")
+    print("[INFO] Run completed.")
 
 if __name__ == "__main__":
     main()
