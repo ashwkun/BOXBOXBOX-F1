@@ -1,0 +1,39 @@
+name: F1 News Notifications
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  process-notifications:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: |
+          pip install requests firebase-admin beautifulsoup4
+          
+      - name: Run notification script
+        env:
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+          # Assuming FCM_DEVICE_TOKEN is not needed if sending to topic, but keeping if script uses it
+        run: python .github/scripts/score_and_notify.py
+        
+      - name: Commit and push state
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add notification_state.json
+          # Only commit if there are changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update notification state [skip ci]" && git push)
