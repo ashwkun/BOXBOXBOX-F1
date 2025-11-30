@@ -26,10 +26,7 @@
       "image": "https://cdn-8.motorsport.com/images/amp/YMdw4KV2/s6/max-verstappen-red-bull-racing.jpg"
     }
   ],
-  "major_sent": [],
-  "slot1_remaining": 1,
-  "slot2_remaining": 2,
-  "digest_items": [
+  "major_sent": [
     {
       "id": "88750209868cef68142e887fa56ff9bb",
       "title": "Zak Brown reveals when McLaren will enforce team orders in drivers' title fight",
@@ -37,6 +34,26 @@
       "score": 210,
       "timestamp": "2025-11-28T18:48:01",
       "image": "https://cdn-1.motorsport.com/images/amp/0o5P5QjY/s6/zak-brown-mclaren.jpg"
+    },
+    {
+      "id": "88750209868cef68142e887fa56ff9bb",
+      "title": "Zak Brown reveals when McLaren will enforce team orders in drivers' title fight",
+      "url": "https://www.motorsport.com/f1/news/zak-brown-reveals-when-mclaren-will-enforce-team-orders-in-drivers-title-fight/10780581/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 210,
+      "timestamp": "2025-11-28T18:48:01",
+      "image": "https://cdn-5.motorsport.com/images/amp/0o5P5QjY/s6/zak-brown-mclaren.jpg"
+    }
+  ],
+  "slot1_remaining": 1,
+  "slot2_remaining": 0,
+  "digest_items": [
+    {
+      "id": "95be2cefb66af57bdf43b9fdff2f04e1",
+      "title": "F1 Qatar GP: Oscar Piastri leads Lando Norris in sole Losail practice ",
+      "url": "https://www.motorsport.com/f1/news/f1-qatar-gp-fp1-report-10780485/10780485/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 100,
+      "timestamp": "2025-11-28T14:46:41",
+      "image": "https://cdn-1.motorsport.com/images/amp/2jEDEjk0/s6/oscar-piastri-mclaren-2.jpg"
     },
     {
       "id": "95be2cefb66af57bdf43b9fdff2f04e1",
@@ -47,6 +64,14 @@
       "image": "https://cdn-1.motorsport.com/images/amp/2jEDEjk0/s6/oscar-piastri-mclaren-2.jpg"
     },
     {
+      "id": "95be2cefb66af57bdf43b9fdff2f04e1",
+      "title": "F1 Qatar GP: Oscar Piastri leads Lando Norris in sole Losail practice ",
+      "url": "https://www.motorsport.com/f1/news/f1-qatar-gp-fp1-report-10780485/10780485/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 100,
+      "timestamp": "2025-11-28T14:46:41",
+      "image": "https://cdn-6.motorsport.com/images/amp/2jEDEjk0/s6/oscar-piastri-mclaren-2.jpg"
+    },
+    {
       "id": "890022ed86d87c45c64d7746dbfe9cc6",
       "title": "Why Max Verstappen \"checked out\" of 2025 F1 title fight after Dutch GP",
       "url": "https://www.motorsport.com/f1/news/verstappen-was-checked-out-of-f1-2025-title-after-dutch-gp/10780410/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
@@ -55,28 +80,20 @@
       "image": "https://cdn-7.motorsport.com/images/amp/6zQGR3wY/s6/max-verstappen-red-bull-racing.jpg"
     },
     {
-      "id": "3e00074b15d544e41495710f20828a73",
-      "title": "Carlos Sainz reveals Williams experiment behind strong Qatar GP qualifying",
-      "url": "https://www.motorsport.com/f1/news/carlos-sainz-reveals-williams-gamble-behind-strong-qatar-gp-showing/10781047/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 95,
-      "timestamp": "2025-11-29T21:12:49",
-      "image": "https://cdn-7.motorsport.com/images/amp/YvKQKWG6/s6/carlos-sainz-williams.jpg"
+      "id": "890022ed86d87c45c64d7746dbfe9cc6",
+      "title": "Why Max Verstappen \"checked out\" of 2025 F1 title fight after Dutch GP",
+      "url": "https://www.motorsport.com/f1/news/verstappen-was-checked-out-of-f1-2025-title-after-dutch-gp/10780410/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 100,
+      "timestamp": "2025-11-28T11:33:49",
+      "image": "https://cdn-7.motorsport.com/images/amp/6zQGR3wY/s6/max-verstappen-red-bull-racing.jpg"
     },
     {
-      "id": "9cb1c5568f75bb903c38be138c562980",
-      "title": "Why Lando Norris says Max Verstappen is \"talking nonsense\" over 2025 F1 title claims",
-      "url": "https://www.motorsport.com/f1/news/norris-accuses-verstappen-of-talking-nonsense-after-f1-2025-title-claim/10780918/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 95,
-      "timestamp": "2025-11-29T16:05:42",
-      "image": "https://cdn-2.motorsport.com/images/amp/6DGqGbKY/s6/lando-norris-mclaren-max-verst-2.jpg"
-    },
-    {
-      "id": "c392d3dcc7b259bb50f86a0214208610",
-      "title": "Max Verstappen is McLaren's 'horror movie villain' who \"never makes mistakes\", says Zak Brown",
-      "url": "https://www.motorsport.com/f1/news/max-verstappen-is-mclarens-horror-movie-villain-who-never-makes-mistakes-says-zak-brown/10780526/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 95,
-      "timestamp": "2025-11-28T23:38:22",
-      "image": "https://cdn-8.motorsport.com/images/amp/YvKQ8W76/s6/max-verstappen-red-bull-racing.jpg"
+      "id": "890022ed86d87c45c64d7746dbfe9cc6",
+      "title": "Why Max Verstappen \"checked out\" of 2025 F1 title fight after Dutch GP",
+      "url": "https://www.motorsport.com/f1/news/verstappen-was-checked-out-of-f1-2025-title-after-dutch-gp/10780410/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 100,
+      "timestamp": "2025-11-28T11:33:49",
+      "image": "https://cdn-5.motorsport.com/images/amp/6zQGR3wY/s6/max-verstappen-red-bull-racing.jpg"
     }
   ],
   "digest_sent": false,
