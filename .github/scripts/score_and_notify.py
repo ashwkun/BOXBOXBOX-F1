@@ -353,16 +353,18 @@ def main():
             
             if state['major_slots_remaining'] > 0:
                 print("       [ACTION] Sending MAJOR notification.")
-                send_fcm_notification(
+                if send_fcm_notification(
                     title="🏁 F1 Major News",
                     body=title,
                     data={"type": "major", "url": link, "score": str(score)},
                     priority="high",
                     channel_id="f1_major"
-                )
-                state['major_slots_used'] += 1
-                state['major_slots_remaining'] -= 1
-                state['major_sent'].append(item_data)
+                ):
+                    state['major_slots_used'] += 1
+                    state['major_slots_remaining'] -= 1
+                    state['major_sent'].append(item_data)
+                else:
+                    print("       [ERROR] Failed to send notification. Not consuming slot.")
             else:
                 print("       [ACTION] Overflowing to digest.")
                 state['digest_items'].append(item_data)
