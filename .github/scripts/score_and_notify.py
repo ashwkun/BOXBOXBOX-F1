@@ -346,12 +346,12 @@ def main():
             state['nuclear_sent'].append(item_data)
             
         elif category == "major":
-            # Check slots and time window
-            hour = current_time.hour
-            in_window = (12 <= hour < 15) or (18 <= hour < 21)
-            print(f"       [ACTION] Category MAJOR. Slots: {state['major_slots_remaining']}, Window: {in_window} (Hour: {hour})")
+            # Check slots (Time window removed for testing)
+            # hour = current_time.hour
+            # in_window = (12 <= hour < 15) or (18 <= hour < 21)
+            print(f"       [ACTION] Category MAJOR. Slots: {state['major_slots_remaining']} (Time window check disabled)")
             
-            if state['major_slots_remaining'] > 0 and in_window:
+            if state['major_slots_remaining'] > 0:
                 print("       [ACTION] Sending MAJOR notification.")
                 send_fcm_notification(
                     title="🏁 F1 Major News",
