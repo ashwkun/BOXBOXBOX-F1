@@ -187,23 +187,27 @@ def init_firebase():
         print("[ERROR] FIREBASE_CREDENTIALS env var not found.")
         return False
 
-def send_fcm_notification(title, body, data, priority="high", channel_id="f1_major"):
+def send_fcm_notification(title, body, data, priority="high", channel_id="f1_major", image_url=None):
     print(f"[INFO] Sending FCM Notification: {title}")
     try:
+        android_config = messaging.AndroidConfig(
+            priority=priority,
+            notification=messaging.AndroidNotification(
+                channel_id=channel_id,
+                color="#FF0000" if channel_id == "f1_nuclear" else None,
+                image=image_url
+            )
+        )
+        
         message = messaging.Message(
             notification=messaging.Notification(
                 title=title,
                 body=body,
+                image=image_url
             ),
             data=data,
             topic=FCM_TOPIC,
-            android=messaging.AndroidConfig(
-                priority=priority,
-                notification=messaging.AndroidNotification(
-                    channel_id=channel_id,
-                    color="#FF0000" if channel_id == "f1_nuclear" else None
-                )
-            )
+            android=android_config
         )
         response = messaging.send(message)
         print(f"  [SUCCESS] Message sent: {response}")
@@ -295,8 +299,15 @@ def main():
         link = item.find('link').text
         pub_date_str = item.find('pubDate').text
         
+        # Extract Image
+        image_url = None
+        enclosure = item.find('enclosure')
+        if enclosure is not None:
+            image_url = enclosure.get('url')
+        
         print(f"\n[ITEM] Processing: {title}")
         print(f"       Link: {link}")
+        print(f"       Image: {image_url}")
         print(f"       PubDate: {pub_date_str}")
 
         # Basic parsing
@@ -337,11 +348,12 @@ def main():
             print("       [ACTION] Sending NUCLEAR notification.")
             # Send Immediately
             send_fcm_notification(
-                title="🚨 F1 BREAKING NEWS",
-                body=title,
-                data={"type": "nuclear", "url": link, "score": str(score)},
+                title=title, # Use headline as title
+                body="🚨 Breaking News • Tap to read",
+                data={"type": "nuclear", "url": link, "score": str(score), "image": image_url},
                 priority="high",
-                channel_id="f1_nuclear"
+                channel_id="f1_nuclear",
+                image_url=image_url
             )
             state['nuclear_sent'].append(item_data)
             
@@ -354,11 +366,12 @@ def main():
             if state['major_slots_remaining'] > 0:
                 print("       [ACTION] Sending MAJOR notification.")
                 if send_fcm_notification(
-                    title="🏁 F1 Major News",
-                    body=title,
-                    data={"type": "major", "url": link, "score": str(score)},
+                    title=title, # Use headline as title
+                    body="Tap to read full story",
+                    data={"type": "major", "url": link, "score": str(score), "image": image_url},
                     priority="high",
-                    channel_id="f1_major"
+                    channel_id="f1_major",
+                    image_url=image_url
                 ):
                     state['major_slots_used'] += 1
                     state['major_slots_remaining'] -= 1
