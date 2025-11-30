@@ -1,6 +1,23 @@
 {
   "date": "2025-11-30",
-  "nuclear_sent": [],
+  "nuclear_sent": [
+    {
+      "id": "6a8541ac80f41d4cc4083653a9a050ef",
+      "title": "F1 Qatar GP: Oscar Piastri wins sprint to cut Lando Norris\u2019 championship lead",
+      "url": "https://www.motorsport.com/f1/news/f1-qatar-gp-sprint-race/10780866/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 999,
+      "timestamp": "2025-11-29T14:45:38",
+      "image": "https://cdn-8.motorsport.com/images/amp/6O797lG6/s6/oscar-piastri-mclaren-3.jpg"
+    },
+    {
+      "id": "26a966c257a14796138113d1f138f0a4",
+      "title": "Max Verstappen won\u2019t blame lost 2025 F1 title on Spanish GP clash",
+      "url": "https://www.motorsport.com/f1/news/verstappen-losing-f1-2025-title-will-not-be-because-of-spanish-gp-clash/10780777/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 999,
+      "timestamp": "2025-11-29T10:48:15",
+      "image": "https://cdn-8.motorsport.com/images/amp/YMdw4KV2/s6/max-verstappen-red-bull-racing.jpg"
+    }
+  ],
   "major_sent": [
     {
       "id": "3e00074b15d544e41495710f20828a73",
@@ -17,85 +34,13 @@
       "timestamp": "2025-11-30T13:24:22.797221"
     }
   ],
-  "major_slots_used": 2,
-  "major_slots_remaining": 0,
   "digest_items": [
     {
-      "id": "327a714d8c0e8cad4f7d7f67e09381d7",
-      "title": "Yuki Tsunoda out in Q1 again \u2013 and he has \u201cno idea what happened\u201d",
-      "url": "https://www.motorsport.com/f1/news/yuki-tsunoda-out-q1-no-idea-what-happened/10781068/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 40,
-      "timestamp": "2025-11-30T13:24:22.369508"
-    },
-    {
-      "id": "f0c09ec04efbcf3bf145d9c50a052a37",
-      "title": "Yuki Tsunoda tackles wild drifting masterclass with five-time Formula Drift champion James Deane",
-      "url": "https://www.motorsport.com/f1/news/yuki-tsunoda-tackles-wild-drifting-masterclass-with-five-time-formula-drift-champion-james-deane/10781079/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 40,
-      "timestamp": "2025-11-30T13:24:22.369773"
-    },
-    {
-      "id": "e9db5897dafee2b021801d98527ddf3b",
-      "title": "Here's the 2025 F1 Qatar GP starting grid",
-      "url": "https://www.motorsport.com/f1/news/heres-the-2025-f1-qatar-gp-starting-grid/10780995/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 65,
-      "timestamp": "2025-11-30T13:24:22.796842"
-    },
-    {
-      "id": "9cb1c5568f75bb903c38be138c562980",
-      "title": "Why Lando Norris says Max Verstappen is \"talking nonsense\" over 2025 F1 title claims",
-      "url": "https://www.motorsport.com/f1/news/norris-accuses-verstappen-of-talking-nonsense-after-f1-2025-title-claim/10780918/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 95,
-      "timestamp": "2025-11-30T13:24:22.944295"
-    },
-    {
-      "id": "6a8541ac80f41d4cc4083653a9a050ef",
-      "title": "F1 Qatar GP: Oscar Piastri wins sprint to cut Lando Norris\u2019 championship lead",
-      "url": "https://www.motorsport.com/f1/news/f1-qatar-gp-sprint-race/10780866/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 230,
-      "timestamp": "2025-11-30T13:24:22.945032"
-    },
-    {
-      "id": "9b203e5c24aa196d4e850dba6d3f7400",
-      "title": "Fernando Alonso: How pros and cons of F1 experience helped mega Qatar sprint quali",
-      "url": "https://www.motorsport.com/f1/news/alonso-discusses-pros-and-cons-of-vast-experience-after-mega-f1-qatar-gp-sprint-quali/10780814/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 40,
-      "timestamp": "2025-11-30T13:24:22.945947"
-    },
-    {
-      "id": "26a966c257a14796138113d1f138f0a4",
-      "title": "Max Verstappen won\u2019t blame lost 2025 F1 title on Spanish GP clash",
-      "url": "https://www.motorsport.com/f1/news/verstappen-losing-f1-2025-title-will-not-be-because-of-spanish-gp-clash/10780777/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 110,
-      "timestamp": "2025-11-30T13:24:22.946207"
-    },
-    {
-      "id": "c392d3dcc7b259bb50f86a0214208610",
-      "title": "Max Verstappen is McLaren's 'horror movie villain' who \"never makes mistakes\", says Zak Brown",
-      "url": "https://www.motorsport.com/f1/news/max-verstappen-is-mclarens-horror-movie-villain-who-never-makes-mistakes-says-zak-brown/10780526/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 95,
-      "timestamp": "2025-11-30T13:24:22.947304"
-    },
-    {
-      "id": "0e879d913a6faf2789c4f94adec9910b",
-      "title": "Yuki Tsunoda to lose Red Bull F1 seat as 2026 line-up \"pretty clear\", says Ralf Schumacher",
-      "url": "https://www.motorsport.com/f1/news/yuki-tsunoda-to-lose-red-bull-f1-seat-as-2026-line-up-pretty-clear-to-ralf-schumacher/10780568/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 75,
-      "timestamp": "2025-11-30T13:24:22.947863"
-    },
-    {
-      "id": "3123490fd01154ab26e5b79b403fc40c",
-      "title": "F1 Qatar GP: Oscar Piastri takes sprint race pole from George Russell and Lando Norris",
-      "url": "https://www.motorsport.com/f1/news/f1-qatar-gp-piastri-bolts-to-sprint-race-pole-from-russell-and-norris/10780592/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 65,
-      "timestamp": "2025-11-30T13:24:22.948252"
-    },
-    {
-      "id": "15cbdbd01d789a38f987acce1af5c236",
-      "title": "\"I feel more confidence\" - Yuki Tsunoda reacts to fifth in Qatar F1 sprint qualifying",
-      "url": "https://www.motorsport.com/f1/news/yuki-tsunoda-reacts-fifth-qatar-f1-sprint-qualifying/10780612/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 40,
-      "timestamp": "2025-11-30T13:24:22.948535"
+      "id": "88750209868cef68142e887fa56ff9bb",
+      "title": "Zak Brown reveals when McLaren will enforce team orders in drivers' title fight",
+      "url": "https://www.motorsport.com/f1/news/zak-brown-reveals-when-mclaren-will-enforce-team-orders-in-drivers-title-fight/10780581/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 210,
+      "timestamp": "2025-11-30T13:24:22.949837"
     },
     {
       "id": "88750209868cef68142e887fa56ff9bb",
@@ -105,32 +50,12 @@
       "timestamp": "2025-11-30T13:24:22.949837"
     },
     {
-      "id": "621623cc0d940b321953cd464c7ca6d2",
-      "title": "The starting grid for the 2025 F1 Qatar GP sprint race",
-      "url": "https://www.motorsport.com/f1/news/the-starting-grid-for-the-2025-f1-qatar-gp-sprint-race/10780596/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 65,
-      "timestamp": "2025-11-30T13:24:22.950051"
-    },
-    {
-      "id": "95be2cefb66af57bdf43b9fdff2f04e1",
-      "title": "F1 Qatar GP: Oscar Piastri leads Lando Norris in sole Losail practice ",
-      "url": "https://www.motorsport.com/f1/news/f1-qatar-gp-fp1-report-10780485/10780485/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 100,
-      "timestamp": "2025-11-30T13:24:22.951142"
-    },
-    {
-      "id": "ebf5009f9438be30ca79def24238218c",
-      "title": "Lewis Hamilton admits F1 left him \"quite miserable\" and how it led to his \"F1\" movie role",
-      "url": "https://www.motorsport.com/f1/news/lewis-hamilton-admits-f1-left-him-quite-miserable-and-how-it-led-to-his-f1-movie-role/10780449/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 95,
-      "timestamp": "2025-11-30T13:24:22.952015"
-    },
-    {
-      "id": "a121c8731fd6531a14daa567a07890c6",
-      "title": "Yuki Tsunoda hints at F1 future amid expected 2026 Red Bull move for Isack Hadjar",
-      "url": "https://www.motorsport.com/f1/news/tsunoda-hints-at-f1-2026-future-amid-expected-red-bull-move-for-hadjar/10780417/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 75,
-      "timestamp": "2025-11-30T13:24:22.952523"
+      "id": "88750209868cef68142e887fa56ff9bb",
+      "title": "Zak Brown reveals when McLaren will enforce team orders in drivers' title fight",
+      "url": "https://www.motorsport.com/f1/news/zak-brown-reveals-when-mclaren-will-enforce-team-orders-in-drivers-title-fight/10780581/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 210,
+      "timestamp": "2025-11-28T18:48:01",
+      "image": "https://cdn-3.motorsport.com/images/amp/0o5P5QjY/s6/zak-brown-mclaren.jpg"
     },
     {
       "id": "890022ed86d87c45c64d7746dbfe9cc6",
@@ -138,6 +63,20 @@
       "url": "https://www.motorsport.com/f1/news/verstappen-was-checked-out-of-f1-2025-title-after-dutch-gp/10780410/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 100,
       "timestamp": "2025-11-30T13:24:22.952768"
+    },
+    {
+      "id": "890022ed86d87c45c64d7746dbfe9cc6",
+      "title": "Why Max Verstappen \"checked out\" of 2025 F1 title fight after Dutch GP",
+      "url": "https://www.motorsport.com/f1/news/verstappen-was-checked-out-of-f1-2025-title-after-dutch-gp/10780410/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 100,
+      "timestamp": "2025-11-30T13:24:22.952768"
+    },
+    {
+      "id": "95be2cefb66af57bdf43b9fdff2f04e1",
+      "title": "F1 Qatar GP: Oscar Piastri leads Lando Norris in sole Losail practice ",
+      "url": "https://www.motorsport.com/f1/news/f1-qatar-gp-fp1-report-10780485/10780485/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 100,
+      "timestamp": "2025-11-30T13:24:22.951142"
     }
   ],
   "digest_sent": false,
@@ -174,5 +113,7 @@
     "10a2e7051ebe5706ca1209d8fb0cc08e",
     "c5ee81b1e0f97c2414036cee3e12591d",
     "657d3936e8b4f415a48d3c26bbb20f8f"
-  ]
+  ],
+  "slot1_remaining": 1,
+  "slot2_remaining": 2
 }
