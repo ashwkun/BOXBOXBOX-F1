@@ -1,47 +1,10 @@
 {
-  "date": "2025-11-30",
+  "date": "1970-01-01",
   "nuclear_sent": [],
-  "major_sent": [
-    {
-      "id": "f0c09ec04efbcf3bf145d9c50a052a37",
-      "title": "Yuki Tsunoda tackles wild drifting masterclass with five-time Formula Drift champion James Deane",
-      "url": "https://www.motorsport.com/f1/news/yuki-tsunoda-tackles-wild-drifting-masterclass-with-five-time-formula-drift-champion-james-deane/10781079/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 40,
-      "timestamp": "2025-11-30T01:00:15.051030"
-    },
-    {
-      "id": "a8ba72ebc88240a793c4c3e99fbc10b6",
-      "title": "F1 Qatar GP - Start time, how to watch & more",
-      "url": "https://www.motorsport.com/f1/news/f1-qatar-gp-start-time-how-to-watch-more/10781062/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 30,
-      "timestamp": "2025-11-30T01:00:15.627518"
-    }
-  ],
-  "major_slots_used": 2,
-  "major_slots_remaining": 0,
+  "major_sent": [],
+  "major_slots_used": 0,
+  "major_slots_remaining": 2,
   "digest_items": [],
-  "digest_sent": true,
-  "ignored_items": [
-    "34402fe046c70a9f835c01ffd513745d",
-    "1e8e3e77650456ffadb070e53f9622de",
-    "c632b46f0fb54b95a3a049e733b1cea5",
-    "e8df838e39fe31876e185f6480a412fc",
-    "d80303e82a3c8513533dd437f57706bf",
-    "628ac690ae3a06b77c57a230e0fe899e",
-    "96e41c726dccb3ba05113e4c754f2985",
-    "17b71e24304cca07ecef8e5b3d16be5a",
-    "829a7600f0dea3a7a19590bc3f131245",
-    "59a6c640903c2dd78e93a7e9adfa3cfc",
-    "a3737dd0b2d4537526e1c5fefc6347e1",
-    "f0061d3fc6a7f4a673a368521ae65614",
-    "2779f5de83afeb5a74e6ed34de79b972",
-    "88d6f8472b6023bcc304d0de18260dcd",
-    "981e15f17c145b0d6ea0a0080fdf7961",
-    "571304d535a22b38290f83a178c2efa9",
-    "aa3ccf3284612d8df218cf22d0e13eaa",
-    "10a2e7051ebe5706ca1209d8fb0cc08e",
-    "c5ee81b1e0f97c2414036cee3e12591d",
-    "16c79bf6057cfbd2de95938a69e0cbd1",
-    "d06235f9aad87014d308657c611153d7"
-  ]
+  "digest_sent": false,
+  "ignored_items": []
 }
