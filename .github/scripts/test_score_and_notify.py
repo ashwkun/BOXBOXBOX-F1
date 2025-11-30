@@ -175,10 +175,14 @@ def load_state():
                     del state['major_slots_remaining']
                 if 'major_slots_used' in state:
                     del state['major_slots_used']
+            # Ensure nuclear_queue exists
+            if 'nuclear_queue' not in state:
+                state['nuclear_queue'] = []
             return state
     return {
         "date": "1970-01-01",
         "nuclear_sent": [],
+        "nuclear_queue": [],
         "major_sent": [],
         "slot1_remaining": 1,
         "slot2_remaining": 2,
@@ -400,6 +404,25 @@ def get_emoji_for_item(item):
     if score >= 75: return "⚡"
     return "📰"
 
+def is_in_nuclear_quiet_hours(current_time):
+    """
+    Check if we're in nuclear notification quiet hours.
+    Quiet hours: 12:00 AM - 8:00 AM IST = 18:30 - 02:30 UTC
+    NOTE: Test mode - quiet hours still active for testing consistency
+    """
+    hour = current_time.hour
+    minute = current_time.minute
+    
+    # 18:30 UTC to 23:59 UTC
+    if hour > 18 or (hour == 18 and minute >= 30):
+        return True
+    
+    # 00:00 UTC to 02:30 UTC
+    if hour < 2 or (hour == 2 and minute < 30):
+        return True
+    
+    return False
+
 def is_in_slot1_window(current_time):
     """Check if current time is in Slot 1 window (24/7 for testing)"""
     hour = current_time.hour
@@ -553,18 +576,42 @@ def main():
     print(f"       Digest: {len(digest_candidates)}")
     print(f"       Ignored: {len(ignored_candidates)}")
 
-    # 4. Process Nuclear Items (Immediate)
+    # 4. Process Nuclear Items (Respect Quiet Hours)
+    in_quiet_hours = is_in_nuclear_quiet_hours(current_time)
+    print(f"\n[INFO] Nuclear quiet hours active: {in_quiet_hours} (12 AM - 8 AM IST)")
+    
+    # Send any queued nuclear items if we're outside quiet hours
+    if not in_quiet_hours and state['nuclear_queue']:
+        print(f"\n[INFO] Sending {len(state['nuclear_queue'])} queued nuclear notifications from quiet hours...")
+        for item in state['nuclear_queue']:
+            print(f"\n[NUCLEAR QUEUED] Sending: {item['title']}")
+            send_fcm_notification(
+                title="F1 News",
+                body=f"🚨 {item['title']}",
+                data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
+                priority="high",
+                channel_id="f1_nuclear",
+                image_url=item.get('image')
+            )
+            state['nuclear_sent'].append(item)
+        state['nuclear_queue'] = []
+    
+    # Process new nuclear items
     for item in nuclear_candidates:
-        print(f"\n[NUCLEAR] Sending: {item['title']}")
-        send_fcm_notification(
-            title="F1 News",
-            body=f"🚨 {item['title']}",
-            data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
-            priority="high",
-            channel_id="f1_nuclear",
-            image_url=item.get('image')
-        )
-        state['nuclear_sent'].append(item)
+        if in_quiet_hours:
+            print(f"\n[NUCLEAR] Queuing for later (quiet hours): {item['title']}")
+            state['nuclear_queue'].append(item)
+        else:
+            print(f"\n[NUCLEAR] Sending: {item['title']}")
+            send_fcm_notification(
+                title="F1 News",
+                body=f"🚨 {item['title']}",
+                data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
+                priority="high",
+                channel_id="f1_nuclear",
+                image_url=item.get('image')
+            )
+            state['nuclear_sent'].append(item)
 
     # 5. Build Major Candidates Pool (Hot Pool System)
     print(f"\n[INFO] Building major candidates pool...")

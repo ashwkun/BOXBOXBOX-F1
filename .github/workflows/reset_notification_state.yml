@@ -18,6 +18,7 @@ jobs:
           echo '{
             "date": "1970-01-01",
             "nuclear_sent": [],
+            "nuclear_queue": [],
             "major_sent": [],
             "slot1_remaining": 1,
             "slot2_remaining": 2,
