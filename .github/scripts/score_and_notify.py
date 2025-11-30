@@ -392,8 +392,7 @@ def main():
 
     # 4. Digest Check
     print(f"\n[INFO] Checking digest status. Time: {current_time.hour}:{current_time.minute}, Sent: {state['digest_sent']}, Items: {len(state['digest_items'])}")
-    # FORCE DIGEST FOR TESTING: Removed time check
-    if not state['digest_sent'] or True: # Force True for testing
+    if 16 <= current_time.hour < 17 and current_time.minute >= 30 and not state['digest_sent']:
         if len(state['digest_items']) > 0:
             print("[INFO] Generating digest...")
             # Sort by score
