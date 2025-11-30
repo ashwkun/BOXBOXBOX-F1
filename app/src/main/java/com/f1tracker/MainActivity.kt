@@ -32,8 +32,14 @@ class MainActivity : ComponentActivity() {
         androidx.lifecycle.ViewModelProvider(this)[com.f1tracker.ui.viewmodels.RaceViewModel::class.java]
     }
     
+    // State to hold intent data (url, target_tab)
+    private val intentData = mutableStateOf<Pair<String, String>?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Handle initial intent
+        handleIntent(intent)
         
         // Request notification permission for Android 13+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
@@ -88,7 +94,9 @@ class MainActivity : ComponentActivity() {
                 AppNavigation(
                     updateStatus = updateStatus,
                     showUpdateDialog = showUpdateDialog,
-                    onShowUpdateDialogChange = { showUpdateDialog = it }
+                    onShowUpdateDialogChange = { showUpdateDialog = it },
+                    intentData = intentData.value,
+                    onIntentHandled = { intentData.value = null }
                 )
                 
                 // Show update dialog if available
@@ -126,6 +134,20 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+        }
+    }
+    
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: android.content.Intent?) {
+        val url = intent?.getStringExtra("url")
+        val targetTab = intent?.getStringExtra("target_tab")
+        if (!url.isNullOrEmpty()) {
+            intentData.value = url to (targetTab ?: "news")
         }
     }
     

@@ -8,7 +8,9 @@ import com.f1tracker.ui.screens.MainAppScreen
 fun AppNavigation(
     updateStatus: com.f1tracker.util.UpdateStatus? = null,
     showUpdateDialog: Boolean = false,
-    onShowUpdateDialogChange: (Boolean) -> Unit = {}
+    onShowUpdateDialogChange: (Boolean) -> Unit = {},
+    intentData: Pair<String, String>? = null,
+    onIntentHandled: () -> Unit = {}
 ) {
     var showSplash by remember { mutableStateOf(true) }
     
@@ -22,7 +24,9 @@ fun AppNavigation(
         MainAppScreen(
             updateStatus = updateStatus,
             showUpdateDialog = showUpdateDialog,
-            onShowUpdateDialogChange = onShowUpdateDialogChange
+            onShowUpdateDialogChange = onShowUpdateDialogChange,
+            intentData = intentData,
+            onIntentHandled = onIntentHandled
         )
     }
 }

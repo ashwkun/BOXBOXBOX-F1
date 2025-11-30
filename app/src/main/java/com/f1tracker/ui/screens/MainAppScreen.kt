@@ -31,7 +31,9 @@ import com.f1tracker.R
 fun MainAppScreen(
     updateStatus: com.f1tracker.util.UpdateStatus?,
     showUpdateDialog: Boolean,
-    onShowUpdateDialogChange: (Boolean) -> Unit
+    onShowUpdateDialogChange: (Boolean) -> Unit,
+    intentData: Pair<String, String>? = null,
+    onIntentHandled: () -> Unit = {}
 ) {
     var currentDestination by remember { mutableStateOf(NavDestination.HOME) }
     var webViewUrl by remember { mutableStateOf<String?>(null) }
@@ -43,6 +45,23 @@ fun MainAppScreen(
     var standingsSelectedTab by remember { mutableStateOf(0) } // Persist standings tab state here
     var socialSelectedTab by remember { mutableStateOf(0) } // Persist social tab state here
     val context = LocalContext.current
+    
+    // Handle Intent Data (Deep Links / Notifications)
+    LaunchedEffect(intentData) {
+        intentData?.let { (url, targetTab) ->
+            // 1. Set up the background state (where to go when back is pressed)
+            if (targetTab == "news") {
+                currentDestination = NavDestination.SOCIAL
+                socialSelectedTab = 1
+            }
+            
+            // 2. Open the content
+            webViewUrl = url
+            
+            // 3. Mark handled
+            onIntentHandled()
+        }
+    }
     
     // Podcast audio player state
     val audioPlayerManager = remember { com.f1tracker.audio.AudioPlayerManager.getInstance(context) }

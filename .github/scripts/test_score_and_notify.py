@@ -13,10 +13,12 @@ RSS_URL = "https://www.motorsport.com/rss/f1/news/"
 STATE_FILE = "notification_state.json"
 FCM_TOPIC = "all_users" # Target topic for notifications
 
-# --- Scoring Constants (PRODUCTION) ---
+# --- Scoring Constants (TEST MODE) ---
+# These thresholds are intentionally low for testing purposes.
+# DO NOT USE IN PRODUCTION.
 NUCLEAR_SCORE = 999
-MAJOR_THRESHOLD = 85  # High threshold for major news
-DIGEST_THRESHOLD = 40 # Moderate threshold for digest
+MAJOR_THRESHOLD = 15 # Low threshold to trigger major notifications easily
+DIGEST_THRESHOLD = 5 # Low threshold to trigger digest items easily
 
 # --- Patterns (Regex) ---
 # Note: Using simple lists of patterns for brevity, but implementing the full logic.
@@ -66,7 +68,7 @@ MEDIUM_PATTERNS = [
     (65, r"\b(strategy|pit stop|tyre|tire)\b.*\b(briefing|problem|issue|concern)\b"),
     (60, r"\b(pace|performance|balance)\b.*\b(issue|problem|struggle|concern)\b"),
     (60, r"\b(verstappen|norris|hamilton|leclerc|piastri|sainz|russell)\b.*\b(says|admits|reveals|claims|insists)\b"),
-    (69, r"\b(collision|incident|contact|clash)\b.*\b(penalty|investigation|cleared|reprimand)\b"),
+    (70, r"\b(collision|incident|contact|clash)\b.*\b(penalty|investigation|cleared|reprimand)\b"),
     (65, r"\b(red bull|ferrari|mercedes|mclaren)\b.*\b(upgrade|issue|problem|pace)\b"),
     (55, r"\b(driver ratings|interactive data|analysis)\b")
 ]
@@ -358,12 +360,12 @@ def main():
             state['nuclear_sent'].append(item_data)
             
         elif category == "major":
-            # Check slots and Time Window (12-15 UTC and 18-21 UTC)
-            hour = current_time.hour
-            in_window = (12 <= hour < 15) or (18 <= hour < 21)
-            print(f"       [ACTION] Category MAJOR. Slots: {state['major_slots_remaining']}, In Window: {in_window}")
+            # Check slots (Time window removed for testing)
+            # hour = current_time.hour
+            # in_window = (12 <= hour < 15) or (18 <= hour < 21)
+            print(f"       [ACTION] Category MAJOR. Slots: {state['major_slots_remaining']} (Time window check disabled)")
             
-            if state['major_slots_remaining'] > 0 and in_window:
+            if state['major_slots_remaining'] > 0:
                 print("       [ACTION] Sending MAJOR notification.")
                 if send_fcm_notification(
                     title="F1 News", # Static title to avoid truncation
@@ -379,7 +381,7 @@ def main():
                 else:
                     print("       [ERROR] Failed to send notification. Not consuming slot.")
             else:
-                print("       [ACTION] Overflowing to digest (No slots or outside window).")
+                print("       [ACTION] Overflowing to digest.")
                 state['digest_items'].append(item_data)
                 
         elif category == "digest":

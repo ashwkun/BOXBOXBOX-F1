@@ -22,7 +22,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         // Handle notification payload
         remoteMessage.notification?.let {
-            sendNotification(it.title, it.body)
+            // Get URL from data
+            val url = remoteMessage.data["url"]
+            val imageUrl = remoteMessage.data["image_url"] // Assuming image_url is passed in data payload
+            val channelIdFromData = remoteMessage.data["channel_id"] // Assuming channel_id can be passed in data payload
+
+            sendNotification(it.title, it.body, channelIdFromData, imageUrl, url)
         }
     }
 
@@ -31,22 +36,36 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         android.util.Log.d("FCM", "Refreshed token: $token")
     }
 
-    private fun sendNotification(title: String?, messageBody: String?) {
+    private fun sendNotification(title: String?, messageBody: String?, channelId: String?, imageUrl: String?, url: String?) {
         val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        
+        if (!url.isNullOrEmpty()) {
+            intent.putExtra("url", url)
+            intent.putExtra("target_tab", "news")
+        }
+
         val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent,
+            this, System.currentTimeMillis().toInt(), intent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val channelId = "f1_updates_channel_v3" // Changed ID to force update
+        val finalChannelId = channelId ?: "f1_updates_channel_v3"
         val soundUri = android.net.Uri.parse("android.resource://" + packageName + "/" + R.raw.notification_sound)
         
-        // Use the new large icon
+        // Use a generic icon if the small one is problematic, but for now stick to small
+        // Ensure it's the one we expect.
         val largeIcon = android.graphics.BitmapFactory.decodeResource(resources, R.drawable.ic_notification_large)
 
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_notification_small) // Use the new small icon
+        // Determine priority based on channel
+        val priority = when (finalChannelId) {
+            "f1_nuclear" -> NotificationCompat.PRIORITY_MAX
+            "f1_major" -> NotificationCompat.PRIORITY_HIGH
+            else -> NotificationCompat.PRIORITY_DEFAULT
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(this, finalChannelId)
+            .setSmallIcon(R.drawable.ic_notification_small)
             .setLargeIcon(largeIcon)
             .setColor(android.graphics.Color.parseColor("#FF0080")) // F1 Pink/Red
             .setContentTitle(title ?: "F1 Update")
@@ -54,7 +73,24 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setSound(soundUri)
             .setContentIntent(pendingIntent)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(messageBody)) // Expandable text
+            .setPriority(priority)
+            
+        // Handle Image
+        if (!imageUrl.isNullOrEmpty()) {
+            try {
+                val urlObj = java.net.URL(imageUrl)
+                val image = android.graphics.BitmapFactory.decodeStream(urlObj.openConnection().getInputStream())
+                notificationBuilder.setStyle(NotificationCompat.BigPictureStyle()
+                    .bigPicture(image)
+                    .setSummaryText(messageBody) // Keep text visible when expanded
+                    .bigLargeIcon(null as android.graphics.Bitmap?)) // Hide large icon when expanded
+            } catch (e: Exception) {
+                e.printStackTrace()
+                notificationBuilder.setStyle(NotificationCompat.BigTextStyle().bigText(messageBody))
+            }
+        } else {
+            notificationBuilder.setStyle(NotificationCompat.BigTextStyle().bigText(messageBody))
+        }
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -65,9 +101,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
                 .build()
 
+            val channelName = when (finalChannelId) {
+                "f1_nuclear" -> "Nuclear Updates"
+                "f1_major" -> "Major Updates"
+                "f1_app_updates" -> "App Updates"
+                else -> "F1 Updates"
+            }
+
             val channel = NotificationChannel(
-                channelId,
-                "F1 Updates",
+                finalChannelId,
+                channelName,
                 NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 setSound(soundUri, audioAttributes)
