@@ -395,14 +395,14 @@ def get_emoji_for_item(item):
 def is_in_nuclear_quiet_hours(current_time):
     """
     Check if we're in nuclear notification quiet hours.
-    Quiet hours: 12:00 AM - 8:00 AM IST = 18:30 - 02:30 UTC
+    Quiet hours: 01:00 AM - 08:00 AM IST = 19:30 - 02:30 UTC
     NOTE: Test mode - quiet hours still active for testing consistency
     """
     hour = current_time.hour
     minute = current_time.minute
     
-    # 18:30 UTC to 23:59 UTC
-    if hour > 18 or (hour == 18 and minute >= 30):
+    # 19:30 UTC to 23:59 UTC
+    if hour > 19 or (hour == 19 and minute >= 30):
         return True
     
     # 00:00 UTC to 02:30 UTC
