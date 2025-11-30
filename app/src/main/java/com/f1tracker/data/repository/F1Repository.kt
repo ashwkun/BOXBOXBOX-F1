@@ -121,7 +121,12 @@ class F1RepositoryImpl @Inject constructor(
                                 ?.replace(Regex("&nbsp;"), " ")
                                 ?.trim() 
                                 ?: "",
-                            published = item.pubDate ?: "",
+                            published = try {
+                                val zdt = java.time.ZonedDateTime.parse(item.pubDate, java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME)
+                                zdt.format(java.time.format.DateTimeFormatter.ISO_DATE_TIME)
+                            } catch (e: Exception) {
+                                item.pubDate ?: ""
+                            },
                             images = listOfNotNull(
                                 item.enclosure?.url?.let { url ->
                                     NewsImage(

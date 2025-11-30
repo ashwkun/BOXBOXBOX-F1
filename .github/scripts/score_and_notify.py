@@ -17,27 +17,75 @@ FCM_TOPIC = "all_users" # Target topic for notifications
 NUCLEAR_SCORE = 999
 MAJOR_THRESHOLD = 85  # High threshold for major news
 DIGEST_THRESHOLD = 40 # Moderate threshold for digest
+DIGEST_COMBINED_THRESHOLD = 150  # Sum of top 3 digest items must exceed this
+
+# --- Time Windows (IST / UTC) ---
+# Slot 1: 13:00-14:00 IST (07:30-08:30 UTC) - 1 notification slot
+# Slot 2: 21:00-22:00 IST (15:30-16:30 UTC) - 2 notification slots 
+# Digest: 08:00-09:00 IST (02:30-03:30 UTC)
+
+SLOT1_START_HOUR = 7   # UTC
+SLOT1_START_MIN = 30
+SLOT1_END_HOUR = 8
+SLOT1_END_MIN = 30
+
+SLOT2_START_HOUR = 15  # UTC
+SLOT2_START_MIN = 30
+SLOT2_END_HOUR = 16
+SLOT2_END_MIN = 30
+
+DIGEST_START_HOUR = 2  # UTC
+DIGEST_START_MIN = 30
+DIGEST_END_HOUR = 3
+DIGEST_END_MIN = 30
 
 # --- Patterns (Regex) ---
-# Note: Using simple lists of patterns for brevity, but implementing the full logic.
+# LENIENT NUCLEAR PATTERNS - Can be tuned down based on user feedback
 NUCLEAR_PATTERNS = [
+    # Safety/Critical Events
     r"\b(crash|accident|injured|hospitalized|fatal|death|died)\b",
     r"\b(red flag|red-flagged)\b",
     r"\b(cancelled|postponed)\b.*\b(race|grand prix|gp|session)\b",
+    
+    # Race Results (Lenient - includes wins, poles, sprint)
+    r"\b(wins|won|victory|victorious)\b.*\b(grand prix|race|gp)\b",
+    r"\b(pole position|takes pole|claims pole|grabs pole|snatches pole)\b",
+    r"\b(sprint)\b.*\b(win|wins|won|victory)\b",
+    
+    # Championships
+    r"\b(clinches|secures|wins|seals)\b.*\b(championship|title|wdc|wcc)\b",
+    r"\b(mathematically|officially)\b.*\b(eliminated|out of contention)\b",
+    
+    # Disqualifications/Bans
     r"\b(disqualified)\b.*\b(race|grand prix|gp)\b",
     r"\b(banned|suspended)\b.*\b(driver|team|races)\b",
+    
+    # Major Team/Driver Changes
     r"\b(leaves|exits|departs|replaced)\b.*\b(red bull|ferrari|mercedes|mclaren)\b",
     r"\b(horner|wolff|vasseur|brown|stella)\b.*\b(leaves|exits|departs|replaced)\b",
     r"\b(retires|retirement|retiring)\b.*\b(from racing|from f1|from formula)\b",
-    r"\b(announces retirement)\b"
+    r"\b(announces retirement)\b",
+    
+    # Records
+    r"\b(breaks? record|all-time|historic|history-making)\b.*\b(win|pole|podium|fastest)\b",
+    r"\b(most wins|most poles|most podiums)\b",
+    
+    # Team Changes
+    r"\b(team.*withdraw|leaving f1|exits formula 1)\b",
+    r"\b(new team|team entry|joins f1|entering formula 1)\b",
+    r"\b(sold|bought|ownership|takeover)\b.*\b(red bull|ferrari|mercedes|mclaren)\b",
+    
+    # Regulatory
+    r"\b(cost cap|budget cap)\b.*\b(breach|violation|exceeded)\b",
+    r"\b(regulation change|rule change|technical directive)\b.*\b(2025|2026|immediate)\b",
+    r"\b(calendar)\b.*\b(added|removed|cancelled|replaced)\b",
+    r"\b(illegal|non-compliant|technical infringement)\b.*\b(car|component)\b",
+    r"\b(protest|appeal)\b.*\b(upheld|successful|overturned)\b"
 ]
 
 MAJOR_PATTERNS = [
-    (110, r"\b(wins|won|victory|victorious)\b.*\b(grand prix|race|gp)\b"),
-    (105, r"\b(dominates|dominated|dominating)\b.*\b(grand prix|race|gp)\b"),
-    (95, r"\b(pole position|takes pole|claims pole|grabs pole|snatches pole)\b"),
+    (110, r"\b(dominates|dominated|dominating)\b.*\b(grand prix|race|gp)\b"),
     (85, r"\b(podium)\b"),
-    (130, r"\b(clinches|secures|wins|seals)\b.*\b(championship|title|wdc|wcc)\b"),
     (105, r"\b(can clinch)\b.*\b(championship)\b"),
     (100, r"\b(championship|title)\b.*\b(lead|ahead|battle|fight|deficit|gap)\b"),
     (90, r"\b(points lead|points gap|points deficit|points ahead)\b"),
@@ -59,7 +107,7 @@ MEDIUM_PATTERNS = [
     (70, r"\b(fastest|quickest|tops|leads)\b.*\b(qualifying|q1|q2|q3)\b"),
     (65, r"\b(grid|starting grid|grid positions)\b"),
     (75, r"\b(team orders)\b"),
-    (70, r"\b(sprint race)\b.*\b(report|result|win|victory)\b"),
+    (70, r"\b(sprint race)\b.*\b(report|result)\b"),
     (65, r"\b(sprint)\b.*\b(pole position|pole)\b"),
     (60, r"\b(fastest|tops|leads)\b.*\b(practice|fp1|fp2|fp3)\b"),
     (70, r"\b(upgrade|upgrades|update|updates)\b.*\b(car|package|floor|wing|aero)\b"),
@@ -113,13 +161,23 @@ NEGATIVE_PATTERNS = [
 def load_state():
     if os.path.exists(STATE_FILE):
         with open(STATE_FILE, 'r') as f:
-            return json.load(f)
+            state = json.load(f)
+            # Migrate old state format if needed
+            if 'major_slots_remaining' in state:
+                # Old format - convert to new slot system
+                state['slot1_remaining'] = state.get('slot1_remaining', 1)
+                state['slot2_remaining'] = state.get('slot2_remaining', 2)
+                if 'major_slots_remaining' in state:
+                    del state['major_slots_remaining']
+                if 'major_slots_used' in state:
+                    del state['major_slots_used']
+            return state
     return {
         "date": "1970-01-01",
         "nuclear_sent": [],
         "major_sent": [],
-        "major_slots_used": 0,
-        "major_slots_remaining": 2,
+        "slot1_remaining": 1,
+        "slot2_remaining": 2,
         "digest_items": [],
         "digest_sent": False,
         "ignored_items": []
@@ -216,24 +274,30 @@ def send_fcm_notification(title, body, data, priority="high", channel_id="f1_maj
         print(f"  [ERROR] Error sending message: {e}")
         return False
 
-def generate_digest_title(items, current_date):
-    count = len(items)
-    day_of_week = current_date.strftime('%A')
+def generate_digest_title(count, day_of_week):
+    """Generate digest title based on previous day's context"""
+    # Monday digest = Sunday's (race day) wrap
+    # Sunday digest = Saturday's (qualifying) digest
+    # Saturday digest = Friday's (practice) roundup
+    # Friday digest = Pre-race week digest
+    # Tue/Wed/Thu = Generic based on count
     
-    # Simple logic for now, can be expanded
-    if day_of_week == 'Friday':
-        return f"🏁 F1 Practice Roundup • {count} Updates"
-    elif day_of_week == 'Saturday':
-        return f"⚡ F1 Qualifying Digest • {count} Updates"
-    elif day_of_week == 'Sunday':
+    if day_of_week == 'Monday':
         return f"🏆 F1 Race Day Wrap • {count} Updates"
-        
-    if count <= 2:
-        return f"📰 F1 Quick Brief • {count} Updates"
-    elif count <= 5:
-        return f"📋 F1 Daily Digest • {count} Updates"
+    elif day_of_week == 'Sunday':
+        return f"⚡ F1 Qualifying Digest • {count} Updates"
+    elif day_of_week == 'Saturday':
+        return f"🏁 F1 Practice Roundup • {count} Updates"
+    elif day_of_week == 'Friday':
+        return f"📋 Pre Raceweek Digest • {count} Updates"
     else:
-        return f"🔥 F1 Busy Day • {count} Updates"
+        # Tuesday, Wednesday, Thursday - generic
+        if count <= 2:
+            return f"📰 F1 Quick Brief • {count} Updates"
+        elif count <= 4:
+            return f"📋 F1 Daily Digest • {count} Updates"
+        else:
+            return f"🔥 F1 Busy Day • {count} Updates"
 
 def get_emoji_for_item(item):
     # Simple mapping based on score/content (could be refined)
@@ -250,6 +314,45 @@ def get_emoji_for_item(item):
     if score >= 75: return "⚡"
     return "📰"
 
+def is_in_slot1_window(current_time):
+    """Check if current time is in Slot 1 window (1-2 PM IST / 07:30-08:30 UTC)"""
+    hour = current_time.hour
+    minute = current_time.minute
+    
+    if hour == SLOT1_START_HOUR and minute >= SLOT1_START_MIN:
+        return True
+    elif SLOT1_START_HOUR < hour < SLOT1_END_HOUR:
+        return True
+    elif hour == SLOT1_END_HOUR and minute < SLOT1_END_MIN:
+        return True
+    return False
+
+def is_in_slot2_window(current_time):
+    """Check if current time is in Slot 2 window (9-10 PM IST / 15:30-16:30 UTC)"""
+    hour = current_time.hour
+    minute = current_time.minute
+    
+    if hour == SLOT2_START_HOUR and minute >= SLOT2_START_MIN:
+        return True
+    elif SLOT2_START_HOUR < hour < SLOT2_END_HOUR:
+        return True
+    elif hour == SLOT2_END_HOUR and minute < SLOT2_END_MIN:
+        return True
+    return False
+
+def is_in_digest_window(current_time):
+    """Check if current time is in Digest window (8-9 AM IST / 02:30-03:30 UTC)"""
+    hour = current_time.hour
+    minute = current_time.minute
+    
+    if hour == DIGEST_START_HOUR and minute >= DIGEST_START_MIN:
+        return True
+    elif DIGEST_START_HOUR < hour < DIGEST_END_HOUR:
+        return True
+    elif hour == DIGEST_END_HOUR and minute < DIGEST_END_MIN:
+        return True
+    return False
+
 # --- Main Logic ---
 
 def main():
@@ -258,19 +361,18 @@ def main():
     # 1. Initialize
     state = load_state()
     current_date_str = datetime.datetime.utcnow().strftime('%Y-%m-%d')
-    print(f"[INFO] Loaded state. Date: {state['date']}, Major Slots Remaining: {state['major_slots_remaining']}")
+    print(f"[INFO] Loaded state. Date: {state['date']}, Slot1 Remaining: {state['slot1_remaining']}, Slot2 Remaining: {state['slot2_remaining']}")
     
     # Reset if new day
     if state['date'] != current_date_str:
         print(f"[INFO] New day detected ({current_date_str}). Resetting state.")
         state['date'] = current_date_str
-        state['major_slots_used'] = 0
-        state['major_slots_remaining'] = 2
+        state['slot1_remaining'] = 1
+        state['slot2_remaining'] = 2
         state['major_sent'] = []
         state['nuclear_sent'] = []
-        state['digest_items'] = []
         state['digest_sent'] = False
-        # Keep ignored items for now to avoid re-processing immediately
+        # Keep digest_items and ignored_items for continuity
     
     if not init_firebase():
         print("[CRITICAL] Firebase init failed. Exiting.")
@@ -287,12 +389,17 @@ def main():
         print(f"[ERROR] Error fetching RSS: {e}")
         return
 
-    # 3. Process Headlines
+    # 3. Score ALL items first (don't send yet)
     channel = root.find('channel')
     items = channel.findall('item')
     print(f"[INFO] Found {len(items)} items in RSS feed.")
     
     current_time = datetime.datetime.utcnow()
+    
+    nuclear_candidates = []
+    major_candidates = []
+    digest_candidates = []
+    ignored_candidates = []
     
     for item in items:
         title = item.find('title').text
@@ -320,15 +427,12 @@ def main():
         headline_id = generate_id(title, pub_date_str)
         print(f"       ID: {headline_id}")
         
-        # Check if processed
+        # Check if already processed
         if headline_id in [x['id'] for x in state['nuclear_sent']]:
             print("       [SKIP] Already sent (Nuclear).")
             continue
         if headline_id in [x['id'] for x in state['major_sent']]:
             print("       [SKIP] Already sent (Major).")
-            continue
-        if headline_id in [x['id'] for x in state['digest_items']]:
-            print("       [SKIP] Already in digest queue.")
             continue
         if headline_id in state['ignored_items']:
             print("       [SKIP] Already ignored.")
@@ -341,98 +445,199 @@ def main():
             "title": title,
             "url": link,
             "score": score,
-            "timestamp": datetime.datetime.utcnow().isoformat()
+            "timestamp": pub_date.isoformat(),
+            "image": image_url
         }
         
+        # Categorize
         if category == "nuclear":
-            print("       [ACTION] Sending NUCLEAR notification.")
-            # Send Immediately
-            send_fcm_notification(
-                title="F1 News", # Static title to avoid truncation
-                body=f"🚨 {title}", # Headline in body
-                data={"type": "nuclear", "url": link, "score": str(score), "image": image_url},
-                priority="high",
-                channel_id="f1_nuclear",
-                image_url=image_url
-            )
-            state['nuclear_sent'].append(item_data)
-            
+            nuclear_candidates.append(item_data)
         elif category == "major":
-            # Check slots and Time Window (12-15 UTC and 18-21 UTC)
-            hour = current_time.hour
-            in_window = (12 <= hour < 15) or (18 <= hour < 21)
-            print(f"       [ACTION] Category MAJOR. Slots: {state['major_slots_remaining']}, In Window: {in_window}")
-            
-            if state['major_slots_remaining'] > 0 and in_window:
-                print("       [ACTION] Sending MAJOR notification.")
-                if send_fcm_notification(
-                    title="F1 News", # Static title to avoid truncation
-                    body=title, # Headline in body
-                    data={"type": "major", "url": link, "score": str(score), "image": image_url},
-                    priority="high",
-                    channel_id="f1_major",
-                    image_url=image_url
-                ):
-                    state['major_slots_used'] += 1
-                    state['major_slots_remaining'] -= 1
-                    state['major_sent'].append(item_data)
-                else:
-                    print("       [ERROR] Failed to send notification. Not consuming slot.")
-            else:
-                print("       [ACTION] Overflowing to digest (No slots or outside window).")
-                state['digest_items'].append(item_data)
-                
+            major_candidates.append(item_data)
         elif category == "digest":
-            print("       [ACTION] Adding to digest queue.")
-            state['digest_items'].append(item_data)
-            
-        else: # ignore
-            print("       [ACTION] Ignoring.")
-            state['ignored_items'].append(headline_id)
+            digest_candidates.append(item_data)
+        else:  # ignore
+            ignored_candidates.append(headline_id)
 
-    # 4. Digest Check
-    print(f"\n[INFO] Checking digest status. Time: {current_time.hour}:{current_time.minute}, Sent: {state['digest_sent']}, Items: {len(state['digest_items'])}")
-    if 16 <= current_time.hour < 17 and current_time.minute >= 30 and not state['digest_sent']:
-        if len(state['digest_items']) > 0:
-            print("[INFO] Generating digest...")
-            # Sort by score
-            sorted_items = sorted(state['digest_items'], key=lambda x: x['score'], reverse=True)
-            top_items = sorted_items[:6] # Max 6 items
+    print(f"\n[INFO] Categorization complete:")
+    print(f"       Nuclear: {len(nuclear_candidates)}")
+    print(f"       Major: {len(major_candidates)}")
+    print(f"       Digest: {len(digest_candidates)}")
+    print(f"       Ignored: {len(ignored_candidates)}")
+
+    # 4. Process Nuclear Items (Immediate)
+    for item in nuclear_candidates:
+        print(f"\n[NUCLEAR] Sending: {item['title']}")
+        send_fcm_notification(
+            title="F1 News",
+            body=f"🚨 {item['title']}",
+            data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
+            priority="high",
+            channel_id="f1_nuclear",
+            image_url=item.get('image')
+        )
+        state['nuclear_sent'].append(item)
+
+    # 5. Build Major Candidates Pool (Hot Pool System)
+    # Combine: digest_queue items with score >= 85 + new major candidates
+    print(f"\n[INFO] Building major candidates pool...")
+    
+    # Get items from digest queue that qualify as major
+    major_from_queue = [item for item in state['digest_items'] if item.get('score', 0) >= MAJOR_THRESHOLD]
+    print(f"       Major-level items from digest queue: {len(major_from_queue)}")
+    
+    # Combine with new major candidates
+    all_major_candidates = major_from_queue + major_candidates
+    print(f"       Total major candidates: {len(all_major_candidates)}")
+    
+    # Filter out already sent (double check)
+    sent_ids = set([x['id'] for x in state['nuclear_sent']] + [x['id'] for x in state['major_sent']])
+    all_major_candidates = [item for item in all_major_candidates if item['id'] not in sent_ids]
+    print(f"       After filtering sent items: {len(all_major_candidates)}")
+    
+    # Sort by score (desc), then by timestamp (desc = newer first)
+    all_major_candidates.sort(key=lambda x: (x['score'], x['timestamp']), reverse=True)
+    
+    # 6. Send Major Notifications Based on Slot Availability
+    in_slot1 = is_in_slot1_window(current_time)
+    in_slot2 = is_in_slot2_window(current_time)
+    
+    print(f"\n[INFO] Time Windows: Slot1={in_slot1}, Slot2={in_slot2}")
+    print(f"       Available slots: Slot1={state['slot1_remaining']}, Slot2={state['slot2_remaining']}")
+    
+    unsent_majors = []
+    
+    if in_slot1 and state['slot1_remaining'] > 0:
+        # Send top 1 item for slot1
+        to_send = all_major_candidates[:state['slot1_remaining']]
+        for item in to_send:
+            print(f"\n[MAJOR SLOT1] Sending: {item['title']} (score: {item['score']})")
+            if send_fcm_notification(
+                title="F1 News",
+                body=item['title'],
+                data={"type": "major", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
+                priority="high",
+                channel_id="f1_major",
+                image_url=item.get('image')
+            ):
+                state['slot1_remaining'] -= 1
+                state['major_sent'].append(item)
+                all_major_candidates.remove(item)
+    
+    if in_slot2 and state['slot2_remaining'] > 0:
+        # Send top 2 items for slot2
+        to_send = all_major_candidates[:state['slot2_remaining']]
+        for item in to_send:
+            print(f"\n[MAJOR SLOT2] Sending: {item['title']} (score: {item['score']})")
+            if send_fcm_notification(
+                title="F1 News",
+                body=item['title'],
+                data={"type": "major", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
+                priority="high",
+                channel_id="f1_major",
+                image_url=item.get('image')
+            ):
+                state['slot2_remaining'] -= 1
+                state['major_sent'].append(item)
+                all_major_candidates.remove(item)
+    
+    # Remaining major candidates become unsent majors
+    unsent_majors = all_major_candidates
+    print(f"\n[INFO] Unsent major items: {len(unsent_majors)}")
+
+    # 7. Rebuild Digest Queue (Hot Pool System)
+    print(f"\n[INFO] Rebuilding digest queue...")
+    
+    # Collect all candidates
+    all_digest_candidates = []
+    
+    # Add existing digest items (exclude those sent as major)
+    sent_major_ids = set([x['id'] for x in state['major_sent']])
+    existing_digest = [item for item in state['digest_items'] if item['id'] not in sent_major_ids]
+    all_digest_candidates.extend(existing_digest)
+    print(f"       Existing digest items: {len(existing_digest)}")
+    
+    # Add new digest items from RSS
+    all_digest_candidates.extend(digest_candidates)
+    print(f"       New digest items from RSS: {len(digest_candidates)}")
+    
+    # Add unsent major items
+    all_digest_candidates.extend(unsent_majors)
+    print(f"       Unsent major items: {len(unsent_majors)}")
+    
+    # Filter out already sent items (nuclear + major)
+    all_sent_ids = set([x['id'] for x in state['nuclear_sent']] + [x['id'] for x in state['major_sent']])
+    all_digest_candidates = [item for item in all_digest_candidates if item['id'] not in all_sent_ids]
+    
+    # Sort by score (desc), then timestamp (desc = newer first)
+    all_digest_candidates.sort(key=lambda x: (x['score'], x['timestamp']), reverse=True)
+    
+    # Keep top 6
+    state['digest_items'] = all_digest_candidates[:6]
+    print(f"       Final digest queue size: {len(state['digest_items'])}")
+    if state['digest_items']:
+        print(f"       Top scores: {[item['score'] for item in state['digest_items']]}")
+
+    # 8. Check Digest Send Time
+    if is_in_digest_window(current_time) and not state['digest_sent']:
+        print(f"\n[INFO] In digest window. Checking threshold...")
+        
+        if len(state['digest_items']) >= 3:
+            # Check threshold: sum of top 3
+            top3_sum = sum([item['score'] for item in state['digest_items'][:3]])
+            print(f"       Top 3 sum: {top3_sum} (threshold: {DIGEST_COMBINED_THRESHOLD})")
             
-            digest_title = generate_digest_title(top_items, current_time)
-            
-            body_lines = []
-            for item in top_items:
-                emoji = get_emoji_for_item(item)
-                body_lines.append(f"{emoji} {item['title']}")
-            
-            body = "\n".join(body_lines) + "\n\nTap to read more"
-            
-            send_fcm_notification(
-                title=digest_title,
-                body=body,
-                data={"type": "digest", "count": str(len(top_items))},
-                priority="normal",
-                channel_id="f1_digest"
-            )
-            state['digest_sent'] = True
-            state['digest_items'] = [] # Clear after sending
+            if top3_sum >= DIGEST_COMBINED_THRESHOLD:
+                # Determine count based on day
+                day_of_week = current_time.strftime('%A')
+                is_race_weekend = day_of_week in ['Monday', 'Friday', 'Saturday', 'Sunday']
+                max_items = 6 if is_race_weekend else 4
+                
+                items_to_send = state['digest_items'][:max_items]
+                digest_title = generate_digest_title(len(items_to_send), day_of_week)
+                
+                print(f"[INFO] Sending digest: {digest_title}")
+                print(f"       Day: {day_of_week}, Max items: {max_items}, Sending: {len(items_to_send)}")
+                
+                # Build digest body
+                body_lines = []
+                for item in items_to_send:
+                    emoji = get_emoji_for_item(item)
+                    body_lines.append(f"{emoji} {item['title']}")
+                
+                body = "\n".join(body_lines) + "\n\nTap to read more"
+                
+                # Send digest
+                send_fcm_notification(
+                    title=digest_title,
+                    body=body,
+                    data={"type": "digest", "count": str(len(items_to_send))},
+                    priority="normal",
+                    channel_id="f1_digest"
+                )
+                
+                state['digest_sent'] = True
+                state['digest_items'] = []  # Clear after sending
+            else:
+                print(f"       Threshold not met. Not sending digest.")
         else:
-            print("[INFO] No items for digest.")
+            print(f"       Not enough items for threshold check ({len(state['digest_items'])} < 3)")
+    
+    # 9. Update ignored items
+    state['ignored_items'].extend(ignored_candidates)
 
-    # 5. Cleanup Old State (Keep last 48 hours)
-    print("[INFO] Cleaning up old state...")
+    # 10. Cleanup Old State (Keep last 48 hours)
+    print(f"\n[INFO] Cleaning up old state...")
     cutoff_time = current_time - datetime.timedelta(hours=48)
     
     state['nuclear_sent'] = [x for x in state['nuclear_sent'] if datetime.datetime.fromisoformat(x['timestamp']) > cutoff_time]
     state['major_sent'] = [x for x in state['major_sent'] if datetime.datetime.fromisoformat(x['timestamp']) > cutoff_time]
-    # Note: digest_items are cleared when sent, or we can keep them for 24h if not sent
-    # Ignored items are just IDs, so we can't check timestamp easily unless we store it.
-    # For now, let's limit ignored_items size to last 200
+    
+    # Limit ignored_items size to last 200
     if len(state['ignored_items']) > 200:
         state['ignored_items'] = state['ignored_items'][-200:]
 
-    # 6. Save State
+    # 11. Save State
     save_state(state)
     print("[INFO] Run completed.")
 
