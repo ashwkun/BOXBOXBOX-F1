@@ -306,14 +306,6 @@ def main():
             print(f"       [WARN] Failed to parse date: {e}. Skipping.")
             continue
             
-        # Only process last 60 mins (plus a buffer)
-        age_seconds = (current_time - pub_date).total_seconds()
-        print(f"       Age: {age_seconds:.0f} seconds")
-        
-        if age_seconds > 3600 * 2: # 2 hours buffer
-            print("       [SKIP] Too old (> 2 hours).")
-            continue
-            
         headline_id = generate_id(title, pub_date_str)
         print(f"       ID: {headline_id}")
         
@@ -355,7 +347,6 @@ def main():
             
         elif category == "major":
             # Check slots and time window
-            # Simplified time window check: 12-15 UTC or 18-21 UTC (approx for now)
             hour = current_time.hour
             in_window = (12 <= hour < 15) or (18 <= hour < 21)
             print(f"       [ACTION] Category MAJOR. Slots: {state['major_slots_remaining']}, Window: {in_window} (Hour: {hour})")
@@ -384,8 +375,7 @@ def main():
             print("       [ACTION] Ignoring.")
             state['ignored_items'].append(headline_id)
 
-    # 4. Digest Check (22:00 UTC approx - adjusting for India 10PM = 16:30 UTC)
-    # Let's check if it's between 16:30 and 17:00 UTC
+    # 4. Digest Check
     print(f"\n[INFO] Checking digest status. Time: {current_time.hour}:{current_time.minute}, Sent: {state['digest_sent']}, Items: {len(state['digest_items'])}")
     if 16 <= current_time.hour < 17 and current_time.minute >= 30 and not state['digest_sent']:
         if len(state['digest_items']) > 0:
@@ -406,7 +396,7 @@ def main():
             send_fcm_notification(
                 title=digest_title,
                 body=body,
-                data={"type": "digest", "count": str(len(top_items))}, # Could add items JSON if needed
+                data={"type": "digest", "count": str(len(top_items))},
                 priority="normal",
                 channel_id="f1_digest"
             )
@@ -415,7 +405,19 @@ def main():
         else:
             print("[INFO] No items for digest.")
 
-    # 5. Save State
+    # 5. Cleanup Old State (Keep last 48 hours)
+    print("[INFO] Cleaning up old state...")
+    cutoff_time = current_time - datetime.timedelta(hours=48)
+    
+    state['nuclear_sent'] = [x for x in state['nuclear_sent'] if datetime.datetime.fromisoformat(x['timestamp']) > cutoff_time]
+    state['major_sent'] = [x for x in state['major_sent'] if datetime.datetime.fromisoformat(x['timestamp']) > cutoff_time]
+    # Note: digest_items are cleared when sent, or we can keep them for 24h if not sent
+    # Ignored items are just IDs, so we can't check timestamp easily unless we store it.
+    # For now, let's limit ignored_items size to last 200
+    if len(state['ignored_items']) > 200:
+        state['ignored_items'] = state['ignored_items'][-200:]
+
+    # 6. Save State
     save_state(state)
     print("[INFO] Run completed.")
 
