@@ -229,6 +229,49 @@ def score_headline(title):
     print(f"    [RESULT] Final Score: {score} | Category: {category}")
     return score, category
 
+def validate_image_url(image_url):
+    """
+    Validate image URL for FCM compatibility.
+    FCM requirements:
+    - Must be HTTPS
+    - Must be publicly accessible
+    - Must be under 1MB
+    - Should respond within reasonable time
+    """
+    if not image_url:
+        return None
+    
+    # Check HTTPS
+    if not image_url.startswith('https://'):
+        print(f"  [WARN] Image URL not HTTPS, skipping: {image_url}")
+        return None
+    
+    try:
+        # HEAD request to check size and accessibility
+        response = requests.head(image_url, timeout=5, allow_redirects=True)
+        
+        if response.status_code != 200:
+            print(f"  [WARN] Image URL returned {response.status_code}, skipping: {image_url}")
+            return None
+        
+        # Check size (FCM limit is ~1MB, be conservative)
+        content_length = response.headers.get('content-length')
+        if content_length:
+            size_mb = int(content_length) / (1024 * 1024)
+            if size_mb > 0.9:  # 900KB limit for safety
+                print(f"  [WARN] Image too large ({size_mb:.2f}MB), skipping: {image_url}")
+                return None
+        
+        print(f"  [INFO] Image validated: {image_url}")
+        return image_url
+        
+    except requests.exceptions.Timeout:
+        print(f"  [WARN] Image URL timeout, skipping: {image_url}")
+        return None
+    except Exception as e:
+        print(f"  [WARN] Image validation failed ({e}), skipping: {image_url}")
+        return None
+
 def init_firebase():
     cred_json = os.environ.get("FIREBASE_CREDENTIALS")
     if cred_json:
@@ -245,15 +288,74 @@ def init_firebase():
         print("[ERROR] FIREBASE_CREDENTIALS env var not found.")
         return False
 
+def validate_image_url(image_url):
+    """
+    Validate image URL for FCM compatibility.
+    FCM requirements:
+    - Must be HTTPS
+    - Must be accessible
+    - Recommended < 1MB (FCM limit)
+    """
+    if not image_url:
+        return None
+        
+    # Check HTTPS
+    if not image_url.startswith('https://'):
+        print(f"  [WARN] Image URL is not HTTPS: {image_url}")
+        return None
+    
+    # Try to check image size and accessibility
+    try:
+        response = requests.head(image_url, timeout=5, allow_redirects=True)
+        
+        if response.status_code != 200:
+            print(f"  [WARN] Image URL returned {response.status_code}: {image_url}")
+            return None
+        
+        # Check content type
+        content_type = response.headers.get('Content-Type', '')
+        if not content_type.startswith('image/'):
+            print(f"  [WARN] URL is not an image (Content-Type: {content_type}): {image_url}")
+            return None
+        
+        # Check size (FCM has 1MB limit, but be conservative)
+        content_length = response.headers.get('Content-Length')
+        if content_length:
+            size_mb = int(content_length) / (1024 * 1024)
+            if size_mb > 1.0:
+                print(f"  [WARN] Image too large ({size_mb:.2f}MB > 1MB): {image_url}")
+                return None
+            print(f"  [INFO] Image validated: {size_mb:.2f}MB")
+        
+        return image_url
+        
+    except requests.exceptions.Timeout:
+        print(f"  [WARN] Image URL timed out (5s): {image_url}")
+        return None
+    except Exception as e:
+        print(f"  [WARN] Error validating image URL: {e}")
+        return None
+
 def send_fcm_notification(title, body, data, priority="high", channel_id="f1_major", image_url=None):
     print(f"[INFO] Sending FCM Notification: {title}")
+    
+    # Validate image URL
+    validated_image = None
+    if image_url:
+        print(f"  [INFO] Validating image URL: {image_url}")
+        validated_image = validate_image_url(image_url)
+        if validated_image:
+            print(f"  [INFO] Image URL validated successfully")
+        else:
+            print(f"  [WARN] Image validation failed, sending without image")
+    
     try:
         android_config = messaging.AndroidConfig(
             priority=priority,
             notification=messaging.AndroidNotification(
                 channel_id=channel_id,
                 color="#FF0000" if channel_id == "f1_nuclear" else None,
-                image=image_url
+                image=validated_image
             )
         )
         
@@ -261,7 +363,7 @@ def send_fcm_notification(title, body, data, priority="high", channel_id="f1_maj
             notification=messaging.Notification(
                 title=title,
                 body=body,
-                image=image_url
+                image=validated_image
             ),
             data=data,
             topic=FCM_TOPIC,
@@ -269,9 +371,40 @@ def send_fcm_notification(title, body, data, priority="high", channel_id="f1_maj
         )
         response = messaging.send(message)
         print(f"  [SUCCESS] Message sent: {response}")
+        if validated_image:
+            print(f"  [INFO] Notification sent with image")
+        else:
+            print(f"  [INFO] Notification sent without image")
         return True
     except Exception as e:
         print(f"  [ERROR] Error sending message: {e}")
+        # Try again without image if image might be the problem
+        if validated_image:
+            print(f"  [RETRY] Attempting to send without image...")
+            try:
+                android_config = messaging.AndroidConfig(
+                    priority=priority,
+                    notification=messaging.AndroidNotification(
+                        channel_id=channel_id,
+                        color="#FF0000" if channel_id == "f1_nuclear" else None
+                    )
+                )
+                
+                message = messaging.Message(
+                    notification=messaging.Notification(
+                        title=title,
+                        body=body
+                    ),
+                    data=data,
+                    topic=FCM_TOPIC,
+                    android=android_config
+                )
+                response = messaging.send(message)
+                print(f"  [SUCCESS] Message sent without image: {response}")
+                return True
+            except Exception as e2:
+                print(f"  [ERROR] Retry also failed: {e2}")
+                return False
         return False
 
 def generate_digest_title(count, day_of_week):
