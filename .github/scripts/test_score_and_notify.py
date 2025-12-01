@@ -353,7 +353,7 @@ def send_fcm_notification(title, body, data, priority="high", channel_id="f1_maj
                 body=f"🚨 {item['title']}",
                 data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
                 priority="high",
-                channel_id="f1_nuclear",
+                channel_id="f1_Updates",
                 image_url=item.get('image')
             ):
                 state['nuclear_sent'].append(item)
