@@ -728,6 +728,12 @@ def main():
     all_digest_candidates.extend(unsent_majors)
     print(f"       Unsent major items: {len(unsent_majors)}")
     
+    # Deduplicate by ID
+    unique_digest = {}
+    for item in all_digest_candidates:
+        unique_digest[item['id']] = item
+    all_digest_candidates = list(unique_digest.values())
+    
     # Filter out already sent items (nuclear + major)
     all_sent_ids = set([x['id'] for x in state['nuclear_sent']] + [x['id'] for x in state['major_sent']])
     all_digest_candidates = [item for item in all_digest_candidates if item['id'] not in all_sent_ids]
