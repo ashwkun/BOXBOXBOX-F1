@@ -240,6 +240,21 @@ def main():
             nuclear_candidates.append(item_data)
         elif category == "major":
             major_candidates.append(item_data)
+
+    # --- FORCE TEST NOTIFICATION ---
+    # Inject a fake item to ensure we get a notification for testing
+    test_id = f"test_notification_{int(current_time.timestamp())}"
+    test_item = {
+        "id": test_id,
+        "title": f"Test Notification {current_time.strftime('%H:%M:%S')}",
+        "url": "https://www.motorsport.com/f1/news/",
+        "score": "100",
+        "image": None,
+        "pub_date": current_time.strftime('%Y-%m-%d %H:%M:%S')
+    }
+    print(f"[DEBUG] Injecting forced test item: {test_item['title']}")
+    nuclear_candidates.append(test_item)
+    # -------------------------------
         # (Digest logic omitted for brevity, but follows same pattern)
 
     # 2. Process Nuclear (Fixed Channel ID)
