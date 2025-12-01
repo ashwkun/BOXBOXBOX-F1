@@ -1,7 +1,6 @@
 {
   "date": "2025-12-01",
-  "nuclear_sent": [],
-  "nuclear_queue": [
+  "nuclear_sent": [
     {
       "id": "2c9a26215a8a2b27044546717b4350ee",
       "title": "How the 2025 F1 title can be won, or lost, at Abu Dhabi GP",
@@ -43,6 +42,7 @@
       "image": "https://cdn-4.motorsport.com/images/amp/YMdw4KV2/s6/max-verstappen-red-bull-racing.jpg"
     }
   ],
+  "nuclear_queue": [],
   "major_sent": [],
   "slot1_remaining": 1,
   "slot2_remaining": 2,
