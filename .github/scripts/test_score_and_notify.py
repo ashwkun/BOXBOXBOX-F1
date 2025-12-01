@@ -119,38 +119,32 @@ def init_firebase():
 
 # --- CRITICAL FIX: Updated Notification Function ---
 def send_fcm_notification(title, body, data, priority="high", channel_id="f1_updates_channel_v3", image_url=None):
-    print(f"[INFO] Sending FCM Notification: {title}")
+    print(f"[INFO] Sending FCM Notification (data-only): {title}")
     
     # Ensure data is a dict
     if data is None:
         data = {}
     
-    # FIX: Explicitly add channel_id and image_url to 'data' for Kotlin to read
+    # Add title and body to data payload for onMessageReceived to handle
+    data["title"] = title
+    data["body"] = body
     data["channel_id"] = channel_id
-    if image_url:
-        data["image_url"] = image_url
-
+    
     # Validate Image URL
     final_image = image_url
     if image_url and not image_url.startswith('https://'):
         final_image = None
+    if final_image:
+        data["image_url"] = final_image
     
     try:
         android_config = messaging.AndroidConfig(
-            priority=priority,
-            notification=messaging.AndroidNotification(
-                channel_id=channel_id,  # Matches the Kotlin 'else' fallback or explicit logic
-                color="#FF0080",        # F1 Pink/Red
-                image=final_image
-            )
+            priority=priority
         )
         
+        # DATA-ONLY message - no notification payload!
+        # This ensures onMessageReceived() is ALWAYS called
         message = messaging.Message(
-            notification=messaging.Notification(
-                title=title,
-                body=body,
-                image=final_image
-            ),
             data=data,
             topic=FCM_TOPIC,
             android=android_config

@@ -293,32 +293,31 @@ def init_firebase():
         return False
 
 def send_fcm_notification(title, body, data, priority="high", channel_id="f1_major", image_url=None):
-    print(f"[INFO] Sending FCM Notification: {title}")
+    print(f"[INFO] Sending FCM Notification (data-only): {title}")
     
-    # Simple validation (HTTPS only)
-    # We rely on the try/except block to handle image errors (size, accessibility, etc.)
-    # If FCM rejects the image, we'll retry without it.
+    # Add title and body to data payload for onMessageReceived to handle
+    if data is None:
+        data = {}
+    data["title"] = title
+    data["body"] = body
+    data["channel_id"] = channel_id
+    
+    # Validate image URL
     final_image = image_url
     if image_url and not image_url.startswith('https://'):
         print(f"  [WARN] Image URL is not HTTPS, skipping image: {image_url}")
         final_image = None
+    if final_image:
+        data["image_url"] = final_image
     
     try:
         android_config = messaging.AndroidConfig(
-            priority=priority,
-            notification=messaging.AndroidNotification(
-                channel_id=channel_id,
-                color="#FF0000" if channel_id == "f1_nuclear" else None,
-                image=final_image
-            )
+            priority=priority
         )
         
+        # DATA-ONLY message - no notification payload!
+        # This ensures onMessageReceived() is ALWAYS called
         message = messaging.Message(
-            notification=messaging.Notification(
-                title=title,
-                body=body,
-                image=final_image
-            ),
             data=data,
             topic=FCM_TOPIC,
             android=android_config
@@ -328,33 +327,6 @@ def send_fcm_notification(title, body, data, priority="high", channel_id="f1_maj
         return True
     except Exception as e:
         print(f"  [ERROR] Error sending message: {e}")
-        # Retry without image if we tried with one
-        if final_image:
-            print(f"  [RETRY] Attempting to send without image...")
-            try:
-                android_config = messaging.AndroidConfig(
-                    priority=priority,
-                    notification=messaging.AndroidNotification(
-                        channel_id=channel_id,
-                        color="#FF0000" if channel_id == "f1_nuclear" else None
-                    )
-                )
-                
-                message = messaging.Message(
-                    notification=messaging.Notification(
-                        title=title,
-                        body=body
-                    ),
-                    data=data,
-                    topic=FCM_TOPIC,
-                    android=android_config
-                )
-                response = messaging.send(message)
-                print(f"  [SUCCESS] Message sent without image: {response}")
-                return True
-            except Exception as e2:
-                print(f"  [ERROR] Retry also failed: {e2}")
-                return False
         return False
 
 # ... (generate_digest_title and get_emoji_for_item remain unchanged) ...

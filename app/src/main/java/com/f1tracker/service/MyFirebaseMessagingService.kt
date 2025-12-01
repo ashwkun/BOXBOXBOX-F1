@@ -15,19 +15,22 @@ import com.google.firebase.messaging.RemoteMessage
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // Handle data payload
+        // Handle DATA-ONLY payload (notification + data bypass onMessageReceived when app in background)
         if (remoteMessage.data.isNotEmpty()) {
-            // Handle data if needed
-        }
-
-        // Handle notification payload
-        remoteMessage.notification?.let {
-            // Get URL from data
+            android.util.Log.d("FCM", "Data payload received: ${remoteMessage.data}")
+            
+            // Read title and body from data payload (for data-only messages)
+            val title = remoteMessage.data["title"]
+            val body = remoteMessage.data["body"]
             val url = remoteMessage.data["url"]
-            val imageUrl = remoteMessage.data["image_url"] // Assuming image_url is passed in data payload
-            val channelIdFromData = remoteMessage.data["channel_id"] // Assuming channel_id can be passed in data payload
-
-            sendNotification(it.title, it.body, channelIdFromData, imageUrl, url)
+            val imageUrl = remoteMessage.data["image_url"]
+            val channelId = remoteMessage.data["channel_id"]
+            
+            if (!title.isNullOrEmpty() && !body.isNullOrEmpty()) {
+                sendNotification(title, body, channelId, imageUrl, url)
+            } else {
+                android.util.Log.w("FCM", "Missing title or body in data payload")
+            }
         }
     }
 
