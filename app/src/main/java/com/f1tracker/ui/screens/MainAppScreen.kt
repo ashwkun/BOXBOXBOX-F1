@@ -56,7 +56,9 @@ fun MainAppScreen(
             }
             
             // 2. Open the content
-            webViewUrl = url
+            if (url.isNotEmpty()) {
+                webViewUrl = url
+            }
             
             // 3. Mark handled
             onIntentHandled()

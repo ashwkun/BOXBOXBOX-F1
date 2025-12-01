@@ -780,7 +780,7 @@ def main():
                 send_fcm_notification(
                     title=digest_title,
                     body=body,
-                    data={"type": "digest", "count": str(len(items_to_send)), "channel_id": "f1_digest"},
+                    data={"type": "digest", "count": str(len(items_to_send)), "channel_id": "f1_digest", "target_tab": "news"},
                     priority="normal",
                     channel_id="f1_digest"
                 )

@@ -158,6 +158,9 @@ class MainActivity : ComponentActivity() {
         val targetTab = intent?.getStringExtra("target_tab")
         if (!url.isNullOrEmpty()) {
             intentData.value = url to (targetTab ?: "news")
+        } else if (targetTab == "news") {
+            // Special case for Digest: No URL, just tab navigation
+            intentData.value = "" to "news"
         }
     }
     
