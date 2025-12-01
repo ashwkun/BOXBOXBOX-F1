@@ -177,15 +177,15 @@ fun MainAppScreen(
                     NavDestination.HOME -> HomeScreen(
                         onNewsClick = { url -> webViewUrl = url },
                         onNavigateToNews = { 
-                            socialSelectedTab = 1
-                            currentDestination = NavDestination.SOCIAL 
-                        },
-                        onNavigateToVideos = { 
                             socialSelectedTab = 2
                             currentDestination = NavDestination.SOCIAL 
                         },
-                        onNavigateToPodcasts = { 
+                        onNavigateToVideos = { 
                             socialSelectedTab = 3
+                            currentDestination = NavDestination.SOCIAL 
+                        },
+                        onNavigateToPodcasts = { 
+                            socialSelectedTab = 4
                             currentDestination = NavDestination.SOCIAL 
                         },
                         onRaceClick = { race -> selectedRace = race },

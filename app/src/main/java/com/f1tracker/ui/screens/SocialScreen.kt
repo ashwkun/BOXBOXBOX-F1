@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.vector.ImageVector
 import coil.compose.AsyncImage
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.f1tracker.R
@@ -115,7 +116,13 @@ fun SocialScreen(
         )
     }
     
-    val tabs = listOf("LATEST", "NEWS", "VIDEOS", "AUDIO")
+    val tabs = listOf(
+        TabItem("LATEST", Icons.Default.NewReleases),
+        TabItem("SOCIAL", Icons.Default.Public),
+        TabItem("NEWS", Icons.Default.Article),
+        TabItem("VIDEOS", Icons.Default.PlayCircle),
+        TabItem("AUDIO", Icons.Default.Headphones)
+    )
     // Initialize pager with the persisted state or initialTab if provided (though initialTab is mostly 0)
     // We prioritize the ViewModel state if it's not 0, otherwise we use initialTab
     val startPage = if (selectedTabIndex != 0) selectedTabIndex else initialTab
@@ -135,12 +142,12 @@ fun SocialScreen(
             latestListState.scrollToItem(0)
         }
         
-        if (pagerState.currentPage != 1) { // Not News
+        if (pagerState.currentPage != 2) { // Not News (Index 2)
             newsViewModel.resetScrollPosition()
             newsListState.scrollToItem(0)
         }
         
-        if (pagerState.currentPage != 2) { // Not Videos
+        if (pagerState.currentPage != 3) { // Not Videos (Index 3)
             multimediaViewModel.resetVideosScrollPosition()
             videosListState.scrollToItem(0)
         }
@@ -163,7 +170,7 @@ fun SocialScreen(
 
             
             // Custom Tab Selector
-            TabSelector(
+            IconTabSelector(
                 tabs = tabs,
                 selectedTab = pagerState.currentPage,
                 onTabSelected = { index ->
@@ -198,7 +205,27 @@ fun SocialScreen(
                         },
                         listState = latestListState
                     )
-                    1 -> NewsList(
+                    1 -> Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.Public,
+                                contentDescription = null,
+                                tint = Color(0xFFFF0080),
+                                modifier = Modifier.size(48.dp)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "SOCIAL FEED COMING SOON",
+                                fontFamily = michromaFont,
+                                fontSize = 14.sp,
+                                color = Color.White.copy(alpha = 0.7f)
+                            )
+                        }
+                    }
+                    2 -> NewsList(
                         articles = newsArticles, 
                         michromaFont = michromaFont, 
                         onNewsClick = onNewsClick, 
@@ -206,13 +233,13 @@ fun SocialScreen(
                         isRefreshing = isRefreshing,
                         onRefresh = { newsViewModel.refreshNews() }
                     )
-                    2 -> VideosList(
+                    3 -> VideosList(
                         videos = youtubeVideos, 
                         michromaFont = michromaFont, 
                         onVideoClick = onVideoClick,
                         listState = videosListState
                     )
-                    3 -> PodcastsList(
+                    4 -> PodcastsList(
                         podcasts = podcasts, 
                         michromaFont = michromaFont, 
                         currentlyPlayingEpisode = currentlyPlayingEpisode, 
@@ -1104,6 +1131,69 @@ private fun formatPublishedDate(publishedString: String): String {
         }
     } catch (e: Exception) {
         "Recently"
+    }
+}
+
+private data class TabItem(
+    val label: String,
+    val icon: ImageVector
+)
+
+@Composable
+private fun IconTabSelector(
+    tabs: List<TabItem>,
+    selectedTab: Int,
+    onTabSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(Color(0xFF0F0F0F), RoundedCornerShape(12.dp))
+            .border(1.dp, Color.White.copy(alpha = 0.08f), RoundedCornerShape(12.dp))
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        tabs.forEachIndexed { index, tab ->
+            val isSelected = selectedTab == index
+            
+            Box(
+                modifier = Modifier
+                    .weight(if (isSelected) 1.5f else 1f)
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(if (isSelected) Color(0xFFFF0080).copy(alpha = 0.2f) else Color.Transparent)
+                    .clickable { onTabSelected(index) }
+                    .animateContentSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = tab.icon,
+                        contentDescription = null,
+                        tint = if (isSelected) Color(0xFFFF0080) else Color.White.copy(alpha = 0.5f),
+                        modifier = Modifier.size(20.dp)
+                    )
+                    
+                    if (isSelected) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = tab.label,
+                            fontFamily = FontFamily(Font(R.font.michroma, FontWeight.Normal)),
+                            fontSize = 10.sp,
+                            color = Color.White,
+                            maxLines = 1,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
