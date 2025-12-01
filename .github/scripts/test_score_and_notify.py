@@ -19,8 +19,8 @@ FCM_TOPIC = "all_users"
 
 # --- Scoring Constants ---
 NUCLEAR_SCORE = 999
-MAJOR_THRESHOLD = 250   
-DIGEST_THRESHOLD = 500  
+MAJOR_THRESHOLD = 50   
+DIGEST_THRESHOLD = 30  
 DIGEST_COMBINED_THRESHOLD = 30
 
 # --- Time Windows (24/7 for Testing) ---
