@@ -104,14 +104,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val channelName = when (finalChannelId) {
                 "f1_nuclear" -> "Nuclear Updates"
                 "f1_major" -> "Major Updates"
+                "f1_digest" -> "Daily Digest"
                 "f1_app_updates" -> "App Updates"
                 else -> "F1 Updates"
+            }
+
+            val importance = when (finalChannelId) {
+                "f1_nuclear" -> NotificationManager.IMPORTANCE_HIGH
+                "f1_major" -> NotificationManager.IMPORTANCE_HIGH
+                else -> NotificationManager.IMPORTANCE_DEFAULT
             }
 
             val channel = NotificationChannel(
                 finalChannelId,
                 channelName,
-                NotificationManager.IMPORTANCE_DEFAULT
+                importance
             ).apply {
                 setSound(soundUri, audioAttributes)
                 enableLights(true)

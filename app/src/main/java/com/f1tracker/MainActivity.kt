@@ -49,6 +49,16 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        // Subscribe to FCM topic for notifications
+        com.google.firebase.messaging.FirebaseMessaging.getInstance().subscribeToTopic("all_users")
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    android.util.Log.w("MainActivity", "Subscribe to topic failed", task.exception)
+                } else {
+                    android.util.Log.d("MainActivity", "Subscribed to topic: all_users")
+                }
+            }
+
         // Load F1 driver and team data from JSON files
         loadF1Data()
         

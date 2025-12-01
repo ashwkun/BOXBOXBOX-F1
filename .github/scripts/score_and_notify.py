@@ -379,7 +379,7 @@ def send_fcm_notification(title, body, data, priority="high", channel_id="f1_maj
             if send_fcm_notification(
                 title="F1 News",
                 body=f"🚨 {item['title']}",
-                data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
+                data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', ''), "channel_id": "f1_nuclear"},
                 priority="high",
                 channel_id="f1_nuclear",
                 image_url=item.get('image')
@@ -635,7 +635,7 @@ def main():
             send_fcm_notification(
                 title="F1 News",
                 body=f"🚨 {item['title']}",
-                data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
+                data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', ''), "channel_id": "f1_nuclear"},
                 priority="high",
                 channel_id="f1_nuclear",
                 image_url=item.get('image')
@@ -655,7 +655,7 @@ def main():
             send_fcm_notification(
                 title="F1 News",
                 body=f"🚨 {item['title']}",
-                data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
+                data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', ''), "channel_id": "f1_nuclear"},
                 priority="high",
                 channel_id="f1_nuclear",
                 image_url=item.get('image')
@@ -699,7 +699,7 @@ def main():
             if send_fcm_notification(
                 title="F1 News",
                 body=item['title'],
-                data={"type": "major", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
+                data={"type": "major", "url": item['url'], "score": str(item['score']), "image": item.get('image', ''), "channel_id": "f1_major"},
                 priority="high",
                 channel_id="f1_major",
                 image_url=item.get('image')
@@ -716,7 +716,7 @@ def main():
             if send_fcm_notification(
                 title="F1 News",
                 body=item['title'],
-                data={"type": "major", "url": item['url'], "score": str(item['score']), "image": item.get('image', '')},
+                data={"type": "major", "url": item['url'], "score": str(item['score']), "image": item.get('image', ''), "channel_id": "f1_major"},
                 priority="high",
                 channel_id="f1_major",
                 image_url=item.get('image')
@@ -795,7 +795,7 @@ def main():
                 send_fcm_notification(
                     title=digest_title,
                     body=body,
-                    data={"type": "digest", "count": str(len(items_to_send))},
+                    data={"type": "digest", "count": str(len(items_to_send)), "channel_id": "f1_digest"},
                     priority="normal",
                     channel_id="f1_digest"
                 )
