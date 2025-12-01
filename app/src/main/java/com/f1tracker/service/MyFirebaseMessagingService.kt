@@ -25,9 +25,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val url = remoteMessage.data["url"]
             val imageUrl = remoteMessage.data["image_url"]
             val channelId = remoteMessage.data["channel_id"]
+            val targetTab = remoteMessage.data["target_tab"]
             
             if (!title.isNullOrEmpty() && !body.isNullOrEmpty()) {
-                sendNotification(title, body, channelId, imageUrl, url)
+                sendNotification(title, body, channelId, imageUrl, url, targetTab)
             } else {
                 android.util.Log.w("FCM", "Missing title or body in data payload")
             }
@@ -39,12 +40,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         android.util.Log.d("FCM", "Refreshed token: $token")
     }
 
-    private fun sendNotification(title: String?, messageBody: String?, channelId: String?, imageUrl: String?, url: String?) {
+    private fun sendNotification(title: String?, messageBody: String?, channelId: String?, imageUrl: String?, url: String?, targetTab: String?) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         
         if (!url.isNullOrEmpty()) {
             intent.putExtra("url", url)
+        }
+        
+        if (!targetTab.isNullOrEmpty()) {
+            intent.putExtra("target_tab", targetTab)
+        } else if (!url.isNullOrEmpty()) {
+            // Default to news if URL is present but no target tab specified
             intent.putExtra("target_tab", "news")
         }
 
