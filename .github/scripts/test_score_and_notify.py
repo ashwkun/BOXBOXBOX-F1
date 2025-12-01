@@ -217,16 +217,17 @@ def main():
         enclosure = item.find('enclosure')
         if enclosure is not None and enclosure.get('type', '').startswith('image/'):
             image_url = enclosure.get('url')
-            
+        
         item_id = generate_id(title, pub_date_str)
         
         # Check duplicates
         is_sent = False
-        for sent in state['nuclear_sent'] + state['major_sent'] + state['digest_items'] + state['ignored_items']:
+        for sent in state['nuclear_sent'] + state['major_sent'] + state['digest_items']:
             if sent['id'] == item_id:
                 is_sent = True
                 break
-        if is_sent: continue
+        if is_sent or item_id in state['ignored_items']:
+            continue
 
         score, category = score_headline(title)
         
