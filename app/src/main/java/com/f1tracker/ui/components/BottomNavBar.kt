@@ -93,10 +93,8 @@ fun BottomNavBar(
                 onClick = { onNavigate(NavDestination.SCHEDULE) }
             )
             
-            // Social (3rd - Swapped with Live)
-            NavItemWithLabel(
-                icon = Icons.Default.DynamicFeed,
-                label = "SOCIAL",
+            // Feed (3rd - formerly Social)
+            NavItemFeed(
                 brigendsFont = brigendsFont,
                 isSelected = currentDestination == NavDestination.SOCIAL,
                 accentColor = accentColor,
@@ -202,6 +200,121 @@ private fun NavItemWithLabel(
         )
         
         Spacer(modifier = Modifier.height(4.dp))
+        
+        // Neon underglow line (active only)
+        Box(
+            modifier = Modifier
+                .width(if (isSelected) 28.dp else 0.dp)
+                .height(3.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(
+                    if (isSelected) {
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                accentColor.copy(alpha = glowPulse),
+                                Color.Transparent
+                            )
+                        )
+                    } else {
+                        Brush.linearGradient(listOf(Color.Transparent, Color.Transparent))
+                    }
+                )
+        )
+    }
+}
+
+@Composable
+private fun NavItemFeed(
+    brigendsFont: FontFamily,
+    isSelected: Boolean,
+    accentColor: Color,
+    onClick: () -> Unit
+) {
+    // Pulse animation for dot
+    val infiniteTransition = rememberInfiniteTransition(label = "pulse")
+    val dotPulse by infiniteTransition.animateFloat(
+        initialValue = 0.5f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "dotPulse"
+    )
+    
+    val glowPulse by infiniteTransition.animateFloat(
+        initialValue = 0.6f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "glowPulse"
+    )
+    
+    Column(
+        modifier = Modifier
+            .width(72.dp) // Narrower for 5 items
+            .fillMaxHeight()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(64.dp) // Slightly smaller for 5 items
+        ) {
+            // Neon glow behind text (active only)
+            if (isSelected) {
+                Box(
+                    modifier = Modifier
+                        .size(54.dp)
+                        .blur(20.dp)
+                        .background(
+                            brush = Brush.radialGradient(
+                                colors = listOf(
+                                    accentColor.copy(alpha = 0.5f * glowPulse),
+                                    Color.Transparent
+                                )
+                            )
+                        )
+                )
+            }
+            
+            // FEED text with dot
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "FEED",
+                    fontFamily = brigendsFont,
+                    fontSize = 14.sp, // Slightly smaller
+                    color = if (isSelected) accentColor else Color(0xFF6B6B6B),
+                    letterSpacing = 0.8.sp
+                )
+                
+                Spacer(modifier = Modifier.width(3.dp))
+                
+                // Pulsing dot
+                Box(
+                    modifier = Modifier
+                        .size(5.dp) // Slightly smaller
+                        .clip(CircleShape)
+                        .background(
+                            if (isSelected) accentColor.copy(alpha = dotPulse) else Color(0xFF6B6B6B)
+                        )
+                )
+            }
+        }
+        
+        Spacer(modifier = Modifier.height(8.dp))
         
         // Neon underglow line (active only)
         Box(
