@@ -644,7 +644,14 @@ def main():
     
     # Combine with new major candidates
     all_major_candidates = major_from_queue + major_candidates
-    print(f"       Total major candidates: {len(all_major_candidates)}")
+    
+    # Deduplicate by ID (prevent items from appearing in both queue and RSS)
+    unique_candidates = {}
+    for item in all_major_candidates:
+        unique_candidates[item['id']] = item
+    all_major_candidates = list(unique_candidates.values())
+
+    print(f"       Total major candidates (deduplicated): {len(all_major_candidates)}")
     
     # Filter out already sent (double check)
     sent_ids = set([x['id'] for x in state['nuclear_sent']] + [x['id'] for x in state['major_sent']])

@@ -131,6 +131,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0, notificationBuilder.build())
+        // Use unique ID to prevent overwriting
+        val notificationId = System.currentTimeMillis().toInt()
+        android.util.Log.d("FCM", "Generating notification with ID: $notificationId")
+        notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }
