@@ -20,8 +20,8 @@ FCM_TOPIC = "all_users" # Target topic for notifications
 
 # --- Scoring Constants (TEST MODE) ---
 NUCLEAR_SCORE = 999
-MAJOR_THRESHOLD = 15   # LOW threshold to trigger majors easily
-DIGEST_THRESHOLD = 5   # LOW threshold to trigger digest items easily
+MAJOR_THRESHOLD = 250   # LOW threshold to trigger majors easily
+DIGEST_THRESHOLD = 500   # LOW threshold to trigger digest items easily
 DIGEST_COMBINED_THRESHOLD = 30  # Sum of top 3 (low for testing)
 
 # --- Time Windows (DISABLED FOR TESTING) ---
@@ -267,7 +267,7 @@ def send_fcm_notification(title, body, data, priority="high", channel_id="f1_maj
             priority=priority,
             notification=messaging.AndroidNotification(
                 channel_id=channel_id,
-                color="#FF0000" if channel_id == "f1_nuclear" else None,
+                color="#FF0000" if channel_id == "f1_Updates" else None,
                 image=final_image
             )
         )
