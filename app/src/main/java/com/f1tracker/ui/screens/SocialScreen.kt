@@ -117,7 +117,7 @@ fun SocialScreen(
     }
     
     val tabs = listOf(
-        TabItem("LATEST", Icons.Default.NewReleases),
+        TabItem("LATEST", Icons.Default.FlashOn),
         TabItem("SOCIAL", Icons.Default.Public),
         TabItem("NEWS", Icons.Default.Article),
         TabItem("VIDEOS", Icons.Default.PlayCircle),
@@ -1161,7 +1161,7 @@ private fun IconTabSelector(
             
             Box(
                 modifier = Modifier
-                    .weight(if (isSelected) 1.5f else 1f)
+                    .weight(if (isSelected) 3f else 1f)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(8.dp))
                     .background(if (isSelected) Color(0xFFFF0080).copy(alpha = 0.2f) else Color.Transparent)
