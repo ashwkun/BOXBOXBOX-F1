@@ -194,6 +194,7 @@ def main():
 
     channel = root.find('channel')
     items = channel.findall('item')
+    print(f"[DEBUG] Found {len(items)} items in RSS feed.")
     
     current_time = datetime.datetime.utcnow()
     
@@ -220,10 +221,15 @@ def main():
             if sent['id'] == item_id:
                 is_sent = True
                 break
-        if is_sent or item_id in state['ignored_items']:
+        if is_sent:
+            print(f"[DEBUG] Skipping duplicate (already sent): {title}")
+            continue
+        if item_id in state['ignored_items']:
+            print(f"[DEBUG] Skipping ignored item: {title}")
             continue
 
         score, category = score_headline(title)
+        print(f"[DEBUG] Item: {title} | Score: {score} | Category: {category}")
         
         item_data = {
             "id": item_id, "title": title, "url": link, 
