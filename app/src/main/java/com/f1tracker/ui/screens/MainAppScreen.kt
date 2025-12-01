@@ -52,7 +52,7 @@ fun MainAppScreen(
             // 1. Set up the background state (where to go when back is pressed)
             if (targetTab == "news") {
                 currentDestination = NavDestination.SOCIAL
-                socialSelectedTab = 1
+                socialSelectedTab = 2
             }
             
             // 2. Open the content
