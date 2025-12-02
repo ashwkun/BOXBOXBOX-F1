@@ -34,6 +34,44 @@ function fetchJson(url) {
     });
 }
 
+// Language Detection (Zero-dependency heuristic)
+function detectLanguage(text) {
+    if (!text) return 'en'; // Default to English if no caption
+
+    const lowerText = text.toLowerCase();
+
+    // Spanish indicators
+    const spanishPatterns = [
+        /\b(año|día|está|más|así|también|sólo|cómo|después|número|equipo|temporada|piloto)\b/i,
+        /[¿¡]/,  // Spanish punctuation
+        /ñ/i     // Spanish character
+    ];
+
+    // Portuguese indicators
+    const portuguesePatterns = [
+        /\b(não|está|é|são|com|para|pelo|pela|também|após|número)\b/i,
+        /ã|õ|ç/i  // Portuguese characters
+    ];
+
+    // Check Spanish
+    const spanishScore = spanishPatterns.filter(pattern => pattern.test(text)).length;
+
+    // Check Portuguese
+    const portugueseScore = portuguesePatterns.filter(pattern => pattern.test(text)).length;
+
+    // Determine language
+    if (spanishScore >= 2) return 'es';
+    if (portugueseScore >= 2) return 'pt';
+    if (spanishScore === 1 || portugueseScore === 1) {
+        // If only 1 match, check for English indicators
+        const englishPatterns = /\b(the|and|for|with|this|that|from|will|race|team|driver)\b/i;
+        if (englishPatterns.test(text)) return 'en';
+        return spanishScore > 0 ? 'es' : 'pt';
+    }
+
+    return 'en'; // Default to English
+}
+
 async function run() {
     try {
         // 1. Fetch Fresh Data (Limit 15 to catch bursts)
@@ -43,8 +81,21 @@ async function run() {
 
         console.log("📡 Fetching Instagram data...");
         const response = await fetchJson(url);
-        const newPosts = response.business_discovery.media.data;
+        let newPosts = response.business_discovery.media.data;
         console.log(`✅ Fetched ${newPosts.length} new posts.`);
+
+        // Add language detection
+        newPosts = newPosts.map(post => ({
+            ...post,
+            language: detectLanguage(post.caption)
+        }));
+
+        // Filter to English only
+        const englishPosts = newPosts.filter(p => p.language === 'en');
+        console.log(`🌍 Language filtered: ${englishPosts.length} English posts (${newPosts.length - englishPosts.length} non-English filtered out)`);
+
+        // Use English posts for feed
+        newPosts = englishPosts;
 
         // ==========================================
         // PART A: UPDATE LIVE FEED (f1_feed.json)
