@@ -143,7 +143,9 @@ class UpdateChecker @Inject constructor(
         return try {
             val major = parts.getOrNull(0)?.toIntOrNull() ?: 0
             val minor = parts.getOrNull(1)?.toIntOrNull() ?: 0
-            major * 100 + minor
+            val patch = parts.getOrNull(2)?.toIntOrNull() ?: 0
+            // Use larger multipliers to support versions like 1.99.99
+            major * 10000 + minor * 100 + patch
         } catch (e: Exception) {
             0
         }
