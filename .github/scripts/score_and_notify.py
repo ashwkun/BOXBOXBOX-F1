@@ -802,14 +802,14 @@ def main():
 
     # 10. Cleanup Old State (Keep last 48 hours)
     print(f"\n[INFO] Cleaning up old state...")
-    cutoff_time = current_time - datetime.timedelta(hours=48)
+    cutoff_time = current_time - datetime.timedelta(hours=96)
     
     state['nuclear_sent'] = [x for x in state['nuclear_sent'] if datetime.datetime.fromisoformat(x['timestamp']) > cutoff_time]
     state['major_sent'] = [x for x in state['major_sent'] if datetime.datetime.fromisoformat(x['timestamp']) > cutoff_time]
     
     # Limit ignored_items size to last 200
-    if len(state['ignored_items']) > 200:
-        state['ignored_items'] = state['ignored_items'][-200:]
+    if len(state['ignored_items']) > 500:
+        state['ignored_items'] = state['ignored_items'][-500:]
 
     # 11. Save State
     save_state(state)
