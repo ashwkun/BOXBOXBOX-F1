@@ -29,7 +29,7 @@ jobs:
       run: |
         git config user.name "F1 Bot"
         git config user.email "bot@boxboxbox.app"
-        git add f1_feed.json f1_archive.json
+        git add f1_feed.json f1_reels.json f1_archive.json
         timestamp=$(date -u)
         git commit -m "Feed update: ${timestamp}" || exit 0
         git push
