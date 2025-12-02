@@ -27,10 +27,7 @@
     }
   ],
   "nuclear_queue": [],
-  "major_sent": [],
-  "slot1_remaining": 1,
-  "slot2_remaining": 2,
-  "digest_items": [
+  "major_sent": [
     {
       "id": "63c6d345b5d49e691343bd2c56734fa6",
       "title": "Red Bull confirms Tuesday announcement on 2026 F1 driver line-ups",
@@ -38,7 +35,11 @@
       "score": 215,
       "timestamp": "2025-11-30T20:38:19",
       "image": "https://cdn-9.motorsport.com/images/amp/0o5PPwwY/s6/isack-hadjar-racing-bulls-team.jpg"
-    },
+    }
+  ],
+  "slot1_remaining": 0,
+  "slot2_remaining": 2,
+  "digest_items": [
     {
       "id": "e78ccc466345aa797bfb5fa4ec200ad0",
       "title": "Charles Leclerc admits \"most exciting part\" of Qatar GP was working out title fight maths",
@@ -78,6 +79,14 @@
       "score": 75,
       "timestamp": "2025-12-01T13:00:00",
       "image": "https://cdn-1.motorsport.com/images/amp/6O1GVV52/s6/yuki-tsunoda-red-bull-racing-i-2.jpg"
+    },
+    {
+      "id": "ac26cbbf20d25ca232a629a45e000a81",
+      "title": "Fernando Alonso explains bizarre Qatar GP spin: \"A spirit inside the car\"",
+      "url": "https://www.motorsport.com/f1/news/fernando-alonso-explains-bizarre-qatar-gp-spin-a-spirit-inside-the-car/10781535/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 75,
+      "timestamp": "2025-12-01T12:32:02",
+      "image": "https://cdn-5.motorsport.com/images/amp/6DGqGa9Y/s6/fernando-alonso-aston-martin-r.jpg"
     }
   ],
   "digest_sent": true,
