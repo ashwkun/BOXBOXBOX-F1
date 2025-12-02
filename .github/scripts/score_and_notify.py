@@ -75,6 +75,11 @@ NUCLEAR_PATTERNS = [
     r"\b(new team|team entry|joins f1|entering formula 1)\b",
     r"\b(sold|bought|ownership|takeover)\b.*\b(red bull|ferrari|mercedes|mclaren)\b",
     
+    # All Driver Moves (Inter-team and Intra-team)
+    r"\b(moves to|joins|signs for|promoted to|in at|switches to|signed by)\b.*\b(red bull|ferrari|mercedes|mclaren|aston martin|alpine|williams|haas|sauber|audi|racing bulls|rb|alphatauri)\b",
+    r"\b(replaces|replacing)\b.*\b(driver|seat)\b",
+    r"\b(contract)\b.*\b(extension|extended|renewed|signed)\b",
+
     # Regulatory
     r"\b(cost cap|budget cap)\b.*\b(breach|violation|exceeded)\b",
     r"\b(regulation change|rule change|technical directive)\b.*\b(2025|2026|immediate)\b",
