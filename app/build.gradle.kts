@@ -18,8 +18,8 @@ android {
         applicationId = "com.boxboxbox.f1tracker.live"
         minSdk = 26
         targetSdk = 34
-        versionCode = 26
-        versionName = "1.10.8"
+        versionCode = 27
+        versionName = "1.10.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
