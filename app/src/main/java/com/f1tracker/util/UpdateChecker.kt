@@ -52,7 +52,7 @@ class UpdateChecker @Inject constructor(
 
             // 2. If we are here, either no cache, cache is old, or cache is invalid.
             // Check rate limit for API call
-            val isDebug = BuildConfig.DEBUG
+            val isDebug = (context.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0
             android.util.Log.d("UpdateChecker", "Checking for updates... Last check: $lastCheck, Now: $now, Interval: $CHECK_INTERVAL_MS, Debug: $isDebug")
             
             if (!isDebug && now - lastCheck < CHECK_INTERVAL_MS) {
