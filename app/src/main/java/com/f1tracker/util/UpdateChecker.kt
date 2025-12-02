@@ -21,7 +21,7 @@ class UpdateChecker @Inject constructor(
         private const val KEY_CACHED_RELEASE_TAG = "cached_release_tag"
         private const val KEY_CACHED_RELEASE_BODY = "cached_release_body"
         private const val KEY_CACHED_DOWNLOAD_URL = "cached_download_url"
-        private const val CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000L // 24 hours
+        private const val CHECK_INTERVAL_MS = 12 * 60 * 60 * 1000L // 12 hours
     }
 
     private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -52,10 +52,9 @@ class UpdateChecker @Inject constructor(
 
             // 2. If we are here, either no cache, cache is old, or cache is invalid.
             // Check rate limit for API call
-            val isDebug = (context.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0
-            android.util.Log.d("UpdateChecker", "Checking for updates... Last check: $lastCheck, Now: $now, Interval: $CHECK_INTERVAL_MS, Debug: $isDebug")
+            android.util.Log.d("UpdateChecker", "Checking for updates... Last check: $lastCheck, Now: $now, Interval: $CHECK_INTERVAL_MS")
             
-            if (!isDebug && now - lastCheck < CHECK_INTERVAL_MS) {
+            if (now - lastCheck < CHECK_INTERVAL_MS) {
                 android.util.Log.d("UpdateChecker", "Skipping update check due to rate limit")
                 return@withContext UpdateStatus.NoUpdateAvailable
             }
