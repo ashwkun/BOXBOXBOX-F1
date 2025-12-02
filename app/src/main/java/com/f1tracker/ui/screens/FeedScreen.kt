@@ -189,6 +189,47 @@ fun FeedScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
             
+            // Social Tab Toggle (Feed vs Reels)
+            if (pagerState.currentPage == 1) {
+                val context = androidx.compose.ui.platform.LocalContext.current
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color(0xFF333333))
+                            .clickable {
+                                // Launch Reels Activity
+                                val intent = android.content.Intent(context, com.f1tracker.ui.screens.ReelsActivity::class.java)
+                                context.startActivity(intent)
+                            }
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.PlayCircle,
+                                contentDescription = "Reels",
+                                tint = Color(0xFFFF004D), // TikTok/Reels Pinkish Red
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "OPEN REELS MODE",
+                                fontFamily = michromaFont,
+                                fontSize = 12.sp,
+                                color = Color.White
+                            )
+                        }
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
             // Content with Swipe Navigation
             androidx.compose.foundation.pager.HorizontalPager(
                 state = pagerState,
@@ -216,10 +257,10 @@ fun FeedScreen(
                         InstagramFeedList(
                             posts = instagramPosts,
                             michromaFont = michromaFont,
-                            onPostClick = { permalink ->
-                                // Open in Browser/App
+                            onOpenInInstagram = { permalink ->
+                                // Open in Instagram app
                                 val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(permalink))
-                                androidx.core.content.ContextCompat.startActivity(context, intent, null)
+                                context.startActivity(intent)
                             }
                         )
                     }
