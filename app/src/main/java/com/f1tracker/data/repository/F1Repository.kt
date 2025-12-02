@@ -18,6 +18,7 @@ interface F1Repository {
     suspend fun getSprintResultsByCircuit(season: String, circuitId: String): Result<List<RaceResult>>
     suspend fun getAllRaceResultsForSeason(season: String): Result<List<Race>>
     suspend fun getESPNSessionResults(round: Int): Result<List<SessionResult>>
+    suspend fun getInstagramFeed(): Result<List<com.f1tracker.data.models.InstagramPost>>
 }
 
 class F1RepositoryImpl @Inject constructor(
@@ -366,5 +367,17 @@ class F1RepositoryImpl @Inject constructor(
         return com.f1tracker.data.local.F1DataProvider.getDriverByName(athlete.fullName)?.code
             ?: com.f1tracker.data.local.F1DataProvider.getDriverByName(athlete.displayName)?.code
             ?: com.f1tracker.data.local.F1DataProvider.getDriverByName(athlete.shortName)?.code
+    }
+
+    override suspend fun getInstagramFeed(): Result<List<com.f1tracker.data.models.InstagramPost>> = withContext(Dispatchers.IO) {
+        try {
+            // Cache busting: Append timestamp to force fresh fetch
+            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_feed.json?t=${System.currentTimeMillis()}"
+            val response = f1ApiService.getInstagramFeed(url)
+            Result.success(response)
+        } catch (e: Exception) {
+            android.util.Log.e("F1Repository", "Error fetching Instagram feed", e)
+            Result.failure(e)
+        }
     }
 }

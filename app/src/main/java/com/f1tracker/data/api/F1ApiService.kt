@@ -7,6 +7,7 @@ import com.f1tracker.data.models.RacesResponse
 import com.f1tracker.data.models.SprintResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Url
 
 interface F1ApiService {
     
@@ -64,4 +65,7 @@ interface F1ApiService {
         @Path("season") season: String = "2025",
         @Path("circuitId") circuitId: String
     ): SprintResponse
+
+    @GET
+    suspend fun getInstagramFeed(@Url url: String): List<com.f1tracker.data.models.InstagramPost>
 }

@@ -27,6 +27,9 @@ class MultimediaViewModel @Inject constructor(
     private val _selectedTabIndex = MutableStateFlow(0)
     val selectedTabIndex: StateFlow<Int> = _selectedTabIndex.asStateFlow()
 
+    private val _instagramPosts = MutableStateFlow<List<com.f1tracker.data.models.InstagramPost>>(emptyList())
+    val instagramPosts: StateFlow<List<com.f1tracker.data.models.InstagramPost>> = _instagramPosts.asStateFlow()
+
     fun setSelectedTab(index: Int) {
         _selectedTabIndex.value = index
     }
@@ -41,6 +44,18 @@ class MultimediaViewModel @Inject constructor(
     init {
         loadYouTubeVideos()
         loadPodcasts()
+        loadInstagramFeed()
+    }
+
+    fun loadInstagramFeed() {
+        viewModelScope.launch {
+            val result = repository.getInstagramFeed()
+            result.onSuccess { posts ->
+                _instagramPosts.value = posts
+            }.onFailure { e ->
+                Log.e("MultimediaViewModel", "Failed to load Instagram feed", e)
+            }
+        }
     }
 
     fun loadYouTubeVideos() {

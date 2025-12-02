@@ -44,6 +44,7 @@ import com.f1tracker.ui.viewmodels.NewsViewModel
 import com.f1tracker.ui.viewmodels.MultimediaViewModel
 import com.f1tracker.ui.components.TabSelector
 import com.f1tracker.ui.models.FeedItem
+import com.f1tracker.ui.components.InstagramFeedList
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -75,7 +76,10 @@ fun FeedScreen(
     val isRefreshing by newsViewModel.isRefreshing.collectAsState()
     val youtubeVideos by multimediaViewModel.youtubeVideos.collectAsState()
     val podcasts by multimediaViewModel.podcasts.collectAsState()
+    val instagramPosts by multimediaViewModel.instagramPosts.collectAsState()
     val selectedTabIndex by multimediaViewModel.selectedTabIndex.collectAsState()
+    val selectedNewsFilter by newsViewModel.selectedFilter.collectAsState()
+    val selectedVideoFilter by multimediaViewModel.selectedVideoFilter.collectAsState()
     
     // Hoisted scroll state for NewsList
     val newsListState = rememberLazyListState(
@@ -207,25 +211,17 @@ fun FeedScreen(
                         },
                         listState = latestListState
                     )
-                    1 -> Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.Public,
-                                contentDescription = null,
-                                tint = Color(0xFFFF0080),
-                                modifier = Modifier.size(48.dp)
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = "SOCIAL FEED COMING SOON",
-                                fontFamily = michromaFont,
-                                fontSize = 14.sp,
-                                color = Color.White.copy(alpha = 0.7f)
-                            )
-                        }
+                    1 -> {
+                        val context = androidx.compose.ui.platform.LocalContext.current
+                        InstagramFeedList(
+                            posts = instagramPosts,
+                            michromaFont = michromaFont,
+                            onPostClick = { permalink ->
+                                // Open in Browser/App
+                                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(permalink))
+                                androidx.core.content.ContextCompat.startActivity(context, intent, null)
+                            }
+                        )
                     }
                     2 -> NewsList(
                         articles = newsArticles, 
@@ -234,7 +230,7 @@ fun FeedScreen(
                         listState = newsListState,
                         isRefreshing = isRefreshing,
                         onRefresh = { newsViewModel.refreshNews() },
-                        selectedFilter = newsViewModel.selectedFilter.collectAsState().value,
+                        selectedFilter = selectedNewsFilter,
                         onFilterSelected = { newsViewModel.setSelectedFilter(it) }
                     )
                     3 -> VideosList(
@@ -242,7 +238,7 @@ fun FeedScreen(
                         michromaFont = michromaFont, 
                         onVideoClick = onVideoClick,
                         listState = videosListState,
-                        selectedFilter = multimediaViewModel.selectedVideoFilter.collectAsState().value,
+                        selectedFilter = selectedVideoFilter,
                         onFilterSelected = { multimediaViewModel.setSelectedVideoFilter(it) }
                     )
                     4 -> PodcastsList(
@@ -1096,5 +1092,6 @@ private fun IconTabSelector(
         }
     }
 }
+
 
 
