@@ -31,6 +31,13 @@ class MultimediaViewModel @Inject constructor(
         _selectedTabIndex.value = index
     }
 
+    private val _selectedVideoFilter = MutableStateFlow("Top")
+    val selectedVideoFilter: StateFlow<String> = _selectedVideoFilter.asStateFlow()
+
+    fun setSelectedVideoFilter(filter: String) {
+        _selectedVideoFilter.value = filter
+    }
+
     init {
         loadYouTubeVideos()
         loadPodcasts()

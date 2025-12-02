@@ -45,6 +45,14 @@ class NewsViewModel @Inject constructor(
         loadNews()
     }
 
+    // Filter Persistence
+    private val _selectedFilter = MutableStateFlow("ALL")
+    val selectedFilter: StateFlow<String> = _selectedFilter.asStateFlow()
+
+    fun setSelectedFilter(filter: String) {
+        _selectedFilter.value = filter
+    }
+
     // Scroll Persistence
     var newsScrollIndex = 0
     var newsScrollOffset = 0

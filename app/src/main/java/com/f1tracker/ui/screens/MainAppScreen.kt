@@ -43,7 +43,7 @@ fun MainAppScreen(
     var backPressedTime by remember { mutableLongStateOf(0L) }
     var scheduleSelectedTab by remember { mutableStateOf(0) } // Persist schedule tab state here
     var standingsSelectedTab by remember { mutableStateOf(0) } // Persist standings tab state here
-    var socialSelectedTab by remember { mutableStateOf(0) } // Persist social tab state here
+    var feedSelectedTab by remember { mutableStateOf(0) } // Persist feed tab state here
     val context = LocalContext.current
     
     // Handle Intent Data (Deep Links / Notifications)
@@ -51,8 +51,8 @@ fun MainAppScreen(
         intentData?.let { (url, targetTab) ->
             // 1. Set up the background state (where to go when back is pressed)
             if (targetTab == "news") {
-                currentDestination = NavDestination.SOCIAL
-                socialSelectedTab = 2
+                currentDestination = NavDestination.FEED
+                feedSelectedTab = 2
             }
             
             // 2. Open the content
@@ -177,16 +177,16 @@ fun MainAppScreen(
                     NavDestination.HOME -> HomeScreen(
                         onNewsClick = { url -> webViewUrl = url },
                         onNavigateToNews = { 
-                            socialSelectedTab = 2
-                            currentDestination = NavDestination.SOCIAL 
+                            feedSelectedTab = 2
+                            currentDestination = NavDestination.FEED 
                         },
                         onNavigateToVideos = { 
-                            socialSelectedTab = 3
-                            currentDestination = NavDestination.SOCIAL 
+                            feedSelectedTab = 3
+                            currentDestination = NavDestination.FEED 
                         },
                         onNavigateToPodcasts = { 
-                            socialSelectedTab = 4
-                            currentDestination = NavDestination.SOCIAL 
+                            feedSelectedTab = 4
+                            currentDestination = NavDestination.FEED 
                         },
                         onRaceClick = { race -> selectedRace = race },
                         onVideoClick = { videoId -> selectedVideoId = videoId },
@@ -224,7 +224,7 @@ fun MainAppScreen(
                         selectedTab = standingsSelectedTab,
                         onTabChange = { standingsSelectedTab = it }
                     )
-                    NavDestination.SOCIAL -> SocialScreen(
+                    NavDestination.FEED -> FeedScreen(
                         onNewsClick = { url -> webViewUrl = url },
                         onVideoClick = { videoId -> selectedVideoId = videoId },
                         onEpisodeClick = { episode ->
@@ -240,7 +240,8 @@ fun MainAppScreen(
                         },
                         currentlyPlayingEpisode = currentEpisode,
                         isPlaying = isPlaying,
-                        initialTab = socialSelectedTab
+                        initialTab = feedSelectedTab,
+                        onTabChanged = { feedSelectedTab = it }
                     )
             }
         }

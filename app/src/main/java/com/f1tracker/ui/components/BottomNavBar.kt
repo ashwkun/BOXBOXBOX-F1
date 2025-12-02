@@ -96,9 +96,9 @@ fun BottomNavBar(
             // Feed (3rd - formerly Social)
             NavItemFeed(
                 brigendsFont = brigendsFont,
-                isSelected = currentDestination == NavDestination.SOCIAL,
+                isSelected = currentDestination == NavDestination.FEED,
                 accentColor = accentColor,
-                onClick = { onNavigate(NavDestination.SOCIAL) }
+                onClick = { onNavigate(NavDestination.FEED) }
             )
             
             // Standings (4th)

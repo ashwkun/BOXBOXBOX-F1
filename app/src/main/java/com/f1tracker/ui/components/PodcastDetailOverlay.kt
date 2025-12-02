@@ -237,7 +237,7 @@ private fun EpisodeRow(
     )
 }
 
-// Helper function for date formatting (duplicated from SocialScreen, could be moved to utils)
+// Helper function for date formatting (duplicated from FeedScreen, could be moved to utils)
 private fun formatPublishedDate(dateString: String): String {
     return try {
         val date = java.time.ZonedDateTime.parse(dateString, java.time.format.DateTimeFormatter.ISO_DATE_TIME)

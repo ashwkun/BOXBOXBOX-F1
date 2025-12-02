@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 enum class NavDestination {
-    HOME, SCHEDULE, LIVE, STANDINGS, SOCIAL
+    HOME, SCHEDULE, LIVE, STANDINGS, FEED
 }
 
 @Composable

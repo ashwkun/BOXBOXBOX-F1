@@ -43,7 +43,7 @@ import com.f1tracker.data.models.F1Video
 import com.f1tracker.ui.viewmodels.NewsViewModel
 import com.f1tracker.ui.viewmodels.MultimediaViewModel
 import com.f1tracker.ui.components.TabSelector
-import com.f1tracker.ui.models.SocialFeedItem
+import com.f1tracker.ui.models.FeedItem
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -56,7 +56,7 @@ import com.f1tracker.util.NewsCategory
 
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-fun SocialScreen(
+fun FeedScreen(
     newsViewModel: NewsViewModel = hiltViewModel(),
     multimediaViewModel: MultimediaViewModel = hiltViewModel(),
     onNewsClick: (String?) -> Unit = {},
@@ -65,7 +65,8 @@ fun SocialScreen(
     onPlayPause: () -> Unit = {},
     currentlyPlayingEpisode: PodcastEpisode? = null,
     isPlaying: Boolean = false,
-    initialTab: Int = 0
+    initialTab: Int = 0,
+    onTabChanged: (Int) -> Unit = {}
 ) {
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
 
@@ -135,6 +136,7 @@ fun SocialScreen(
     // Sync pager state with ViewModel
     LaunchedEffect(pagerState.currentPage) {
         multimediaViewModel.setSelectedTab(pagerState.currentPage)
+        onTabChanged(pagerState.currentPage)
         
         // Reset scroll positions if switching away from tabs
         if (pagerState.currentPage != 0) { // Not Latest
@@ -231,13 +233,17 @@ fun SocialScreen(
                         onNewsClick = onNewsClick, 
                         listState = newsListState,
                         isRefreshing = isRefreshing,
-                        onRefresh = { newsViewModel.refreshNews() }
+                        onRefresh = { newsViewModel.refreshNews() },
+                        selectedFilter = newsViewModel.selectedFilter.collectAsState().value,
+                        onFilterSelected = { newsViewModel.setSelectedFilter(it) }
                     )
                     3 -> VideosList(
                         videos = youtubeVideos, 
                         michromaFont = michromaFont, 
                         onVideoClick = onVideoClick,
-                        listState = videosListState
+                        listState = videosListState,
+                        selectedFilter = multimediaViewModel.selectedVideoFilter.collectAsState().value,
+                        onFilterSelected = { multimediaViewModel.setSelectedVideoFilter(it) }
                     )
                     4 -> PodcastsList(
                         podcasts = podcasts, 
@@ -273,17 +279,17 @@ private fun LatestFeed(
     listState: LazyListState
 ) {
     val combinedItems = remember(newsArticles, videos, podcasts) {
-        val latestNews = newsArticles.take(2).map { SocialFeedItem.NewsItem(it) }
-        val latestVideos = videos.take(2).map { SocialFeedItem.VideoItem(it) }
-        // Take 1 latest episode from EACH podcast
-        val latestPodcasts = podcasts.mapNotNull { podcast ->
+        val items = mutableListOf<FeedItem>()
+        
+        newsArticles.take(2).forEach { items.add(FeedItem.NewsItem(it)) }
+        videos.take(2).forEach { items.add(FeedItem.VideoItem(it)) }
+        podcasts.forEach { podcast ->
             podcast.episodes.maxByOrNull { parseDate(it.publishedDate) }?.let { episode ->
-                SocialFeedItem.PodcastItem(episode)
+                items.add(FeedItem.PodcastItem(episode))
             }
         }
             
-        (latestNews + latestVideos + latestPodcasts)
-            .sortedByDescending { parseDate(it.publishedDate) }
+        items.sortedByDescending { parseDate(it.publishedDate) }
     }
 
     LazyColumn(
@@ -294,9 +300,14 @@ private fun LatestFeed(
     ) {
         items(combinedItems) { item ->
             when (item) {
-                is SocialFeedItem.NewsItem -> FullNewsCard(item.article, michromaFont, onNewsClick, showTag = true)
-                is SocialFeedItem.VideoItem -> VideoCard(item.video, michromaFont, onVideoClick, showTag = true)
-                is SocialFeedItem.PodcastItem -> LargePodcastCard(
+                is FeedItem.NewsItem -> com.f1tracker.ui.components.NewsCard(
+                    article = item.article,
+                    onNewsClick = onNewsClick,
+                    showTag = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                is FeedItem.VideoItem -> VideoCard(item.video, michromaFont, onVideoClick, showTag = true)
+                is FeedItem.PodcastItem -> LargePodcastCard(
                     episode = item.episode,
                     isCurrentlyPlaying = currentlyPlayingEpisode?.audioUrl == item.episode.audioUrl,
                     isPlaying = isPlaying && currentlyPlayingEpisode?.audioUrl == item.episode.audioUrl,
@@ -511,22 +522,32 @@ private fun NewsList(
     onNewsClick: (String?) -> Unit,
     listState: LazyListState,
     isRefreshing: Boolean,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    selectedFilter: String,
+    onFilterSelected: (String) -> Unit
 ) {
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isRefreshing,
         onRefresh = onRefresh
     )
     
-    var selectedFilter by remember { mutableStateOf(NewsCategory.ALL) }
+    val tabs = listOf("ALL", "HEADLINES", "PADDOCK", "EXTRAS")
     
     val filteredArticles = remember(articles, selectedFilter) {
-        if (selectedFilter == NewsCategory.ALL) {
-            articles
-        } else {
-            articles.filter { article ->
-                NewsCategorizer.categorize(article.headline) == selectedFilter
+        when (selectedFilter) {
+            "ALL" -> articles
+            "HEADLINES" -> articles.filter { 
+                val cat = NewsCategorizer.categorize(it.headline)
+                cat == NewsCategory.NUCLEAR || cat == NewsCategory.MAJOR
             }
+            "PADDOCK" -> articles.filter { 
+                NewsCategorizer.categorize(it.headline) == NewsCategory.PADDOCK 
+            }
+            "EXTRAS" -> articles.filter { 
+                val cat = NewsCategorizer.categorize(it.headline)
+                cat == NewsCategory.OTHERS || cat == NewsCategory.HEADLINES
+            }
+            else -> articles
         }
     }
 
@@ -549,8 +570,8 @@ private fun NewsList(
                         .padding(vertical = 16.dp, horizontal = 20.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    NewsCategory.values().forEach { category ->
-                        val isSelected = selectedFilter == category
+                    tabs.forEach { tab ->
+                        val isSelected = selectedFilter == tab
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(50))
@@ -562,11 +583,11 @@ private fun NewsList(
                                     color = if (isSelected) Color(0xFFFF0080) else Color.White.copy(alpha = 0.1f),
                                     shape = RoundedCornerShape(50)
                                 )
-                                .clickable { selectedFilter = category }
-                                .padding(horizontal = 8.dp, vertical = 6.dp)
+                                .clickable { onFilterSelected(tab) }
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {
                             Text(
-                                text = category.label.uppercase(),
+                                text = tab,
                                 fontFamily = michromaFont,
                                 fontSize = 9.sp,
                                 color = if (isSelected) Color.White else Color.White.copy(alpha = 0.7f),
@@ -579,10 +600,11 @@ private fun NewsList(
 
             items(filteredArticles) { article ->
                 Box(modifier = Modifier.padding(horizontal = 16.dp)) {
-                    FullNewsCard(
+                    com.f1tracker.ui.components.NewsCard(
                         article = article,
-                        michromaFont = michromaFont,
-                        onNewsClick = onNewsClick
+                        onNewsClick = onNewsClick,
+                        showTag = true,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }
@@ -603,10 +625,10 @@ private fun VideosList(
     videos: List<F1Video>,
     michromaFont: FontFamily,
     onVideoClick: (String) -> Unit,
-    listState: LazyListState
+    listState: LazyListState,
+    selectedFilter: String,
+    onFilterSelected: (String) -> Unit
 ) {
-    var selectedFilter by remember { mutableStateOf("Top") }
-    
     // Determine available filters based on content
     val availableFilters = remember(videos) {
         val filters = mutableListOf("All", "Top")
@@ -658,7 +680,7 @@ private fun VideosList(
                                 color = if (isSelected) Color(0xFFFF0080) else Color.White.copy(alpha = 0.1f),
                                 shape = RoundedCornerShape(50)
                             )
-                            .clickable { selectedFilter = filter }
+                            .clickable { onFilterSelected(filter) }
                             .padding(horizontal = 12.dp, vertical = 6.dp) // Smaller padding
                     ) {
                         Text(
@@ -725,129 +747,7 @@ private fun PodcastsList(
     }
 }
 
-@Composable
-private fun FullNewsCard(
-    article: NewsArticle,
-    michromaFont: FontFamily,
-    onNewsClick: (String?) -> Unit,
-    showTag: Boolean = false
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onNewsClick(article.links?.web?.href) },
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF1A1A1A)
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        )
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            // News image
-            val imageUrl = article.images?.firstOrNull { it.type == "header" }?.url 
-                ?: article.images?.firstOrNull()?.url
-            
-            if (imageUrl != null) {
-                Box {
-                    AsyncImage(
-                        model = imageUrl,
-                        contentDescription = article.headline,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                            .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
-                        contentScale = ContentScale.Crop
-                    )
-                    
-                    if (showTag) {
-                        Box(
-                            modifier = Modifier
-                                .padding(12.dp)
-                                .background(Color(0xFFFF0080), RoundedCornerShape(4.dp))
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
-                                .align(Alignment.TopStart)
-                        ) {
-                            Text(
-                                text = "ARTICLE",
-                                fontFamily = michromaFont,
-                                fontSize = 10.sp,
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
 
-                    // Source Chip (F1/ESPN)
-                    val sourceName = when {
-                        article.links?.web?.href?.contains("formula1.com") == true -> "F1"
-                        article.links?.web?.href?.contains("motorsport.com") == true -> "MOTORSPORT.COM"
-                        article.links?.web?.href?.contains("espn") == true -> "ESPN"
-                        else -> "NEWS"
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(12.dp)
-                            .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        Text(
-                            text = sourceName,
-                            fontFamily = michromaFont,
-                            fontSize = 10.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
-            
-            // Content section
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                // Headline
-                Text(
-                    text = article.headline,
-                    fontFamily = michromaFont,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                    lineHeight = 18.sp
-                )
-                
-                // Description
-                Text(
-                    text = article.description,
-                    fontSize = 12.sp,
-                    color = Color.White.copy(alpha = 0.7f),
-                    maxLines = 4,
-                    overflow = TextOverflow.Ellipsis,
-                    lineHeight = 16.sp
-                )
-                
-                // Published date
-                Text(
-                    text = formatPublishedDate(article.published),
-                    fontFamily = michromaFont,
-                    fontSize = 9.sp,
-                    color = Color(0xFFFF0080),
-                    letterSpacing = 0.5.sp
-                )
-            }
-        }
-    }
-}
 
 @Composable
 private fun VideoCard(
