@@ -267,14 +267,14 @@ class F1RepositoryImpl @Inject constructor(
                     number = sprintResult.number,
                     position = sprintResult.position,
                     positionText = sprintResult.position,
-                    points = "0", // Sprint points not in model
+                    points = sprintResult.points,
                     driver = sprintResult.driver,
                     constructor = sprintResult.constructor,
-                    grid = "0",
-                    laps = "0",
+                    grid = sprintResult.grid,
+                    laps = sprintResult.laps,
                     status = sprintResult.status,
                     time = sprintResult.time,
-                    fastestLap = null
+                    fastestLap = sprintResult.fastestLap
                 )
             } ?: emptyList()
             

@@ -121,10 +121,14 @@ data class RaceWithSprint(
 data class SprintResult(
     @SerializedName("number") val number: String,
     @SerializedName("position") val position: String,
+    @SerializedName("points") val points: String,
     @SerializedName("Driver") val driver: Driver,
     @SerializedName("Constructor") val constructor: Constructor,
+    @SerializedName("grid") val grid: String,
+    @SerializedName("laps") val laps: String,
+    @SerializedName("status") val status: String,
     @SerializedName("Time") val time: Time?,
-    @SerializedName("status") val status: String
+    @SerializedName("FastestLap") val fastestLap: FastestLap?
 )
 
 data class Time(

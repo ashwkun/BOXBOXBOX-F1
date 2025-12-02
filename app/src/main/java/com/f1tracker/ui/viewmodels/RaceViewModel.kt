@@ -215,6 +215,9 @@ class RaceViewModel @Inject constructor(
                 Log.e("RaceViewModel", "Failed to load current year race results", e)
                 _lastYearRaceResults.value = null
             }
+            
+            // Also load current year's sprint results
+            loadSprintResults(currentSeason, circuitId)
         }
     }
 
@@ -230,21 +233,20 @@ class RaceViewModel @Inject constructor(
             }
             
             // Also load last year's sprint results
-            loadLastYearSprintResults(circuitId)
+            loadSprintResults(lastSeason, circuitId)
         }
     }
     
     private val _lastYearSprintResults = MutableStateFlow<List<RaceResult>?>(null)
     val lastYearSprintResults: StateFlow<List<RaceResult>?> = _lastYearSprintResults.asStateFlow()
     
-    private fun loadLastYearSprintResults(circuitId: String) {
+    private fun loadSprintResults(season: String, circuitId: String) {
         viewModelScope.launch {
-            val lastSeason = (java.time.Year.now().value - 1).toString()
-            val result = repository.getSprintResultsByCircuit(lastSeason, circuitId)
+            val result = repository.getSprintResultsByCircuit(season, circuitId)
             result.onSuccess { results ->
                 _lastYearSprintResults.value = results
             }.onFailure { e ->
-                Log.e("RaceViewModel", "Failed to load last year sprint results", e)
+                Log.e("RaceViewModel", "Failed to load sprint results for $season", e)
                 _lastYearSprintResults.value = null
             }
         }

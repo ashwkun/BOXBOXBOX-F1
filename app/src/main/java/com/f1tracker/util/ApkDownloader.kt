@@ -61,22 +61,23 @@ class ApkDownloader(private val context: Context) {
                         android.util.Log.d("ApkDownloader", "Download successful")
                         emit(DownloadState.Downloading(100)) // Ensure 100% is shown
                         
-                        val uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
-                        val uriString = cursor.getString(uriIndex)
-                        val fileUri = if (uriString.startsWith("file://")) {
-                            Uri.parse(uriString)
-                        } else {
-                            downloadManager.getUriForDownloadedFile(downloadId)
-                        }
+                        // Use the explicit file path we defined
+                        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName)
                         
-                        // Convert to File object for FileProvider
-                        val path = fileUri.path
-                        if (path != null) {
-                            android.util.Log.d("ApkDownloader", "File path: $path")
-                            emit(DownloadState.Downloaded(File(path)))
+                        if (file.exists()) {
+                            android.util.Log.d("ApkDownloader", "File path: ${file.absolutePath}")
+                            emit(DownloadState.Downloaded(file))
                         } else {
-                            android.util.Log.e("ApkDownloader", "Failed to get file path")
-                            emit(DownloadState.Error("Failed to get file path"))
+                            android.util.Log.e("ApkDownloader", "File not found at expected path: ${file.absolutePath}")
+                            // Fallback to trying to get path from cursor if explicit path fails (unlikely if download successful)
+                            val uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
+                            val uriString = cursor.getString(uriIndex)
+                            val fileUri = Uri.parse(uriString)
+                            if (fileUri.scheme == "file") {
+                                emit(DownloadState.Downloaded(File(fileUri.path!!)))
+                            } else {
+                                emit(DownloadState.Error("Could not determine file path"))
+                            }
                         }
                     }
                     DownloadManager.STATUS_FAILED -> {
