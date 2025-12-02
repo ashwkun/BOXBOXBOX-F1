@@ -2,7 +2,8 @@ const fs = require('fs');
 const https = require('https');
 
 // CONFIG
-const MAX_FEED_POSTS = 60;  // Increased to 60 as per BRD
+// CONFIG
+const MAX_FEED_POSTS = 150;  // Increased to 150 for more content
 const FEED_FILE = 'f1_feed.json';        // Mixed content (images + videos)
 const REELS_FILE = 'f1_reels.json';      // Videos only
 const ARCHIVE_FILE = 'f1_archive.json';  // Full history
@@ -90,7 +91,7 @@ async function run() {
         console.log(`📡 Fetching from ${ALL_ACCOUNTS.length} accounts...`);
 
         // 1. PARALLEL FETCH FROM ALL ACCOUNTS
-        const fields = 'media.limit(25){id,caption,media_url,thumbnail_url,permalink,media_type,timestamp,like_count,comments_count}';
+        const fields = 'media.limit(50){id,caption,media_url,thumbnail_url,permalink,media_type,timestamp,like_count,comments_count}';
 
         const fetchPromises = ALL_ACCOUNTS.map(async (username) => {
             try {
