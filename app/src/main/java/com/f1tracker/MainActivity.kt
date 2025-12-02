@@ -122,7 +122,7 @@ class MainActivity : ComponentActivity() {
                                 downloader.download(status.downloadUrl).collect { state ->
                                     downloadState = state
                                     if (state is DownloadState.Downloaded) {
-                                        downloader.installApk(state.file)
+                                        downloader.installApk(state.uri)
                                         // Reset state after install prompt
                                         downloadState = DownloadState.Idle
                                     }

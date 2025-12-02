@@ -52,7 +52,11 @@ class UpdateChecker @Inject constructor(
 
             // 2. If we are here, either no cache, cache is old, or cache is invalid.
             // Check rate limit for API call
-            if (now - lastCheck < CHECK_INTERVAL_MS) {
+            val isDebug = BuildConfig.DEBUG
+            android.util.Log.d("UpdateChecker", "Checking for updates... Last check: $lastCheck, Now: $now, Interval: $CHECK_INTERVAL_MS, Debug: $isDebug")
+            
+            if (!isDebug && now - lastCheck < CHECK_INTERVAL_MS) {
+                android.util.Log.d("UpdateChecker", "Skipping update check due to rate limit")
                 return@withContext UpdateStatus.NoUpdateAvailable
             }
 
@@ -61,6 +65,7 @@ class UpdateChecker @Inject constructor(
             prefs.edit().putLong(KEY_LAST_CHECK, now).apply()
 
             val latestVersion = parseVersion(latestRelease.tagName)
+            android.util.Log.d("UpdateChecker", "Current version: $currentVersion, Latest version: $latestVersion (tag: ${latestRelease.tagName})")
 
             if (latestVersion > currentVersion) {
                 val apkAsset = latestRelease.assets.find { 
@@ -76,6 +81,7 @@ class UpdateChecker @Inject constructor(
                         downloadUrl = apkAsset.browserDownloadUrl
                     )
                 } else {
+                    android.util.Log.w("UpdateChecker", "Update available but no APK asset found")
                     UpdateStatus.NoUpdateAvailable
                 }
             } else {

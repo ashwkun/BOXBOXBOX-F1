@@ -15,7 +15,7 @@ import java.io.File
 sealed class DownloadState {
     object Idle : DownloadState()
     data class Downloading(val progress: Int) : DownloadState()
-    data class Downloaded(val file: File) : DownloadState()
+    data class Downloaded(val uri: Uri, val mimeType: String? = "application/vnd.android.package-archive") : DownloadState()
     data class Error(val message: String) : DownloadState()
 }
 
@@ -61,22 +61,24 @@ class ApkDownloader(private val context: Context) {
                         android.util.Log.d("ApkDownloader", "Download successful")
                         emit(DownloadState.Downloading(100)) // Ensure 100% is shown
                         
-                        // Use the explicit file path we defined
-                        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName)
+                        val uri = downloadManager.getUriForDownloadedFile(downloadId)
+                        val mimeType = downloadManager.getMimeTypeForDownloadedFile(downloadId)
                         
-                        if (file.exists()) {
-                            android.util.Log.d("ApkDownloader", "File path: ${file.absolutePath}")
-                            emit(DownloadState.Downloaded(file))
+                        if (uri != null) {
+                            android.util.Log.d("ApkDownloader", "Download URI: $uri")
+                            emit(DownloadState.Downloaded(uri, mimeType))
                         } else {
-                            android.util.Log.e("ApkDownloader", "File not found at expected path: ${file.absolutePath}")
-                            // Fallback to trying to get path from cursor if explicit path fails (unlikely if download successful)
-                            val uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
-                            val uriString = cursor.getString(uriIndex)
-                            val fileUri = Uri.parse(uriString)
-                            if (fileUri.scheme == "file") {
-                                emit(DownloadState.Downloaded(File(fileUri.path!!)))
+                            // Fallback to file path if URI is null (e.g. older Android versions or specific failures)
+                            val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName)
+                            if (file.exists()) {
+                                val fileUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+                                } else {
+                                    Uri.fromFile(file)
+                                }
+                                emit(DownloadState.Downloaded(fileUri))
                             } else {
-                                emit(DownloadState.Error("Could not determine file path"))
+                                emit(DownloadState.Error("Failed to get download URI"))
                             }
                         }
                     }
@@ -115,21 +117,10 @@ class ApkDownloader(private val context: Context) {
         }
     }
 
-    fun installApk(file: File) {
+    fun installApk(uri: Uri) {
         try {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
-            
-            val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                FileProvider.getUriForFile(
-                    context,
-                    "${context.packageName}.fileprovider",
-                    file
-                )
-            } else {
-                Uri.fromFile(file)
-            }
-
             intent.setDataAndType(uri, "application/vnd.android.package-archive")
             context.startActivity(intent)
         } catch (e: Exception) {
