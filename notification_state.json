@@ -57,20 +57,20 @@
   "slot2_remaining": 2,
   "digest_items": [
     {
+      "id": "4e6763375c9d14b51fceee7e3dfa47ce",
+      "title": "Lewis Hamilton\u2019s priceless reaction as Max Verstappen\u2019s Qatar win flips F1 title fight",
+      "url": "https://www.motorsport.com/f1/news/lewis-hamiltons-priceless-reaction-as-max-verstappens-qatar-win-flips-f1-title-fight/10781668/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 799,
+      "timestamp": "2025-12-02T00:05:21",
+      "image": "https://cdn-8.motorsport.com/images/amp/0rVxVXq0/s6/lewis-hamilton-ferrari.jpg"
+    },
+    {
       "id": "e78ccc466345aa797bfb5fa4ec200ad0",
       "title": "Charles Leclerc admits \"most exciting part\" of Qatar GP was working out title fight maths",
       "url": "https://www.motorsport.com/f1/news/charles-leclerc-admits-most-exciting-part-of-qatar-gp-was-working-out-title-fight-maths/10781550/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 195,
       "timestamp": "2025-12-01T13:54:59",
       "image": "https://cdn-4.motorsport.com/images/amp/YP7r7P32/s6/charles-leclerc-ferrari.jpg"
-    },
-    {
-      "id": "4e6763375c9d14b51fceee7e3dfa47ce",
-      "title": "Lewis Hamilton\u2019s priceless reaction as Max Verstappen\u2019s Qatar win flips F1 title fight",
-      "url": "https://www.motorsport.com/f1/news/lewis-hamiltons-priceless-reaction-as-max-verstappens-qatar-win-flips-f1-title-fight/10781668/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 100,
-      "timestamp": "2025-12-02T00:05:21",
-      "image": "https://cdn-8.motorsport.com/images/amp/0rVxVXq0/s6/lewis-hamilton-ferrari.jpg"
     },
     {
       "id": "6e41c0cc456c53a05530e9cd6a5b833a",
@@ -147,6 +147,141 @@
     "b951bd053214a8ef84d39991b8d72704",
     "dd147e06273155f6eee224bf84095c08",
     "7642dd4fbf7ad29dadb6d34cea704aec",
-    "3f6c94b53a137b6c55730a1e4bac0a83"
+    "3f6c94b53a137b6c55730a1e4bac0a83",
+    "60d15bd10bcfb79241718c4b5efcd643",
+    "85e90c6c47b3e7966ed7ae2884f81400",
+    "e78ccc466345aa797bfb5fa4ec200ad0",
+    "b93105ebc74b1e4d4dd9da5bc84cb5dd",
+    "ac26cbbf20d25ca232a629a45e000a81",
+    "a237dc77778f3da7655e1a119d88aec5",
+    "6e41c0cc456c53a05530e9cd6a5b833a",
+    "27069cf484aec20b6edd1cd47aff7ece",
+    "2bc54afcf7cc61015fbfab66f3751094"
+  ],
+  "schema_version": 2,
+  "sent_urls": [
+    "https://www.motorsport.com/f1/news/red-bull-confirms-tuesday-announcement-on-2026-f1-driver-line-ups/10781377/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-qatar-gp-race-report/10781244/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/isack-hadjar-red-bull-f1-2026-arvid-lindblad-racing-bulls/10781791/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/james-vowles-hails-dream-come-true-as-williams-secures-p5-in-constructors-championship/10781595/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f2-champion-leonardo-fornaroli-joins-mclaren-as-test-and-development-driver/10781693/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/how-the-2025-f1-title-can-be-won-or-lost-at-abu-dhabi-gp/10781252/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
+  ],
+  "title_fingerprints": [
+    {
+      "tokens": [
+        "moves",
+        "red",
+        "2026",
+        "arvid",
+        "at",
+        "isack",
+        "bull",
+        "to",
+        "for",
+        "bulls",
+        "f1",
+        "racing",
+        "in",
+        "hadjar",
+        "lindblad"
+      ],
+      "title": "Isack Hadjar moves to Red Bull for F1 2026, Arvid Lindblad in at Racing Bulls",
+      "timestamp": "2025-12-02T15:05:05"
+    },
+    {
+      "tokens": [
+        "leonardo",
+        "test",
+        "development",
+        "as",
+        "joins",
+        "and",
+        "driver",
+        "mclaren",
+        "champion",
+        "f2",
+        "fornaroli"
+      ],
+      "title": "F2 champion Leonardo Fornaroli joins McLaren as test and development driver",
+      "timestamp": "2025-12-02T07:59:18"
+    },
+    {
+      "tokens": [
+        "p5",
+        "championship",
+        "vowles",
+        "hails",
+        "as",
+        "secures",
+        "in",
+        "williams",
+        "james",
+        "true",
+        "constructors",
+        "come",
+        "dream"
+      ],
+      "title": "James Vowles hails \"dream come true\" as Williams secures P5 in constructors' championship",
+      "timestamp": "2025-12-01T22:43:33"
+    },
+    {
+      "tokens": [
+        "red",
+        "2026",
+        "tuesday",
+        "bull",
+        "confirms",
+        "line",
+        "ups",
+        "f1",
+        "announcement",
+        "on",
+        "driver"
+      ],
+      "title": "Red Bull confirms Tuesday announcement on 2026 F1 driver line-ups",
+      "timestamp": "2025-11-30T20:38:19"
+    },
+    {
+      "tokens": [
+        "or",
+        "at",
+        "the",
+        "2025",
+        "won",
+        "can",
+        "abu",
+        "f1",
+        "be",
+        "title",
+        "dhabi",
+        "gp",
+        "how",
+        "lost"
+      ],
+      "title": "How the 2025 F1 title can be won, or lost, at Abu Dhabi GP",
+      "timestamp": "2025-11-30T18:45:25"
+    },
+    {
+      "tokens": [
+        "qatar",
+        "fight",
+        "wins",
+        "to",
+        "oscar",
+        "abu",
+        "max",
+        "f1",
+        "from",
+        "piastri",
+        "title",
+        "gp",
+        "taking",
+        "verstappen",
+        "dhabi"
+      ],
+      "title": "F1 Qatar GP: Max Verstappen wins from Oscar Piastri, taking title fight to Abu Dhabi",
+      "timestamp": "2025-11-30T17:51:07"
+    }
   ]
 }
