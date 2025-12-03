@@ -51,18 +51,14 @@
       "score": 215,
       "timestamp": "2025-11-30T20:38:19",
       "image": "https://cdn-6.motorsport.com/images/amp/0o5PPwwY/s6/isack-hadjar-racing-bulls-team.jpg"
-    }
-  ],
-  "slot1_remaining": 0,
-  "slot2_remaining": 2,
-  "digest_items": [
+    },
     {
       "id": "4e6763375c9d14b51fceee7e3dfa47ce",
       "title": "Lewis Hamilton\u2019s priceless reaction as Max Verstappen\u2019s Qatar win flips F1 title fight",
       "url": "https://www.motorsport.com/f1/news/lewis-hamiltons-priceless-reaction-as-max-verstappens-qatar-win-flips-f1-title-fight/10781668/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 799,
       "timestamp": "2025-12-02T00:05:21",
-      "image": "https://cdn-5.motorsport.com/images/amp/0rVxVXq0/s6/lewis-hamilton-ferrari.jpg"
+      "image": "https://cdn-4.motorsport.com/images/amp/0rVxVXq0/s6/lewis-hamilton-ferrari.jpg"
     },
     {
       "id": "e78ccc466345aa797bfb5fa4ec200ad0",
@@ -71,7 +67,11 @@
       "score": 195,
       "timestamp": "2025-12-01T13:54:59",
       "image": "https://cdn-4.motorsport.com/images/amp/YP7r7P32/s6/charles-leclerc-ferrari.jpg"
-    },
+    }
+  ],
+  "slot1_remaining": 0,
+  "slot2_remaining": 0,
+  "digest_items": [
     {
       "id": "6e41c0cc456c53a05530e9cd6a5b833a",
       "title": "Oscar Piastri: Qatar GP heartbreak hurts more than McLaren's Las Vegas double DSQ",
@@ -162,44 +162,46 @@
   "schema_version": 2,
   "sent_urls": [
     "https://www.motorsport.com/f1/news/james-vowles-hails-dream-come-true-as-williams-secures-p5-in-constructors-championship/10781595/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/isack-hadjar-red-bull-f1-2026-arvid-lindblad-racing-bulls/10781791/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-qatar-gp-race-report/10781244/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/how-the-2025-f1-title-can-be-won-or-lost-at-abu-dhabi-gp/10781252/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/red-bull-confirms-tuesday-announcement-on-2026-f1-driver-line-ups/10781377/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/charles-leclerc-admits-most-exciting-part-of-qatar-gp-was-working-out-title-fight-maths/10781550/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/f2-champion-leonardo-fornaroli-joins-mclaren-as-test-and-development-driver/10781693/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/red-bull-confirms-tuesday-announcement-on-2026-f1-driver-line-ups/10781377/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
+    "https://www.motorsport.com/f1/news/lewis-hamiltons-priceless-reaction-as-max-verstappens-qatar-win-flips-f1-title-fight/10781668/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/isack-hadjar-red-bull-f1-2026-arvid-lindblad-racing-bulls/10781791/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-qatar-gp-race-report/10781244/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
   ],
   "title_fingerprints": [
     {
       "tokens": [
-        "bull",
-        "at",
-        "red",
-        "2026",
-        "bulls",
-        "hadjar",
-        "for",
-        "lindblad",
-        "racing",
         "to",
-        "f1",
-        "in",
-        "isack",
+        "lindblad",
+        "bull",
+        "hadjar",
+        "red",
         "moves",
-        "arvid"
+        "f1",
+        "2026",
+        "arvid",
+        "isack",
+        "for",
+        "at",
+        "racing",
+        "in",
+        "bulls"
       ],
       "title": "Isack Hadjar moves to Red Bull for F1 2026, Arvid Lindblad in at Racing Bulls",
       "timestamp": "2025-12-02T15:05:05"
     },
     {
       "tokens": [
-        "driver",
-        "mclaren",
+        "champion",
+        "development",
+        "f2",
         "as",
         "and",
-        "champion",
-        "f2",
-        "development",
+        "mclaren",
         "fornaroli",
+        "driver",
         "test",
         "leonardo",
         "joins"
@@ -209,77 +211,118 @@
     },
     {
       "tokens": [
-        "williams",
-        "james",
-        "secures",
-        "vowles",
-        "p5",
-        "hails",
-        "constructors",
+        "flips",
+        "fight",
+        "s",
         "as",
-        "in",
-        "come",
-        "championship",
+        "qatar",
+        "f1",
+        "max",
+        "verstappen",
+        "lewis",
+        "priceless",
+        "hamilton",
+        "reaction",
+        "title",
+        "win"
+      ],
+      "title": "Lewis Hamilton\u2019s priceless reaction as Max Verstappen\u2019s Qatar win flips F1 title fight",
+      "timestamp": "2025-12-02T00:05:21"
+    },
+    {
+      "tokens": [
+        "hails",
         "dream",
-        "true"
+        "secures",
+        "true",
+        "james",
+        "come",
+        "as",
+        "p5",
+        "in",
+        "vowles",
+        "constructors",
+        "williams",
+        "championship"
       ],
       "title": "James Vowles hails \"dream come true\" as Williams secures P5 in constructors' championship",
       "timestamp": "2025-12-01T22:43:33"
     },
     {
       "tokens": [
-        "bull",
-        "confirms",
-        "driver",
-        "red",
+        "charles",
+        "gp",
+        "most",
+        "part",
+        "fight",
+        "qatar",
+        "exciting",
+        "leclerc",
+        "working",
+        "maths",
+        "was",
+        "of",
+        "admits",
+        "title",
+        "out"
+      ],
+      "title": "Charles Leclerc admits \"most exciting part\" of Qatar GP was working out title fight maths",
+      "timestamp": "2025-12-01T13:54:59"
+    },
+    {
+      "tokens": [
+        "ups",
         "line",
+        "bull",
+        "tuesday",
+        "confirms",
+        "red",
+        "on",
         "2026",
         "f1",
-        "announcement",
-        "on",
-        "ups",
-        "tuesday"
+        "driver",
+        "announcement"
       ],
       "title": "Red Bull confirms Tuesday announcement on 2026 F1 driver line-ups",
       "timestamp": "2025-11-30T20:38:19"
     },
     {
       "tokens": [
-        "dhabi",
-        "title",
-        "or",
-        "at",
-        "the",
-        "2025",
         "can",
-        "abu",
         "gp",
-        "f1",
         "won",
+        "2025",
         "lost",
+        "f1",
+        "the",
+        "how",
         "be",
-        "how"
+        "or",
+        "dhabi",
+        "at",
+        "abu",
+        "title"
       ],
       "title": "How the 2025 F1 title can be won, or lost, at Abu Dhabi GP",
       "timestamp": "2025-11-30T18:45:25"
     },
     {
       "tokens": [
-        "dhabi",
-        "title",
-        "qatar",
-        "wins",
-        "oscar",
-        "from",
         "gp",
-        "abu",
-        "max",
+        "oscar",
+        "to",
+        "from",
         "piastri",
         "fight",
+        "dhabi",
         "f1",
-        "to",
+        "qatar",
+        "wins",
+        "taking",
+        "max",
         "verstappen",
-        "taking"
+        "abu",
+        "title"
       ],
       "title": "F1 Qatar GP: Max Verstappen wins from Oscar Piastri, taking title fight to Abu Dhabi",
       "timestamp": "2025-11-30T17:51:07"
