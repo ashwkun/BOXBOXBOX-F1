@@ -15,6 +15,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.ui.draw.alpha
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -54,6 +55,7 @@ import com.f1tracker.data.models.InstagramPost
 import com.f1tracker.ui.theme.F1TrackerTheme
 import com.f1tracker.ui.viewmodels.ReelsViewModel
 import com.f1tracker.util.InstagramConstants
+import com.f1tracker.ui.components.GlassmorphicLoadingIndicator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -133,6 +135,8 @@ fun ReelsScreen(
     }
 }
 
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ReelItem(
     post: InstagramPost,
@@ -141,89 +145,55 @@ fun ReelItem(
     onClose: () -> Unit
 ) {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
+    val isCarousel = post.media_type == "CAROUSEL_ALBUM" && !post.children.isNullOrEmpty()
     
-    // ExoPlayer State
-    var exoPlayer by remember { mutableStateOf<ExoPlayer?>(null) }
-    var isVideoReady by remember { mutableStateOf(false) }
-    
-    // Create/Release Player based on isPlaying and Lifecycle
-    DisposableEffect(context, isPlaying, lifecycleOwner) {
-        if (isPlaying) {
-            val player = ExoPlayer.Builder(context).build().apply {
-                post.media_url?.let { url ->
-                    setMediaItem(MediaItem.fromUri(url))
-                    prepare()
-                    playWhenReady = true
-                    repeatMode = Player.REPEAT_MODE_ONE
-                    addListener(object : Player.Listener {
-                        override fun onPlaybackStateChanged(playbackState: Int) {
-                            if (playbackState == Player.STATE_READY) {
-                                isVideoReady = true
-                            }
-                        }
-                    })
-                }
-            }
-            exoPlayer = player
-        }
-
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_PAUSE -> exoPlayer?.pause()
-                Lifecycle.Event.ON_RESUME -> if (isPlaying) exoPlayer?.play()
-                else -> {}
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-            exoPlayer?.release()
-            exoPlayer = null
-            isVideoReady = false
-        }
-    }
-
     Box(modifier = Modifier.fillMaxSize()) {
-        // 1. Video Player Layer
-        if (exoPlayer != null) {
-            AndroidView(
-                factory = { ctx ->
-                    PlayerView(ctx).apply {
-                        player = exoPlayer
-                        useController = false
-                        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT // Changed to FIT
-                        layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                        setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER) // Handle buffering manually
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .alpha(if (isVideoReady) 1f else 0f) // Fade in
-            )
-        }
-        
-        // Thumbnail / Loading State
-        if (!isVideoReady) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                AsyncImage(
-                    model = post.thumbnail_url ?: post.media_url,
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit, // Match video fit
-                    modifier = Modifier.fillMaxSize()
-                )
+        if (isCarousel) {
+            val children = post.children!!
+            val pagerState = rememberPagerState(pageCount = { children.size })
+            
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize()
+            ) { page ->
+                val child = children[page]
+                // Only play video if the parent ReelItem is playing AND this is the current slide
+                val isChildPlaying = isPlaying && pagerState.currentPage == page
                 
-                // Glassmorphic Loading Indicator
-                Box(
+                ReelMediaItem(
+                    mediaUrl = child.media_url,
+                    thumbnailUrl = child.thumbnail_url,
+                    mediaType = child.media_type,
+                    isPlaying = isChildPlaying
+                )
+            }
+            
+            // Carousel Indicator
+            if (children.size > 1) {
+                Row(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.3f)),
-                    contentAlignment = Alignment.Center
+                        .align(Alignment.TopCenter)
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    GlassmorphicLoadingIndicator()
+                    repeat(children.size) { iteration ->
+                        val color = if (pagerState.currentPage == iteration) Color.White else Color.White.copy(alpha = 0.5f)
+                        Box(
+                            modifier = Modifier
+                                .size(6.dp)
+                                .clip(CircleShape)
+                                .background(color)
+                        )
+                    }
                 }
             }
+        } else {
+            ReelMediaItem(
+                mediaUrl = post.media_url,
+                thumbnailUrl = post.thumbnail_url,
+                mediaType = post.media_type,
+                isPlaying = isPlaying
+            )
         }
 
         // 2. Gradient Overlay (Bottom 40% for better readability)
@@ -342,8 +312,101 @@ fun ReelItem(
                 }
             )
         }
+    }
+}
 
+@Composable
+fun ReelMediaItem(
+    mediaUrl: String?,
+    thumbnailUrl: String?,
+    mediaType: String,
+    isPlaying: Boolean
+) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    
+    // ExoPlayer State
+    var exoPlayer by remember { mutableStateOf<ExoPlayer?>(null) }
+    var isVideoReady by remember { mutableStateOf(false) }
+    
+    // Create/Release Player based on isPlaying and Lifecycle
+    DisposableEffect(context, isPlaying, lifecycleOwner, mediaUrl) {
+        if (isPlaying && mediaType == "VIDEO" && mediaUrl != null) {
+            val player = ExoPlayer.Builder(context).build().apply {
+                setMediaItem(MediaItem.fromUri(mediaUrl))
+                prepare()
+                playWhenReady = true
+                repeatMode = Player.REPEAT_MODE_ONE
+                addListener(object : Player.Listener {
+                    override fun onPlaybackStateChanged(playbackState: Int) {
+                        if (playbackState == Player.STATE_READY) {
+                            isVideoReady = true
+                        }
+                    }
+                })
+            }
+            exoPlayer = player
+        }
 
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_PAUSE -> exoPlayer?.pause()
+                Lifecycle.Event.ON_RESUME -> if (isPlaying) exoPlayer?.play()
+                else -> {}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            exoPlayer?.release()
+            exoPlayer = null
+            isVideoReady = false
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // 1. Video Player Layer
+        if (exoPlayer != null) {
+            AndroidView(
+                factory = { ctx ->
+                    PlayerView(ctx).apply {
+                        player = exoPlayer
+                        useController = false
+                        resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT // Changed to FIT
+                        layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                        setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER) // Handle buffering manually
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(if (isVideoReady) 1f else 0f) // Fade in
+            )
+        }
+        
+        // Thumbnail / Loading State / Image Fallback
+        if (!isVideoReady) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                AsyncImage(
+                    model = thumbnailUrl ?: mediaUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit, // Match video fit
+                    modifier = Modifier.fillMaxSize()
+                )
+                
+                // Glassmorphic Loading Indicator (only if it's a video trying to load)
+                if (mediaType == "VIDEO" && isPlaying) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.3f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        GlassmorphicLoadingIndicator()
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -372,36 +435,4 @@ fun GlassActionButton(
     }
 }
 
-@Composable
-fun GlassmorphicLoadingIndicator() {
-    Box(
-        modifier = Modifier
-            .size(60.dp)
-            .clip(CircleShape)
-            .background(
-                Brush.linearGradient(
-                    colors = listOf(
-                        Color.White.copy(alpha = 0.1f),
-                        Color.White.copy(alpha = 0.05f)
-                    )
-                )
-            )
-            .border(
-                width = 1.dp,
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color.White.copy(alpha = 0.2f),
-                        Color.Transparent
-                    )
-                ),
-                shape = CircleShape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        androidx.compose.material3.CircularProgressIndicator(
-            modifier = Modifier.size(32.dp),
-            color = Color(0xFFFF0080),
-            strokeWidth = 3.dp
-        )
-    }
-}
+// GlassmorphicLoadingIndicator now imported from shared components

@@ -29,6 +29,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import com.f1tracker.util.InstagramConstants
+import com.f1tracker.ui.components.GlassmorphicLoadingIndicator
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -439,7 +440,12 @@ private fun InstagramPostCard(
                         
                         // Glassmorphic Loading Indicator (while buffering)
                         if (!isVideoReady.value) {
-                            GlassmorphicLoadingIndicator()
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                GlassmorphicLoadingIndicator()
+                            }
                         }
                         
                         // Custom Controls Overlay (Bottom Right)
@@ -545,31 +551,4 @@ private fun formatCount(count: Int): String {
     }
 }
 
-@Composable
-fun GlassmorphicLoadingIndicator() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        // Glassmorphic Container
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.White.copy(alpha = 0.1f)) // Semi-transparent white
-                .border(
-                    width = 1.dp,
-                    color = Color.White.copy(alpha = 0.2f),
-                    shape = RoundedCornerShape(16.dp)
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            // Spinning Indicator
-            androidx.compose.material3.CircularProgressIndicator(
-                modifier = Modifier.size(40.dp),
-                color = Color.White,
-                strokeWidth = 3.dp
-            )
-        }
-    }
-}
+// GlassmorphicLoadingIndicator now imported from shared components

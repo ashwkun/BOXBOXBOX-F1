@@ -91,7 +91,7 @@ async function run() {
         console.log(`📡 Fetching from ${ALL_ACCOUNTS.length} accounts...`);
 
         // 1. PARALLEL FETCH FROM ALL ACCOUNTS
-        const fields = 'media.limit(50){id,caption,media_url,thumbnail_url,permalink,media_type,timestamp,like_count,comments_count}';
+        const fields = 'media.limit(50){id,caption,media_url,thumbnail_url,permalink,media_type,timestamp,like_count,comments_count,children{id,media_type,media_url,thumbnail_url,timestamp}}';
 
         const fetchPromises = ALL_ACCOUNTS.map(async (username) => {
             try {

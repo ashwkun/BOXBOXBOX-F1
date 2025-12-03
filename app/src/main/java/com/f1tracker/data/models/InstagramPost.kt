@@ -11,5 +11,14 @@ data class InstagramPost(
     val language: String? = "en", // Language code (default for backward compatibility)
     val like_count: Int = 0,
     val comments_count: Int = 0,
+    val timestamp: String,
+    val children: List<InstagramMedia>? = null
+)
+
+data class InstagramMedia(
+    val id: String,
+    val media_type: String, // "IMAGE" or "VIDEO"
+    val media_url: String?,
+    val thumbnail_url: String?,
     val timestamp: String
 )

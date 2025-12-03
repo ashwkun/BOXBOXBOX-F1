@@ -21,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.foundation.pager.HorizontalPager
 import coil.compose.AsyncImage
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.f1tracker.R
@@ -336,16 +338,34 @@ private fun LatestFeed(
     val combinedItems = remember(newsArticles, videos, podcasts, instagramPosts) {
         val items = mutableListOf<FeedItem>()
         
-        newsArticles.take(2).forEach { items.add(FeedItem.NewsItem(it)) }
-        videos.take(2).forEach { items.add(FeedItem.VideoItem(it)) }
-        instagramPosts.take(3).forEach { items.add(FeedItem.InstagramItem(it)) }
+        // Take most recent items from each content type to ensure diversity
+        newsArticles
+            .sortedByDescending { parseDate(it.published) }
+            .take(3)
+            .forEach { items.add(FeedItem.NewsItem(it)) }
+        
+        videos
+            .sortedByDescending { parseDate(it.publishedDate) }
+            .take(3)
+            .forEach { items.add(FeedItem.VideoItem(it)) }
+        
+        instagramPosts
+            .sortedByDescending { parseDate(it.timestamp) }
+            .take(3)
+            .forEach { items.add(FeedItem.InstagramItem(it)) }
+        
+        // For podcasts, take the most recent episode from each podcast
         podcasts.forEach { podcast ->
-            podcast.episodes.maxByOrNull { parseDate(it.publishedDate) }?.let { episode ->
-                items.add(FeedItem.PodcastItem(episode))
-            }
+            podcast.episodes
+                .sortedByDescending { parseDate(it.publishedDate) }
+                .take(1)
+                .forEach { episode ->
+                    items.add(FeedItem.PodcastItem(episode))
+                }
         }
-            
-        items.sortedByDescending { parseDate(it.publishedDate) }
+        
+        // Now sort all these items by published date and take top 30
+        items.sortedByDescending { parseDate(it.publishedDate) }.take(30)
     }
 
     LazyColumn(
@@ -371,11 +391,22 @@ private fun LatestFeed(
                     onEpisodeClick = onEpisodeClick,
                     onPlayPause = onPlayPause
                 )
-                is FeedItem.InstagramItem -> LatestInstagramCard(
-                    post = item.post,
-                    michromaFont = michromaFont,
-                    onClick = { onNavigateToReels(item.post.permalink) }
-                )
+                is FeedItem.InstagramItem -> {
+                    val isReel = item.post.media_type == "VIDEO"
+                    LatestInstagramCard(
+                        post = item.post,
+                        michromaFont = michromaFont,
+                        onClick = {
+                            if (isReel) {
+                                // Navigate to Reels screen for videos
+                                onNavigateToReels(item.post.permalink)
+                            } else {
+                                // Navigate to Social tab for regular posts
+                                onExploreClick(1) // Social tab is index 1
+                            }
+                        }
+                    )
+                }
             }
         }
         
@@ -398,81 +429,336 @@ private fun LatestFeed(
 }
 
 @Composable
+private fun shimmerBrush(showShimmer: Boolean = true, targetValue: Float = 1000f): androidx.compose.ui.graphics.Brush {
+    return if (showShimmer) {
+        val shimmerColors = listOf(
+            Color.DarkGray.copy(alpha = 0.6f),
+            Color.DarkGray.copy(alpha = 0.2f),
+            Color.DarkGray.copy(alpha = 0.6f),
+        )
+
+        val transition = rememberInfiniteTransition(label = "shimmer")
+        val translateAnimation = transition.animateFloat(
+            initialValue = 0f,
+            targetValue = targetValue,
+            animationSpec = infiniteRepeatable(
+                animation = tween(800), repeatMode = RepeatMode.Reverse
+            ),
+            label = "shimmer"
+        )
+        androidx.compose.ui.graphics.Brush.linearGradient(
+            colors = shimmerColors,
+            start = androidx.compose.ui.geometry.Offset.Zero,
+            end = androidx.compose.ui.geometry.Offset(x = translateAnimation.value, y = translateAnimation.value)
+        )
+    } else {
+        androidx.compose.ui.graphics.Brush.linearGradient(
+            colors = listOf(Color.Transparent, Color.Transparent),
+            start = androidx.compose.ui.geometry.Offset.Zero,
+            end = androidx.compose.ui.geometry.Offset.Zero
+        )
+    }
+}
+
+
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
 fun LatestInstagramCard(
     post: com.f1tracker.data.models.InstagramPost,
     michromaFont: FontFamily,
     onClick: () -> Unit
 ) {
+    val isReel = post.media_type == "VIDEO"
+    val isCarousel = post.media_type == "CAROUSEL_ALBUM" && !post.children.isNullOrEmpty()
+    
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
+        modifier = if (isReel || isCarousel) {
+            Modifier
+                .fillMaxWidth()
+                .height(600.dp)
+        } else {
+            Modifier.fillMaxWidth()
+        },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1A1A1A)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Column {
-            // Header
+        Column(
+            modifier = if (isReel || isCarousel) Modifier.fillMaxSize() else Modifier.fillMaxWidth()
+        ) {
+            // Header: User Info
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.Public, // Placeholder for Instagram icon
-                    contentDescription = "Instagram",
-                    tint = Color(0xFFE1306C),
-                    modifier = Modifier.size(20.dp)
-                )
+                val safeAuthor = post.author ?: "f1"
+                val isOfficial = com.f1tracker.util.InstagramConstants.isOfficialAccount(safeAuthor)
+                
+                // Avatar
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(androidx.compose.foundation.shape.CircleShape)
+                        .background(if (isOfficial) Color.White else Color(0xFFFFD700)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = safeAuthor.take(2).uppercase(),
+                        fontFamily = michromaFont,
+                        fontSize = 10.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                
                 Spacer(modifier = Modifier.width(8.dp))
+                
                 Text(
-                    text = "@${post.author ?: "f1"}",
+                    text = "@$safeAuthor",
                     fontFamily = michromaFont,
-                    fontSize = 12.sp,
-                    color = Color.White
+                    fontSize = 11.sp,
+                    color = if (isOfficial) Color.White else Color(0xFFFFD700),
+                    fontWeight = FontWeight.Bold
                 )
+                
+                if (isOfficial) {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(
+                        imageVector = Icons.Default.Verified,
+                        contentDescription = "Verified",
+                        tint = Color(0xFF1DA1F2),
+                        modifier = Modifier.size(12.dp)
+                    )
+                }
+                
                 Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "INSTAGRAM",
-                    fontFamily = michromaFont,
-                    fontSize = 10.sp,
-                    color = Color.White.copy(alpha = 0.5f)
-                )
+                
+                // Tag in top right
+                Box(
+                    modifier = Modifier
+                        .background(Color(0xFFFF0080), RoundedCornerShape(4.dp))
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "SOCIAL",
+                        fontFamily = michromaFont,
+                        fontSize = 9.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
+            
+            // Media Content
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .then(if (isReel || isCarousel) Modifier.weight(1f) else Modifier)
+                    .background(if (isReel || isCarousel) Color.Black else Color.Transparent)
+            ) {
+                if (isCarousel) {
+                    val children = post.children!!
+                    val pagerState = androidx.compose.foundation.pager.rememberPagerState(pageCount = { children.size })
+                    
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier.fillMaxSize()
+                    ) { page ->
+                        val child = children[page]
+                        FeedMediaItem(
+                            mediaUrl = child.media_url,
+                            thumbnailUrl = child.thumbnail_url,
+                            mediaType = child.media_type,
+                            isReel = true, // Treat carousel items as full height
+                            onClick = onClick
+                        )
+                    }
+                    
+                    // Carousel Indicator
+                    if (children.size > 1) {
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(top = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            repeat(children.size) { iteration ->
+                                val color = if (pagerState.currentPage == iteration) Color.White else Color.White.copy(alpha = 0.5f)
+                                Box(
+                                    modifier = Modifier
+                                        .size(6.dp)
+                                        .clip(androidx.compose.foundation.shape.CircleShape)
+                                        .background(color)
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    FeedMediaItem(
+                        mediaUrl = post.media_url,
+                        thumbnailUrl = post.thumbnail_url,
+                        mediaType = post.media_type,
+                        isReel = isReel,
+                        onClick = onClick
+                    )
+                }
+            }
+            
+            // Caption
+            if (!post.caption.isNullOrEmpty()) {
+                Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+                    Text(
+                        text = post.caption,
+                        fontSize = 12.sp,
+                        color = Color.White.copy(alpha = 0.8f),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        lineHeight = 16.sp
+                    )
+                }
+            }
+        }
+    }
+}
 
-            // Image/Thumbnail
-            Box(modifier = Modifier.fillMaxWidth().height(250.dp)) {
-                AsyncImage(
-                    model = post.thumbnail_url ?: post.media_url,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-                if (post.media_type == "VIDEO") {
+@Composable
+fun FeedMediaItem(
+    mediaUrl: String?,
+    thumbnailUrl: String?,
+    mediaType: String,
+    isReel: Boolean,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable { onClick() }
+    ) {
+        val imageUrl = if (mediaType == "VIDEO") {
+            thumbnailUrl ?: mediaUrl
+        } else {
+            mediaUrl
+        }
+        
+        if (imageUrl != null) {
+            coil.compose.SubcomposeAsyncImage(
+                model = imageUrl,
+                contentDescription = null,
+                modifier = if (isReel) {
+                    Modifier.fillMaxSize()
+                } else {
+                    Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 400.dp)
+                },
+                contentScale = if (isReel) ContentScale.Fit else ContentScale.Crop,
+                loading = {
                     Box(
-                        modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.3f)),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(shimmerBrush())
+                    )
+                }
+            )
+        }
+        
+        // Video Player logic
+        if (mediaType == "VIDEO") {
+            val context = androidx.compose.ui.platform.LocalContext.current
+            val lifecycleOwner = androidx.compose.ui.platform.LocalLifecycleOwner.current
+            val isMuted = remember { mutableStateOf(true) }
+            val isVideoReady = remember { mutableStateOf(false) }
+            val showVideoPlayer = remember { mutableStateOf(true) }
+            
+            if (showVideoPlayer.value && mediaUrl != null) {
+                val exoPlayer = remember(showVideoPlayer.value) {
+                    androidx.media3.exoplayer.ExoPlayer.Builder(context).build().apply {
+                        setMediaItem(androidx.media3.common.MediaItem.fromUri(mediaUrl))
+                        prepare()
+                        playWhenReady = true
+                        repeatMode = androidx.media3.common.Player.REPEAT_MODE_ONE
+                        volume = if (isMuted.value) 0f else 1f
+                        
+                        addListener(object : androidx.media3.common.Player.Listener {
+                            override fun onPlaybackStateChanged(playbackState: Int) {
+                                if (playbackState == androidx.media3.common.Player.STATE_READY) {
+                                    isVideoReady.value = true
+                                }
+                            }
+                        })
+                    }
+                }
+                
+                LaunchedEffect(isMuted.value) {
+                    exoPlayer.volume = if (isMuted.value) 0f else 1f
+                }
+                
+                DisposableEffect(lifecycleOwner) {
+                    val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+                        when (event) {
+                            androidx.lifecycle.Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
+                            androidx.lifecycle.Lifecycle.Event.ON_RESUME -> exoPlayer.play()
+                            else -> {}
+                        }
+                    }
+                    lifecycleOwner.lifecycle.addObserver(observer)
+                    
+                    onDispose {
+                        lifecycleOwner.lifecycle.removeObserver(observer)
+                        exoPlayer.stop()
+                        exoPlayer.release()
+                    }
+                }
+                
+                androidx.compose.ui.viewinterop.AndroidView(
+                    factory = { ctx ->
+                        androidx.media3.ui.PlayerView(ctx).apply {
+                            player = exoPlayer
+                            useController = false
+                            setShowBuffering(androidx.media3.ui.PlayerView.SHOW_BUFFERING_NEVER)
+                            setShutterBackgroundColor(android.graphics.Color.TRANSPARENT)
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .alpha(if (isVideoReady.value) 1f else 0f)
+                )
+                
+                if (!isVideoReady.value) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        com.f1tracker.ui.components.GlassmorphicLoadingIndicator()
+                    }
+                }
+                
+                // Mute toggle button
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(12.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(36.dp)
+                            .clip(androidx.compose.foundation.shape.CircleShape)
+                            .background(Color.Black.copy(alpha = 0.5f))
+                            .clickable { isMuted.value = !isMuted.value }
+                            .padding(6.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = Icons.Default.PlayCircle,
-                            contentDescription = "Play",
+                            imageVector = if (isMuted.value) Icons.Default.VolumeOff else Icons.Default.VolumeUp,
+                            contentDescription = "Toggle Sound",
                             tint = Color.White,
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     }
                 }
-            }
-
-            // Caption
-            post.caption?.let { caption ->
-                Text(
-                    text = caption,
-                    color = Color.White.copy(alpha = 0.8f),
-                    fontSize = 12.sp,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(12.dp)
-                )
             }
         }
     }
@@ -1209,14 +1495,20 @@ private fun IconTabSelector(
                     .clip(RoundedCornerShape(8.dp))
                     .background(
                         if (isSelected) {
-                            Brush.horizontalGradient(
-                                colors = listOf(
-                                    Color(0xFFFF0080).copy(alpha = 0.15f),
-                                    Color(0xFFFF0080).copy(alpha = 0.05f)
-                                )
+                            Color(0xFFFF0080).copy(alpha = 0.02f)
+                        } else {
+                            Color.Transparent
+                        }
+                    )
+                    .then(
+                        if (isSelected) {
+                            Modifier.border(
+                                width = 1.5.dp,
+                                color = Color(0xFFFF0080).copy(alpha = 0.3f),
+                                shape = RoundedCornerShape(8.dp)
                             )
                         } else {
-                            androidx.compose.ui.graphics.SolidColor(Color.Transparent)
+                            Modifier
                         }
                     )
                     .clickable { onTabSelected(index) },
