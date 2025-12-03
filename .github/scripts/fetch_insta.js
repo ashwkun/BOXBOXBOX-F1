@@ -3,19 +3,19 @@ const https = require('https');
 
 // CONFIG
 // CONFIG
-const MAX_FEED_POSTS = 150;  // Increased to 150 for more content
+const MAX_FEED_POSTS = 300;  // Increased to 300 for more content
 const FEED_FILE = 'f1_feed.json';        // Mixed content (images + videos)
 const REELS_FILE = 'f1_reels.json';      // Videos only
 const ARCHIVE_FILE = 'f1_archive.json';  // Full history
 
 // ACCOUNT LISTS (BRD Section 2.1)
 const OFFICIAL_ACCOUNTS = [
-    'f1', 'redbullracing', 'scuderiaferrari', 'mclaren', 'mercedesamgf1'
+    'f1', 'redbullracing', 'scuderiaferrari', 'mclaren', 'mercedesamgf1', 'haasf1team'
 ];
 
 const MEME_ACCOUNTS = [
-    'lollipopmancomics', 'f1troll', 'badf1stats',
-    'sim3744', 'f1humor', 'paddock.legends'
+    'lollipopmancomics', 'f1troll', 'f1.memes', 'wtf1',
+    'formuladank', 'f1sarcasm', 'insidef1', 'f1humor_official'
 ];
 
 const ALL_ACCOUNTS = [...OFFICIAL_ACCOUNTS, ...MEME_ACCOUNTS];
