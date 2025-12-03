@@ -497,14 +497,14 @@ def main():
     
     # Reset if new day
     if state['date'] != current_date_str:
-        print(f"[INFO] New day detected ({current_date_str}). Resetting state.")
+        print(f"[INFO] New day detected ({current_date_str}). Resetting daily limits.")
         state['date'] = current_date_str
         state['slot1_remaining'] = 1
         state['slot2_remaining'] = 2
-        state['major_sent'] = []
-        state['nuclear_sent'] = []
         state['digest_sent'] = False
-        # Keep digest_items and ignored_items for continuity
+        # NOTE: DO NOT clear nuclear_sent or major_sent here!
+        # RSS items can persist for 4+ days, so we rely on the 96-hour cleanup logic
+        # at the end of the script to prevent unbounded growth while avoiding re-sends.
     
     if not init_firebase():
         print("[CRITICAL] Firebase init failed. Exiting.")
@@ -606,19 +606,41 @@ def main():
     
     # Send any queued nuclear items if we're outside quiet hours
     if not in_quiet_hours and state['nuclear_queue']:
-        print(f"\n[INFO] Sending {len(state['nuclear_queue'])} queued nuclear notifications from quiet hours...")
-        for item in state['nuclear_queue']:
+        print(f"\n[INFO] Processing {len(state['nuclear_queue'])} queued nuclear notifications from quiet hours...")
+        # Get IDs of already sent items for de-duplication
+        sent_nuclear_ids = set([x['id'] for x in state['nuclear_sent']])
+        
+        # Use a copy of the queue to iterate safely
+        queue_copy = list(state['nuclear_queue'])
+        successfully_sent = []
+        
+        for item in queue_copy:
+            # Double-check: Skip if already sent (backward compatibility protection)
+            if item['id'] in sent_nuclear_ids:
+                print(f"\n[NUCLEAR QUEUED] SKIPPING (already sent): {item['title']}")
+                # Remove from queue but don't send again
+                successfully_sent.append(item)
+                continue
+                
             print(f"\n[NUCLEAR QUEUED] Sending: {item['title']}")
-            send_fcm_notification(
+            if send_fcm_notification(
                 title="F1 News",
                 body=f"🚨 {item['title']}",
                 data={"type": "nuclear", "url": item['url'], "score": str(item['score']), "image": item.get('image', ''), "channel_id": "f1_nuclear"},
                 priority="high",
                 channel_id="f1_nuclear",
                 image_url=item.get('image')
-            )
-            state['nuclear_sent'].append(item)
-        state['nuclear_queue'] = []  # Clear the queue
+            ):
+                # Only mark as sent and remove from queue if send was successful
+                state['nuclear_sent'].append(item)
+                successfully_sent.append(item)
+                sent_nuclear_ids.add(item['id'])  # Update the set for this run
+            else:
+                print(f"  [WARN] Failed to send queued nuclear item. Keeping in queue.")
+        
+        # Remove successfully sent items from queue
+        state['nuclear_queue'] = [item for item in state['nuclear_queue'] if item not in successfully_sent]
+        print(f"[INFO] Queued items processed. Remaining in queue: {len(state['nuclear_queue'])}")
     
     # Process new nuclear items
     for item in nuclear_candidates:

@@ -47,14 +47,30 @@ class MultimediaViewModel @Inject constructor(
         loadInstagramFeed()
     }
 
+    private val _isInstagramRefreshing = MutableStateFlow(false)
+    val isInstagramRefreshing: StateFlow<Boolean> = _isInstagramRefreshing.asStateFlow()
+
     fun loadInstagramFeed() {
         viewModelScope.launch {
             val result = repository.getInstagramFeed()
             result.onSuccess { posts ->
-                _instagramPosts.value = posts
+                _instagramPosts.value = posts.shuffled() // Always shuffle on load
             }.onFailure { e ->
                 Log.e("MultimediaViewModel", "Failed to load Instagram feed", e)
             }
+        }
+    }
+
+    fun refreshInstagramFeed() {
+        viewModelScope.launch {
+            _isInstagramRefreshing.value = true
+            val result = repository.getInstagramFeed()
+            result.onSuccess { posts ->
+                _instagramPosts.value = posts.shuffled() // Shuffle on refresh too
+            }.onFailure { e ->
+                Log.e("MultimediaViewModel", "Failed to refresh Instagram feed", e)
+            }
+            _isInstagramRefreshing.value = false
         }
     }
 
