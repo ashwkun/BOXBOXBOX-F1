@@ -166,12 +166,12 @@ async function run() {
         fs.writeFileSync(FEED_FILE, JSON.stringify(finalFeed, null, 2));
         console.log(`💾 Saved ${finalFeed.length} posts to ${FEED_FILE}`);
 
-        // B) REELS FEED (f1_reels.json) - Videos only, limit 60
+        // B) REELS FEED (f1_reels.json) - Videos + Carousels, limit 60
         const videoFeed = sortedFeed
-            .filter(p => p.media_type === 'VIDEO')
+            .filter(p => p.media_type === 'VIDEO' || p.media_type === 'CAROUSEL_ALBUM')
             .slice(0, MAX_FEED_POSTS);
         fs.writeFileSync(REELS_FILE, JSON.stringify(videoFeed, null, 2));
-        console.log(`🎬 Saved ${videoFeed.length} videos to ${REELS_FILE}`);
+        console.log(`🎬 Saved ${videoFeed.length} reels (videos + carousels) to ${REELS_FILE}`);
 
         // C) FULL ARCHIVE (f1_archive.json) - Everything, unlimited
         fs.writeFileSync(ARCHIVE_FILE, JSON.stringify(sortedArchive, null, 2));
