@@ -62,12 +62,14 @@ fun FeedScreen(
     multimediaViewModel: MultimediaViewModel = hiltViewModel(),
     onNewsClick: (String?) -> Unit = {},
     onVideoClick: (String) -> Unit = {},
+    onNavigateToReels: (String) -> Unit = {},
     onEpisodeClick: (PodcastEpisode) -> Unit = {},
     onPlayPause: () -> Unit = {},
     currentlyPlayingEpisode: PodcastEpisode? = null,
     isPlaying: Boolean = false,
     initialTab: Int = 0,
-    onTabChanged: (Int) -> Unit = {}
+    onTabChanged: (Int) -> Unit = {},
+    refreshTrigger: Long = 0L
 ) {
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
 
@@ -80,6 +82,12 @@ fun FeedScreen(
     val selectedTabIndex by multimediaViewModel.selectedTabIndex.collectAsState()
     val selectedNewsFilter by newsViewModel.selectedFilter.collectAsState()
     val selectedVideoFilter by multimediaViewModel.selectedVideoFilter.collectAsState()
+    
+    // Hoisted Pager State for Instagram Feed
+    val instagramPagerState = androidx.compose.foundation.pager.rememberPagerState {
+        if (instagramPosts.isEmpty()) 3 else instagramPosts.size
+    }
+    val isInstagramRefreshing by multimediaViewModel.isInstagramRefreshing.collectAsState()
     
     // Hoisted scroll state for NewsList
     val newsListState = rememberLazyListState(
@@ -138,6 +146,7 @@ fun FeedScreen(
     var selectedPodcast by remember { mutableStateOf<Podcast?>(null) }
     
     // Sync pager state with ViewModel
+    // Sync pager state with ViewModel
     LaunchedEffect(pagerState.currentPage) {
         multimediaViewModel.setSelectedTab(pagerState.currentPage)
         onTabChanged(pagerState.currentPage)
@@ -158,6 +167,25 @@ fun FeedScreen(
             videosListState.scrollToItem(0)
         }
     }
+
+    // Handle Navbar Refresh Trigger
+    LaunchedEffect(refreshTrigger) {
+        if (refreshTrigger > 0) {
+            // Scroll to top and refresh current tab
+            when (pagerState.currentPage) {
+                0 -> latestListState.animateScrollToItem(0)
+                1 -> {
+                    instagramPagerState.animateScrollToPage(0)
+                    multimediaViewModel.refreshInstagramFeed()
+                }
+                2 -> {
+                    newsListState.animateScrollToItem(0)
+                    newsViewModel.refreshNews()
+                }
+                3 -> videosListState.animateScrollToItem(0)
+            }
+        }
+    }
     
     // Scroll to initial tab only if it's explicitly requested and different from current
     LaunchedEffect(initialTab) {
@@ -166,6 +194,8 @@ fun FeedScreen(
         }
     }
     
+
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -175,19 +205,37 @@ fun FeedScreen(
             // Header
 
             
-            // Custom Tab Selector
-            IconTabSelector(
-                tabs = tabs,
-                selectedTab = pagerState.currentPage,
-                onTabSelected = { index ->
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(index)
-                    }
-                },
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-            
-            Spacer(modifier = Modifier.height(16.dp))
+            // Custom Tab Selector (Always Visible)
+            Column {
+                IconTabSelector(
+                    tabs = tabs,
+                    selectedTab = pagerState.currentPage,
+                    onTabSelected = { index ->
+                        coroutineScope.launch {
+                            if (pagerState.currentPage == index) {
+                                // Already on this tab: Scroll to top and refresh
+                                when (index) {
+                                    0 -> latestListState.animateScrollToItem(0)
+                                    1 -> {
+                                        instagramPagerState.animateScrollToPage(0)
+                                        multimediaViewModel.refreshInstagramFeed()
+                                    }
+                                    2 -> {
+                                        newsListState.animateScrollToItem(0)
+                                        newsViewModel.refreshNews()
+                                    }
+                                    3 -> videosListState.animateScrollToItem(0)
+                                }
+                            } else {
+                                // Switch tab
+                                pagerState.animateScrollToPage(index)
+                            }
+                        }
+                    },
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
             
             // Content with Swipe Navigation
             androidx.compose.foundation.pager.HorizontalPager(
@@ -195,55 +243,42 @@ fun FeedScreen(
                 modifier = Modifier.fillMaxSize()
             ) { page ->
                 when (page) {
-                    0 -> LatestFeed(
-                        newsArticles = newsArticles,
-                        videos = youtubeVideos,
-                        podcasts = podcasts,
-                        michromaFont = michromaFont,
-                        onNewsClick = onNewsClick,
-                        onVideoClick = onVideoClick,
-                        onEpisodeClick = onEpisodeClick,
-                        onPlayPause = onPlayPause,
-                        currentlyPlayingEpisode = currentlyPlayingEpisode,
-                        isPlaying = isPlaying,
-                        onExploreClick = { tabIndex ->
-                            coroutineScope.launch { pagerState.animateScrollToPage(tabIndex) }
-                        },
-                        listState = latestListState
-                    )
+                    0 -> {
+
+                        LatestFeed(
+                            newsArticles = newsArticles,
+                            videos = youtubeVideos,
+                            podcasts = podcasts,
+                            michromaFont = michromaFont,
+                            onNewsClick = onNewsClick,
+                            onVideoClick = onVideoClick,
+                            onEpisodeClick = onEpisodeClick,
+                            onPlayPause = onPlayPause,
+                            currentlyPlayingEpisode = currentlyPlayingEpisode,
+                            isPlaying = isPlaying,
+                            onExploreClick = { tabIndex ->
+                                coroutineScope.launch { pagerState.animateScrollToPage(tabIndex) }
+                            },
+                            listState = latestListState,
+                            instagramPosts = instagramPosts,
+                            onNavigateToReels = onNavigateToReels
+                        )
+                    }
                     1 -> {
                         val context = androidx.compose.ui.platform.LocalContext.current
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            InstagramFeedList(
-                                posts = instagramPosts,
-                                michromaFont = michromaFont,
-                                onOpenInInstagram = { permalink ->
-                                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(permalink))
-                                    context.startActivity(intent)
-                                }
-                            )
-                            
-                            // Minimal Immersive Toggle (FAB)
-                            androidx.compose.material3.FloatingActionButton(
-                                onClick = {
-                                    val intent = android.content.Intent(context, com.f1tracker.ui.screens.ReelsActivity::class.java)
-                                    context.startActivity(intent)
-                                },
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(24.dp)
-                                    .size(56.dp),
-                                containerColor = Color(0xFFFF004D), // TikTok/Reels Pink
-                                contentColor = Color.White,
-                                shape = androidx.compose.foundation.shape.CircleShape
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.PlayCircle,
-                                    contentDescription = "Immersive Mode",
-                                    modifier = Modifier.size(28.dp)
-                                )
-                            }
-                        }
+                        InstagramFeedList(
+                            posts = instagramPosts,
+                            michromaFont = michromaFont,
+                            onOpenInInstagram = { permalink ->
+                                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(permalink))
+                                context.startActivity(intent)
+                            },
+                            onNavigateToReels = onNavigateToReels,
+                            onScrollDirectionChange = { /* No-op, tab is always visible */ },
+                            pagerState = instagramPagerState,
+                            isRefreshing = isInstagramRefreshing,
+                            onRefresh = { multimediaViewModel.refreshInstagramFeed() }
+                        )
                     }
                     2 -> NewsList(
                         articles = newsArticles, 
@@ -294,13 +329,16 @@ private fun LatestFeed(
     currentlyPlayingEpisode: PodcastEpisode?,
     isPlaying: Boolean,
     onExploreClick: (Int) -> Unit,
+    instagramPosts: List<com.f1tracker.data.models.InstagramPost>,
+    onNavigateToReels: (String) -> Unit,
     listState: LazyListState
 ) {
-    val combinedItems = remember(newsArticles, videos, podcasts) {
+    val combinedItems = remember(newsArticles, videos, podcasts, instagramPosts) {
         val items = mutableListOf<FeedItem>()
         
         newsArticles.take(2).forEach { items.add(FeedItem.NewsItem(it)) }
         videos.take(2).forEach { items.add(FeedItem.VideoItem(it)) }
+        instagramPosts.take(3).forEach { items.add(FeedItem.InstagramItem(it)) }
         podcasts.forEach { podcast ->
             podcast.episodes.maxByOrNull { parseDate(it.publishedDate) }?.let { episode ->
                 items.add(FeedItem.PodcastItem(episode))
@@ -333,6 +371,11 @@ private fun LatestFeed(
                     onEpisodeClick = onEpisodeClick,
                     onPlayPause = onPlayPause
                 )
+                is FeedItem.InstagramItem -> LatestInstagramCard(
+                    post = item.post,
+                    michromaFont = michromaFont,
+                    onClick = { onNavigateToReels(item.post.permalink) }
+                )
             }
         }
         
@@ -348,6 +391,87 @@ private fun LatestFeed(
                     fontFamily = michromaFont,
                     fontSize = 12.sp,
                     color = Color.White.copy(alpha = 0.5f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun LatestInstagramCard(
+    post: com.f1tracker.data.models.InstagramPost,
+    michromaFont: FontFamily,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E))
+    ) {
+        Column {
+            // Header
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Public, // Placeholder for Instagram icon
+                    contentDescription = "Instagram",
+                    tint = Color(0xFFE1306C),
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "@${post.author ?: "f1"}",
+                    fontFamily = michromaFont,
+                    fontSize = 12.sp,
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = "INSTAGRAM",
+                    fontFamily = michromaFont,
+                    fontSize = 10.sp,
+                    color = Color.White.copy(alpha = 0.5f)
+                )
+            }
+
+            // Image/Thumbnail
+            Box(modifier = Modifier.fillMaxWidth().height(250.dp)) {
+                AsyncImage(
+                    model = post.thumbnail_url ?: post.media_url,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+                if (post.media_type == "VIDEO") {
+                    Box(
+                        modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.3f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PlayCircle,
+                            contentDescription = "Play",
+                            tint = Color.White,
+                            modifier = Modifier.size(48.dp)
+                        )
+                    }
+                }
+            }
+
+            // Caption
+            post.caption?.let { caption ->
+                Text(
+                    text = caption,
+                    color = Color.White.copy(alpha = 0.8f),
+                    fontSize = 12.sp,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(12.dp)
                 )
             }
         }
@@ -1068,7 +1192,8 @@ private fun IconTabSelector(
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp)
-            .background(Color(0xFF0F0F0F), RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color(0xFF0F0F0F))
             .border(1.dp, Color.White.copy(alpha = 0.08f), RoundedCornerShape(12.dp))
             .padding(4.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -1076,15 +1201,25 @@ private fun IconTabSelector(
     ) {
         tabs.forEachIndexed { index, tab ->
             val isSelected = selectedTab == index
-            
             Box(
                 modifier = Modifier
-                    .weight(if (isSelected) 3f else 1f)
+                    .weight(if (isSelected) 2.5f else 1f)
                     .fillMaxHeight()
+                    .animateContentSize()
                     .clip(RoundedCornerShape(8.dp))
-                    .background(if (isSelected) Color(0xFFFF0080).copy(alpha = 0.2f) else Color.Transparent)
-                    .clickable { onTabSelected(index) }
-                    .animateContentSize(),
+                    .background(
+                        if (isSelected) {
+                            Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color(0xFFFF0080).copy(alpha = 0.15f),
+                                    Color(0xFFFF0080).copy(alpha = 0.05f)
+                                )
+                            )
+                        } else {
+                            androidx.compose.ui.graphics.SolidColor(Color.Transparent)
+                        }
+                    )
+                    .clickable { onTabSelected(index) },
                 contentAlignment = Alignment.Center
             ) {
                 Row(
@@ -1093,17 +1228,17 @@ private fun IconTabSelector(
                 ) {
                     Icon(
                         imageVector = tab.icon,
-                        contentDescription = null,
-                        tint = if (isSelected) Color(0xFFFF0080) else Color.White.copy(alpha = 0.5f),
-                        modifier = Modifier.size(20.dp)
+                        contentDescription = tab.label,
+                        tint = if (isSelected) Color(0xFFFF0080) else Color.Gray,
+                        modifier = Modifier.size(16.dp)
                     )
                     
                     if (isSelected) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = tab.label,
-                            fontFamily = FontFamily(Font(R.font.michroma, FontWeight.Normal)),
-                            fontSize = 10.sp,
+                            fontFamily = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal)),
+                            fontSize = 8.sp,
                             color = Color.White,
                             maxLines = 1,
                             fontWeight = FontWeight.Bold

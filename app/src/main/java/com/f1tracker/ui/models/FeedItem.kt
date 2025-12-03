@@ -18,4 +18,8 @@ sealed interface FeedItem {
     data class PodcastItem(val episode: PodcastEpisode) : FeedItem {
         override val publishedDate: String = episode.publishedDate
     }
+
+    data class InstagramItem(val post: com.f1tracker.data.models.InstagramPost) : FeedItem {
+        override val publishedDate: String = post.timestamp
+    }
 }

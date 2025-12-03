@@ -44,6 +44,9 @@ fun MainAppScreen(
     var scheduleSelectedTab by remember { mutableStateOf(0) } // Persist schedule tab state here
     var standingsSelectedTab by remember { mutableStateOf(0) } // Persist standings tab state here
     var feedSelectedTab by remember { mutableStateOf(0) } // Persist feed tab state here
+    var feedRefreshTrigger by remember { mutableLongStateOf(0L) } // Trigger for feed refresh
+    var reelsStartPermalink by remember { mutableStateOf<String?>(null) }
+    var reelsRefreshTrigger by remember { mutableLongStateOf(0L) }
     val context = LocalContext.current
     
     // Handle Intent Data (Deep Links / Notifications)
@@ -101,6 +104,7 @@ fun MainAppScreen(
             selectedSessionResult != null -> selectedSessionResult = null
             selectedRace != null -> selectedRace = null
             webViewUrl != null -> webViewUrl = null
+            currentDestination == NavDestination.REELS -> currentDestination = NavDestination.FEED
             currentDestination != NavDestination.HOME -> currentDestination = NavDestination.HOME
             else -> {
                 // Double back to exit
@@ -227,6 +231,10 @@ fun MainAppScreen(
                     NavDestination.FEED -> FeedScreen(
                         onNewsClick = { url -> webViewUrl = url },
                         onVideoClick = { videoId -> selectedVideoId = videoId },
+                        onNavigateToReels = { permalink ->
+                            reelsStartPermalink = permalink
+                            currentDestination = NavDestination.REELS
+                        },
                         onEpisodeClick = { episode ->
                             currentEpisode = episode
                             audioPlayerManager.playEpisode(episode.audioUrl)
@@ -241,7 +249,13 @@ fun MainAppScreen(
                         currentlyPlayingEpisode = currentEpisode,
                         isPlaying = isPlaying,
                         initialTab = feedSelectedTab,
-                        onTabChanged = { feedSelectedTab = it }
+                        onTabChanged = { feedSelectedTab = it },
+                        refreshTrigger = feedRefreshTrigger
+                    )
+                    NavDestination.REELS -> ReelsScreen(
+                        onClose = { currentDestination = NavDestination.FEED },
+                        startPermalink = reelsStartPermalink,
+                        refreshTrigger = reelsRefreshTrigger
                     )
             }
         }
@@ -266,6 +280,18 @@ fun MainAppScreen(
                         liveTabClickCount = 0
                         Toast.makeText(context, "🏎️ Secret Test Notification Sent!", Toast.LENGTH_SHORT).show()
                         sendTestNotification(context)
+                    }
+                } else if (destination == NavDestination.FEED) {
+                    if (currentDestination == NavDestination.FEED) {
+                         // User clicked Feed while already on Feed -> Trigger Refresh
+                        feedRefreshTrigger = System.currentTimeMillis()
+                    } else if (currentDestination == NavDestination.REELS) {
+                        // User clicked Feed (which is mapped to Reels contextually) while on Reels -> Trigger Reels Refresh
+                        reelsRefreshTrigger = System.currentTimeMillis()
+                        // Stay on REELS, just refresh
+                        return@BottomNavBar
+                    } else {
+                         liveTabClickCount = 0 // Reset if switched tab
                     }
                 } else {
                     liveTabClickCount = 0 // Reset if switched tab
