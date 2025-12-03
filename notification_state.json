@@ -62,7 +62,7 @@
       "url": "https://www.motorsport.com/f1/news/lewis-hamiltons-priceless-reaction-as-max-verstappens-qatar-win-flips-f1-title-fight/10781668/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 799,
       "timestamp": "2025-12-02T00:05:21",
-      "image": "https://cdn-8.motorsport.com/images/amp/0rVxVXq0/s6/lewis-hamilton-ferrari.jpg"
+      "image": "https://cdn-5.motorsport.com/images/amp/0rVxVXq0/s6/lewis-hamilton-ferrari.jpg"
     },
     {
       "id": "e78ccc466345aa797bfb5fa4ec200ad0",
@@ -156,129 +156,130 @@
     "a237dc77778f3da7655e1a119d88aec5",
     "6e41c0cc456c53a05530e9cd6a5b833a",
     "27069cf484aec20b6edd1cd47aff7ece",
-    "2bc54afcf7cc61015fbfab66f3751094"
+    "2bc54afcf7cc61015fbfab66f3751094",
+    "02b8859b16be7428e7e76b731ae745da"
   ],
   "schema_version": 2,
   "sent_urls": [
-    "https://www.motorsport.com/f1/news/red-bull-confirms-tuesday-announcement-on-2026-f1-driver-line-ups/10781377/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-qatar-gp-race-report/10781244/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/isack-hadjar-red-bull-f1-2026-arvid-lindblad-racing-bulls/10781791/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/james-vowles-hails-dream-come-true-as-williams-secures-p5-in-constructors-championship/10781595/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/isack-hadjar-red-bull-f1-2026-arvid-lindblad-racing-bulls/10781791/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-qatar-gp-race-report/10781244/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/how-the-2025-f1-title-can-be-won-or-lost-at-abu-dhabi-gp/10781252/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/f2-champion-leonardo-fornaroli-joins-mclaren-as-test-and-development-driver/10781693/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/how-the-2025-f1-title-can-be-won-or-lost-at-abu-dhabi-gp/10781252/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
+    "https://www.motorsport.com/f1/news/red-bull-confirms-tuesday-announcement-on-2026-f1-driver-line-ups/10781377/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
   ],
   "title_fingerprints": [
     {
       "tokens": [
-        "moves",
+        "bull",
+        "at",
         "red",
         "2026",
-        "arvid",
-        "at",
-        "isack",
-        "bull",
-        "to",
-        "for",
         "bulls",
-        "f1",
-        "racing",
-        "in",
         "hadjar",
-        "lindblad"
+        "for",
+        "lindblad",
+        "racing",
+        "to",
+        "f1",
+        "in",
+        "isack",
+        "moves",
+        "arvid"
       ],
       "title": "Isack Hadjar moves to Red Bull for F1 2026, Arvid Lindblad in at Racing Bulls",
       "timestamp": "2025-12-02T15:05:05"
     },
     {
       "tokens": [
-        "leonardo",
-        "test",
-        "development",
-        "as",
-        "joins",
-        "and",
         "driver",
         "mclaren",
+        "as",
+        "and",
         "champion",
         "f2",
-        "fornaroli"
+        "development",
+        "fornaroli",
+        "test",
+        "leonardo",
+        "joins"
       ],
       "title": "F2 champion Leonardo Fornaroli joins McLaren as test and development driver",
       "timestamp": "2025-12-02T07:59:18"
     },
     {
       "tokens": [
-        "p5",
-        "championship",
-        "vowles",
-        "hails",
-        "as",
-        "secures",
-        "in",
         "williams",
         "james",
-        "true",
+        "secures",
+        "vowles",
+        "p5",
+        "hails",
         "constructors",
+        "as",
+        "in",
         "come",
-        "dream"
+        "championship",
+        "dream",
+        "true"
       ],
       "title": "James Vowles hails \"dream come true\" as Williams secures P5 in constructors' championship",
       "timestamp": "2025-12-01T22:43:33"
     },
     {
       "tokens": [
-        "red",
-        "2026",
-        "tuesday",
         "bull",
         "confirms",
+        "driver",
+        "red",
         "line",
-        "ups",
+        "2026",
         "f1",
         "announcement",
         "on",
-        "driver"
+        "ups",
+        "tuesday"
       ],
       "title": "Red Bull confirms Tuesday announcement on 2026 F1 driver line-ups",
       "timestamp": "2025-11-30T20:38:19"
     },
     {
       "tokens": [
+        "dhabi",
+        "title",
         "or",
         "at",
         "the",
         "2025",
-        "won",
         "can",
         "abu",
-        "f1",
-        "be",
-        "title",
-        "dhabi",
         "gp",
-        "how",
-        "lost"
+        "f1",
+        "won",
+        "lost",
+        "be",
+        "how"
       ],
       "title": "How the 2025 F1 title can be won, or lost, at Abu Dhabi GP",
       "timestamp": "2025-11-30T18:45:25"
     },
     {
       "tokens": [
+        "dhabi",
+        "title",
         "qatar",
-        "fight",
         "wins",
-        "to",
         "oscar",
+        "from",
+        "gp",
         "abu",
         "max",
-        "f1",
-        "from",
         "piastri",
-        "title",
-        "gp",
-        "taking",
+        "fight",
+        "f1",
+        "to",
         "verstappen",
-        "dhabi"
+        "taking"
       ],
       "title": "F1 Qatar GP: Max Verstappen wins from Oscar Piastri, taking title fight to Abu Dhabi",
       "timestamp": "2025-11-30T17:51:07"
