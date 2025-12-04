@@ -29,7 +29,7 @@ if (!token || !userId) {
     process.exit(1);
 }
 
-// Helper: HTTP GET Promise
+// Helper: HTTP GET Promise (Returns Data + Headers)
 function fetchJson(url) {
     return new Promise((resolve, reject) => {
         https.get(url, (res) => {
@@ -39,7 +39,7 @@ function fetchJson(url) {
                 try {
                     const json = JSON.parse(data);
                     if (json.error) reject(new Error(json.error.message));
-                    else resolve(json);
+                    else resolve({ json, headers: res.headers });
                 } catch (e) {
                     reject(e);
                 }
@@ -91,15 +91,17 @@ async function run() {
         console.log(`📡 Fetching from ${ALL_ACCOUNTS.length} accounts...`);
 
         // 1. SEQUENTIAL FETCH FROM ALL ACCOUNTS (Rate Limit Safe)
-        const fields = 'media.limit(20){id,caption,media_url,thumbnail_url,permalink,media_type,timestamp,like_count,comments_count,children{id,media_type,media_url,thumbnail_url,timestamp}}';
+        // Reduced limit to 10 to lower CPU cost (Step 4)
+        const fields = 'media.limit(10){id,caption,media_url,thumbnail_url,permalink,media_type,timestamp,like_count,comments_count,children{id,media_type,media_url,thumbnail_url,timestamp}}';
         let allPosts = [];
 
         for (const username of ALL_ACCOUNTS) {
             try {
                 console.log(`   - Fetching @${username}...`);
                 const url = `https://graph.facebook.com/v21.0/${userId}?fields=business_discovery.username(${username}){${fields}}&access_token=${token}`;
-                const response = await fetchJson(url);
-                const posts = response.business_discovery.media.data;
+
+                const { json, headers } = await fetchJson(url);
+                const posts = json.business_discovery.media.data;
 
                 // Add author field to each post
                 const processedPosts = posts.map(post => ({
@@ -110,8 +112,35 @@ async function run() {
 
                 allPosts = allPosts.concat(processedPosts);
 
-                // Rate Limit Protection: Wait 2 seconds between requests
-                await new Promise(r => setTimeout(r, 2000));
+                // --- DYNAMIC BACKOFF LOGIC (Step 3) ---
+                let delay = 2000; // Default 2s (Step 2)
+
+                // Check 'x-business-use-case-usage' header
+                // Format: [{"id":"...","call_count":10,"total_cputime":15,"total_time":15,"type":"business_discovery"}]
+                const usageHeader = headers['x-business-use-case-usage'];
+                if (usageHeader) {
+                    try {
+                        const usageData = JSON.parse(usageHeader);
+                        if (usageData && usageData.length > 0) {
+                            const cpuTime = usageData[0].total_cputime; // Percentage used
+                            console.log(`     📊 API Usage: ${cpuTime}%`);
+
+                            if (cpuTime > 90) {
+                                console.warn(`     🔥 HIGH LOAD (>90%). Cooling down for 2 minutes...`);
+                                delay = 120000; // 2 minutes
+                            } else if (cpuTime > 80) {
+                                console.warn(`     ⚠️ WARN LOAD (>80%). Cooling down for 30 seconds...`);
+                                delay = 30000; // 30 seconds
+                            }
+                        }
+                    } catch (e) {
+                        // Ignore header parse error
+                    }
+                }
+
+                // Wait
+                if (delay > 2000) console.log(`     ⏳ Pausing for ${delay / 1000}s...`);
+                await new Promise(r => setTimeout(r, delay));
 
             } catch (error) {
                 console.warn(`⚠️  Failed to fetch @${username}:`, error.message);
