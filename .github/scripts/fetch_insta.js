@@ -90,29 +90,34 @@ async function run() {
     try {
         console.log(`📡 Fetching from ${ALL_ACCOUNTS.length} accounts...`);
 
-        // 1. PARALLEL FETCH FROM ALL ACCOUNTS
-        const fields = 'media.limit(50){id,caption,media_url,thumbnail_url,permalink,media_type,timestamp,like_count,comments_count,children{id,media_type,media_url,thumbnail_url,timestamp}}';
+        // 1. SEQUENTIAL FETCH FROM ALL ACCOUNTS (Rate Limit Safe)
+        const fields = 'media.limit(20){id,caption,media_url,thumbnail_url,permalink,media_type,timestamp,like_count,comments_count,children{id,media_type,media_url,thumbnail_url,timestamp}}';
+        let allPosts = [];
 
-        const fetchPromises = ALL_ACCOUNTS.map(async (username) => {
+        for (const username of ALL_ACCOUNTS) {
             try {
+                console.log(`   - Fetching @${username}...`);
                 const url = `https://graph.facebook.com/v21.0/${userId}?fields=business_discovery.username(${username}){${fields}}&access_token=${token}`;
                 const response = await fetchJson(url);
                 const posts = response.business_discovery.media.data;
 
                 // Add author field to each post
-                return posts.map(post => ({
+                const processedPosts = posts.map(post => ({
                     ...post,
                     author: username,
                     language: detectLanguage(post.caption)
                 }));
+
+                allPosts = allPosts.concat(processedPosts);
+
+                // Rate Limit Protection: Wait 2 seconds between requests
+                await new Promise(r => setTimeout(r, 2000));
+
             } catch (error) {
                 console.warn(`⚠️  Failed to fetch @${username}:`, error.message);
-                return []; // Return empty array on failure, don't crash
+                // Continue to next account
             }
-        });
-
-        const results = await Promise.all(fetchPromises);
-        let allPosts = results.flat(); // Flatten array of arrays
+        }
 
         console.log(`✅ Fetched ${allPosts.length} total posts from ${ALL_ACCOUNTS.length} accounts.`);
 
