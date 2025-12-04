@@ -15,7 +15,7 @@ const OFFICIAL_ACCOUNTS = [
 
 const MEME_ACCOUNTS = [
     'lollipopmancomics', 'f1troll', 'boxbox_club', 'racingvacing',
-    'f1_no_contextrmuladank', 'boxboxnightmares', '5secondpenalty', 'f1humor.official'
+    'f1_no_context', 'boxboxnightmares', '5secondpenalty', 'f1humor.official'
 ];
 
 const ALL_ACCOUNTS = [...OFFICIAL_ACCOUNTS, ...MEME_ACCOUNTS];
