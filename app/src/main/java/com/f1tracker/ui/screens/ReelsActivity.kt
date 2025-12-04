@@ -145,46 +145,60 @@ fun ReelItem(
     onClose: () -> Unit
 ) {
     val context = LocalContext.current
-    val isCarousel = post.media_type == "CAROUSEL_ALBUM" && !post.children.isNullOrEmpty()
+    val isCarousel = post.media_type == "CAROUSEL_ALBUM" && !post.children?.data.isNullOrEmpty()
+    
+    android.util.Log.d("ReelsDebug", "Post ID: ${post.id}, Type: ${post.media_type}, Children: ${post.children?.data?.size}, isCarousel: $isCarousel")
     
     Box(modifier = Modifier.fillMaxSize()) {
-        if (isCarousel) {
-            val children = post.children!!
-            val pagerState = rememberPagerState(pageCount = { children.size })
-            
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                val child = children[page]
-                // Only play video if the parent ReelItem is playing AND this is the current slide
-                val isChildPlaying = isPlaying && pagerState.currentPage == page
+        if (post.media_type == "CAROUSEL_ALBUM") {
+            if (!post.children?.data.isNullOrEmpty()) {
+                val children = post.children!!.data
+                val pagerState = rememberPagerState(pageCount = { children.size })
                 
-                ReelMediaItem(
-                    mediaUrl = child.media_url,
-                    thumbnailUrl = child.thumbnail_url,
-                    mediaType = child.media_type,
-                    isPlaying = isChildPlaying
-                )
-            }
-            
-            // Carousel Indicator
-            if (children.size > 1) {
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    repeat(children.size) { iteration ->
-                        val color = if (pagerState.currentPage == iteration) Color.White else Color.White.copy(alpha = 0.5f)
-                        Box(
-                            modifier = Modifier
-                                .size(6.dp)
-                                .clip(CircleShape)
-                                .background(color)
-                        )
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize()
+                ) { page ->
+                    val child = children[page]
+                    // Only play video if the parent ReelItem is playing AND this is the current slide
+                    val isChildPlaying = isPlaying && pagerState.currentPage == page
+                    
+                    ReelMediaItem(
+                        mediaUrl = child.media_url,
+                        thumbnailUrl = child.thumbnail_url,
+                        mediaType = child.media_type,
+                        isPlaying = isChildPlaying
+                    )
+                }
+                
+                // Carousel Indicator
+                if (children.size > 1) {
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(top = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        repeat(children.size) { iteration ->
+                            val color = if (pagerState.currentPage == iteration) Color.White else Color.White.copy(alpha = 0.5f)
+                            Box(
+                                modifier = Modifier
+                                    .size(6.dp)
+                                    .clip(CircleShape)
+                                    .background(color)
+                            )
+                        }
                     }
+                }
+            } else {
+                // Loading state for carousel with missing children
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black),
+                    contentAlignment = Alignment.Center
+                ) {
+                    GlassmorphicLoadingIndicator()
                 }
             }
         } else {

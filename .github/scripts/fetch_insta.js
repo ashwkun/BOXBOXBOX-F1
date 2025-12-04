@@ -10,12 +10,12 @@ const ARCHIVE_FILE = 'f1_archive.json';  // Full history
 
 // ACCOUNT LISTS (BRD Section 2.1)
 const OFFICIAL_ACCOUNTS = [
-    'f1', 'redbullracing', 'scuderiaferrari', 'mclaren', 'mercedesamgf1', 'haasf1team'
+    'f1', 'motorsportcom'
 ];
 
 const MEME_ACCOUNTS = [
-    'lollipopmancomics', 'f1troll', 'f1.memes', 'wtf1',
-    'formuladank', 'f1sarcasm', 'insidef1', 'f1humor_official'
+    'lollipopmancomics', 'f1troll', 'boxbox_club', 'racingvacing',
+    'f1_no_contextrmuladank', 'boxboxnightmares', '5secondpenalty', 'f1humor.official'
 ];
 
 const ALL_ACCOUNTS = [...OFFICIAL_ACCOUNTS, ...MEME_ACCOUNTS];
@@ -152,14 +152,52 @@ async function run() {
             archiveMap.set(p.id, p);
         });
 
-        // 5. SORT & SLICE (Newest First)
-        const sortedFeed = Array.from(feedMap.values())
+        // 5. DEDUPLICATE & MERGE (Audio Workaround)
+        const groupedPosts = new Map();
+
+        // Group by Author + Caption (first 50 chars)
+        Array.from(feedMap.values()).forEach(post => {
+            const captionKey = post.caption ? post.caption.substring(0, 50).trim() : '';
+            const key = `${post.author}|${captionKey}`;
+
+            if (!groupedPosts.has(key)) {
+                groupedPosts.set(key, []);
+            }
+            groupedPosts.get(key).push(post);
+        });
+
+        const finalFeedList = [];
+
+        groupedPosts.forEach((group) => {
+            // If we have multiple posts in a group, check for VIDEO + IMAGE/CAROUSEL mix
+            if (group.length > 1) {
+                const videoPost = group.find(p => p.media_type === 'VIDEO');
+                const imagePost = group.find(p => p.media_type === 'IMAGE' || p.media_type === 'CAROUSEL_ALBUM');
+
+                if (videoPost && imagePost) {
+                    console.log(`🔀 Merging audio from Video ${videoPost.id} to ${imagePost.media_type} ${imagePost.id}`);
+                    // Transfer video URL as audio_url
+                    imagePost.audio_url = videoPost.media_url;
+                    // Keep only the image post
+                    finalFeedList.push(imagePost);
+                } else {
+                    // No clear merge candidate, keep all (or just duplicates of same type)
+                    group.forEach(p => finalFeedList.push(p));
+                }
+            } else {
+                // Single post, keep it
+                finalFeedList.push(group[0]);
+            }
+        });
+
+        // 6. SORT & SLICE (Newest First)
+        const sortedFeed = finalFeedList
             .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
         const sortedArchive = Array.from(archiveMap.values())
             .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-        // 6. GENERATE DUAL-FILE OUTPUT
+        // 7. GENERATE DUAL-FILE OUTPUT
 
         // A) MIXED FEED (f1_feed.json) - Images + Videos, limit 60
         const finalFeed = sortedFeed.slice(0, MAX_FEED_POSTS);
@@ -177,7 +215,7 @@ async function run() {
         fs.writeFileSync(ARCHIVE_FILE, JSON.stringify(sortedArchive, null, 2));
         console.log(`📚 Saved ${sortedArchive.length} posts to ${ARCHIVE_FILE}`);
 
-        // 7. SUMMARY
+        // 8. SUMMARY
         console.log(`\n✨ Success! Summary:`);
         console.log(`   - Total accounts: ${ALL_ACCOUNTS.length}`);
         console.log(`   - Mixed feed: ${finalFeed.length} posts`);

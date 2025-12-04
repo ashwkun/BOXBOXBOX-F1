@@ -86,8 +86,15 @@ fun FeedScreen(
     val selectedVideoFilter by multimediaViewModel.selectedVideoFilter.collectAsState()
     
     // Hoisted Pager State for Instagram Feed
-    val instagramPagerState = androidx.compose.foundation.pager.rememberPagerState {
+    val instagramPagerState = androidx.compose.foundation.pager.rememberPagerState(
+        initialPage = multimediaViewModel.instagramScrollIndex
+    ) {
         if (instagramPosts.isEmpty()) 3 else instagramPosts.size
+    }
+
+    // Sync Instagram scroll state to ViewModel
+    LaunchedEffect(instagramPagerState.currentPage) {
+        multimediaViewModel.updateInstagramScrollPosition(instagramPagerState.currentPage)
     }
     val isInstagramRefreshing by multimediaViewModel.isInstagramRefreshing.collectAsState()
     
@@ -136,6 +143,7 @@ fun FeedScreen(
         TabItem("SOCIAL", Icons.Default.Public),
         TabItem("NEWS", Icons.Default.Article),
         TabItem("VIDEOS", Icons.Default.PlayCircle),
+        TabItem("GAMES", Icons.Default.SportsEsports),
         TabItem("AUDIO", Icons.Default.Headphones)
     )
     // Initialize pager with the persisted state or initialTab if provided (though initialTab is mostly 0)
@@ -168,6 +176,10 @@ fun FeedScreen(
             multimediaViewModel.resetVideosScrollPosition()
             videosListState.scrollToItem(0)
         }
+        
+        // No specific scroll state reset needed for Game tab (Index 4) or Audio (Index 5) yet
+
+
     }
 
     // Handle Navbar Refresh Trigger
@@ -185,6 +197,7 @@ fun FeedScreen(
                     newsViewModel.refreshNews()
                 }
                 3 -> videosListState.animateScrollToItem(0)
+                // 4 (Game) and 5 (Audio) don't have scrollable lists to reset yet
             }
         }
     }
@@ -227,6 +240,7 @@ fun FeedScreen(
                                         newsViewModel.refreshNews()
                                     }
                                     3 -> videosListState.animateScrollToItem(0)
+                                    // 4 and 5 don't have scrollable lists yet
                                 }
                             } else {
                                 // Switch tab
@@ -242,7 +256,8 @@ fun FeedScreen(
             // Content with Swipe Navigation
             androidx.compose.foundation.pager.HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                beyondBoundsPageCount = 1
             ) { page ->
                 when (page) {
                     0 -> {
@@ -300,7 +315,9 @@ fun FeedScreen(
                         selectedFilter = selectedVideoFilter,
                         onFilterSelected = { multimediaViewModel.setSelectedVideoFilter(it) }
                     )
-                    4 -> PodcastsList(
+
+                    4 -> GameScreen(michromaFont = michromaFont)
+                    5 -> PodcastsList(
                         podcasts = podcasts, 
                         michromaFont = michromaFont, 
                         currentlyPlayingEpisode = currentlyPlayingEpisode, 
@@ -469,7 +486,7 @@ fun LatestInstagramCard(
     onClick: () -> Unit
 ) {
     val isReel = post.media_type == "VIDEO"
-    val isCarousel = post.media_type == "CAROUSEL_ALBUM" && !post.children.isNullOrEmpty()
+    val isCarousel = post.media_type == "CAROUSEL_ALBUM" && !post.children?.data.isNullOrEmpty()
     
     Card(
         modifier = if (isReel || isCarousel) {
@@ -559,7 +576,7 @@ fun LatestInstagramCard(
                     .background(if (isReel || isCarousel) Color.Black else Color.Transparent)
             ) {
                 if (isCarousel) {
-                    val children = post.children!!
+                    val children = post.children!!.data
                     val pagerState = androidx.compose.foundation.pager.rememberPagerState(pageCount = { children.size })
                     
                     HorizontalPager(

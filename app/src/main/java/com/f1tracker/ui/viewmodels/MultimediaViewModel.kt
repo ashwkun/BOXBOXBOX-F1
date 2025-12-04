@@ -217,4 +217,15 @@ class MultimediaViewModel @Inject constructor(
         videosScrollIndex = 0
         videosScrollOffset = 0
     }
+
+    // Scroll Persistence for Instagram Feed
+    var instagramScrollIndex = 0
+
+    fun updateInstagramScrollPosition(index: Int) {
+        instagramScrollIndex = index
+    }
+
+    fun resetInstagramScrollPosition() {
+        instagramScrollIndex = 0
+    }
 }

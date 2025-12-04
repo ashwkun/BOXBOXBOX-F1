@@ -250,6 +250,7 @@ fun SkeletonInstagramPostCard() {
     }
 }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 private fun InstagramPostCard(
     post: InstagramPost,
@@ -263,19 +264,46 @@ private fun InstagramPostCard(
 ) {
     // Determine if this is a reel (VIDEO with portrait orientation)
     val isReel = post.media_type == "VIDEO"
-    val isCarousel = post.media_type == "CAROUSEL_ALBUM"
+    val isCarousel = post.media_type == "CAROUSEL_ALBUM" && !post.children?.data.isNullOrEmpty()
     val showVideoPlayer = androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
-    val context = androidx.compose.ui.platform.LocalContext.current
     
     // Auto-play when this is the current playing index
     androidx.compose.runtime.LaunchedEffect(currentlyPlayingIndex.value) {
-        if (isReel && currentlyPlayingIndex.value == index) {
+        if (currentlyPlayingIndex.value == index) {
             showVideoPlayer.value = true
         } else {
             showVideoPlayer.value = false
         }
     }
     
+    // Background Audio Logic (for Image/Carousel posts with merged audio)
+    val hasBackgroundAudio = !post.audio_url.isNullOrEmpty() && post.media_type != "VIDEO"
+    val shouldPlayAudio = showVideoPlayer.value && hasBackgroundAudio
+    
+    if (hasBackgroundAudio && shouldPlayAudio) {
+        val context = androidx.compose.ui.platform.LocalContext.current
+        val exoPlayer = androidx.compose.runtime.remember(shouldPlayAudio) {
+            androidx.media3.exoplayer.ExoPlayer.Builder(context).build().apply {
+                setMediaItem(androidx.media3.common.MediaItem.fromUri(post.audio_url!!))
+                prepare()
+                playWhenReady = true
+                repeatMode = androidx.media3.common.Player.REPEAT_MODE_ONE
+                volume = if (isMuted) 0f else 1f
+            }
+        }
+        
+        androidx.compose.runtime.LaunchedEffect(isMuted) {
+            exoPlayer.volume = if (isMuted) 0f else 1f
+        }
+        
+        androidx.compose.runtime.DisposableEffect(shouldPlayAudio) {
+            onDispose {
+                exoPlayer.stop()
+                exoPlayer.release()
+            }
+        }
+    }
+
     // Container Box to center the card in the Pager item
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -360,150 +388,152 @@ private fun InstagramPostCard(
                     .then(if (isReel) Modifier.weight(1f) else Modifier) // Only weight for Reels
                     .background(if (isReel) Color.Black else Color.Transparent)
             ) {
-                // Thumbnail
-                val imageUrl = if (post.media_type == "VIDEO") {
-                    post.thumbnail_url ?: post.media_url
-                } else {
-                    post.media_url
-                }
-                
-                    if (imageUrl != null) {
-                        SubcomposeAsyncImage(
-                            model = imageUrl,
-                            contentDescription = post.caption,
-                            modifier = if (isReel) {
-                                Modifier.fillMaxSize() 
-                            } else {
-                                Modifier.fillMaxWidth().wrapContentHeight().heightIn(max = 500.dp)
-                            },
-                            contentScale = if (isReel) ContentScale.Fit else ContentScale.FillWidth,
-                            loading = {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(shimmerBrush())
-                                )
-                            }
-                        )
-                    }
-                
-                // Video Player
-                if (showVideoPlayer.value && isReel) {
-                    val videoUrl = post.media_url ?: ""
-                    if (videoUrl.isNotEmpty()) {
-                        val context = androidx.compose.ui.platform.LocalContext.current
+                if (post.media_type == "CAROUSEL_ALBUM") {
+                    if (!post.children?.data.isNullOrEmpty()) {
+                        val children = post.children!!.data
+                        val pagerState = androidx.compose.foundation.pager.rememberPagerState(pageCount = { children.size })
                         
-                        val isVideoReady = androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
-                        
-                        val exoPlayer = androidx.compose.runtime.remember(showVideoPlayer.value) {
-                            androidx.media3.exoplayer.ExoPlayer.Builder(context).build().apply {
-                                setMediaItem(androidx.media3.common.MediaItem.fromUri(videoUrl))
-                                prepare()
-                                playWhenReady = true
-                                repeatMode = androidx.media3.common.Player.REPEAT_MODE_ONE
-                                volume = if (isMuted) 0f else 1f
-                                
-                                addListener(object : androidx.media3.common.Player.Listener {
-                                    override fun onPlaybackStateChanged(playbackState: Int) {
-                                        if (playbackState == androidx.media3.common.Player.STATE_READY) {
-                                            isVideoReady.value = true
-                                        }
-                                    }
-                                })
-                            }
-                        }
-                        
-                        androidx.compose.runtime.LaunchedEffect(isMuted) {
-                            exoPlayer.volume = if (isMuted) 0f else 1f
-                        }
-                        
-                        androidx.compose.runtime.DisposableEffect(showVideoPlayer.value) {
-                            onDispose {
-                                exoPlayer.stop()
-                                exoPlayer.release()
-                            }
-                        }
-                        
-                        AndroidView(
-                            factory = { ctx ->
-                                androidx.media3.ui.PlayerView(ctx).apply {
-                                    player = exoPlayer
-                                    useController = false
-                                    setShowBuffering(androidx.media3.ui.PlayerView.SHOW_BUFFERING_NEVER)
-                                    setShutterBackgroundColor(android.graphics.Color.TRANSPARENT) // Fix black frame
-                                }
-                            },
+                        androidx.compose.foundation.pager.HorizontalPager(
+                            state = pagerState,
                             modifier = Modifier
-                                .fillMaxSize()
-                                .alpha(if (isVideoReady.value) 1f else 0f)
-                        )
-                        
-                        // Glassmorphic Loading Indicator (while buffering)
-                        if (!isVideoReady.value) {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                GlassmorphicLoadingIndicator()
+                                .fillMaxWidth()
+                                .height(400.dp) // Fixed height for carousel images in feed
+                        ) { page ->
+                            val child = children[page]
+                            val isChildVideo = child.media_type == "VIDEO"
+                            val isChildPlaying = showVideoPlayer.value && pagerState.currentPage == page
+                            
+                            if (isChildVideo) {
+                                FeedVideoPlayer(
+                                    videoUrl = child.media_url ?: "",
+                                    thumbnailUrl = child.thumbnail_url,
+                                    isMuted = isMuted,
+                                    shouldPlay = isChildPlaying,
+                                    onMuteToggle = onMuteToggle,
+                                    onNavigateToReels = { onNavigateToReels(post.permalink) },
+                                    isReelMode = false // In carousel, we treat it like a normal feed video
+                                )
+                            } else {
+                                val imageUrl = child.media_url ?: child.thumbnail_url
+                                if (imageUrl != null) {
+                                    SubcomposeAsyncImage(
+                                        model = imageUrl,
+                                        contentDescription = null,
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentScale = ContentScale.Crop,
+                                        loading = {
+                                            Box(
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .background(shimmerBrush())
+                                            )
+                                        }
+                                    )
+                                }
                             }
                         }
                         
-                        // Custom Controls Overlay (Bottom Right)
+                        // Carousel Indicator
+                        if (children.size > 1) {
+                            Row(
+                                modifier = Modifier
+                                    .align(Alignment.TopCenter)
+                                    .padding(top = 16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                repeat(children.size) { iteration ->
+                                    val color = if (pagerState.currentPage == iteration) Color.White else Color.White.copy(alpha = 0.5f)
+                                    Box(
+                                        modifier = Modifier
+                                            .size(6.dp)
+                                            .clip(androidx.compose.foundation.shape.CircleShape)
+                                            .background(color)
+                                    )
+                                }
+                            }
+                        }
+                        
+                        // Carousel Icon Indicator (Top Right)
                         Box(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .clickable {
-                                    // Click to Enter Reels Mode
-                                    onNavigateToReels(post.permalink)
-                                }
+                                .align(Alignment.TopEnd)
                                 .padding(12.dp)
+                                .background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(4.dp))
+                                .padding(4.dp)
                         ) {
-                            Row(
-                                modifier = Modifier.align(Alignment.BottomEnd),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                // Sound Toggle (Only this remains)
-                                Box(
-                                    modifier = Modifier
-                                        .size(28.dp)
-                                        .clip(androidx.compose.foundation.shape.CircleShape)
-                                        .background(Color.Black.copy(alpha = 0.5f))
-                                        .clickable { onMuteToggle() }
-                                        .padding(4.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Icon(
-                                    imageVector = if (isMuted) Icons.Filled.VolumeOff else Icons.Filled.VolumeUp,
-                                    contentDescription = "Toggle Sound",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(16.dp)
-                                )
+                            Icon(
+                                imageVector = Icons.Default.Collections,
+                                contentDescription = "Carousel",
+                                tint = Color.White,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    } else {
+                        // Loading state for carousel with missing children
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(400.dp)
+                                .background(Color(0xFF1A1A1A)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            GlassmorphicLoadingIndicator()
+                        }
+                    }
+                } else {
+                    // Single Post (Image or Video)
+                    val isVideo = post.media_type == "VIDEO"
+                    
+                    if (isVideo) {
+                        FeedVideoPlayer(
+                            videoUrl = post.media_url ?: "",
+                            thumbnailUrl = post.thumbnail_url,
+                            isMuted = isMuted,
+                            shouldPlay = showVideoPlayer.value,
+                            onMuteToggle = onMuteToggle,
+                            onNavigateToReels = { onNavigateToReels(post.permalink) },
+                            isReelMode = true // Single video posts are treated as Reels
+                        )
+                    } else {
+                        // Single Image
+                        val imageUrl = post.media_url
+                        if (imageUrl != null) {
+                            SubcomposeAsyncImage(
+                                model = imageUrl,
+                                contentDescription = post.caption,
+                                modifier = Modifier.fillMaxWidth().wrapContentHeight().heightIn(max = 500.dp),
+                                contentScale = ContentScale.FillWidth,
+                                loading = {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(shimmerBrush())
+                                    )
                                 }
-                            }
+                            )
                         }
                     }
                 }
-
-                // Reel Overlay (when not playing)
-                if (isReel && !showVideoPlayer.value) {
-                    Box(
+                
+                // Background Audio Mute Toggle (Bottom Right)
+                if (hasBackgroundAudio) {
+                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Black.copy(alpha = 0.15f))
-                            .clickable {
-                                // Click to Enter Reels Mode
-                                onNavigateToReels(post.permalink)
-                            },
+                            .align(Alignment.BottomEnd)
+                            .padding(12.dp)
+                            .size(36.dp)
+                            .clip(androidx.compose.foundation.shape.CircleShape)
+                            .background(Color.Black.copy(alpha = 0.6f))
+                            .clickable { onMuteToggle() }
+                            .padding(8.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.PlayCircle,
-                            contentDescription = "Play",
-                            tint = Color.White.copy(alpha = 0.8f),
-                            modifier = Modifier.size(48.dp)
+                            imageVector = if (isMuted) Icons.Filled.VolumeOff else Icons.Filled.VolumeUp,
+                            contentDescription = "Toggle Audio",
+                            tint = Color.White,
+                            modifier = Modifier.size(20.dp)
                         )
-
                     }
                 }
             }
@@ -524,6 +554,141 @@ private fun InstagramPostCard(
         }
     }
 }
+}
+
+@Composable
+private fun FeedVideoPlayer(
+    videoUrl: String,
+    thumbnailUrl: String?,
+    isMuted: Boolean,
+    shouldPlay: Boolean,
+    onMuteToggle: () -> Unit,
+    onNavigateToReels: () -> Unit,
+    isReelMode: Boolean
+) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val isVideoReady = androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    
+    // Thumbnail / Placeholder
+    if (!isVideoReady.value) {
+        val imageModel = thumbnailUrl ?: videoUrl
+        SubcomposeAsyncImage(
+            model = imageModel,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = if (isReelMode) ContentScale.Fit else ContentScale.Crop,
+            loading = {
+                Box(
+                    modifier = Modifier.fillMaxSize().background(shimmerBrush())
+                )
+            }
+        )
+    }
+
+    if (shouldPlay && videoUrl.isNotEmpty()) {
+        val exoPlayer = androidx.compose.runtime.remember(shouldPlay) {
+            androidx.media3.exoplayer.ExoPlayer.Builder(context).build().apply {
+                setMediaItem(androidx.media3.common.MediaItem.fromUri(videoUrl))
+                prepare()
+                playWhenReady = true
+                repeatMode = androidx.media3.common.Player.REPEAT_MODE_ONE
+                volume = if (isMuted) 0f else 1f
+                
+                addListener(object : androidx.media3.common.Player.Listener {
+                    override fun onPlaybackStateChanged(playbackState: Int) {
+                        if (playbackState == androidx.media3.common.Player.STATE_READY) {
+                            isVideoReady.value = true
+                        }
+                    }
+                })
+            }
+        }
+        
+        androidx.compose.runtime.LaunchedEffect(isMuted) {
+            exoPlayer.volume = if (isMuted) 0f else 1f
+        }
+        
+        androidx.compose.runtime.DisposableEffect(shouldPlay) {
+            onDispose {
+                exoPlayer.stop()
+                exoPlayer.release()
+            }
+        }
+        
+        AndroidView(
+            factory = { ctx ->
+                androidx.media3.ui.PlayerView(ctx).apply {
+                    player = exoPlayer
+                    useController = false
+                    setShowBuffering(androidx.media3.ui.PlayerView.SHOW_BUFFERING_NEVER)
+                    setShutterBackgroundColor(android.graphics.Color.TRANSPARENT)
+                }
+            },
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(if (isVideoReady.value) 1f else 0f)
+        )
+        
+        // Glassmorphic Loading Indicator (while buffering)
+        if (!isVideoReady.value) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                GlassmorphicLoadingIndicator()
+            }
+        }
+        
+        // Custom Controls Overlay (Bottom Right)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable { onNavigateToReels() }
+                .padding(12.dp)
+        ) {
+            Row(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Sound Toggle
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)
+                        .clip(androidx.compose.foundation.shape.CircleShape)
+                        .background(Color.Black.copy(alpha = 0.5f))
+                        .clickable { onMuteToggle() }
+                        .padding(4.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = if (isMuted) Icons.Filled.VolumeOff else Icons.Filled.VolumeUp,
+                        contentDescription = "Toggle Sound",
+                        tint = Color.White,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+        }
+    }
+
+    // Play Overlay (when not playing)
+    if (!shouldPlay) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.15f))
+                .clickable { onNavigateToReels() },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.PlayCircle,
+                contentDescription = "Play",
+                tint = Color.White.copy(alpha = 0.8f),
+                modifier = Modifier.size(48.dp)
+            )
+        }
+    }
 }
 
 private fun formatTimeAgo(timestamp: String): String {
