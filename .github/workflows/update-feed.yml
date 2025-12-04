@@ -3,8 +3,8 @@ name: Fast F1 Feed Update
 on:
   schedule:
     # THE QUEUE SKIPPER: Prime number offsets to avoid traffic
-    # Runs at minute 7, 22, 37, 52 of every hour
-    - cron: '7,22,37,52 * * * *'
+    # Runs at minute 7 and 37 of every hour (Every 30 mins)
+    - cron: '7,37 * * * *'
   workflow_dispatch: # Manual trigger
 
 jobs:
