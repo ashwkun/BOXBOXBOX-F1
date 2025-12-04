@@ -261,7 +261,8 @@ fun FeedScreen(
             androidx.compose.foundation.pager.HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize(),
-                beyondBoundsPageCount = 1
+                beyondBoundsPageCount = 1,
+                userScrollEnabled = !isGameFullScreen
             ) { page ->
                 when (page) {
                     0 -> {
