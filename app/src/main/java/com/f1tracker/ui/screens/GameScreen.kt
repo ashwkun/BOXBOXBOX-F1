@@ -1,11 +1,14 @@
 package com.f1tracker.ui.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,11 +22,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.f1tracker.R
 import com.f1tracker.ui.screens.games.HotlapGame
 
 enum class GameView {
@@ -83,36 +88,39 @@ fun GameList(
         GameItem(
             id = "hotlap",
             title = "HOTLAP",
-            description = "TEST YOUR REFLEXES",
+            description = "REFLEX TEST",
             icon = Icons.Default.Timer,
             color = Color(0xFFFF0000), // Red
+            imageRes = R.drawable.game_hotlap,
             isAvailable = true
         ),
         GameItem(
             id = "strategy",
-            title = "STRATEGY MASTER",
+            title = "STRATEGY",
             description = "CALL THE SHOTS",
             icon = Icons.Default.SportsEsports,
             color = Color(0xFF00D2BE), // Mercedes Teal
+            imageRes = R.drawable.game_strategy,
             isAvailable = false
         ),
         GameItem(
             id = "pitstop",
-            title = "PIT STOP PRO",
+            title = "PIT STOP",
             description = "PERFECT TIMING",
             icon = Icons.Default.SportsEsports,
             color = Color(0xFFFF8700), // McLaren Orange
+            imageRes = R.drawable.game_pitstop,
             isAvailable = false
         )
     )
 
-    LazyColumn(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Removed "F1 ARCADE" header as requested
-
         items(games) { game ->
             GameCard(
                 game = game,
@@ -134,96 +142,82 @@ fun GameCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(220.dp) // Taller for grid
             .clickable(enabled = game.isAvailable) { onClick() },
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF121212)),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            // Background Gradient
+            // Background Image
+            Image(
+                painter = painterResource(id = game.imageRes),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+
+            // Gradient Overlay (Darker at bottom for text)
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        Brush.linearGradient(
+                        Brush.verticalGradient(
                             colors = listOf(
-                                game.color.copy(alpha = 0.15f),
-                                Color.Black
+                                Color.Transparent,
+                                Color.Black.copy(alpha = 0.6f),
+                                Color.Black.copy(alpha = 0.9f)
                             ),
-                            start = androidx.compose.ui.geometry.Offset(0f, 0f),
-                            end = androidx.compose.ui.geometry.Offset(1000f, 1000f)
+                            startY = 100f
                         )
                     )
             )
             
-            // Accent Line
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .width(4.dp)
-                    .fillMaxHeight()
-                    .background(game.color)
-            )
-
+            // Content
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.Center
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.Bottom
             ) {
-                // Icon
-                Icon(
-                    imageVector = game.icon,
-                    contentDescription = null,
-                    tint = game.color,
-                    modifier = Modifier.size(48.dp)
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
                 // Title
                 Text(
                     text = game.title,
                     fontFamily = brigendsFont,
-                    fontSize = 24.sp,
-                    color = if (game.isAvailable) Color.White else Color.Gray,
-                    letterSpacing = 1.sp
+                    fontSize = 16.sp,
+                    color = Color.White,
+                    letterSpacing = 1.sp,
+                    lineHeight = 18.sp
                 )
                 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 
                 // Description
                 Text(
                     text = game.description,
                     fontFamily = michromaFont,
-                    fontSize = 12.sp,
-                    color = if (game.isAvailable) Color.White.copy(alpha = 0.7f) else Color.Gray.copy(alpha = 0.5f),
-                    letterSpacing = 2.sp
+                    fontSize = 10.sp,
+                    color = game.color,
+                    fontWeight = FontWeight.Bold
                 )
             }
             
-            // "Play" or "Soon" Badge
+            // "Play" or "Soon" Badge (Top Right)
             Box(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(24.dp)
+                    .padding(8.dp)
                     .background(
-                        if (game.isAvailable) game.color.copy(alpha = 0.2f) else Color.DarkGray.copy(alpha = 0.2f),
-                        RoundedCornerShape(8.dp)
+                        if (game.isAvailable) game.color else Color.Black.copy(alpha = 0.7f),
+                        RoundedCornerShape(4.dp)
                     )
-                    .border(
-                        width = 1.dp,
-                        color = if (game.isAvailable) game.color else Color.Gray,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                    .padding(horizontal = 6.dp, vertical = 2.dp)
             ) {
                 Text(
                     text = if (game.isAvailable) "PLAY" else "SOON",
                     fontFamily = michromaFont,
-                    fontSize = 10.sp,
-                    color = if (game.isAvailable) game.color else Color.Gray,
+                    fontSize = 8.sp,
+                    color = if (game.isAvailable) Color.Black else Color.White,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -237,5 +231,6 @@ data class GameItem(
     val description: String,
     val icon: ImageVector,
     val color: Color,
+    val imageRes: Int,
     val isAvailable: Boolean
 )
