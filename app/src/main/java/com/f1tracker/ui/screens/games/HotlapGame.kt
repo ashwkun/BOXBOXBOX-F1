@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun HotlapGame(
     michromaFont: FontFamily,
+    brigendsFont: FontFamily,
     onBack: () -> Unit
 ) {
     Column(
@@ -40,7 +42,7 @@ fun HotlapGame(
             }
             Text(
                 text = "HOTLAP",
-                fontFamily = michromaFont,
+                fontFamily = brigendsFont, // Using Brigends as requested
                 fontSize = 20.sp,
                 color = Color.White,
                 modifier = Modifier.padding(start = 8.dp)
@@ -51,7 +53,15 @@ fun HotlapGame(
         Box(
             modifier = Modifier
                 .weight(1f)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Black,
+                            Color(0xFF1A0000) // Subtle red tint at bottom
+                        )
+                    )
+                ),
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -59,20 +69,23 @@ fun HotlapGame(
                     imageVector = Icons.Default.Timer,
                     contentDescription = null,
                     tint = Color(0xFFFF0000),
-                    modifier = Modifier.size(80.dp)
+                    modifier = Modifier.size(100.dp)
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
                 Text(
                     text = "GAME LOADING...",
-                    fontFamily = michromaFont,
-                    fontSize = 16.sp,
-                    color = Color.White
+                    fontFamily = brigendsFont,
+                    fontSize = 24.sp,
+                    color = Color.White,
+                    letterSpacing = 2.sp
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Prepare your reflexes",
-                    fontSize = 14.sp,
-                    color = Color.Gray
+                    text = "PREPARE YOUR REFLEXES",
+                    fontFamily = michromaFont,
+                    fontSize = 12.sp,
+                    color = Color.Gray,
+                    letterSpacing = 4.sp
                 )
             }
         }

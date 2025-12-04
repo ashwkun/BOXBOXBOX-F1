@@ -74,6 +74,8 @@ fun FeedScreen(
     refreshTrigger: Long = 0L
 ) {
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
+    val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
+    var isGameFullScreen by remember { mutableStateOf(false) }
 
     
     val newsArticles by newsViewModel.newsArticles.collectAsState()
@@ -220,7 +222,8 @@ fun FeedScreen(
             // Header
 
             
-            // Custom Tab Selector (Always Visible)
+            // Custom Tab Selector (Always Visible unless in Game Fullscreen)
+            if (!isGameFullScreen) {
             Column {
                 IconTabSelector(
                     tabs = tabs,
@@ -251,6 +254,7 @@ fun FeedScreen(
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+            }
             }
             
             // Content with Swipe Navigation
@@ -316,7 +320,11 @@ fun FeedScreen(
                         onFilterSelected = { multimediaViewModel.setSelectedVideoFilter(it) }
                     )
 
-                    4 -> GameScreen(michromaFont = michromaFont)
+                    4 -> GameScreen(
+                        michromaFont = michromaFont, 
+                        brigendsFont = brigendsFont,
+                        onFullScreenToggle = { isGameFullScreen = it }
+                    )
                     5 -> PodcastsList(
                         podcasts = podcasts, 
                         michromaFont = michromaFont, 
