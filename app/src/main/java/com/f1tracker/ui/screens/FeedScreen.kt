@@ -247,7 +247,11 @@ fun FeedScreen(
                                 }
                             } else {
                                 // Switch tab
-                                pagerState.animateScrollToPage(index)
+                                if (kotlin.math.abs(pagerState.currentPage - index) > 1) {
+                                    pagerState.scrollToPage(index)
+                                } else {
+                                    pagerState.animateScrollToPage(index)
+                                }
                             }
                         }
                     },
