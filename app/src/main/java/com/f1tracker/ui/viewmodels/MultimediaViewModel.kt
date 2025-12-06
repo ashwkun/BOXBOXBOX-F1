@@ -83,12 +83,6 @@ class MultimediaViewModel @Inject constructor(
     private fun sortByEngagement(posts: List<com.f1tracker.data.models.InstagramPost>): List<com.f1tracker.data.models.InstagramPost> {
         val now = java.time.Instant.now()
         
-        // Meme accounts get a boost for entertainment value
-        val memeAccounts = setOf(
-            "lollipopmancomics", "f1troll", "boxbox_club", "racingvacing",
-            "f1_no_context", "boxboxnightmares", "5secondpenalty", "f1humor.official"
-        )
-        
         fun getScore(post: com.f1tracker.data.models.InstagramPost): Double {
             val likes = post.like_count.toDouble()
             val comments = post.comments_count.toDouble()
@@ -108,9 +102,10 @@ class MultimediaViewModel @Inject constructor(
                 score *= 1.2
             }
             
-            // Boost meme accounts for entertainment value
-            if (post.author in memeAccounts) {
-                score *= 1.3
+            // Debuff F1 official account - they have massive follower advantage
+            // This balances their likes to give smaller accounts a fair chance
+            if (post.author == "f1") {
+                score *= 0.4
             }
             
             // Add slight randomization (±15%) so refresh feels fresh
