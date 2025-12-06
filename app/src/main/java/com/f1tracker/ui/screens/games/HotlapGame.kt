@@ -147,6 +147,8 @@ fun HotlapGame(
     var sectorResults by remember { mutableStateOf(listOf(-1, -1, -1)) }
     // Original WR sector times at lap start (for delta display - these don't get updated mid-lap)
     var originalWrSectorTimes by remember { mutableStateOf(listOf(Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE)) }
+    // Pending WR sector updates (to apply after lap completion)
+    var pendingWrSectorUpdates by remember { mutableStateOf(mutableMapOf<Int, Long>()) }
     
     var carPosition by remember { mutableStateOf(Offset.Zero) }
     var carAngle by remember { mutableFloatStateOf(0f) }
@@ -357,6 +359,7 @@ fun HotlapGame(
             sectorTimes = listOf(0L, 0L, 0L)
             sectorResults = listOf(-1, -1, -1)
             originalWrSectorTimes = wrSectorTimes  // Capture WR times at lap start for delta display
+            pendingWrSectorUpdates = mutableMapOf()  // Clear pending updates
             
             var hasLeftStart = false
             
@@ -413,9 +416,9 @@ fun HotlapGame(
                     newSectorTimes[completedSector] = sectorTime
                     sectorTimes = newSectorTimes
                     
-                    // Determine sector result
+                    // Determine sector result (compare to ORIGINAL WR times, not updated ones)
                     val newResults = sectorResults.toMutableList()
-                    val wrTime = wrSectorTimes[completedSector]
+                    val wrTime = originalWrSectorTimes[completedSector]  // Use original, not current
                     val pbTime = bestSectorTimes[completedSector]
                     val isWRSector = sectorTime < wrTime
                     newResults[completedSector] = when {
@@ -440,14 +443,11 @@ fun HotlapGame(
                         prefs.edit().putLong("best_sector_${completedSector}_$trackId", sectorTime).apply()
                     }
                     
-                    // Upload new WR sector time to Firebase
+                    // Queue WR sector update for Firebase (don't update local state mid-lap)
                     if (isWRSector) {
                         val sectorKey = "s${completedSector + 1}"
                         sectorTimesRef.child(trackId).child(sectorKey).setValue(sectorTime)
-                        // Update local WR sector times
-                        val newWrSectors = wrSectorTimes.toMutableList()
-                        newWrSectors[completedSector] = sectorTime
-                        wrSectorTimes = newWrSectors
+                        pendingWrSectorUpdates[completedSector] = sectorTime
                     }
                     
                     lastSectorTime = lapTimeMs
@@ -479,7 +479,7 @@ fun HotlapGame(
                         sectorTimes = newSectorTimes
                         
                         val newResults = sectorResults.toMutableList()
-                        val wrTime = wrSectorTimes[2]
+                        val wrTime = originalWrSectorTimes[2]  // Use original, not updated
                         val pbTime = bestSectorTimes[2]
                         val isWRSector = sector3Time < wrTime
                         newResults[2] = when {
@@ -503,12 +503,21 @@ fun HotlapGame(
                             prefs.edit().putLong("best_sector_2_$trackId", sector3Time).apply()
                         }
                         
+                        // Queue WR sector update (don't update local state mid-lap)
                         if (isWRSector) {
                             sectorTimesRef.child(trackId).child("s3").setValue(sector3Time)
-                            val newWrSectors = wrSectorTimes.toMutableList()
-                            newWrSectors[2] = sector3Time
-                            wrSectorTimes = newWrSectors
+                            pendingWrSectorUpdates[2] = sector3Time
                         }
+                    }
+                    
+                    // Apply pending WR sector updates NOW (lap is complete)
+                    if (pendingWrSectorUpdates.isNotEmpty()) {
+                        val newWrSectors = wrSectorTimes.toMutableList()
+                        pendingWrSectorUpdates.forEach { (sector, time) ->
+                            newWrSectors[sector] = time
+                        }
+                        wrSectorTimes = newWrSectors
+                        pendingWrSectorUpdates.clear()
                     }
                     
                     // Check for PB/WR BEFORE updating values
@@ -815,9 +824,13 @@ fun HotlapGame(
                                     val sectorTime = sectorTimes[i]
                                     val wrTime = originalWrSectorTimes[i]  // Use original WR times for delta (not updated ones)
                                     val result = sectorResults[i]
-                                    val delta = if (wrTime < Long.MAX_VALUE && sectorTime > 0) {
+                                    
+                                    // Calculate delta only if both times are valid
+                                    val hasValidSectorTime = sectorTime > 0
+                                    val hasValidWrTime = wrTime < Long.MAX_VALUE
+                                    val delta = if (hasValidSectorTime && hasValidWrTime) {
                                         sectorTime - wrTime
-                                    } else 0L
+                                    } else null
                                     
                                     val sectorColor = when (result) {
                                         2 -> Color(0xFF9933FF)  // Purple - WR
@@ -839,10 +852,11 @@ fun HotlapGame(
                                         )
                                         Text(
                                             text = when {
-                                                delta > 0 -> "+${String.format("%.2f", delta / 1000.0)}"
-                                                delta < 0 -> String.format("%.2f", delta / 1000.0)
-                                                wrTime < Long.MAX_VALUE -> "0.00"
-                                                else -> "---"
+                                                !hasValidSectorTime -> "---"  // Sector not completed
+                                                !hasValidWrTime -> "NEW"  // No WR existed, this is the first
+                                                delta != null && delta > 0 -> "+${String.format("%.2f", delta / 1000.0)}"
+                                                delta != null && delta < 0 -> String.format("%.2f", delta / 1000.0)
+                                                else -> "0.00"  // Exactly equal (rare)
                                             },
                                             fontFamily = pixelFont,
                                             fontSize = 8.sp,

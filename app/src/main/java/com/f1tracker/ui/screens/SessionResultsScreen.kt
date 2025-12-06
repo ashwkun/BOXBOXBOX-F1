@@ -48,8 +48,6 @@ fun SessionResultsScreen(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        // Animated Header (Retained as requested)
-        AnimatedHeader()
         
         // Session Title Header with Back Button
         Row(

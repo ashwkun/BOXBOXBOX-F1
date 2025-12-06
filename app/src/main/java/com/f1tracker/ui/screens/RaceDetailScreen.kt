@@ -132,7 +132,6 @@ fun RaceDetailScreen(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        com.f1tracker.ui.components.AnimatedHeader()
         
         Box(
             modifier = Modifier

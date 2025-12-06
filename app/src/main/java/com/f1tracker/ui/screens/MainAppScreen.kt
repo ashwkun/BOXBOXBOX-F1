@@ -144,18 +144,6 @@ fun MainAppScreen(
     } else if (selectedVideoId != null) {
         // Show YouTube Player if video is selected
         YouTubePlayerScreen(videoId = selectedVideoId!!)
-    } else if (selectedSessionResult != null) {
-        // Show Session Results
-        SessionResultsScreen(
-            sessionResult = selectedSessionResult!!,
-            onBackClick = { selectedSessionResult = null }
-        )
-    } else if (selectedRace != null) {
-        // Show Race Detail if race is selected
-        RaceDetailScreen(
-            race = selectedRace!!,
-            onBackClick = { selectedRace = null }
-        )
     } else if (webViewUrl != null) {
         // Show WebView if URL is set
         WebViewScreen(
@@ -258,6 +246,22 @@ fun MainAppScreen(
                         refreshTrigger = reelsRefreshTrigger
                     )
             }
+            
+            // Overlay: Race Detail Screen (shown with navbar)
+            if (selectedRace != null) {
+                RaceDetailScreen(
+                    race = selectedRace!!,
+                    onBackClick = { selectedRace = null }
+                )
+            }
+            
+            // Overlay: Session Results Screen (shown with navbar)
+            if (selectedSessionResult != null) {
+                SessionResultsScreen(
+                    sessionResult = selectedSessionResult!!,
+                    onBackClick = { selectedSessionResult = null }
+                )
+            }
         }
 
         // Secret Notification State
@@ -268,6 +272,10 @@ fun MainAppScreen(
         BottomNavBar(
             currentDestination = currentDestination,
             onNavigate = { destination -> 
+                // Clear overlay screens when navigating via navbar
+                selectedRace = null
+                selectedSessionResult = null
+                
                 if (destination == NavDestination.LIVE) {
                     val currentTime = System.currentTimeMillis()
                     if (currentTime - lastLiveTabClickTime > 2000) {

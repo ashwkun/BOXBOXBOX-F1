@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -41,11 +42,24 @@ fun LiveScreen(
     val sessionName by liveClient.sessionName.collectAsState()
     val isConnected by liveClient.isConnected.collectAsState()
     val connectionError by liveClient.connectionError.collectAsState()
+    val currentLap by liveClient.currentLap.collectAsState()
+    val totalLaps by liveClient.totalLaps.collectAsState()
     
     // Race weekend state for session detection
     val raceWeekendState by raceViewModel.raceWeekendState.collectAsState()
     
-    var showRawView by remember { mutableStateOf(false) }
+    // Determine session type from name
+    val sessionType = remember(sessionName) {
+        when {
+            sessionName.contains("race", ignoreCase = true) && !sessionName.contains("sprint", ignoreCase = true) -> SessionType.RACE
+            sessionName.contains("sprint", ignoreCase = true) && sessionName.contains("qualifying", ignoreCase = true) -> SessionType.SPRINT_QUALIFYING
+            sessionName.contains("sprint", ignoreCase = true) -> SessionType.SPRINT
+            sessionName.contains("qualifying", ignoreCase = true) -> SessionType.QUALIFYING
+            sessionName.contains("practice", ignoreCase = true) || sessionName.contains("fp", ignoreCase = true) -> SessionType.PRACTICE
+            else -> SessionType.RACE // Default to race layout
+        }
+    }
+    
     var countdown by remember { mutableStateOf(30) }
     var countdownFinished by remember { mutableStateOf(false) }
     
@@ -80,165 +94,92 @@ fun LiveScreen(
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        // Header - only show when connecting/connected to live session
-        if (shouldConnect) {
-            Column {
-                // Top Bar with Session Name, Lap Counter and Connection Status
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.Black)
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(
-                        modifier = Modifier.weight(1f, fill = false)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = if (sessionName.isNotEmpty()) sessionName.uppercase() else "LIVE TIMING",
-                                fontFamily = michromaFont,
-                                fontSize = 12.sp,
-                                color = Color.White,
-                                letterSpacing = 1.sp,
-                                fontWeight = FontWeight.Bold
+        // Minimal header - only show when we have live data
+        if (shouldConnect && liveDrivers.isNotEmpty()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFF0A0A0A))
+                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Session name and lap counter
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    // Live pulse indicator
+                    val infiniteTransition = rememberInfiniteTransition(label = "pulse")
+                    val pulseAlpha by infiniteTransition.animateFloat(
+                        initialValue = 0.4f,
+                        targetValue = 1f,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(800, easing = FastOutSlowInEasing),
+                            repeatMode = RepeatMode.Reverse
+                        ),
+                        label = "pulseAlpha"
+                    )
+                    
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .background(
+                                Color(0xFFFF0080).copy(alpha = pulseAlpha),
+                                RoundedCornerShape(4.dp)
                             )
-                            
-                            // Master Lap Counter (Inline)
-                            if (liveDrivers.isNotEmpty()) {
-                                val leader = liveDrivers.firstOrNull()
-                                val currentLap = leader?.laps ?: "-"
-                                
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Container(
-                                    modifier = Modifier
-                                        .background(Color(0xFF1A1A1A), RoundedCornerShape(4.dp))
-                                        .padding(horizontal = 6.dp, vertical = 2.dp)
-                                ) {
-                                    Text(
-                                        text = "LAP $currentLap",
-                                        fontFamily = michromaFont,
-                                        fontSize = 10.sp,
-                                        color = Color(0xFFE6007E),
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
-                            }
-                        }
-                        
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            // Animated connection indicator
-                            Box(
-                                modifier = Modifier
-                                    .size(6.dp)
-                                    .background(
-                                        if (isConnected) Color(0xFF00FF41) else if (connectionError != null) Color(0xFFFF0040) else Color(0xFFFFAA00),
-                                        RoundedCornerShape(3.dp)
-                                    )
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = when {
-                                    !isConnected && connectionError != null -> "ERROR"
-                                    !isConnected -> "CONNECTING..."
-                                    liveDrivers.isEmpty() -> "WAITING..."
-                                    else -> "LIVE"
-                                },
-                                fontFamily = michromaFont,
-                                fontSize = 8.sp,
-                                color = when {
-                                    !isConnected && connectionError != null -> Color(0xFFFF0040)
-                                    !isConnected -> Color(0xFFFFAA00)
-                                    liveDrivers.isEmpty() -> Color(0xFFFFAA00)
-                                    else -> Color(0xFF00FF41)
-                                },
-                                letterSpacing = 0.5.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                    )
                     
                     Spacer(modifier = Modifier.width(8.dp))
                     
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // View mode buttons
-                        if (liveDrivers.isNotEmpty()) {
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        if (!showRawView) Color(0xFFE6007E).copy(alpha = 0.3f) else Color(0xFF1A1A1A),
-                                        RoundedCornerShape(4.dp)
-                                    )
-                                    .border(
-                                        width = 1.dp,
-                                        color = if (!showRawView) Color(0xFFE6007E) else Color.White.copy(alpha = 0.2f),
-                                        shape = RoundedCornerShape(4.dp)
-                                    )
-                                    .clickable { showRawView = false }
-                                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                            ) {
-                                Text(
-                                    text = "GRID",
-                                    fontFamily = michromaFont,
-                                    fontSize = 8.sp,
-                                    color = if (!showRawView) Color.White else Color.White.copy(alpha = 0.6f),
-                                    letterSpacing = 0.5.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                            
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        if (showRawView) Color(0xFFE6007E).copy(alpha = 0.3f) else Color(0xFF1A1A1A),
-                                        RoundedCornerShape(4.dp)
-                                    )
-                                    .border(
-                                        width = 1.dp,
-                                        color = if (showRawView) Color(0xFFE6007E) else Color.White.copy(alpha = 0.2f),
-                                        shape = RoundedCornerShape(4.dp)
-                                    )
-                                    .clickable { showRawView = true }
-                                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                            ) {
-                                Text(
-                                    text = "RAW",
-                                    fontFamily = michromaFont,
-                                    fontSize = 8.sp,
-                                    color = if (showRawView) Color.White else Color.White.copy(alpha = 0.6f),
-                                    letterSpacing = 0.5.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
-                        
-                        // Reconnect button
-                        if (connectionError != null) {
-                            Box(
-                                modifier = Modifier
-                                    .background(
-                                        Color(0xFFE6007E),
-                                        RoundedCornerShape(4.dp)
-                                    )
-                                    .clickable { liveClient.connect() }
-                                    .padding(horizontal = 8.dp, vertical = 4.dp)
-                            ) {
-                                Text(
-                                    text = "RETRY",
-                                    fontFamily = michromaFont,
-                                    fontSize = 8.sp,
-                                    color = Color.White,
-                                    letterSpacing = 0.5.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
+                    Text(
+                        text = if (sessionName.isNotEmpty()) sessionName.uppercase() else "LIVE",
+                        fontFamily = michromaFont,
+                        fontSize = 11.sp,
+                        color = Color.White,
+                        letterSpacing = 1.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    // Lap counter (only for Race/Sprint sessions)
+                    if (sessionType == SessionType.RACE || sessionType == SessionType.SPRINT) {
+                        Spacer(modifier = Modifier.width(12.dp))
+                        val lapDisplay = if (totalLaps > 0) "$currentLap/$totalLaps" else "$currentLap"
+                        Text(
+                            text = "LAP $lapDisplay",
+                            fontFamily = michromaFont,
+                            fontSize = 10.sp,
+                            color = Color(0xFFE6007E),
+                            fontWeight = FontWeight.Bold
+                        )
                     }
+                }
+                
+                // Session type badge
+                Box(
+                    modifier = Modifier
+                        .background(
+                            when (sessionType) {
+                                SessionType.RACE -> Color(0xFFE6007E).copy(alpha = 0.2f)
+                                SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> Color(0xFF00BFFF).copy(alpha = 0.2f)
+                                SessionType.SPRINT -> Color(0xFFFF8000).copy(alpha = 0.2f)
+                                SessionType.PRACTICE -> Color(0xFF888888).copy(alpha = 0.2f)
+                            },
+                            RoundedCornerShape(4.dp)
+                        )
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = when (sessionType) {
+                            SessionType.RACE -> "RACE"
+                            SessionType.QUALIFYING -> "QUALI"
+                            SessionType.SPRINT_QUALIFYING -> "SQ"
+                            SessionType.SPRINT -> "SPRINT"
+                            SessionType.PRACTICE -> "FP"
+                        },
+                        fontFamily = michromaFont,
+                        fontSize = 8.sp,
+                        color = Color.White,
+                        letterSpacing = 0.5.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }
@@ -253,166 +194,267 @@ fun LiveScreen(
                     michromaFont = michromaFont
                 )
             }
-            // Show raw table view
-            showRawView && liveDrivers.isNotEmpty() -> {
-                androidx.compose.foundation.lazy.LazyRow(
+            
+            
+            // Loading state - Premium connecting screen
+            !isConnected && connectionError == null -> {
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Black)
-                        .padding(16.dp)
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    Color(0xFF1A0A12),
+                                    Color.Black
+                                ),
+                                radius = 800f
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
                 ) {
-                    item {
-                        androidx.compose.foundation.text.selection.SelectionContainer {
-                            Column {
-                                // Header
-                                Text(
-                                    text = "═══════════════════════════════════════════════════════════════════════════════════",
-                                    fontFamily = FontFamily.Monospace,
-                                    fontSize = 10.sp,
-                                    color = Color(0xFF00FF41),
-                                    modifier = Modifier.padding(bottom = 4.dp)
-                                )
-                                Text(
-                                    text = String.format("%-5s %-20s %-20s %-15s %-10s %-6s", 
-                                        "POS", "DRIVER", "TEAM", "TIME", "GAP", "PITS"),
-                                    fontFamily = FontFamily.Monospace,
-                                    fontSize = 10.sp,
-                                    color = Color(0xFF00FF41),
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    text = "───────────────────────────────────────────────────────────────────────────────────",
-                                    fontFamily = FontFamily.Monospace,
-                                    fontSize = 10.sp,
-                                    color = Color(0xFF00FF41),
-                                    modifier = Modifier.padding(bottom = 8.dp)
-                                )
-                                
-                                // Drivers
-                                liveDrivers.forEachIndexed { index, driver ->
-                                    val driverName = "${driver.firstName ?: ""} ${driver.lastName ?: ""}".trim().take(20)
-                                    val team = (driver.externalTeam ?: "").take(20)
-                                    val time = (driver.raceTime ?: " ").take(15)
-                                    val gap = calculateGapToCarAhead(liveDrivers, index).take(10)
-                                    
-                                    Text(
-                                        text = String.format("%-5s %-20s %-20s %-15s %-10s %-6s",
-                                            driver.positionDisplay ?: "-",
-                                            driverName,
-                                            team,
-                                            time,
-                                            gap,
-                                            driver.pits ?: "0"
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(24.dp)
+                    ) {
+                        // Animated pulsing ring
+                        val infiniteTransition = rememberInfiniteTransition(label = "connecting")
+                        val pulseScale by infiniteTransition.animateFloat(
+                            initialValue = 0.9f,
+                            targetValue = 1.1f,
+                            animationSpec = infiniteRepeatable(
+                                animation = tween(1000, easing = FastOutSlowInEasing),
+                                repeatMode = RepeatMode.Reverse
+                            ),
+                            label = "scale"
+                        )
+                        val pulseAlpha by infiniteTransition.animateFloat(
+                            initialValue = 0.3f,
+                            targetValue = 0.8f,
+                            animationSpec = infiniteRepeatable(
+                                animation = tween(1000, easing = FastOutSlowInEasing),
+                                repeatMode = RepeatMode.Reverse
+                            ),
+                            label = "alpha"
+                        )
+                        
+                        Box(
+                            modifier = Modifier.size(80.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            // Outer pulsing ring
+                            Box(
+                                modifier = Modifier
+                                    .size((70 * pulseScale).dp)
+                                    .border(
+                                        width = 2.dp,
+                                        brush = Brush.sweepGradient(
+                                            listOf(
+                                                Color(0xFFE6007E).copy(alpha = pulseAlpha),
+                                                Color(0xFFE6007E).copy(alpha = 0.1f),
+                                                Color(0xFFE6007E).copy(alpha = pulseAlpha)
+                                            )
                                         ),
-                                        fontFamily = FontFamily.Monospace,
-                                        fontSize = 10.sp,
-                                        color = Color(0xFF00FF41),
-                                        modifier = Modifier.padding(vertical = 2.dp)
+                                        shape = RoundedCornerShape(35.dp)
                                     )
-                                }
-                            }
+                            )
+                            // Inner progress
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(40.dp),
+                                color = Color(0xFFE6007E),
+                                strokeWidth = 2.dp
+                            )
+                        }
+                        
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "CONNECTING",
+                                fontFamily = brigendsFont,
+                                fontSize = 14.sp,
+                                color = Color.White,
+                                letterSpacing = 3.sp
+                            )
+                            Text(
+                                text = "Establishing live timing connection",
+                                fontFamily = michromaFont,
+                                fontSize = 10.sp,
+                                color = Color.White.copy(alpha = 0.5f),
+                                letterSpacing = 0.5.sp
+                            )
                         }
                     }
                 }
             }
             
-            
-            // Loading state
-            !isConnected && connectionError == null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(32.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(40.dp),
-                            color = Color(0xFFE6007E),
-                            strokeWidth = 3.dp
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "CONNECTING",
-                            fontFamily = brigendsFont,
-                            fontSize = 12.sp,
-                            color = Color.White,
-                            letterSpacing = 1.sp
-                        )
-                    }
-                }
-            }
-            
-            // Error state
+            // Error state - Premium error screen
             connectionError != null && liveDrivers.isEmpty() -> {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(32.dp),
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    Color(0xFF1A0808),
+                                    Color.Black
+                                ),
+                                radius = 800f
+                            )
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.WifiOff,
-                            contentDescription = "Error",
-                            tint = Color(0xFFFF0080),
-                            modifier = Modifier.size(32.dp)
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        Text(
-                            text = "Connection Error",
-                            fontFamily = brigendsFont,
-                            fontSize = 12.sp,
-                            color = Color.White,
-                            letterSpacing = 1.sp
-                        )
+                        Box(
+                            modifier = Modifier
+                                .size(64.dp)
+                                .background(
+                                    Color(0xFFFF0040).copy(alpha = 0.1f),
+                                    RoundedCornerShape(32.dp)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.WifiOff,
+                                contentDescription = "Error",
+                                tint = Color(0xFFFF0040),
+                                modifier = Modifier.size(28.dp)
+                            )
+                        }
+                        
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "CONNECTION FAILED",
+                                fontFamily = brigendsFont,
+                                fontSize = 14.sp,
+                                color = Color.White,
+                                letterSpacing = 2.sp
+                            )
+                            Text(
+                                text = "Unable to connect to live timing",
+                                fontFamily = michromaFont,
+                                fontSize = 10.sp,
+                                color = Color.White.copy(alpha = 0.5f),
+                                letterSpacing = 0.5.sp
+                            )
+                        }
+                        
+                        Spacer(modifier = Modifier.height(8.dp))
+                        
+                        // Retry button
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    Brush.horizontalGradient(
+                                        listOf(
+                                            Color(0xFFE6007E),
+                                            Color(0xFFFF0080)
+                                        )
+                                    ),
+                                    RoundedCornerShape(6.dp)
+                                )
+                                .clickable { liveClient.connect() }
+                                .padding(horizontal = 24.dp, vertical = 10.dp)
+                        ) {
+                            Text(
+                                text = "RETRY CONNECTION",
+                                fontFamily = michromaFont,
+                                fontSize = 10.sp,
+                                color = Color.White,
+                                letterSpacing = 1.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }
             
-            // No data but connected - with countdown
+            // No data but connected - with countdown - Premium waiting screen
             liveDrivers.isEmpty() && isConnected -> {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(32.dp),
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    Color(0xFF151008),
+                                    Color.Black
+                                ),
+                                radius = 800f
+                            )
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
-                        // Animated waiting circle
+                        // Animated countdown with ring
+                        val infiniteTransition = rememberInfiniteTransition(label = "waiting")
+                        val rotation by infiniteTransition.animateFloat(
+                            initialValue = 0f,
+                            targetValue = 360f,
+                            animationSpec = infiniteRepeatable(
+                                animation = tween(3000, easing = LinearEasing)
+                            ),
+                            label = "rotation"
+                        )
+                        
                         Box(
-                            modifier = Modifier.size(60.dp),
+                            modifier = Modifier.size(80.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(60.dp),
-                                color = Color(0xFFFFAA00).copy(alpha = 0.3f),
-                                strokeWidth = 2.dp
+                            // Rotating accent ring
+                            Box(
+                                modifier = Modifier
+                                    .size(75.dp)
+                                    .border(
+                                        width = 2.dp,
+                                        brush = Brush.sweepGradient(
+                                            0f to Color(0xFFFFAA00).copy(alpha = 0.6f),
+                                            0.5f to Color.Transparent,
+                                            1f to Color(0xFFFFAA00).copy(alpha = 0.6f)
+                                        ),
+                                        shape = RoundedCornerShape(37.5.dp)
+                                    )
+                                    .graphicsLayer { rotationZ = rotation }
                             )
+                            // Countdown number
                             Text(
-                                text = "$countdown",
+                                text = if (countdown > 0) "$countdown" else "...",
                                 fontFamily = michromaFont,
-                                fontSize = 18.sp,
+                                fontSize = 22.sp,
                                 color = Color(0xFFFFAA00),
                                 letterSpacing = 1.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                         
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "AWAITING DATA",
-                            fontFamily = brigendsFont,
-                            fontSize = 12.sp,
-                            color = Color.White,
-                            letterSpacing = 1.sp
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "AWAITING DATA",
+                                fontFamily = brigendsFont,
+                                fontSize = 14.sp,
+                                color = Color.White,
+                                letterSpacing = 3.sp
+                            )
+                            Text(
+                                text = "Session data will appear shortly",
+                                fontFamily = michromaFont,
+                                fontSize = 10.sp,
+                                color = Color.White.copy(alpha = 0.5f),
+                                letterSpacing = 0.5.sp
+                            )
+                        }
                     }
                 }
             }
@@ -420,59 +462,10 @@ fun LiveScreen(
             // Show live data
             else -> {
                 Column {
-                    // Column Headers
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.Black)
-                            .padding(horizontal = 12.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "POS",
-                            fontFamily = michromaFont,
-                            fontSize = 9.sp,
-                            color = Color.White.copy(alpha = 0.4f),
-                            letterSpacing = 0.5.sp,
-                            modifier = Modifier.width(32.dp),
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.width(2.dp))
-                        Text(
-                            text = "DRIVER",
-                            fontFamily = michromaFont,
-                            fontSize = 9.sp,
-                            color = Color.White.copy(alpha = 0.4f),
-                            letterSpacing = 0.5.sp,
-                            modifier = Modifier.width(52.dp),
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1,
-                            overflow = androidx.compose.ui.text.style.TextOverflow.Visible
-                        )
-                        Text(
-                            text = "GAP",
-                            fontFamily = michromaFont,
-                            fontSize = 9.sp,
-                            color = Color.White.copy(alpha = 0.4f),
-                            letterSpacing = 0.5.sp,
-                            modifier = Modifier.weight(1f),
-                            textAlign = androidx.compose.ui.text.style.TextAlign.End,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = "PIT",
-                            fontFamily = michromaFont,
-                            fontSize = 9.sp,
-                            color = Color.White.copy(alpha = 0.4f),
-                            letterSpacing = 0.5.sp,
-                            modifier = Modifier.width(24.dp),
-                            textAlign = androidx.compose.ui.text.style.TextAlign.End,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                    // Session-specific column headers
+                    SessionHeader(sessionType = sessionType, michromaFont = michromaFont)
                     
-                    // Driver List
+                    // Driver List with session-specific rows
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
@@ -480,11 +473,31 @@ fun LiveScreen(
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         itemsIndexed(liveDrivers) { index, driver ->
-                            LiveDriverRow(
-                                driver = driver,
-                                gapToAhead = calculateGapToCarAhead(liveDrivers, index),
-                                michromaFont = michromaFont
-                            )
+                            when (sessionType) {
+                                SessionType.RACE, SessionType.SPRINT -> {
+                                    RaceDriverRow(
+                                        driver = driver,
+                                        index = index,
+                                        drivers = liveDrivers,
+                                        michromaFont = michromaFont
+                                    )
+                                }
+                                SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> {
+                                    QualiDriverRow(
+                                        driver = driver,
+                                        isKnockoutZone = index >= 15, // Positions 16-20
+                                        michromaFont = michromaFont
+                                    )
+                                }
+                                SessionType.PRACTICE -> {
+                                    PracticeDriverRow(
+                                        driver = driver,
+                                        index = index,
+                                        drivers = liveDrivers,
+                                        michromaFont = michromaFont
+                                    )
+                                }
+                            }
                         }
                         
                         // Bottom spacer
@@ -495,6 +508,600 @@ fun LiveScreen(
                 }
             }
         }
+    }
+}
+
+// Session Type Enum
+enum class SessionType {
+    RACE, SPRINT, QUALIFYING, SPRINT_QUALIFYING, PRACTICE
+}
+
+// Session-specific column header
+@Composable
+private fun SessionHeader(
+    sessionType: SessionType,
+    michromaFont: FontFamily
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Black)
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Position column - always present
+        Text(
+            text = "P",
+            fontFamily = michromaFont,
+            fontSize = 8.sp,
+            color = Color.White.copy(alpha = 0.4f),
+            modifier = Modifier.width(24.dp),
+            fontWeight = FontWeight.Bold
+        )
+        
+        // Driver column - always present
+        Text(
+            text = "DRIVER",
+            fontFamily = michromaFont,
+            fontSize = 8.sp,
+            color = Color.White.copy(alpha = 0.4f),
+            modifier = Modifier.width(44.dp),
+            fontWeight = FontWeight.Bold
+        )
+        
+        when (sessionType) {
+            SessionType.RACE, SessionType.SPRINT -> {
+                // Tyre
+                Text(
+                    text = "TYRE",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.width(36.dp),
+                    fontWeight = FontWeight.Bold
+                )
+                // Interval
+                Text(
+                    text = "INT",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.weight(1f),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                    fontWeight = FontWeight.Bold
+                )
+                // Pits
+                Text(
+                    text = "PIT",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.width(24.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> {
+                // Sectors
+                Text(
+                    text = "S1",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.width(36.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "S2",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.width(36.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "S3",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.width(36.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
+                // Best Lap
+                Text(
+                    text = "BEST",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.weight(1f),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                    fontWeight = FontWeight.Bold
+                )
+                // Gap
+                Text(
+                    text = "GAP",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.width(48.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            SessionType.PRACTICE -> {
+                // Best Lap
+                Text(
+                    text = "BEST",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.weight(1f),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
+                // Gap
+                Text(
+                    text = "GAP",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.weight(1f),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                    fontWeight = FontWeight.Bold
+                )
+                // Laps
+                Text(
+                    text = "LAPS",
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = Color.White.copy(alpha = 0.4f),
+                    modifier = Modifier.width(32.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+// Get tyre color based on compound
+private fun getTyreColor(compound: String?): Color {
+    return when (compound?.uppercase()) {
+        "SOFT" -> Color(0xFFFF0000)        // Red
+        "MEDIUM" -> Color(0xFFFFD700)      // Yellow
+        "HARD" -> Color(0xFFFFFFFF)        // White
+        "INTERMEDIATE" -> Color(0xFF00FF00) // Green
+        "WET" -> Color(0xFF0080FF)         // Blue
+        else -> Color(0xFF888888)          // Unknown - Gray
+    }
+}
+
+// Get team color for a driver
+private fun getTeamColor(teamName: String?): Color {
+    return when {
+        teamName?.contains("Red Bull", ignoreCase = true) == true -> Color(0xFF3671C6)
+        teamName?.contains("Ferrari", ignoreCase = true) == true -> Color(0xFFE8002D)
+        teamName?.contains("Mercedes", ignoreCase = true) == true -> Color(0xFF27F4D2)
+        teamName?.contains("McLaren", ignoreCase = true) == true -> Color(0xFFFF8000)
+        teamName?.contains("Aston Martin", ignoreCase = true) == true -> Color(0xFF229971)
+        teamName?.contains("Alpine", ignoreCase = true) == true -> Color(0xFFFF87BC)
+        teamName?.contains("Williams", ignoreCase = true) == true -> Color(0xFF64C4FF)
+        teamName?.contains("RB", ignoreCase = true) == true -> Color(0xFF6692FF)
+        teamName?.contains("Kick Sauber", ignoreCase = true) == true -> Color(0xFF52E252)
+        teamName?.contains("Haas", ignoreCase = true) == true -> Color(0xFFB6BABD)
+        else -> Color(0xFF888888)
+    }
+}
+
+// RACE / SPRINT Driver Row
+@Composable
+private fun RaceDriverRow(
+    driver: LiveDriver,
+    index: Int,
+    drivers: List<LiveDriver>,
+    michromaFont: FontFamily
+) {
+    val driverCode = generateDriverCode(driver.firstName, driver.lastName)
+    val teamColor = getTeamColor(driver.externalTeam)
+    val tyreColor = getTyreColor(driver.tyreCompound)
+    val gapToAhead = calculateGapToCarAhead(drivers, index)
+    
+    // Position accent colors
+    val positionColor = when (driver.positionDisplay?.toIntOrNull()) {
+        1 -> Color(0xFFFFD700)  // Gold
+        2 -> Color(0xFFC0C0C0)  // Silver
+        3 -> Color(0xFFCD7F32)  // Bronze
+        else -> Color(0xFFE6007E) // Hot Pink
+    }
+    
+    // Status indicator
+    val statusColor = when (driver.status) {
+        1 -> Color(0xFFFFAA00)  // In pit
+        2 -> Color(0xFFFF0040)  // Retired
+        3 -> Color(0xFFFF0040)  // Stopped
+        else -> null
+    }
+    
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        if (statusColor != null) statusColor.copy(alpha = 0.1f) else Color(0xFF161616),
+                        Color(0xFF121212)
+                    )
+                ),
+                RoundedCornerShape(6.dp)
+            )
+            .border(
+                width = 1.dp,
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        teamColor.copy(alpha = 0.3f),
+                        Color.White.copy(alpha = 0.05f)
+                    )
+                ),
+                shape = RoundedCornerShape(6.dp)
+            )
+            .padding(horizontal = 6.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Position
+        Row(
+            modifier = Modifier.width(24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(2.dp)
+                    .height(14.dp)
+                    .background(positionColor.copy(alpha = 0.8f), RoundedCornerShape(1.dp))
+            )
+            Spacer(modifier = Modifier.width(3.dp))
+            Text(
+                text = driver.positionDisplay ?: "-",
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        
+        // Driver code with team color
+        Row(
+            modifier = Modifier.width(44.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(3.dp)
+                    .height(20.dp)
+                    .background(teamColor, RoundedCornerShape(1.5.dp))
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = driverCode,
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        
+        // Tyre indicator (colored dot + age)
+        Row(
+            modifier = Modifier.width(36.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(10.dp)
+                    .background(tyreColor, RoundedCornerShape(5.dp))
+            )
+            Spacer(modifier = Modifier.width(3.dp))
+            Text(
+                text = driver.tyreAge?.toString() ?: "-",
+                fontFamily = michromaFont,
+                fontSize = 9.sp,
+                color = Color.White.copy(alpha = 0.7f)
+            )
+        }
+        
+        // Interval/Gap
+        Text(
+            text = gapToAhead,
+            fontFamily = michromaFont,
+            fontSize = 10.sp,
+            color = if (index == 0) Color(0xFFFFD700) else Color.White.copy(alpha = 0.9f),
+            modifier = Modifier.weight(1f),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+            fontWeight = if (index == 0) FontWeight.Bold else FontWeight.Normal
+        )
+        
+        // Pit stops
+        Text(
+            text = driver.pits ?: "0",
+            fontFamily = michromaFont,
+            fontSize = 10.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            modifier = Modifier.width(24.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End
+        )
+    }
+}
+
+// QUALIFYING / SPRINT QUALIFYING Driver Row
+@Composable
+private fun QualiDriverRow(
+    driver: LiveDriver,
+    isKnockoutZone: Boolean,
+    michromaFont: FontFamily
+) {
+    val driverCode = generateDriverCode(driver.firstName, driver.lastName)
+    val teamColor = getTeamColor(driver.externalTeam)
+    
+    // Position accent colors
+    val positionColor = when (driver.positionDisplay?.toIntOrNull()) {
+        1 -> Color(0xFFFFD700)  // Gold
+        2 -> Color(0xFFC0C0C0)  // Silver
+        3 -> Color(0xFFCD7F32)  // Bronze
+        else -> Color(0xFFE6007E) // Hot Pink
+    }
+    
+    // Sector colors: 0=white, 1=green (personal), 2=purple (overall)
+    val sectorColors = driver.sectorColors.map { colorCode ->
+        when (colorCode) {
+            2 -> Color(0xFFAA00FF)  // Purple - overall fastest
+            1 -> Color(0xFF00FF00)  // Green - personal best
+            else -> Color.White.copy(alpha = 0.8f)  // White - normal
+        }
+    }
+    
+    // Background color for knockout zone
+    val bgColor = if (isKnockoutZone) Color(0xFFFF0040).copy(alpha = 0.1f) else Color(0xFF161616)
+    
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(bgColor, Color(0xFF121212))
+                ),
+                RoundedCornerShape(6.dp)
+            )
+            .border(
+                width = 1.dp,
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        if (isKnockoutZone) Color(0xFFFF0040).copy(alpha = 0.3f) else teamColor.copy(alpha = 0.3f),
+                        Color.White.copy(alpha = 0.05f)
+                    )
+                ),
+                shape = RoundedCornerShape(6.dp)
+            )
+            .padding(horizontal = 6.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Position
+        Row(
+            modifier = Modifier.width(24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(2.dp)
+                    .height(14.dp)
+                    .background(positionColor.copy(alpha = 0.8f), RoundedCornerShape(1.dp))
+            )
+            Spacer(modifier = Modifier.width(3.dp))
+            Text(
+                text = driver.positionDisplay ?: "-",
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        
+        // Driver code with team color
+        Row(
+            modifier = Modifier.width(44.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(3.dp)
+                    .height(20.dp)
+                    .background(teamColor, RoundedCornerShape(1.5.dp))
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = driverCode,
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        
+        // Sector 1
+        Text(
+            text = driver.sectors.getOrNull(0) ?: "-",
+            fontFamily = michromaFont,
+            fontSize = 9.sp,
+            color = sectorColors.getOrNull(0) ?: Color.White.copy(alpha = 0.7f),
+            modifier = Modifier.width(36.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            fontWeight = if ((driver.sectorColors.getOrNull(0) ?: 0) > 0) FontWeight.Bold else FontWeight.Normal
+        )
+        
+        // Sector 2
+        Text(
+            text = driver.sectors.getOrNull(1) ?: "-",
+            fontFamily = michromaFont,
+            fontSize = 9.sp,
+            color = sectorColors.getOrNull(1) ?: Color.White.copy(alpha = 0.7f),
+            modifier = Modifier.width(36.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            fontWeight = if ((driver.sectorColors.getOrNull(1) ?: 0) > 0) FontWeight.Bold else FontWeight.Normal
+        )
+        
+        // Sector 3
+        Text(
+            text = driver.sectors.getOrNull(2) ?: "-",
+            fontFamily = michromaFont,
+            fontSize = 9.sp,
+            color = sectorColors.getOrNull(2) ?: Color.White.copy(alpha = 0.7f),
+            modifier = Modifier.width(36.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            fontWeight = if ((driver.sectorColors.getOrNull(2) ?: 0) > 0) FontWeight.Bold else FontWeight.Normal
+        )
+        
+        // Best lap time
+        Text(
+            text = driver.raceTime ?: "-",
+            fontFamily = michromaFont,
+            fontSize = 10.sp,
+            color = Color.White,
+            modifier = Modifier.weight(1f),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+            fontWeight = FontWeight.Bold
+        )
+        
+        // Gap to P1
+        Text(
+            text = driver.gap ?: "-",
+            fontFamily = michromaFont,
+            fontSize = 9.sp,
+            color = if (driver.gap == null || driver.gap == "-") Color(0xFFFFD700) else Color.White.copy(alpha = 0.7f),
+            modifier = Modifier.width(48.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End
+        )
+    }
+}
+
+// PRACTICE Driver Row
+@Composable
+private fun PracticeDriverRow(
+    driver: LiveDriver,
+    index: Int,
+    drivers: List<LiveDriver>,
+    michromaFont: FontFamily
+) {
+    val driverCode = generateDriverCode(driver.firstName, driver.lastName)
+    val teamColor = getTeamColor(driver.externalTeam)
+    
+    // Position accent colors
+    val positionColor = when (driver.positionDisplay?.toIntOrNull()) {
+        1 -> Color(0xFFFFD700)  // Gold
+        2 -> Color(0xFFC0C0C0)  // Silver
+        3 -> Color(0xFFCD7F32)  // Bronze
+        else -> Color(0xFFE6007E) // Hot Pink
+    }
+    
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(Color(0xFF161616), Color(0xFF121212))
+                ),
+                RoundedCornerShape(6.dp)
+            )
+            .border(
+                width = 1.dp,
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        teamColor.copy(alpha = 0.3f),
+                        Color.White.copy(alpha = 0.05f)
+                    )
+                ),
+                shape = RoundedCornerShape(6.dp)
+            )
+            .padding(horizontal = 6.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Position
+        Row(
+            modifier = Modifier.width(24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(2.dp)
+                    .height(14.dp)
+                    .background(positionColor.copy(alpha = 0.8f), RoundedCornerShape(1.dp))
+            )
+            Spacer(modifier = Modifier.width(3.dp))
+            Text(
+                text = driver.positionDisplay ?: "-",
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        
+        // Driver code with team color
+        Row(
+            modifier = Modifier.width(44.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(3.dp)
+                    .height(20.dp)
+                    .background(teamColor, RoundedCornerShape(1.5.dp))
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = driverCode,
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        
+        // Best lap time
+        Text(
+            text = driver.raceTime ?: "-",
+            fontFamily = michromaFont,
+            fontSize = 10.sp,
+            color = if (index == 0) Color(0xFFAA00FF) else Color.White,
+            modifier = Modifier.weight(1f),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            fontWeight = if (index == 0) FontWeight.Bold else FontWeight.Normal
+        )
+        
+        // Gap
+        Text(
+            text = driver.gap ?: "-",
+            fontFamily = michromaFont,
+            fontSize = 10.sp,
+            color = if (index == 0) Color(0xFFFFD700) else Color.White.copy(alpha = 0.7f),
+            modifier = Modifier.weight(1f),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End
+        )
+        
+        // Laps completed
+        Text(
+            text = driver.laps ?: "-",
+            fontFamily = michromaFont,
+            fontSize = 10.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            modifier = Modifier.width(32.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End
+        )
     }
 }
 
