@@ -72,12 +72,19 @@ fun SessionResultsScreen(
         "qualifying" to "Qualifying",
         "sprint" to "Sprint",
         "sprint qualifying" to "Sprint Qualifying",
+        "sprint shootout" to "Sprint Qualifying",
         "fp1" to "FP1",
         "fp2" to "FP2",
         "fp3" to "FP3",
         "free practice 1" to "FP1",
         "free practice 2" to "FP2",
-        "free practice 3" to "FP3"
+        "free practice 3" to "FP3",
+        "practice 1" to "FP1",
+        "practice 2" to "FP2",
+        "practice 3" to "FP3",
+        "1st practice" to "FP1",
+        "2nd practice" to "FP2",
+        "3rd practice" to "FP3"
     )
     val targetSessionType = sessionTypeMapping[sessionResult.sessionName.lowercase()] ?: sessionResult.sessionName
     
