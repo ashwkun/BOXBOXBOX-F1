@@ -580,7 +580,7 @@ fun SocialFeatureBlock(
                         fontSize = 11.sp,
                         color = Color.White,
                         maxLines = 6,
-                        lineHeight = 16.sp,
+                        lineHeight = 13.sp,
                         overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                    )
                    Spacer(modifier = Modifier.height(8.dp))
