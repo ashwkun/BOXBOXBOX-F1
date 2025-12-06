@@ -153,11 +153,19 @@ fun HomeScreen(
             val now = java.time.Instant.now()
             fun getScore(post: com.f1tracker.data.models.InstagramPost): Double {
                 val likes = post.like_count.toDouble()
+                val comments = post.comments_count.toDouble()
+                val engagement = likes + (comments * 3)
                 val hours = try {
                      val instant = java.time.Instant.parse(post.timestamp)
                      java.time.Duration.between(instant, now).toHours().toDouble()
                 } catch (e: Exception) { 100.0 }
-                return likes / Math.pow(hours + 2.0, 1.5)
+                var score = engagement / Math.pow(hours + 2.0, 1.5)
+                
+                // Debuff F1 official account (0.5x - less penalty than feed)
+                if (post.author == "f1") {
+                    score *= 0.5
+                }
+                return score
             }
 
             val sorted = instagramPosts.sortedByDescending { getScore(it) }
