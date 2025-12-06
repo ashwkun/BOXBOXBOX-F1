@@ -194,6 +194,15 @@ fun RaceDetailScreen(
             contentPadding = PaddingValues(bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
+            // Determine if race is completed (for section ordering)
+            val isRaceCompleted = try {
+                val nowUTC = LocalDateTime.now(java.time.ZoneId.of("UTC"))
+                val raceDateTime = LocalDateTime.parse("${race.date}T${race.time}", DateTimeFormatter.ISO_DATE_TIME)
+                raceDateTime.isBefore(nowUTC)
+            } catch (e: Exception) {
+                false
+            }
+            
             // Race Header (Circuit Image + Info)
             item {
                 RaceHeaderSection(
@@ -204,9 +213,11 @@ fun RaceDetailScreen(
                 )
             }
             
-            // Schedule Section
-            item {
-                ScheduleSection(race, michromaFont, brigendsFont)
+            // Schedule Section - at top for upcoming races
+            if (!isRaceCompleted) {
+                item {
+                    ScheduleSection(race, michromaFont, brigendsFont)
+                }
             }
             
             // Highlights Section
@@ -225,7 +236,7 @@ fun RaceDetailScreen(
                 }
             }
             
-            // Last Year's Results (Podium + Full List)
+            // Results Section (shows for both completed and upcoming with last year's data)
             if ((lastYearResults != null && lastYearResults?.results?.isNotEmpty() == true) || hasSprintResults) {
                 item {
                     Column(
@@ -241,15 +252,6 @@ fun RaceDetailScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp),
                             horizontalAlignment = Alignment.Start
                         ) {
-                            // Determine header text based on race completion status
-                            val isRaceCompleted = try {
-                                val nowUTC = LocalDateTime.now(java.time.ZoneId.of("UTC"))
-                                val raceDateTime = LocalDateTime.parse("${race.date}T${race.time}", DateTimeFormatter.ISO_DATE_TIME)
-                                raceDateTime.isBefore(nowUTC)
-                            } catch (e: Exception) {
-                                false
-                            }
-                            
                             Text(
                                 text = if (isRaceCompleted) "RESULTS" else "LAST YEAR'S RESULTS",
                                 fontFamily = brigendsFont,
@@ -339,6 +341,13 @@ fun RaceDetailScreen(
                             }
                         }
                     }
+                }
+            }
+            
+            // Schedule Section - at bottom for completed races
+            if (isRaceCompleted) {
+                item {
+                    ScheduleSection(race, michromaFont, brigendsFont)
                 }
             }
         }
