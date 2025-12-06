@@ -62,13 +62,31 @@ fun SessionResultsScreen(
     val allHighlights by viewModel.raceHighlights.collectAsState()
     var selectedVideoId by remember { mutableStateOf<String?>(null) }
     
-    // Filter highlights for this race + current year
+    // Filter highlights for this race + current year + matching session type
     val currentYear = java.time.Year.now().value.toString()
     val raceNameNormalized = raceName.lowercase().replace("grand prix", "").trim()
-    val sessionHighlights = remember(allHighlights, raceName) {
-        allHighlights.filter { highlight ->
+    
+    // Map SessionResult session name to highlight sessionType
+    val sessionTypeMapping = mapOf(
+        "race" to "Race",
+        "qualifying" to "Qualifying",
+        "sprint" to "Sprint",
+        "sprint qualifying" to "Sprint Qualifying",
+        "fp1" to "FP1",
+        "fp2" to "FP2",
+        "fp3" to "FP3",
+        "free practice 1" to "FP1",
+        "free practice 2" to "FP2",
+        "free practice 3" to "FP3"
+    )
+    val targetSessionType = sessionTypeMapping[sessionResult.sessionName.lowercase()] ?: sessionResult.sessionName
+    
+    val sessionHighlight = remember(allHighlights, raceName, sessionResult.sessionName) {
+        allHighlights.find { highlight ->
             val highlightRaceNormalized = highlight.raceName.lowercase().trim()
-            highlight.year == currentYear && highlightRaceNormalized.contains(raceNameNormalized)
+            highlight.year == currentYear && 
+                highlightRaceNormalized.contains(raceNameNormalized) &&
+                highlight.sessionType.equals(targetSessionType, ignoreCase = true)
         }
     }
     
@@ -178,6 +196,18 @@ fun SessionResultsScreen(
             contentPadding = PaddingValues(bottom = 24.dp, start = 20.dp, end = 20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // Highlight for this session (shown at top if available)
+            if (sessionHighlight != null) {
+                item {
+                    SessionHighlightCard(
+                        highlight = sessionHighlight,
+                        michromaFont = michromaFont,
+                        onClick = { selectedVideoId = sessionHighlight.id },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+            
             // Podium Section (Top 3)
             if (sessionResult.results.isNotEmpty()) {
                 item {
@@ -212,39 +242,6 @@ fun SessionResultsScreen(
                                         michromaFont = michromaFont
                                     )
                                 }
-                            }
-                        }
-                    }
-                }
-            }
-            // Highlights Section
-            if (sessionHighlights.isNotEmpty()) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp)
-                    ) {
-                        Text(
-                            text = "HIGHLIGHTS",
-                            fontFamily = brigendsFont,
-                            fontSize = 14.sp,
-                            color = Color.White.copy(alpha = 0.8f),
-                            letterSpacing = 2.sp,
-                            modifier = Modifier.padding(bottom = 12.dp)
-                        )
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .horizontalScroll(rememberScrollState()),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            sessionHighlights.forEach { highlight ->
-                                SessionHighlightCard(
-                                    highlight = highlight,
-                                    michromaFont = michromaFont,
-                                    onClick = { selectedVideoId = highlight.id }
-                                )
                             }
                         }
                     }
@@ -498,11 +495,11 @@ private fun DriverResultRow(
 private fun SessionHighlightCard(
     highlight: HighlightVideo,
     michromaFont: FontFamily,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier.width(240.dp)
 ) {
     Card(
-        modifier = Modifier
-            .width(240.dp)
+        modifier = modifier
             .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF111111)),
@@ -512,7 +509,7 @@ private fun SessionHighlightCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(135.dp)
+                    .height(180.dp)
             ) {
                 AsyncImage(
                     model = highlight.thumbnail,
