@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -53,6 +54,8 @@ import androidx.compose.ui.platform.LocalContext
 import com.f1tracker.data.models.HighlightVideo
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 
 @Composable
 
@@ -137,6 +140,41 @@ fun RaceDetailScreen(
     // Race Highlights
     val raceHighlights by viewModel.raceHighlights.collectAsState()
     val context = LocalContext.current
+    
+    // YouTube Player State
+    var selectedVideoId by remember { mutableStateOf<String?>(null) }
+    
+    // In-app YouTube Player Dialog
+    if (selectedVideoId != null) {
+        Dialog(
+            onDismissRequest = { selectedVideoId = null },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+            ) {
+                YouTubePlayerScreen(videoId = selectedVideoId!!)
+                
+                // Close button
+                IconButton(
+                    onClick = { selectedVideoId = null },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
+                        .size(40.dp)
+                        .background(Color.Black.copy(alpha = 0.6f), CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Close",
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -179,8 +217,9 @@ fun RaceDetailScreen(
                         michromaFont = michromaFont,
                         brigendsFont = brigendsFont,
                         onHighlightClick = { highlight ->
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(highlight.url))
-                            context.startActivity(intent)
+                            // Extract video ID from URL
+                            val videoId = highlight.id
+                            selectedVideoId = videoId
                         }
                     )
                 }
