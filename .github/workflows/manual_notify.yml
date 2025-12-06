@@ -1,0 +1,64 @@
+name: 🚀 Manual Notification
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: 'Notification Title'
+        required: true
+        default: 'F1 Update'
+      body:
+        description: 'Notification Body'
+        required: true
+        default: 'Check out the latest news!'
+      channel:
+        description: 'Channel (Sound)'
+        required: true
+        default: 'f1_major'
+        type: choice
+        options:
+        - f1_major
+        - f1_nuclear
+        - f1_digest
+        - f1_app_updates
+      image_url:
+        description: 'Image URL (Optional)'
+        required: false
+      target_tab:
+        description: 'Target Tab'
+        required: true
+        default: 'news'
+        type: choice
+        options:
+        - news
+        - live
+        - standings
+        - calendar
+
+jobs:
+  send-notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install firebase-admin
+
+      - name: Send Notification
+        env:
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+        run: |
+          python .github/scripts/manual_dispatch.py \
+            --title "${{ inputs.title }}" \
+            --body "${{ inputs.body }}" \
+            --channel "${{ inputs.channel }}" \
+            --image_url "${{ inputs.image_url }}" \
+            --target_tab "${{ inputs.target_tab }}"

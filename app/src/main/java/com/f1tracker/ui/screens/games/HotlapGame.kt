@@ -1,6 +1,8 @@
 package com.f1tracker.ui.screens.games
 
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.SoundPool
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -69,10 +71,52 @@ fun HotlapGame(
     
     val prefs = remember { context.getSharedPreferences("hotlap_game", Context.MODE_PRIVATE) }
     
+    // Sound system
+    var soundEnabled by remember { mutableStateOf(prefs.getBoolean("sound_enabled", true)) }
+    var engineSoundEnabled by remember { mutableStateOf(prefs.getBoolean("engine_sound_enabled", true)) }
+    var engineStreamId by remember { mutableIntStateOf(0) }
+    
+    LaunchedEffect(Unit) {
+        android.util.Log.d("HotlapGame", "Sound enabled: $soundEnabled, Engine enabled: $engineSoundEnabled")
+    }
+    val soundPool = remember {
+        SoundPool.Builder()
+            .setMaxStreams(8)  // Increased for engine loop
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build()
+            )
+            .build()
+    }
+    val soundIds = remember {
+        mapOf(
+            "countdown" to soundPool.load(context, R.raw.beep_countdown, 1),
+            "go" to soundPool.load(context, R.raw.beep_go, 1),
+            "sector_wr" to soundPool.load(context, R.raw.sector_wr, 1),
+            "sector_pb" to soundPool.load(context, R.raw.sector_pb, 1),
+            "sector_slow" to soundPool.load(context, R.raw.sector_slow, 1),
+            "dnf" to soundPool.load(context, R.raw.sound_dnf, 1),
+            "finish" to soundPool.load(context, R.raw.finish_normal, 1),
+            "finish_pb" to soundPool.load(context, R.raw.finish_pb, 1),
+            "finish_wr" to soundPool.load(context, R.raw.finish_wr, 1),
+            "engine" to soundPool.load(context, R.raw.loop_5, 1),
+            "screech" to soundPool.load(context, R.raw.screech_loop, 1)
+        )
+    }
+    
+    fun playSound(name: String) {
+        if (soundEnabled) {
+            soundIds[name]?.let { soundPool.play(it, 1f, 1f, 0, 0, 1f) }
+        }
+    }
+    
     // Firebase Database reference
     val database = remember { FirebaseDatabase.getInstance() }
     val leaderboardRef = remember { database.getReference("hotlap/leaderboard") }
     val ghostsRef = remember { database.getReference("hotlap/ghosts") }
+    val sectorTimesRef = remember { database.getReference("hotlap/sector_times") }
     
     // Current track ID for storage keys
     val trackId = "masters-circuit"
@@ -83,13 +127,36 @@ fun HotlapGame(
         if (playerName.isEmpty()) HotlapState.NAME_ENTRY else HotlapState.READY
     ) }
     var countdownValue by remember { mutableIntStateOf(3) }
+    var startTime by remember { mutableLongStateOf(0L) }
     var lapTimeMs by remember { mutableLongStateOf(0L) }
     var bestLapTimeMs by remember { mutableLongStateOf(prefs.getLong("best_time_$trackId", Long.MAX_VALUE)) }
+    var isNewPB by remember { mutableStateOf(false) }  // Track if last finish was a PB
+    var isNewWR by remember { mutableStateOf(false) }  // Track if last finish was a WR
+    
+    // Sector timing state (3 sectors: 0-33%, 33-66%, 66-100%)
+    var currentSector by remember { mutableIntStateOf(0) }  // Current sector (0, 1, 2)
+    var lastSectorTime by remember { mutableLongStateOf(0L) }  // Time when entered current sector
+    var sectorTimes by remember { mutableStateOf(listOf(0L, 0L, 0L)) }  // Current lap sector times
+    var bestSectorTimes by remember { mutableStateOf(listOf(
+        prefs.getLong("best_sector_0_$trackId", Long.MAX_VALUE),
+        prefs.getLong("best_sector_1_$trackId", Long.MAX_VALUE),
+        prefs.getLong("best_sector_2_$trackId", Long.MAX_VALUE)
+    )) }  // PB sector times
+    var wrSectorTimes by remember { mutableStateOf(listOf(Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE)) }  // WR sector times
+    // Sector results: -1=pending, 0=yellow(slower), 1=green(PB), 2=purple(WR)
+    var sectorResults by remember { mutableStateOf(listOf(-1, -1, -1)) }
+    // Original WR sector times at lap start (for delta display - these don't get updated mid-lap)
+    var originalWrSectorTimes by remember { mutableStateOf(listOf(Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE)) }
     
     var carPosition by remember { mutableStateOf(Offset.Zero) }
     var carAngle by remember { mutableFloatStateOf(0f) }
     var steerDirection by remember { mutableIntStateOf(0) }
     var carPathIndex by remember { mutableFloatStateOf(0f) }
+    
+    // Steering duration for screech sound
+    var steeringDuration by remember { mutableLongStateOf(0L) }
+    var lastSteerTime by remember { mutableLongStateOf(0L) }
+    var screechStreamId by remember { mutableIntStateOf(0) }
     
     // Ghost data - track specific
     var myGhostEnabled by remember { mutableStateOf(false) }
@@ -102,6 +169,7 @@ fun HotlapGame(
     // Leaderboard state
     var leaderboard by remember { mutableStateOf<List<LeaderboardEntry>>(emptyList()) }
     var showLeaderboard by remember { mutableStateOf(false) }
+    var showSettings by remember { mutableStateOf(false) }  // Settings panel state
     var globalBestTime by remember { mutableLongStateOf(Long.MAX_VALUE) }
     var worldRecordHolder by remember { mutableStateOf("---") }
     var yourRank by remember { mutableIntStateOf(0) }
@@ -109,8 +177,8 @@ fun HotlapGame(
     // Name entry dialog state
     var nameInput by remember { mutableStateOf("") }
     
-    val carSpeed = 0.005f
-    val steerSpeed = 0.06f
+    val carSpeed = 0.30f  // units per second (was 0.005f per frame at 60fps)
+    val steerSpeed = 3.6f  // radians per second (was 0.06f per frame at 60fps)
     val trackWidth = 0.06f
     
     // Fetch leaderboard from Firebase
@@ -163,6 +231,19 @@ fun HotlapGame(
         }
     }
     
+    // Fetch WR sector times from Firebase
+    LaunchedEffect(trackId) {
+        sectorTimesRef.child(trackId).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val s1 = snapshot.child("s1").getValue(Long::class.java) ?: Long.MAX_VALUE
+                val s2 = snapshot.child("s2").getValue(Long::class.java) ?: Long.MAX_VALUE
+                val s3 = snapshot.child("s3").getValue(Long::class.java) ?: Long.MAX_VALUE
+                wrSectorTimes = listOf(s1, s2, s3)
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+    
     LaunchedEffect(Unit) {
         trackData = loadRandomTrack(context)
         trackData?.let {
@@ -177,18 +258,84 @@ fun HotlapGame(
     
     LaunchedEffect(gameState) {
         if (gameState == HotlapState.COUNTDOWN) {
+            showLeaderboard = false  // Auto-close leaderboard when game starts
+            showSettings = false     // Auto-close settings when game starts
             currentLapRecording = mutableListOf()
             currentGhostFrame = 0
             countdownValue = 3
+            playSound("countdown")
             delay(500L)
             countdownValue = 2
+            playSound("countdown")
             delay(500L)
             countdownValue = 1
+            playSound("countdown")
             delay(500L)
+            playSound("go")
             gameState = HotlapState.PLAYING
+            startTime = System.currentTimeMillis() // Set start time when game begins
         }
     }
     
+    // Engine sound loop management
+    LaunchedEffect(gameState, soundEnabled, engineSoundEnabled) {
+        if (gameState == HotlapState.PLAYING && soundEnabled && engineSoundEnabled) {
+            if (engineStreamId == 0) {
+                soundIds["engine"]?.let { id ->
+                    // Increased volume to 100% (1.0f)
+                    engineStreamId = soundPool.play(id, 1.0f, 1.0f, 1, -1, 1.0f)
+                }
+            }
+        } else {
+            if (engineStreamId != 0) {
+                soundPool.stop(engineStreamId)
+                engineStreamId = 0
+            }
+        }
+    }
+    
+    // Tire screech management
+    LaunchedEffect(steerDirection, gameState, soundEnabled) {
+        if (gameState == HotlapState.PLAYING && soundEnabled && steerDirection != 0) {
+            val startSteerTime = System.currentTimeMillis()
+            try {
+                while (true) {
+                    val duration = System.currentTimeMillis() - startSteerTime
+                    // Threshold set to 250ms
+                    if (duration > 250L && screechStreamId == 0) {
+                        soundIds["screech"]?.let { id ->
+                            // Volume 50% (0.5f)
+                            screechStreamId = soundPool.play(id, 0.5f, 0.5f, 1, -1, 1.2f)
+                        }
+                    }
+                    delay(100L)
+                }
+            } finally {
+                // Stop sound when steering stops (coroutine cancelled)
+                if (screechStreamId != 0) {
+                    soundPool.stop(screechStreamId)
+                    screechStreamId = 0
+                }
+            }
+        } else {
+            // Ensure sound is stopped if state changes or steering is 0
+            if (screechStreamId != 0) {
+                soundPool.stop(screechStreamId)
+                screechStreamId = 0
+            }
+        }
+    }
+    
+    // Engine pitch modulation based on speed
+    LaunchedEffect(carSpeed, engineStreamId) {
+        if (engineStreamId != 0) {
+            // Speed ranges roughly 0 to 15.0
+            // Pitch range: 0.8 (idle) to 1.3 (max revs) - reduced range to keep it low
+            val pitch = 0.8f + (carSpeed / 12.0f).coerceIn(0f, 0.5f)
+            soundPool.setRate(engineStreamId, pitch)
+        }
+    }
+
     LaunchedEffect(gameState, trackData) {
         if (gameState == HotlapState.PLAYING && trackData != null) {
             val startTime = System.currentTimeMillis()
@@ -204,16 +351,28 @@ fun HotlapGame(
             }
             carPathIndex = 0f
             
+            // Reset sector data for new lap
+            currentSector = 0
+            lastSectorTime = 0L
+            sectorTimes = listOf(0L, 0L, 0L)
+            sectorResults = listOf(-1, -1, -1)
+            originalWrSectorTimes = wrSectorTimes  // Capture WR times at lap start for delta display
+            
             var hasLeftStart = false
+            
+            var lastFrameTime = System.currentTimeMillis()
             
             while (gameState == HotlapState.PLAYING) {
                 delay(16L)
-                lapTimeMs = System.currentTimeMillis() - startTime
+                val currentTime = System.currentTimeMillis()
+                val deltaTime = (currentTime - lastFrameTime) / 1000f  // seconds
+                lastFrameTime = currentTime
+                lapTimeMs = currentTime - startTime
                 
-                carAngle += steerDirection * steerSpeed
+                carAngle += steerDirection * steerSpeed * deltaTime
                 carPosition = Offset(
-                    carPosition.x + cos(carAngle) * carSpeed,
-                    carPosition.y + sin(carAngle) * carSpeed
+                    carPosition.x + cos(carAngle) * carSpeed * deltaTime,
+                    carPosition.y + sin(carAngle) * carSpeed * deltaTime
                 )
                 
                 // Record ghost frame
@@ -227,9 +386,79 @@ fun HotlapGame(
                     }
                 }
                 
+                // Sector crossing detection (find closest track point to determine progress)
+                var closestPointIndex = 0
+                var closestDistance = Float.MAX_VALUE
+                for (i in track.points.indices) {
+                    val dist = distance(carPosition, track.points[i])
+                    if (dist < closestDistance) {
+                        closestDistance = dist
+                        closestPointIndex = i
+                    }
+                }
+                val trackProgress = closestPointIndex.toFloat() / track.points.size.toFloat()
+                val newSector = when {
+                    trackProgress < 0.33f -> 0
+                    trackProgress < 0.66f -> 1
+                    else -> 2
+                }
+                
+                if (newSector != currentSector && newSector > currentSector) {
+                    // Crossed into a new sector
+                    val completedSector = currentSector
+                    val sectorTime = lapTimeMs - lastSectorTime
+                    
+                    // Update sector times
+                    val newSectorTimes = sectorTimes.toMutableList()
+                    newSectorTimes[completedSector] = sectorTime
+                    sectorTimes = newSectorTimes
+                    
+                    // Determine sector result
+                    val newResults = sectorResults.toMutableList()
+                    val wrTime = wrSectorTimes[completedSector]
+                    val pbTime = bestSectorTimes[completedSector]
+                    val isWRSector = sectorTime < wrTime
+                    newResults[completedSector] = when {
+                        isWRSector -> 2  // Purple - WR
+                        sectorTime < pbTime -> 1  // Green - PB
+                        else -> 0  // Yellow - slower
+                    }
+                    sectorResults = newResults
+                    
+                    // Play sector crossing sound
+                    when (newResults[completedSector]) {
+                        2 -> playSound("sector_wr")
+                        1 -> playSound("sector_pb")
+                        else -> playSound("sector_slow")
+                    }
+                    
+                    // Update best sector times if this was a PB
+                    if (sectorTime < pbTime) {
+                        val newBestSectors = bestSectorTimes.toMutableList()
+                        newBestSectors[completedSector] = sectorTime
+                        bestSectorTimes = newBestSectors
+                        prefs.edit().putLong("best_sector_${completedSector}_$trackId", sectorTime).apply()
+                    }
+                    
+                    // Upload new WR sector time to Firebase
+                    if (isWRSector) {
+                        val sectorKey = "s${completedSector + 1}"
+                        sectorTimesRef.child(trackId).child(sectorKey).setValue(sectorTime)
+                        // Update local WR sector times
+                        val newWrSectors = wrSectorTimes.toMutableList()
+                        newWrSectors[completedSector] = sectorTime
+                        wrSectorTimes = newWrSectors
+                    }
+                    
+                    lastSectorTime = lapTimeMs
+                    currentSector = newSector
+                }
+                
                 val distToTrack = distanceToTrack(carPosition, track.points)
-                if (distToTrack > trackWidth) {
+                // Added 20% tolerance for kerbs/wheels-on-track
+                if (distToTrack > trackWidth * 1.2f) {
                     gameState = HotlapState.DNF
+                    playSound("dnf")
                     break
                 }
                 
@@ -241,7 +470,61 @@ fun HotlapGame(
                 
                 if (hasLeftStart && lapTimeMs > 3000 && distToStart < 0.08f) {
                     gameState = HotlapState.FINISHED
-                    if (lapTimeMs < bestLapTimeMs) {
+                    
+                    // Process sector 3 before finish (it wouldn't trigger normally since we stop at finish line)
+                    if (currentSector == 2) {
+                        val sector3Time = lapTimeMs - lastSectorTime
+                        val newSectorTimes = sectorTimes.toMutableList()
+                        newSectorTimes[2] = sector3Time
+                        sectorTimes = newSectorTimes
+                        
+                        val newResults = sectorResults.toMutableList()
+                        val wrTime = wrSectorTimes[2]
+                        val pbTime = bestSectorTimes[2]
+                        val isWRSector = sector3Time < wrTime
+                        newResults[2] = when {
+                            isWRSector -> 2  // Purple - WR
+                            sector3Time < pbTime -> 1  // Green - PB
+                            else -> 0  // Yellow - slower
+                        }
+                        sectorResults = newResults
+                        
+                        // Play sector 3 crossing sound
+                        when (newResults[2]) {
+                            2 -> playSound("sector_wr")
+                            1 -> playSound("sector_pb")
+                            else -> playSound("sector_slow")
+                        }
+                        
+                        if (sector3Time < pbTime) {
+                            val newBestSectors = bestSectorTimes.toMutableList()
+                            newBestSectors[2] = sector3Time
+                            bestSectorTimes = newBestSectors
+                            prefs.edit().putLong("best_sector_2_$trackId", sector3Time).apply()
+                        }
+                        
+                        if (isWRSector) {
+                            sectorTimesRef.child(trackId).child("s3").setValue(sector3Time)
+                            val newWrSectors = wrSectorTimes.toMutableList()
+                            newWrSectors[2] = sector3Time
+                            wrSectorTimes = newWrSectors
+                        }
+                    }
+                    
+                    // Check for PB/WR BEFORE updating values
+                    val wasNewWR = lapTimeMs < globalBestTime
+                    val wasNewPB = lapTimeMs < bestLapTimeMs
+                    isNewWR = wasNewWR
+                    isNewPB = wasNewPB
+                    
+                    // Play finish sound
+                    when {
+                        wasNewWR -> playSound("finish_wr")
+                        wasNewPB -> playSound("finish_pb")
+                        else -> playSound("finish")
+                    }
+                    
+                    if (wasNewPB) {
                         bestLapTimeMs = lapTimeMs
                         myGhostData = currentLapRecording.toList()
                         saveGhostData(prefs, trackId, myGhostData)
@@ -253,6 +536,8 @@ fun HotlapGame(
                             "timestamp" to System.currentTimeMillis()
                         )
                         leaderboardRef.child(trackId).child(playerName).setValue(entry)
+                            .addOnSuccessListener { android.util.Log.d("Firebase", "Leaderboard updated for $playerName") }
+                            .addOnFailureListener { e -> android.util.Log.e("Firebase", "Leaderboard update failed", e) }
                         
                         // Upload ghost data to Firebase (sampled for smaller size)
                         val ghostFrames = mutableMapOf<String, Any>()
@@ -265,6 +550,15 @@ fun HotlapGame(
                             )
                         }
                         ghostsRef.child(trackId).child(playerName).setValue(ghostFrames)
+                            .addOnSuccessListener { android.util.Log.d("Firebase", "Ghost data updated for $playerName") }
+                            .addOnFailureListener { e -> android.util.Log.e("Firebase", "Ghost data update failed", e) }
+                        
+                        // Optimistic update: If user beat WR, immediately use their ghost as WR ghost
+                        if (wasNewWR) {
+                            wrGhostData = myGhostData.filterIndexed { i, _ -> i % 5 == 0 }
+                            globalBestTime = lapTimeMs
+                            worldRecordHolder = playerName
+                        }
                     }
                     break
                 }
@@ -286,7 +580,11 @@ fun HotlapGame(
                     Spacer(Modifier.height(16.dp))
                     OutlinedTextField(
                         value = nameInput,
-                        onValueChange = { if (it.length <= 10) nameInput = it.uppercase() },
+                        onValueChange = { input ->
+                            if (input.length <= 10) {
+                                nameInput = input.filter { it.isLetterOrDigit() }.uppercase()
+                            }
+                        },
                         singleLine = true,
                         modifier = Modifier.width(200.dp)
                     )
@@ -364,64 +662,66 @@ fun HotlapGame(
             }
         }
         
-        // Stats chips row
+        // Stats Header (PB + WR + Rank)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(horizontal = 12.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // Your Best Time chip
-            if (bestLapTimeMs < Long.MAX_VALUE) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(Color(0xFFFFD700), RoundedCornerShape(8.dp))
-                        .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
-                        .padding(8.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("YOUR BEST", fontFamily = pixelFont, fontSize = 5.sp, color = Color.Black)
-                        Text(formatLapTime(bestLapTimeMs), fontFamily = pixelFont, fontSize = 7.sp, color = Color.Black)
+            // Best Time
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(Color(0xFFFFD700), RoundedCornerShape(4.dp))
+                    .padding(horizontal = 8.dp, vertical = 3.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = if (bestLapTimeMs < Long.MAX_VALUE) "PB ${formatLapTime(bestLapTimeMs)}" else "PB ---",
+                    fontFamily = pixelFont,
+                    fontSize = 8.sp,
+                    color = Color.Black
+                )
+            }
+            
+            // WR Time
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(Color(0xFF00AAFF), RoundedCornerShape(4.dp))
+                    .padding(horizontal = 8.dp, vertical = 3.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = if (globalBestTime < Long.MAX_VALUE) "WR ${formatLapTime(globalBestTime)}" else "WR ---",
+                    fontFamily = pixelFont,
+                    fontSize = 8.sp,
+                    color = Color.White
+                )
+            }
+            
+            // Rank
+            Box(
+                modifier = Modifier
+                    .background(
+                        if (showLeaderboard) Color(0xFFFF6600) else Color(0xFF9933FF),
+                        RoundedCornerShape(4.dp)
+                    )
+                    .clickable { 
+                        showSettings = false  // Close settings when opening leaderboard
+                        showLeaderboard = !showLeaderboard 
                     }
-                }
-            }
-            
-            // Global Best chip
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(Color(0xFF00AAFF), RoundedCornerShape(8.dp))
-                    .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
-                    .padding(8.dp),
+                    .padding(horizontal = 8.dp, vertical = 3.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(worldRecordHolder, fontFamily = pixelFont, fontSize = 5.sp, color = Color.White)
-                    Text(
-                        if (globalBestTime < Long.MAX_VALUE) formatLapTime(globalBestTime) else "---",
-                        fontFamily = pixelFont, fontSize = 7.sp, color = Color.White
-                    )
-                }
-            }
-            
-            // Your Rank chip
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(Color(0xFF9933FF), RoundedCornerShape(8.dp))
-                    .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
-                    .padding(8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("YOUR RANK", fontFamily = pixelFont, fontSize = 5.sp, color = Color.White)
-                    Text(
-                        if (yourRank > 0) "#$yourRank/${leaderboard.size}" else "-/${leaderboard.size}",
-                        fontFamily = pixelFont, fontSize = 7.sp, color = Color.White
-                    )
-                }
+                Text(
+                    text = "Rank: ${if (yourRank > 0) yourRank else "-"}/${leaderboard.size} >",
+                    fontFamily = pixelFont,
+                    fontSize = 8.sp,
+                    color = Color.White
+                )
             }
         }
         
@@ -454,7 +754,8 @@ fun HotlapGame(
                         ghostData = myGhostData,
                         wrGhostEnabled = worldGhostEnabled,
                         wrGhostData = wrGhostData,
-                        lapTimeMs = lapTimeMs
+                        lapTimeMs = lapTimeMs,
+                        sectorResults = sectorResults
                     )
                 }
                 
@@ -463,14 +764,94 @@ fun HotlapGame(
                 }
                 
                 if (gameState == HotlapState.DNF) {
-                    Text("DNF", fontFamily = pixelFont, fontSize = 32.sp, color = Color.Red)
+                    Box(
+                        modifier = Modifier
+                            .background(Color.Red.copy(alpha = 0.9f), RoundedCornerShape(8.dp))
+                            .padding(horizontal = 24.dp, vertical = 16.dp)
+                    ) {
+                        Text("DNF", fontFamily = pixelFont, fontSize = 32.sp, color = Color.White)
+                    }
                 }
                 
                 if (gameState == HotlapState.FINISHED) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("FINISH", fontFamily = pixelFont, fontSize = 16.sp, color = Color(0xFF00AA00))
-                        Spacer(Modifier.height(8.dp))
-                        Text(formatLapTime(lapTimeMs), fontFamily = pixelFont, fontSize = 20.sp, color = Color.Black)
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                when {
+                                    isNewWR -> Color(0xFFFFD700).copy(alpha = 0.95f)  // Gold for WR
+                                    isNewPB -> Color(0xFF00FF00).copy(alpha = 0.95f)  // Green for PB
+                                    else -> Color(0xFF00AA00).copy(alpha = 0.9f)  // Normal finish
+                                },
+                                RoundedCornerShape(8.dp)
+                            )
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                text = when {
+                                    isNewWR -> "NEW WORLD RECORD!"
+                                    isNewPB -> "NEW PERSONAL BEST!"
+                                    else -> "FINISH"
+                                },
+                                fontFamily = pixelFont,
+                                fontSize = 12.sp,
+                                color = if (isNewWR) Color.Black else Color.White
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(
+                                text = formatLapTime(lapTimeMs),
+                                fontFamily = pixelFont,
+                                fontSize = 20.sp,
+                                color = if (isNewWR) Color.Black else Color.White
+                            )
+                            Spacer(Modifier.height(8.dp))
+                            
+                            // Sector summary row
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                for (i in 0 until 3) {
+                                    val sectorTime = sectorTimes[i]
+                                    val wrTime = originalWrSectorTimes[i]  // Use original WR times for delta (not updated ones)
+                                    val result = sectorResults[i]
+                                    val delta = if (wrTime < Long.MAX_VALUE && sectorTime > 0) {
+                                        sectorTime - wrTime
+                                    } else 0L
+                                    
+                                    val sectorColor = when (result) {
+                                        2 -> Color(0xFF9933FF)  // Purple - WR
+                                        1 -> Color(0xFF00FF00)  // Green - PB
+                                        else -> Color(0xFFFFAA00)  // Yellow - slower
+                                    }
+                                    
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        modifier = Modifier
+                                            .background(sectorColor.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
+                                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                                    ) {
+                                        Text(
+                                            text = "S${i + 1}",
+                                            fontFamily = pixelFont,
+                                            fontSize = 7.sp,
+                                            color = if (isNewWR) Color.Black else Color.White
+                                        )
+                                        Text(
+                                            text = when {
+                                                delta > 0 -> "+${String.format("%.2f", delta / 1000.0)}"
+                                                delta < 0 -> String.format("%.2f", delta / 1000.0)
+                                                wrTime < Long.MAX_VALUE -> "0.00"
+                                                else -> "---"
+                                            },
+                                            fontFamily = pixelFont,
+                                            fontSize = 8.sp,
+                                            color = sectorColor
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 
@@ -539,81 +920,163 @@ fun HotlapGame(
                         }
                     }
                 }
+                
+                // Settings overlay (empty for now)
+                if (showSettings) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.95f))
+                            .padding(8.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = "SETTINGS",
+                                fontFamily = pixelFont,
+                                fontSize = 12.sp,
+                                color = Color(0xFFFFD700)
+                            )
+                            Spacer(Modifier.height(16.dp))
+                            
+                            // Sound Toggle
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .background(
+                                        if (soundEnabled) Color(0xFF00AA00) else Color(0xFF666666),
+                                        RoundedCornerShape(4.dp)
+                                    )
+                                    .clickable { 
+                                        soundEnabled = !soundEnabled
+                                        prefs.edit().putBoolean("sound_enabled", soundEnabled).apply()
+                                    }
+                                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                            ) {
+                                Text(
+                                    text = "SFX: ${if (soundEnabled) "ON" else "OFF"}",
+                                    fontFamily = pixelFont,
+                                    fontSize = 10.sp,
+                                    color = Color.White
+                                )
+                            }
+                            
+                            // Engine Sound Toggle (Sub-menu)
+                            if (soundEnabled) {
+                                Spacer(Modifier.height(8.dp))
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .background(
+                                            if (engineSoundEnabled) Color(0xFF008800) else Color(0xFF555555),
+                                            RoundedCornerShape(4.dp)
+                                        )
+                                        .clickable { 
+                                            engineSoundEnabled = !engineSoundEnabled
+                                            prefs.edit().putBoolean("engine_sound_enabled", engineSoundEnabled).apply()
+                                        }
+                                        .padding(horizontal = 10.dp, vertical = 6.dp)
+                                ) {
+                                    Text(
+                                        text = "ENGINE: ${if (engineSoundEnabled) "ON" else "OFF"}",
+                                        fontFamily = pixelFont,
+                                        fontSize = 8.sp,
+                                        color = Color.White
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         
         Spacer(Modifier.weight(0.3f))
         
-        // GHOST TOGGLES & LEADERBOARD - Above controls
+        // Action Bar: Ghost Toggles + Rank/Leaderboard + Settings
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.Black)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                .padding(horizontal = 12.dp, vertical = 6.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // My Ghost toggle
-            Box(
+            // GHOSTS Container with ME/WR toggles inside
+            Row(
                 modifier = Modifier
-                    .weight(1f)
-                    .background(
-                        if (myGhostEnabled) Color(0xFF00FF00) else Color(0xFF333333),
-                        RoundedCornerShape(4.dp)
-                    )
-                    .border(2.dp, Color.White, RoundedCornerShape(4.dp))
-                    .clickable { myGhostEnabled = !myGhostEnabled }
-                    .padding(horizontal = 8.dp, vertical = 6.dp),
-                contentAlignment = Alignment.Center
+                    .background(Color(0xFF222222), RoundedCornerShape(4.dp))
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = if (myGhostEnabled) "ME:ON" else "ME:OFF",
+                    text = "GHOSTS",
                     fontFamily = pixelFont,
-                    fontSize = 6.sp,
-                    color = Color.White
+                    fontSize = 7.sp,
+                    color = Color.Gray,
+                    modifier = Modifier.padding(start = 4.dp)
                 )
+                
+                // ME toggle
+                Box(
+                    modifier = Modifier
+                        .background(
+                            if (myGhostEnabled) Color(0xFF00FF00) else Color(0xFF555555),
+                            RoundedCornerShape(3.dp)
+                        )
+                        .clickable { myGhostEnabled = !myGhostEnabled }
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "PB",
+                        fontFamily = pixelFont,
+                        fontSize = 8.sp,
+                        color = Color.White
+                    )
+                }
+                
+                // WR toggle
+                Box(
+                    modifier = Modifier
+                        .background(
+                            if (worldGhostEnabled) Color(0xFFFFD700) else Color(0xFF555555),
+                            RoundedCornerShape(3.dp)
+                        )
+                        .clickable { worldGhostEnabled = !worldGhostEnabled }
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "WR",
+                        fontFamily = pixelFont,
+                        fontSize = 8.sp,
+                        color = if (worldGhostEnabled) Color.Black else Color.White
+                    )
+                }
             }
             
-            // World Record Ghost toggle
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(
-                        if (worldGhostEnabled) Color(0xFF00AAFF) else Color(0xFF333333),
-                        RoundedCornerShape(4.dp)
-                    )
-                    .border(2.dp, Color.White, RoundedCornerShape(4.dp))
-                    .clickable { worldGhostEnabled = !worldGhostEnabled }
-                    .padding(horizontal = 8.dp, vertical = 6.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = if (worldGhostEnabled) "WR:ON" else "WR:OFF",
-                    fontFamily = pixelFont,
-                    fontSize = 6.sp,
-                    color = Color.White
-                )
-            }
+            Spacer(Modifier.weight(1f))
             
-            // Leaderboard Button
+            // Settings Button
             Box(
                 modifier = Modifier
-                    .weight(1f)
                     .background(
-                        if (showLeaderboard) Color(0xFFFF6600) else Color(0xFF9933FF),
+                        if (showSettings) Color(0xFFFF6600) else Color(0xFF444444),
                         RoundedCornerShape(4.dp)
                     )
-                    .border(2.dp, Color.White, RoundedCornerShape(4.dp))
-                    .clickable { showLeaderboard = !showLeaderboard }
-                    .padding(horizontal = 8.dp, vertical = 6.dp),
+                    .clickable { 
+                        showLeaderboard = false  // Close leaderboard when opening settings
+                        showSettings = !showSettings 
+                    }
+                    .padding(horizontal = 10.dp, vertical = 6.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = if (showLeaderboard) "CLOSE" else "RANKS",
-                    fontFamily = pixelFont,
-                    fontSize = 6.sp,
-                    color = Color.White
-                )
+                Text("SETTINGS", fontFamily = pixelFont, fontSize = 8.sp, color = Color.White)
             }
         }
         
@@ -733,11 +1196,13 @@ private fun GameCanvas(
     ghostData: List<GhostFrame>,
     wrGhostEnabled: Boolean,
     wrGhostData: List<GhostFrame>,
-    lapTimeMs: Long
+    lapTimeMs: Long,
+    sectorResults: List<Int>  // -1=pending, 0=yellow, 1=green, 2=purple
 ) {
     Canvas(modifier = Modifier.fillMaxSize()) {
         val padding = 20.dp.toPx()
-        val canvasSize = size.minDimension - padding * 2
+        val maxCanvasSize = 800.dp.toPx()  // Cap for consistent visual speed across devices
+        val canvasSize = minOf(size.minDimension - padding * 2, maxCanvasSize)
         
         val screenPoints = track.points.map { point ->
             Offset(padding + point.x * canvasSize, padding + point.y * canvasSize)
@@ -758,6 +1223,39 @@ private fun GameCanvas(
             style = Stroke(width = trackWidth * canvasSize * 2f, cap = StrokeCap.Square, join = StrokeJoin.Miter))
         drawPath(trackPath, Color.Black, 
             style = Stroke(width = trackWidth * canvasSize * 0.2f, cap = StrokeCap.Square, join = StrokeJoin.Miter))
+        
+        // Draw colored sector overlays
+        val sectorSize = screenPoints.size / 3
+        for (sector in 0 until 3) {
+            val result = sectorResults[sector]
+            if (result >= 0) {  // Only draw if sector is complete
+                val sectorColor = when (result) {
+                    2 -> Color(0xFF9933FF).copy(alpha = 0.4f)  // Purple - WR
+                    1 -> Color(0xFF00FF00).copy(alpha = 0.4f)  // Green - PB
+                    else -> Color(0xFFFFAA00).copy(alpha = 0.4f)  // Yellow - slower
+                }
+                
+                val startIdx = sector * sectorSize
+                val endIdx = minOf((sector + 1) * sectorSize, screenPoints.size - 1)
+                
+                if (startIdx < screenPoints.size && endIdx > startIdx) {
+                    val sectorPath = Path().apply {
+                        moveTo(screenPoints[startIdx].x, screenPoints[startIdx].y)
+                        for (i in (startIdx + 1)..endIdx) {
+                            if (i < screenPoints.size) {
+                                lineTo(screenPoints[i].x, screenPoints[i].y)
+                            }
+                        }
+                        // Close the loop for the last sector
+                        if (sector == 2 && screenPoints.isNotEmpty()) {
+                            lineTo(screenPoints[0].x, screenPoints[0].y)
+                        }
+                    }
+                    drawPath(sectorPath, sectorColor, 
+                        style = Stroke(width = trackWidth * canvasSize * 1.8f, cap = StrokeCap.Butt, join = StrokeJoin.Miter))
+                }
+            }
+        }
         
         if (screenPoints.size > 1) {
             val start = screenPoints[0]
@@ -812,14 +1310,42 @@ private fun GameCanvas(
             rotate(degrees = (ghostAngle * 180f / kotlin.math.PI.toFloat()) + 90f, pivot = screenGhost) {
                 translate(left = screenGhost.x - 32 * px, top = screenGhost.y - 32 * px) {
                     // Ghost car in semi-transparent blue
-                    drawRect(Color(0x8800AAFF), Offset(18 * px, 2 * px), androidx.compose.ui.geometry.Size(28 * px, 4 * px))
-                    drawRect(Color(0x8800AAFF), Offset(18 * px, 54 * px), androidx.compose.ui.geometry.Size(28 * px, 6 * px))
-                    drawRect(Color(0xAA0088FF), Offset(28 * px, 6 * px), androidx.compose.ui.geometry.Size(8 * px, 10 * px))
-                    drawRect(Color(0xAA0088FF), Offset(26 * px, 16 * px), androidx.compose.ui.geometry.Size(12 * px, 38 * px))
-                    drawRect(Color(0xBB0066DD), Offset(16 * px, 10 * px), androidx.compose.ui.geometry.Size(8 * px, 10 * px))
-                    drawRect(Color(0xBB0066DD), Offset(40 * px, 10 * px), androidx.compose.ui.geometry.Size(8 * px, 10 * px))
-                    drawRect(Color(0xBB0066DD), Offset(14 * px, 42 * px), androidx.compose.ui.geometry.Size(10 * px, 12 * px))
-                    drawRect(Color(0xBB0066DD), Offset(40 * px, 42 * px), androidx.compose.ui.geometry.Size(10 * px, 12 * px))
+                    
+                    // Front Wing
+                    drawRect(Color(0x4400AAFF), Offset(12 * px, 0 * px), androidx.compose.ui.geometry.Size(40 * px, 4 * px))
+                    
+                    // Front Suspension
+                    drawLine(Color(0x660066DD), Offset(20 * px, 12 * px), Offset(28 * px, 14 * px), strokeWidth = 1 * px)
+                    drawLine(Color(0x660066DD), Offset(44 * px, 12 * px), Offset(36 * px, 14 * px), strokeWidth = 1 * px)
+                    
+                    // Front Wheels
+                    drawRect(Color(0x660066DD), Offset(12 * px, 6 * px), androidx.compose.ui.geometry.Size(8 * px, 12 * px))
+                    drawRect(Color(0x660066DD), Offset(44 * px, 6 * px), androidx.compose.ui.geometry.Size(8 * px, 12 * px))
+                    
+                    // Nose & Cockpit
+                    drawRect(Color(0x550088FF), Offset(28 * px, 4 * px), androidx.compose.ui.geometry.Size(8 * px, 20 * px))
+                    drawRect(Color(0x550088FF), Offset(26 * px, 24 * px), androidx.compose.ui.geometry.Size(12 * px, 10 * px))
+                    
+                    // Sidepods
+                    drawRect(Color(0x550088FF), Offset(18 * px, 22 * px), androidx.compose.ui.geometry.Size(8 * px, 24 * px))
+                    drawRect(Color(0x550088FF), Offset(38 * px, 22 * px), androidx.compose.ui.geometry.Size(8 * px, 24 * px))
+                    
+                    // Engine Cover
+                    drawRect(Color(0x550066DD), Offset(28 * px, 34 * px), androidx.compose.ui.geometry.Size(8 * px, 18 * px))
+                    
+                    // Driver Helmet
+                    drawCircle(Color(0x55FFFF00), radius = 3 * px, center = Offset(32 * px, 28 * px))
+                    
+                    // Rear Suspension
+                    drawLine(Color(0x660066DD), Offset(18 * px, 46 * px), Offset(28 * px, 44 * px), strokeWidth = 1 * px)
+                    drawLine(Color(0x660066DD), Offset(46 * px, 46 * px), Offset(36 * px, 44 * px), strokeWidth = 1 * px)
+                    
+                    // Rear Wheels
+                    drawRect(Color(0x660066DD), Offset(10 * px, 40 * px), androidx.compose.ui.geometry.Size(10 * px, 14 * px))
+                    drawRect(Color(0x660066DD), Offset(44 * px, 40 * px), androidx.compose.ui.geometry.Size(10 * px, 14 * px))
+                    
+                    // Rear Wing
+                    drawRect(Color(0x4400AAFF), Offset(12 * px, 56 * px), androidx.compose.ui.geometry.Size(40 * px, 6 * px))
                 }
             }
         }
@@ -854,14 +1380,42 @@ private fun GameCanvas(
             rotate(degrees = (ghostAngle * 180f / kotlin.math.PI.toFloat()) + 90f, pivot = screenGhost) {
                 translate(left = screenGhost.x - 32 * px, top = screenGhost.y - 32 * px) {
                     // WR Ghost car in semi-transparent gold
-                    drawRect(Color(0x88FFD700), Offset(18 * px, 2 * px), androidx.compose.ui.geometry.Size(28 * px, 4 * px))
-                    drawRect(Color(0x88FFD700), Offset(18 * px, 54 * px), androidx.compose.ui.geometry.Size(28 * px, 6 * px))
-                    drawRect(Color(0xAAFFAA00), Offset(28 * px, 6 * px), androidx.compose.ui.geometry.Size(8 * px, 10 * px))
-                    drawRect(Color(0xAAFFAA00), Offset(26 * px, 16 * px), androidx.compose.ui.geometry.Size(12 * px, 38 * px))
-                    drawRect(Color(0xBBFF8800), Offset(16 * px, 10 * px), androidx.compose.ui.geometry.Size(8 * px, 10 * px))
-                    drawRect(Color(0xBBFF8800), Offset(40 * px, 10 * px), androidx.compose.ui.geometry.Size(8 * px, 10 * px))
-                    drawRect(Color(0xBBFF8800), Offset(14 * px, 42 * px), androidx.compose.ui.geometry.Size(10 * px, 12 * px))
-                    drawRect(Color(0xBBFF8800), Offset(40 * px, 42 * px), androidx.compose.ui.geometry.Size(10 * px, 12 * px))
+                    
+                    // Front Wing
+                    drawRect(Color(0x44FFD700), Offset(12 * px, 0 * px), androidx.compose.ui.geometry.Size(40 * px, 4 * px))
+                    
+                    // Front Suspension
+                    drawLine(Color(0x66FF8800), Offset(20 * px, 12 * px), Offset(28 * px, 14 * px), strokeWidth = 1 * px)
+                    drawLine(Color(0x66FF8800), Offset(44 * px, 12 * px), Offset(36 * px, 14 * px), strokeWidth = 1 * px)
+                    
+                    // Front Wheels
+                    drawRect(Color(0x66FF8800), Offset(12 * px, 6 * px), androidx.compose.ui.geometry.Size(8 * px, 12 * px))
+                    drawRect(Color(0x66FF8800), Offset(44 * px, 6 * px), androidx.compose.ui.geometry.Size(8 * px, 12 * px))
+                    
+                    // Nose & Cockpit
+                    drawRect(Color(0x55FFAA00), Offset(28 * px, 4 * px), androidx.compose.ui.geometry.Size(8 * px, 20 * px))
+                    drawRect(Color(0x55FFAA00), Offset(26 * px, 24 * px), androidx.compose.ui.geometry.Size(12 * px, 10 * px))
+                    
+                    // Sidepods
+                    drawRect(Color(0x55FFAA00), Offset(18 * px, 22 * px), androidx.compose.ui.geometry.Size(8 * px, 24 * px))
+                    drawRect(Color(0x55FFAA00), Offset(38 * px, 22 * px), androidx.compose.ui.geometry.Size(8 * px, 24 * px))
+                    
+                    // Engine Cover
+                    drawRect(Color(0x55FF8800), Offset(28 * px, 34 * px), androidx.compose.ui.geometry.Size(8 * px, 18 * px))
+                    
+                    // Driver Helmet
+                    drawCircle(Color(0x55FFFF00), radius = 3 * px, center = Offset(32 * px, 28 * px))
+                    
+                    // Rear Suspension
+                    drawLine(Color(0x66FF8800), Offset(18 * px, 46 * px), Offset(28 * px, 44 * px), strokeWidth = 1 * px)
+                    drawLine(Color(0x66FF8800), Offset(46 * px, 46 * px), Offset(36 * px, 44 * px), strokeWidth = 1 * px)
+                    
+                    // Rear Wheels
+                    drawRect(Color(0x66FF8800), Offset(10 * px, 40 * px), androidx.compose.ui.geometry.Size(10 * px, 14 * px))
+                    drawRect(Color(0x66FF8800), Offset(44 * px, 40 * px), androidx.compose.ui.geometry.Size(10 * px, 14 * px))
+                    
+                    // Rear Wing
+                    drawRect(Color(0x44FFD700), Offset(12 * px, 56 * px), androidx.compose.ui.geometry.Size(40 * px, 6 * px))
                 }
             }
         }
@@ -873,14 +1427,41 @@ private fun GameCanvas(
             
             rotate(degrees = (carAngle * 180f / kotlin.math.PI.toFloat()) + 90f, pivot = screenCar) {
                 translate(left = screenCar.x - 32 * px, top = screenCar.y - 32 * px) {
-                    drawRect(Color.White, Offset(18 * px, 2 * px), androidx.compose.ui.geometry.Size(28 * px, 4 * px))
-                    drawRect(Color.White, Offset(18 * px, 54 * px), androidx.compose.ui.geometry.Size(28 * px, 6 * px))
-                    drawRect(Color(0xFFE74C3C), Offset(28 * px, 6 * px), androidx.compose.ui.geometry.Size(8 * px, 10 * px))
-                    drawRect(Color(0xFFE74C3C), Offset(26 * px, 16 * px), androidx.compose.ui.geometry.Size(12 * px, 38 * px))
-                    drawRect(Color.Black, Offset(16 * px, 10 * px), androidx.compose.ui.geometry.Size(8 * px, 10 * px))
-                    drawRect(Color.Black, Offset(40 * px, 10 * px), androidx.compose.ui.geometry.Size(8 * px, 10 * px))
-                    drawRect(Color.Black, Offset(14 * px, 42 * px), androidx.compose.ui.geometry.Size(10 * px, 12 * px))
-                    drawRect(Color.Black, Offset(40 * px, 42 * px), androidx.compose.ui.geometry.Size(10 * px, 12 * px))
+                    // Front Wing
+                    drawRect(Color.White, Offset(12 * px, 0 * px), androidx.compose.ui.geometry.Size(40 * px, 4 * px))
+                    
+                    // Front Suspension
+                    drawLine(Color.Black, Offset(20 * px, 12 * px), Offset(28 * px, 14 * px), strokeWidth = 1 * px)
+                    drawLine(Color.Black, Offset(44 * px, 12 * px), Offset(36 * px, 14 * px), strokeWidth = 1 * px)
+                    
+                    // Front Wheels
+                    drawRect(Color.Black, Offset(12 * px, 6 * px), androidx.compose.ui.geometry.Size(8 * px, 12 * px))
+                    drawRect(Color.Black, Offset(44 * px, 6 * px), androidx.compose.ui.geometry.Size(8 * px, 12 * px))
+                    
+                    // Nose & Cockpit
+                    drawRect(Color(0xFFE74C3C), Offset(28 * px, 4 * px), androidx.compose.ui.geometry.Size(8 * px, 20 * px))
+                    drawRect(Color(0xFFE74C3C), Offset(26 * px, 24 * px), androidx.compose.ui.geometry.Size(12 * px, 10 * px))
+                    
+                    // Sidepods
+                    drawRect(Color(0xFFE74C3C), Offset(18 * px, 22 * px), androidx.compose.ui.geometry.Size(8 * px, 24 * px))
+                    drawRect(Color(0xFFE74C3C), Offset(38 * px, 22 * px), androidx.compose.ui.geometry.Size(8 * px, 24 * px))
+                    
+                    // Engine Cover
+                    drawRect(Color(0xFFC0392B), Offset(28 * px, 34 * px), androidx.compose.ui.geometry.Size(8 * px, 18 * px))
+                    
+                    // Driver Helmet
+                    drawCircle(Color.Yellow, radius = 3 * px, center = Offset(32 * px, 28 * px))
+                    
+                    // Rear Suspension
+                    drawLine(Color.Black, Offset(18 * px, 46 * px), Offset(28 * px, 44 * px), strokeWidth = 1 * px)
+                    drawLine(Color.Black, Offset(46 * px, 46 * px), Offset(36 * px, 44 * px), strokeWidth = 1 * px)
+                    
+                    // Rear Wheels
+                    drawRect(Color.Black, Offset(10 * px, 40 * px), androidx.compose.ui.geometry.Size(10 * px, 14 * px))
+                    drawRect(Color.Black, Offset(44 * px, 40 * px), androidx.compose.ui.geometry.Size(10 * px, 14 * px))
+                    
+                    // Rear Wing
+                    drawRect(Color.White, Offset(12 * px, 56 * px), androidx.compose.ui.geometry.Size(40 * px, 6 * px))
                 }
             }
         }
@@ -985,8 +1566,6 @@ private fun loadRandomTrack(context: Context): TrackData? {
 }
 
 private fun formatLapTime(ms: Long): String {
-    val minutes = ms / 60000
-    val seconds = (ms % 60000) / 1000
-    val millis = ms % 1000
-    return String.format("%d:%02d.%03d", minutes, seconds, millis)
+    val totalSeconds = ms / 1000.0
+    return String.format("%.2fs", totalSeconds)
 }
