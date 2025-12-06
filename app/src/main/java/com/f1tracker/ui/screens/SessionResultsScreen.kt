@@ -2,18 +2,23 @@ package com.f1tracker.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,26 +27,98 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.f1tracker.R
 import com.f1tracker.data.local.F1DataProvider
 import com.f1tracker.data.models.DriverResult
+import com.f1tracker.data.models.HighlightVideo
 import com.f1tracker.data.models.SessionResult
 import com.f1tracker.ui.components.AnimatedHeader
+import com.f1tracker.ui.viewmodels.RaceViewModel
 
 @Composable
 fun SessionResultsScreen(
     sessionResult: SessionResult,
-    onBackClick: () -> Unit
+    raceName: String = "",
+    onBackClick: () -> Unit,
+    viewModel: RaceViewModel = hiltViewModel()
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
     val accentColor = Color(0xFFFF0080)
+    val context = LocalContext.current
+    val activity = context as? android.app.Activity
+    
+    // Highlights state
+    val allHighlights by viewModel.raceHighlights.collectAsState()
+    var selectedVideoId by remember { mutableStateOf<String?>(null) }
+    
+    // Filter highlights for this race + current year
+    val currentYear = java.time.Year.now().value.toString()
+    val raceNameNormalized = raceName.lowercase().replace("grand prix", "").trim()
+    val sessionHighlights = remember(allHighlights, raceName) {
+        allHighlights.filter { highlight ->
+            val highlightRaceNormalized = highlight.raceName.lowercase().trim()
+            highlight.year == currentYear && highlightRaceNormalized.contains(raceNameNormalized)
+        }
+    }
+    
+    // Fetch highlights on mount
+    LaunchedEffect(raceName) {
+        if (raceName.isNotEmpty()) {
+            viewModel.loadAllHighlights()
+        }
+    }
+    
+    // YouTube Player Dialog
+    if (selectedVideoId != null) {
+        LaunchedEffect(selectedVideoId) {
+            activity?.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+        DisposableEffect(selectedVideoId) {
+            onDispose {
+                activity?.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+        }
+        Dialog(
+            onDismissRequest = { selectedVideoId = null },
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false,
+                decorFitsSystemWindows = false
+            )
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+            ) {
+                YouTubePlayerScreen(videoId = selectedVideoId!!)
+                IconButton(
+                    onClick = { selectedVideoId = null },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
+                        .size(40.dp)
+                        .background(Color.Black.copy(alpha = 0.6f), CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Close",
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+    }
     
     Column(
         modifier = Modifier
@@ -135,6 +212,39 @@ fun SessionResultsScreen(
                                         michromaFont = michromaFont
                                     )
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+            // Highlights Section
+            if (sessionHighlights.isNotEmpty()) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
+                    ) {
+                        Text(
+                            text = "HIGHLIGHTS",
+                            fontFamily = brigendsFont,
+                            fontSize = 14.sp,
+                            color = Color.White.copy(alpha = 0.8f),
+                            letterSpacing = 2.sp,
+                            modifier = Modifier.padding(bottom = 12.dp)
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .horizontalScroll(rememberScrollState()),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            sessionHighlights.forEach { highlight ->
+                                SessionHighlightCard(
+                                    highlight = highlight,
+                                    michromaFont = michromaFont,
+                                    onClick = { selectedVideoId = highlight.id }
+                                )
                             }
                         }
                     }
@@ -382,4 +492,67 @@ private fun DriverResultRow(
         thickness = 1.dp,
         modifier = Modifier.padding(horizontal = 20.dp)
     )
+}
+
+@Composable
+private fun SessionHighlightCard(
+    highlight: HighlightVideo,
+    michromaFont: FontFamily,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .width(240.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF111111)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
+    ) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(135.dp)
+            ) {
+                AsyncImage(
+                    model = highlight.thumbnail,
+                    contentDescription = highlight.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+                
+                // Play Icon Overlay
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.3f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(Color(0xFFFF0080).copy(alpha = 0.9f), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PlayArrow,
+                            contentDescription = "Play",
+                            tint = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
+            }
+            
+            Text(
+                text = highlight.title,
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = Color.White,
+                maxLines = 2,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                modifier = Modifier.padding(10.dp)
+            )
+        }
+    }
 }

@@ -301,6 +301,19 @@ class RaceViewModel @Inject constructor(
         }
     }
 
+    fun loadAllHighlights() {
+        viewModelScope.launch {
+            val result = repository.getHighlights()
+            result.onSuccess { allHighlights ->
+                Log.d("RaceViewModel", "Loaded ${allHighlights.size} total highlights")
+                _raceHighlights.value = allHighlights
+            }.onFailure { e ->
+                Log.e("RaceViewModel", "Failed to load highlights", e)
+                _raceHighlights.value = emptyList()
+            }
+        }
+    }
+
     private fun updateFilteredRaces(races: List<Race>) {
         val now = LocalDateTime.now(ZoneId.of("UTC"))
         

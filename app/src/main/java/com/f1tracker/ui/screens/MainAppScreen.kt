@@ -40,6 +40,7 @@ fun MainAppScreen(
     var selectedRace by remember { mutableStateOf<com.f1tracker.data.models.Race?>(null) }
     var selectedVideoId by remember { mutableStateOf<String?>(null) }
     var selectedSessionResult by remember { mutableStateOf<com.f1tracker.data.models.SessionResult?>(null) }
+    var selectedSessionRaceName by remember { mutableStateOf("") }
     var backPressedTime by remember { mutableLongStateOf(0L) }
     var scheduleSelectedTab by remember { mutableStateOf(0) } // Persist schedule tab state here
     var standingsSelectedTab by remember { mutableStateOf(0) } // Persist standings tab state here
@@ -209,8 +210,9 @@ fun MainAppScreen(
                             standingsSelectedTab = tabIndex
                             currentDestination = NavDestination.STANDINGS
                         },
-                        onViewResults = { result ->
+                        onViewResults = { result, raceName ->
                             selectedSessionResult = result
+                            selectedSessionRaceName = raceName
                         },
                         onNavigateToLive = {
                             currentDestination = NavDestination.LIVE
@@ -270,6 +272,7 @@ fun MainAppScreen(
             if (selectedSessionResult != null) {
                 SessionResultsScreen(
                     sessionResult = selectedSessionResult!!,
+                    raceName = selectedSessionRaceName,
                     onBackClick = { selectedSessionResult = null }
                 )
             }

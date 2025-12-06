@@ -44,7 +44,7 @@ fun HeroSectionFixed(
     getCountdown: (LocalDateTime) -> String,
     modifier: Modifier = Modifier,
     onRaceClick: (Race) -> Unit = {},
-    onViewResults: (SessionResult) -> Unit = {},
+    onViewResults: (SessionResult, String) -> Unit = { _, _ -> },
     onLiveClick: () -> Unit = {}
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
@@ -336,7 +336,7 @@ private fun ActiveWeekendHeroFixed(
     michromaFont: FontFamily,
     accentColor: Color,
     onRaceClick: (Race) -> Unit,
-    onViewResults: (SessionResult) -> Unit,
+    onViewResults: (SessionResult, String) -> Unit,
     onLiveClick: () -> Unit = {}
 ) {
     val countryCode = getCountryCodeFixed(state.race.circuit.location.country)
@@ -520,6 +520,7 @@ private fun ActiveWeekendHeroFixed(
                                 brigendsFont = brigendsFont,
                                 michromaFont = michromaFont,
                                 accentColor = accentColor,
+                                raceName = state.race.raceName,
                                 onViewResults = onViewResults
                             )
                         }
@@ -985,7 +986,8 @@ private fun CompletedCard(
     brigendsFont: FontFamily,
     michromaFont: FontFamily,
     accentColor: Color,
-    onViewResults: (SessionResult) -> Unit
+    raceName: String,
+    onViewResults: (SessionResult, String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -993,7 +995,7 @@ private fun CompletedCard(
             .clip(RoundedCornerShape(12.dp))
             .background(Color.White.copy(alpha = 0.04f))
             .clickable(enabled = sessionResult != null) { 
-                if (sessionResult != null) onViewResults(sessionResult) 
+                if (sessionResult != null) onViewResults(sessionResult, raceName) 
             }
             .padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)

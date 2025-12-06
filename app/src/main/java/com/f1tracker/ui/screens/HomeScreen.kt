@@ -64,7 +64,7 @@ fun HomeScreen(
     onGameClick: () -> Unit = {},
     onPlayPause: () -> Unit = {},
     onNavigateToStandings: (Int) -> Unit = {}, // 0 for Drivers, 1 for Constructors
-    onViewResults: (com.f1tracker.data.models.SessionResult) -> Unit = {},
+    onViewResults: (com.f1tracker.data.models.SessionResult, String) -> Unit = { _, _ -> },
     onNavigateToLive: () -> Unit = {},
     currentlyPlayingEpisode: com.f1tracker.data.models.PodcastEpisode? = null,
     isPlaying: Boolean = false
