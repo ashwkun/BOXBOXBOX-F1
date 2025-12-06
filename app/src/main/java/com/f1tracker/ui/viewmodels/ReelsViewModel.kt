@@ -65,6 +65,12 @@ class ReelsViewModel @Inject constructor(
     private fun sortByEngagement(posts: List<InstagramPost>): List<InstagramPost> {
         val now = java.time.Instant.now()
         
+        // Meme accounts get a boost for entertainment value
+        val memeAccounts = setOf(
+            "lollipopmancomics", "f1troll", "boxbox_club", "racingvacing",
+            "f1_no_context", "boxboxnightmares", "5secondpenalty", "f1humor.official"
+        )
+        
         fun getScore(post: InstagramPost): Double {
             val likes = post.like_count.toDouble()
             val comments = post.comments_count.toDouble()
@@ -77,11 +83,16 @@ class ReelsViewModel @Inject constructor(
             
             // Time decay: older posts score lower
             val timeDecay = Math.pow(hoursAgo + 2.0, 1.5)
-            val baseScore = engagement / timeDecay
+            var score = engagement / timeDecay
+            
+            // Boost meme accounts for entertainment value
+            if (post.author in memeAccounts) {
+                score *= 1.3
+            }
             
             // Add slight randomization (±15%) so refresh feels fresh
             val randomFactor = 0.85 + (Math.random() * 0.30)
-            return baseScore * randomFactor
+            return score * randomFactor
         }
         
         // Sort by score
