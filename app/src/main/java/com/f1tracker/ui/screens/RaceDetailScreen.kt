@@ -242,6 +242,7 @@ fun RaceDetailScreen(
                 item {
                     HighlightsSection(
                         highlights = raceHighlights,
+                        isRaceCompleted = isRaceCompleted,
                         michromaFont = michromaFont,
                         brigendsFont = brigendsFont,
                         onHighlightClick = { highlight ->
@@ -1025,6 +1026,7 @@ private enum class ResultType {
 @Composable
 private fun HighlightsSection(
     highlights: List<HighlightVideo>,
+    isRaceCompleted: Boolean,
     michromaFont: FontFamily,
     brigendsFont: FontFamily,
     onHighlightClick: (HighlightVideo) -> Unit
@@ -1035,7 +1037,7 @@ private fun HighlightsSection(
             .padding(horizontal = 20.dp)
     ) {
         Text(
-            text = "HIGHLIGHTS",
+            text = if (isRaceCompleted) "HIGHLIGHTS" else "LAST YEAR'S HIGHLIGHTS",
             fontFamily = brigendsFont,
             fontSize = 14.sp,
             color = Color.White.copy(alpha = 0.8f),
@@ -1110,23 +1112,6 @@ private fun HighlightCard(
                             modifier = Modifier.size(28.dp)
                         )
                     }
-                }
-                
-                // Session Type Badge
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(8.dp)
-                        .background(Color(0xFFFF0080), RoundedCornerShape(4.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = highlight.sessionType.uppercase(),
-                        fontFamily = michromaFont,
-                        fontSize = 10.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
                 }
             }
             

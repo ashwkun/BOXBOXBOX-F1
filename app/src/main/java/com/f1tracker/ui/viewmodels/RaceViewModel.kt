@@ -262,8 +262,23 @@ class RaceViewModel @Inject constructor(
         viewModelScope.launch {
             val result = repository.getHighlights()
             result.onSuccess { allHighlights ->
-                // Extract year and race name for matching
+                // Determine if race is completed
+                val isCompleted = try {
+                    val now = LocalDateTime.now(ZoneId.of("UTC"))
+                    val raceDateTime = LocalDateTime.parse("${race.date}T${race.time}", DateTimeFormatter.ISO_DATE_TIME)
+                    raceDateTime.isBefore(now)
+                } catch (e: Exception) {
+                    false
+                }
+                
+                // For completed races: show current year highlights
+                // For upcoming races: show last year highlights (like results)
                 val raceYear = race.date.substringBefore("-") // "2025-03-16" -> "2025"
+                val targetYear = if (isCompleted) {
+                    raceYear
+                } else {
+                    (raceYear.toIntOrNull()?.minus(1) ?: raceYear).toString()
+                }
                 
                 // Normalize race name for matching (e.g., "Bahrain Grand Prix" -> "bahrain")
                 val raceNameNormalized = race.raceName
@@ -274,10 +289,10 @@ class RaceViewModel @Inject constructor(
                 // Filter highlights for this specific race
                 val filteredHighlights = allHighlights.filter { highlight ->
                     val highlightRaceNormalized = highlight.raceName.lowercase().trim()
-                    highlight.year == raceYear && highlightRaceNormalized.contains(raceNameNormalized)
+                    highlight.year == targetYear && highlightRaceNormalized.contains(raceNameNormalized)
                 }
                 
-                Log.d("RaceViewModel", "Found ${filteredHighlights.size} highlights for ${race.raceName}")
+                Log.d("RaceViewModel", "Found ${filteredHighlights.size} highlights for ${race.raceName} (year: $targetYear, completed: $isCompleted)")
                 _raceHighlights.value = filteredHighlights
             }.onFailure { e ->
                 Log.e("RaceViewModel", "Failed to load highlights", e)
