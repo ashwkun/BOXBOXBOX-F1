@@ -44,6 +44,7 @@ import com.f1tracker.ui.viewmodels.RaceViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -143,12 +144,28 @@ fun RaceDetailScreen(
     
     // YouTube Player State
     var selectedVideoId by remember { mutableStateOf<String?>(null) }
+    val activity = context as? android.app.Activity
     
     // In-app YouTube Player Dialog
     if (selectedVideoId != null) {
+        // Force landscape orientation when opening video
+        LaunchedEffect(selectedVideoId) {
+            activity?.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+        
+        // Restore portrait when dialog closes
+        DisposableEffect(selectedVideoId) {
+            onDispose {
+                activity?.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+        }
+        
         Dialog(
             onDismissRequest = { selectedVideoId = null },
-            properties = DialogProperties(usePlatformDefaultWidth = false)
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false,
+                decorFitsSystemWindows = false
+            )
         ) {
             Box(
                 modifier = Modifier
