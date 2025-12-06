@@ -64,5 +64,21 @@ class ReelsViewModel @Inject constructor(
     fun refresh() {
         fetchReels(forceRefresh = true)
     }
+    
+    // Throttle error-triggered refreshes to once per 2 minutes
+    private var lastErrorRefresh: Long = 0
+    private val ERROR_REFRESH_COOLDOWN = 2 * 60 * 1000L // 2 minutes
+    
+    /**
+     * Called when a video fails to play. Triggers a refresh if cooldown has passed.
+     * This handles expired Instagram CDN URLs by fetching fresh data.
+     */
+    fun onVideoError() {
+        val now = System.currentTimeMillis()
+        if (now - lastErrorRefresh > ERROR_REFRESH_COOLDOWN && !_isRefreshing.value) {
+            android.util.Log.d("ReelsViewModel", "Video error detected, refreshing reels data...")
+            lastErrorRefresh = now
+            fetchReels(forceRefresh = true)
+        }
+    }
 }
-

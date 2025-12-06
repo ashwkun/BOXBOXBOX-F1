@@ -132,7 +132,8 @@ fun ReelsScreen(
             post = reels[page],
             isPlaying = (pagerState.currentPage == page),
             michromaFont = michromaFont,
-            onClose = onClose
+            onClose = onClose,
+            onVideoError = { viewModel.onVideoError() }
         )
     }
 }
@@ -144,7 +145,8 @@ fun ReelItem(
     post: InstagramPost,
     isPlaying: Boolean,
     michromaFont: FontFamily,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    onVideoError: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val isCarousel = post.media_type == "CAROUSEL_ALBUM" && !post.children?.data.isNullOrEmpty()
@@ -169,7 +171,8 @@ fun ReelItem(
                         mediaUrl = child.media_url,
                         thumbnailUrl = child.thumbnail_url,
                         mediaType = child.media_type,
-                        isPlaying = isChildPlaying
+                        isPlaying = isChildPlaying,
+                        onVideoError = onVideoError
                     )
                 }
                 
@@ -208,7 +211,8 @@ fun ReelItem(
                 mediaUrl = post.media_url,
                 thumbnailUrl = post.thumbnail_url,
                 mediaType = post.media_type,
-                isPlaying = isPlaying
+                isPlaying = isPlaying,
+                onVideoError = onVideoError
             )
         }
 
@@ -336,7 +340,8 @@ fun ReelMediaItem(
     mediaUrl: String?,
     thumbnailUrl: String?,
     mediaType: String,
-    isPlaying: Boolean
+    isPlaying: Boolean,
+    onVideoError: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -371,6 +376,7 @@ fun ReelMediaItem(
                     android.util.Log.e("ReelsDebug", "Player Error for $mediaUrl: ${error.message}", error)
                     hasError = true
                     isVideoReady = false
+                    onVideoError() // Trigger refresh of feed data
                 }
             }
             player.addListener(listener)
