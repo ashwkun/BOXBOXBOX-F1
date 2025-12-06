@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -46,6 +47,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.derivedStateOf
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import com.f1tracker.data.models.HighlightVideo
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 
 @Composable
 
@@ -126,6 +133,10 @@ fun RaceDetailScreen(
     val sprintResults by viewModel.lastYearSprintResults.collectAsState()
     var selectedResultType by remember { mutableStateOf(ResultType.RACE) }
     val hasSprintResults = sprintResults?.isNotEmpty() == true
+    
+    // Race Highlights
+    val raceHighlights by viewModel.raceHighlights.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -158,6 +169,21 @@ fun RaceDetailScreen(
             // Schedule Section
             item {
                 ScheduleSection(race, michromaFont, brigendsFont)
+            }
+            
+            // Highlights Section
+            if (raceHighlights.isNotEmpty()) {
+                item {
+                    HighlightsSection(
+                        highlights = raceHighlights,
+                        michromaFont = michromaFont,
+                        brigendsFont = brigendsFont,
+                        onHighlightClick = { highlight ->
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(highlight.url))
+                            context.startActivity(intent)
+                        }
+                    )
+                }
             }
             
             // Last Year's Results (Podium + Full List)
@@ -931,3 +957,124 @@ private enum class ResultType {
     RACE, SPRINT
 }
 
+@Composable
+private fun HighlightsSection(
+    highlights: List<HighlightVideo>,
+    michromaFont: FontFamily,
+    brigendsFont: FontFamily,
+    onHighlightClick: (HighlightVideo) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+    ) {
+        Text(
+            text = "HIGHLIGHTS",
+            fontFamily = brigendsFont,
+            fontSize = 14.sp,
+            color = Color.White.copy(alpha = 0.8f),
+            letterSpacing = 2.sp,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+        
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            highlights.forEach { highlight ->
+                HighlightCard(
+                    highlight = highlight,
+                    michromaFont = michromaFont,
+                    brigendsFont = brigendsFont,
+                    onClick = { onHighlightClick(highlight) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun HighlightCard(
+    highlight: HighlightVideo,
+    michromaFont: FontFamily,
+    brigendsFont: FontFamily,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .width(280.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF111111)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
+    ) {
+        Column {
+            // Thumbnail with Play Icon
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(157.dp)
+            ) {
+                AsyncImage(
+                    model = highlight.thumbnail,
+                    contentDescription = highlight.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+                
+                // Play Icon Overlay
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.3f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .background(Color(0xFFFF0080).copy(alpha = 0.9f), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PlayArrow,
+                            contentDescription = "Play",
+                            tint = Color.White,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
+                }
+                
+                // Session Type Badge
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(8.dp)
+                        .background(Color(0xFFFF0080), RoundedCornerShape(4.dp))
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = highlight.sessionType.uppercase(),
+                        fontFamily = michromaFont,
+                        fontSize = 10.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            
+            // Title
+            Text(
+                text = highlight.title,
+                fontFamily = michromaFont,
+                fontSize = 12.sp,
+                color = Color.White,
+                maxLines = 2,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                modifier = Modifier.padding(12.dp)
+            )
+        }
+    }
+}

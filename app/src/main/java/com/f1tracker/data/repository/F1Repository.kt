@@ -20,6 +20,7 @@ interface F1Repository {
     suspend fun getESPNSessionResults(round: Int): Result<List<SessionResult>>
     suspend fun getInstagramFeed(forceRefresh: Boolean = false): Result<List<com.f1tracker.data.models.InstagramPost>>
     suspend fun getInstagramReels(forceRefresh: Boolean = false): Result<List<com.f1tracker.data.models.InstagramPost>>
+    suspend fun getHighlights(): Result<List<com.f1tracker.data.models.HighlightVideo>>
 }
 
 class F1RepositoryImpl @Inject constructor(
@@ -437,6 +438,17 @@ class F1RepositoryImpl @Inject constructor(
                 android.util.Log.d("F1Repository", "Returning stale reels cache due to error")
                 return@withContext Result.success(cached.second)
             }
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getHighlights(): Result<List<com.f1tracker.data.models.HighlightVideo>> = withContext(Dispatchers.IO) {
+        try {
+            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_highlights.json"
+            val response = f1ApiService.getHighlights(url)
+            Result.success(response)
+        } catch (e: Exception) {
+            android.util.Log.e("F1Repository", "Error fetching highlights", e)
             Result.failure(e)
         }
     }

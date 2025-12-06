@@ -187,6 +187,9 @@ class RaceViewModel @Inject constructor(
     fun selectRace(race: Race) {
         _selectedRace.value = race
         
+        // Load highlights for this race
+        loadRaceHighlights(race)
+        
         // Check if race is completed
         val isCompleted = try {
             val now = LocalDateTime.now(ZoneId.of("UTC"))
@@ -248,6 +251,37 @@ class RaceViewModel @Inject constructor(
             }.onFailure { e ->
                 Log.e("RaceViewModel", "Failed to load sprint results for $season", e)
                 _lastYearSprintResults.value = null
+            }
+        }
+    }
+
+    private val _raceHighlights = MutableStateFlow<List<com.f1tracker.data.models.HighlightVideo>>(emptyList())
+    val raceHighlights: StateFlow<List<com.f1tracker.data.models.HighlightVideo>> = _raceHighlights.asStateFlow()
+
+    fun loadRaceHighlights(race: Race) {
+        viewModelScope.launch {
+            val result = repository.getHighlights()
+            result.onSuccess { allHighlights ->
+                // Extract year and race name for matching
+                val raceYear = race.date.substringBefore("-") // "2025-03-16" -> "2025"
+                
+                // Normalize race name for matching (e.g., "Bahrain Grand Prix" -> "bahrain")
+                val raceNameNormalized = race.raceName
+                    .lowercase()
+                    .replace("grand prix", "")
+                    .trim()
+                
+                // Filter highlights for this specific race
+                val filteredHighlights = allHighlights.filter { highlight ->
+                    val highlightRaceNormalized = highlight.raceName.lowercase().trim()
+                    highlight.year == raceYear && highlightRaceNormalized.contains(raceNameNormalized)
+                }
+                
+                Log.d("RaceViewModel", "Found ${filteredHighlights.size} highlights for ${race.raceName}")
+                _raceHighlights.value = filteredHighlights
+            }.onFailure { e ->
+                Log.e("RaceViewModel", "Failed to load highlights", e)
+                _raceHighlights.value = emptyList()
             }
         }
     }
