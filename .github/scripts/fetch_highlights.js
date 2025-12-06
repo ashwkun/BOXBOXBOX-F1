@@ -3,7 +3,7 @@ const https = require('https');
 
 // CONFIG
 const OUTPUT_FILE = 'f1_highlights.json';
-const PLAYLIST_ID = 'UUqap5g-T2k2nBprQYg5d1rQ'; // F1 Channel Uploads (Corrected)
+const PLAYLIST_ID = 'UUB_qr75-ydFVKSF9Dmo6izg'; // F1 Channel Uploads (Derived from user provided Channel ID)
 const START_DATE = new Date('2025-03-01T00:00:00Z');
 const MAX_PAGES = 100; // Increased to cover full season history
 
