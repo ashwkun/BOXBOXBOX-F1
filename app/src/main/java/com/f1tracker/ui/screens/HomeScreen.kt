@@ -37,11 +37,15 @@ import com.f1tracker.ui.components.ConstructorStandingsCard
 import com.f1tracker.ui.components.DriverStandingsCard
 import com.f1tracker.ui.components.HeroSectionFixed
 import com.f1tracker.ui.components.LastRaceCard
+import com.f1tracker.ui.components.DailyMixSection
 import com.f1tracker.ui.viewmodels.MultimediaViewModel
 import com.f1tracker.ui.viewmodels.NewsViewModel
 import com.f1tracker.ui.viewmodels.RaceViewModel
 import com.f1tracker.ui.viewmodels.StandingsViewModel
 import kotlinx.coroutines.delay
+
+import com.f1tracker.util.NewsCategorizer
+import com.f1tracker.util.NewsCategory
 
 @Composable
 fun HomeScreen(
@@ -53,9 +57,11 @@ fun HomeScreen(
     onNavigateToNews: () -> Unit = {},
     onNavigateToVideos: () -> Unit = {},
     onNavigateToPodcasts: () -> Unit = {},
+    onNavigateToSocial: (String) -> Unit = {},
     onRaceClick: (Race) -> Unit = {},
     onVideoClick: (String) -> Unit = {},
     onEpisodeClick: (com.f1tracker.data.models.PodcastEpisode) -> Unit = {},
+    onGameClick: () -> Unit = {},
     onPlayPause: () -> Unit = {},
     onNavigateToStandings: (Int) -> Unit = {}, // 0 for Drivers, 1 for Constructors
     onViewResults: (com.f1tracker.data.models.SessionResult) -> Unit = {},
@@ -75,6 +81,26 @@ fun HomeScreen(
     // Refresh data if stale when screen is displayed
     LaunchedEffect(Unit) {
         raceViewModel.refreshIfStale()
+    }
+    
+    // Sort News for Daily Mix (Prioritize Nuclear/Major)
+    val dailyMixNews = remember(newsArticles) {
+        newsArticles.sortedBy { article ->
+            val category = NewsCategorizer.categorize(article.headline)
+            when (category) {
+                NewsCategory.NUCLEAR -> 0
+                NewsCategory.MAJOR -> 1
+                else -> 2
+            }
+        }
+    }
+
+    // Filter news for the list below to avoid duplicates
+    val remainingNews = remember(newsArticles, dailyMixNews) {
+        val mixedUrls = dailyMixNews.take(2).mapNotNull { it.links?.web?.href }.toSet()
+        newsArticles.filter { article -> 
+            article.links?.web?.href !in mixedUrls 
+        }
     }
     
     Column(
@@ -105,11 +131,56 @@ fun HomeScreen(
             onNavigateToStandings = onNavigateToStandings
         )
         
-        // News Section
-        if (newsArticles.isNotEmpty()) {
+        // Bento "Daily Mix" Horizontal Scroll
+        val instagramPosts by multimediaViewModel.instagramPosts.collectAsState()
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        DailyMixSection(
+            newsArticles = dailyMixNews,
+            videos = youtubeVideos,
+            socialPosts = instagramPosts,
+            podcasts = podcasts,
+            onNewsClick = onNewsClick,
+            onVideoClick = onVideoClick,
+            onSocialClick = { permalink -> onNavigateToSocial(permalink) },
+            onGameClick = onGameClick,
+            onPodcastClick = onEpisodeClick
+        )
+
+        // Social Section (Replicating News Section style, but big cards)
+        val socialSectionPosts = remember(instagramPosts) {
+            val now = java.time.Instant.now()
+            fun getScore(post: com.f1tracker.data.models.InstagramPost): Double {
+                val likes = post.like_count.toDouble()
+                val hours = try {
+                     val instant = java.time.Instant.parse(post.timestamp)
+                     java.time.Duration.between(instant, now).toHours().toDouble()
+                } catch (e: Exception) { 100.0 }
+                return likes / Math.pow(hours + 2.0, 1.5)
+            }
+
+            val sorted = instagramPosts.sortedByDescending { getScore(it) }
+            val topReel = sorted.firstOrNull { it.media_type == "VIDEO" }
+            val others = sorted.filter { it != topReel }.take(2)
+            
+            if (topReel != null) listOf(topReel) + others else others.take(3)
+        }
+
+        if (socialSectionPosts.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(12.dp))
+            com.f1tracker.ui.components.SocialSection(
+                posts = socialSectionPosts,
+                onSocialClick = { permalink -> onNavigateToSocial(permalink) },
+                onViewMoreClick = { onNavigateToSocial("") }
+            )
+        }
+
+        // News Section (Remaining items)
+        if (remainingNews.isNotEmpty()) {
             Spacer(modifier = Modifier.height(12.dp))
             com.f1tracker.ui.components.NewsSection(
-                newsArticles = newsArticles,
+                newsArticles = remainingNews, 
                 onNewsClick = onNewsClick,
                 onViewMoreClick = onNavigateToNews
             )

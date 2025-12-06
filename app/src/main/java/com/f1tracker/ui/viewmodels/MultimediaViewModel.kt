@@ -64,7 +64,7 @@ class MultimediaViewModel @Inject constructor(
     fun refreshInstagramFeed() {
         viewModelScope.launch {
             _isInstagramRefreshing.value = true
-            val result = repository.getInstagramFeed()
+            val result = repository.getInstagramFeed(forceRefresh = true)
             result.onSuccess { posts ->
                 _instagramPosts.value = posts.shuffled() // Shuffle on refresh too
             }.onFailure { e ->

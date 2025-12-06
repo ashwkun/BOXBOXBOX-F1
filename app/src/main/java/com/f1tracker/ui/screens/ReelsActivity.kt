@@ -56,6 +56,7 @@ import com.f1tracker.ui.theme.F1TrackerTheme
 import com.f1tracker.ui.viewmodels.ReelsViewModel
 import com.f1tracker.util.InstagramConstants
 import com.f1tracker.ui.components.GlassmorphicLoadingIndicator
+import com.f1tracker.ui.util.ExoPlayerPool
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -119,6 +120,7 @@ fun ReelsScreen(
 
     VerticalPager(
         state = pagerState,
+        beyondBoundsPageCount = 1, // Preload next page
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
@@ -339,29 +341,67 @@ fun ReelMediaItem(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     
-    // ExoPlayer State
+    // ExoPlayer State - using pool for efficient reuse
     var exoPlayer by remember { mutableStateOf<ExoPlayer?>(null) }
     var isVideoReady by remember { mutableStateOf(false) }
+    var hasError by remember { mutableStateOf(false) }
     
     // Create/Release Player based on isPlaying and Lifecycle
-    DisposableEffect(context, isPlaying, lifecycleOwner, mediaUrl) {
-        if (isPlaying && mediaType == "VIDEO" && mediaUrl != null) {
-            val player = ExoPlayer.Builder(context).build().apply {
-                setMediaItem(MediaItem.fromUri(mediaUrl))
-                prepare()
-                playWhenReady = true
-                repeatMode = Player.REPEAT_MODE_ONE
-                addListener(object : Player.Listener {
-                    override fun onPlaybackStateChanged(playbackState: Int) {
-                        if (playbackState == Player.STATE_READY) {
-                            isVideoReady = true
-                        }
+    // Using ExoPlayerPool for efficient player reuse
+    // NOTE: Removed isPlaying from keys to allow preloading when composed
+    DisposableEffect(mediaUrl) {
+        if (mediaType == "VIDEO" && mediaUrl != null) {
+            val player = ExoPlayerPool.acquire(context)
+            player.setMediaItem(MediaItem.fromUri(mediaUrl))
+            player.prepare()
+            // Don't play immediately if not active page, but do prepare
+            player.playWhenReady = isPlaying 
+            player.volume = 1f // Ensure volume is up
+            player.repeatMode = Player.REPEAT_MODE_ONE
+            
+            val listener = object : Player.Listener {
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    if (playbackState == Player.STATE_READY) {
+                        isVideoReady = true
+                        hasError = false
                     }
-                })
-            }
-            exoPlayer = player
-        }
+                }
 
+                override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                    android.util.Log.e("ReelsDebug", "Player Error for $mediaUrl: ${error.message}", error)
+                    hasError = true
+                    isVideoReady = false
+                }
+            }
+            player.addListener(listener)
+            exoPlayer = player
+
+            onDispose {
+                player.removeListener(listener)
+                ExoPlayerPool.release(player)
+                exoPlayer = null
+                isVideoReady = false
+                hasError = false
+            }
+        } else {
+            onDispose { 
+                exoPlayer?.let { ExoPlayerPool.release(it) }
+                exoPlayer = null
+            }
+        }
+    }
+
+    // React to isPlaying changes (swipe)
+    LaunchedEffect(isPlaying, exoPlayer) {
+        exoPlayer?.playWhenReady = isPlaying
+        if (isPlaying && hasError) {
+             // Try to prepare again if we come back to a failed video
+             exoPlayer?.prepare()
+        }
+    }
+    
+    // Separate lifecycle handling to pause/resume
+    DisposableEffect(lifecycleOwner, exoPlayer) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> exoPlayer?.pause()
@@ -373,9 +413,6 @@ fun ReelMediaItem(
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
-            exoPlayer?.release()
-            exoPlayer = null
-            isVideoReady = false
         }
     }
 
@@ -399,7 +436,7 @@ fun ReelMediaItem(
         }
         
         // Thumbnail / Loading State / Image Fallback
-        if (!isVideoReady) {
+        if (!isVideoReady || hasError) {
             Box(modifier = Modifier.fillMaxSize()) {
                 AsyncImage(
                     model = thumbnailUrl ?: mediaUrl,
@@ -409,7 +446,7 @@ fun ReelMediaItem(
                 )
                 
                 // Glassmorphic Loading Indicator (only if it's a video trying to load)
-                if (mediaType == "VIDEO" && isPlaying) {
+                if (mediaType == "VIDEO" && isPlaying && !hasError) {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -417,6 +454,27 @@ fun ReelMediaItem(
                         contentAlignment = Alignment.Center
                     ) {
                         GlassmorphicLoadingIndicator()
+                    }
+                }
+                
+                // Error Indicator
+                if (hasError) {
+                     Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.5f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = androidx.compose.material.icons.Icons.Default.Close,
+                                contentDescription = "Error",
+                                tint = Color.Red,
+                                modifier = Modifier.size(48.dp)
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text("Video Failed to Load", color = Color.White)
+                        }
                     }
                 }
             }

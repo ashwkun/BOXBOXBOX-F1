@@ -18,8 +18,8 @@ interface F1Repository {
     suspend fun getSprintResultsByCircuit(season: String, circuitId: String): Result<List<RaceResult>>
     suspend fun getAllRaceResultsForSeason(season: String): Result<List<Race>>
     suspend fun getESPNSessionResults(round: Int): Result<List<SessionResult>>
-    suspend fun getInstagramFeed(): Result<List<com.f1tracker.data.models.InstagramPost>>
-    suspend fun getInstagramReels(): Result<List<com.f1tracker.data.models.InstagramPost>>
+    suspend fun getInstagramFeed(forceRefresh: Boolean = false): Result<List<com.f1tracker.data.models.InstagramPost>>
+    suspend fun getInstagramReels(forceRefresh: Boolean = false): Result<List<com.f1tracker.data.models.InstagramPost>>
 }
 
 class F1RepositoryImpl @Inject constructor(
@@ -31,6 +31,15 @@ class F1RepositoryImpl @Inject constructor(
     private val youtubeRssApiService: YouTubeRssApiService,
     private val podcastApiService: PodcastApiService
 ) : F1Repository {
+
+    // Smart caching: 5-minute TTL to balance freshness and performance
+    private companion object {
+        const val CACHE_TTL_MS = 5 * 60 * 1000L // 5 minutes
+    }
+    
+    // In-memory cache with timestamp
+    private var feedCache: Pair<Long, List<InstagramPost>>? = null
+    private var reelsCache: Pair<Long, List<InstagramPost>>? = null
 
     private fun getCurrentSeason(): String {
         return java.time.Year.now().toString()
@@ -370,26 +379,64 @@ class F1RepositoryImpl @Inject constructor(
             ?: com.f1tracker.data.local.F1DataProvider.getDriverByName(athlete.shortName)?.code
     }
 
-    override suspend fun getInstagramFeed(): Result<List<com.f1tracker.data.models.InstagramPost>> = withContext(Dispatchers.IO) {
+    override suspend fun getInstagramFeed(forceRefresh: Boolean): Result<List<com.f1tracker.data.models.InstagramPost>> = withContext(Dispatchers.IO) {
         try {
-            // Cache busting: Append timestamp to force fresh fetch
-            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_feed.json?t=${System.currentTimeMillis()}"
+            // Check cache first (unless force refresh)
+            val cached = feedCache
+            if (!forceRefresh && cached != null && System.currentTimeMillis() - cached.first < CACHE_TTL_MS) {
+                android.util.Log.d("F1Repository", "Returning cached Instagram feed (age: ${(System.currentTimeMillis() - cached.first) / 1000}s)")
+                return@withContext Result.success(cached.second)
+            }
+            
+            // Fetch fresh - append timestamp ONLY if forcing refresh to bypass all caches
+            val baseUrl = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_feed.json"
+            val url = if (forceRefresh) "$baseUrl?t=${System.currentTimeMillis()}" else baseUrl
             val response = f1ApiService.getInstagramFeed(url)
+            
+            // Update cache
+            feedCache = System.currentTimeMillis() to response
+            android.util.Log.d("F1Repository", "Fetched fresh Instagram feed (${response.size} posts)")
+            
             Result.success(response)
         } catch (e: Exception) {
             android.util.Log.e("F1Repository", "Error fetching Instagram feed", e)
+            // Return stale cache if available on error
+            val cached = feedCache
+            if (cached != null) {
+                android.util.Log.d("F1Repository", "Returning stale cache due to error")
+                return@withContext Result.success(cached.second)
+            }
             Result.failure(e)
         }
     }
 
-    override suspend fun getInstagramReels(): Result<List<com.f1tracker.data.models.InstagramPost>> = withContext(Dispatchers.IO) {
+    override suspend fun getInstagramReels(forceRefresh: Boolean): Result<List<com.f1tracker.data.models.InstagramPost>> = withContext(Dispatchers.IO) {
         try {
-            // Cache busting: Append timestamp to force fresh fetch
-            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_reels.json?t=${System.currentTimeMillis()}"
+            // Check cache first (unless force refresh)
+            val cached = reelsCache
+            if (!forceRefresh && cached != null && System.currentTimeMillis() - cached.first < CACHE_TTL_MS) {
+                android.util.Log.d("F1Repository", "Returning cached Instagram reels (age: ${(System.currentTimeMillis() - cached.first) / 1000}s)")
+                return@withContext Result.success(cached.second)
+            }
+            
+            // Fetch fresh - append timestamp ONLY if forcing refresh to bypass all caches
+            val baseUrl = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_reels.json"
+            val url = if (forceRefresh) "$baseUrl?t=${System.currentTimeMillis()}" else baseUrl
             val response = f1ApiService.getInstagramFeed(url) // Uses same endpoint, different file
+            
+            // Update cache
+            reelsCache = System.currentTimeMillis() to response
+            android.util.Log.d("F1Repository", "Fetched fresh Instagram reels (${response.size} posts)")
+            
             Result.success(response)
         } catch (e: Exception) {
             android.util.Log.e("F1Repository", "Error fetching Instagram reels", e)
+            // Return stale cache if available on error
+            val cached = reelsCache
+            if (cached != null) {
+                android.util.Log.d("F1Repository", "Returning stale reels cache due to error")
+                return@withContext Result.success(cached.second)
+            }
             Result.failure(e)
         }
     }

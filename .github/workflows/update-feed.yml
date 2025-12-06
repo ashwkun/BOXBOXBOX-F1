@@ -5,7 +5,7 @@ on:
     # THE QUEUE SKIPPER: Prime number offsets to avoid traffic
     # Runs at minute 7 and 37 of every hour, between 03:00 and 19:00 UTC
     # IST: Runs from 08:30 AM to 01:30 AM (Sleeps 01:30 AM - 08:30 AM)
-    - cron: '7,37 3-19 * * *'
+    - cron: '7 3-19 * * *'
   workflow_dispatch: # Manual trigger
 
 jobs:
@@ -26,11 +26,16 @@ jobs:
         IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
       run: node .github/scripts/fetch_insta.js
 
+    - name: Fetch YouTube
+      env:
+        YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_CREDENTIALS }}
+      run: node .github/scripts/fetch_youtube.js
+
     - name: Commit Change
       run: |
         git config user.name "F1 Bot"
         git config user.email "bot@boxboxbox.app"
-        git add f1_feed.json f1_reels.json f1_archive.json
+        git add f1_feed.json f1_reels.json f1_archive.json f1_youtube.json
         timestamp=$(date -u)
         git commit -m "Feed update: ${timestamp}" || exit 0
         git push

@@ -1,0 +1,33 @@
+name: Historical F1 Highlights
+
+on:
+  schedule:
+    # Run once a day at 04:00 UTC
+    - cron: '0 4 * * *'
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  update-highlights:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Fetch Highlights
+      env:
+        YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_CREDENTIALS }}
+      run: node .github/scripts/fetch_highlights.js
+
+    - name: Commit Change
+      run: |
+        git config user.name "F1 Bot"
+        git config user.email "bot@boxboxbox.app"
+        git add f1_highlights.json
+        timestamp=$(date -u)
+        git commit -m "Highlights update: ${timestamp}" || exit 0
+        git push

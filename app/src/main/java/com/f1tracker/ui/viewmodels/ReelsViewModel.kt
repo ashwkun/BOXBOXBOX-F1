@@ -21,22 +21,48 @@ class ReelsViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
     init {
         fetchReels()
     }
 
-    fun fetchReels() {
+    /**
+     * Fetch reels with optional force refresh.
+     * 
+     * @param forceRefresh If true, bypasses cache and fetches fresh data.
+     *                     Use this for pull-to-refresh actions.
+     */
+    fun fetchReels(forceRefresh: Boolean = false) {
         viewModelScope.launch {
-            _isLoading.value = true
-            repository.getInstagramReels()
+            if (forceRefresh) {
+                _isRefreshing.value = true
+            } else {
+                _isLoading.value = true
+            }
+            
+            repository.getInstagramReels(forceRefresh = forceRefresh)
                 .onSuccess { posts ->
                     _reels.value = posts
                 }
                 .onFailure {
                     // Handle error (maybe retry or show empty state)
+                    android.util.Log.e("ReelsViewModel", "Failed to fetch reels", it)
                 }
+            
             _isLoading.value = false
+            _isRefreshing.value = false
         }
     }
+    
+    /**
+     * Refresh reels, bypassing cache.
+     * Call this from pull-to-refresh UI.
+     */
+    fun refresh() {
+        fetchReels(forceRefresh = true)
+    }
 }
+

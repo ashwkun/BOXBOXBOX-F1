@@ -36,6 +36,7 @@ import com.f1tracker.data.local.F1DataProvider
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import androidx.compose.ui.graphics.graphicsLayer
 
 @Composable
 fun HeroSectionFixed(
@@ -101,6 +102,20 @@ private fun ComingUpHeroFixed(
     val targetDateTime = parseISTDateTimeFixed(state.nextMainEvent.date, state.nextMainEvent.time)
     var countdown by remember { mutableStateOf("") }
     
+    // Parallax State
+    val parallax by com.f1tracker.ui.util.rememberParallaxState()
+    // Animation for smooth parallax
+    val animatedHorizontalBias by animateFloatAsState(
+        targetValue = parallax.horizontalBias,
+        animationSpec = tween(100, easing = LinearEasing),
+        label = "parallaxX"
+    )
+    val animatedVerticalBias by animateFloatAsState(
+        targetValue = parallax.verticalBias,
+        animationSpec = tween(100, easing = LinearEasing),
+        label = "parallaxY"
+    )
+    
     LaunchedEffect(targetDateTime) {
         while (true) {
             countdown = getCountdown(targetDateTime)
@@ -134,14 +149,20 @@ private fun ComingUpHeroFixed(
             )
             .clickable { onRaceClick(state.race) }
     ) {
-        // Circuit track layout as background (very subtle)
+        // Circuit track layout as background (Parallax Layer 1 - Deep)
         val circuitDrawable = getCircuitDrawableById(state.race.circuit.circuitId)
         AsyncImage(
             model = circuitDrawable,
             contentDescription = null,
             modifier = Modifier
                 .matchParentSize()
-                .alpha(0.02f),
+                .alpha(0.04f) // Reduced visibility further
+                .graphicsLayer {
+                    translationX = animatedHorizontalBias * 25f // Reduced intensity
+                    translationY = animatedVerticalBias * 25f
+                    scaleX = 1.1f 
+                    scaleY = 1.1f
+                },
             contentScale = ContentScale.Crop
         )
         
@@ -170,6 +191,7 @@ private fun ComingUpHeroFixed(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                // Flag (Static)
                 AsyncImage(
                     model = flagUrl,
                     contentDescription = null,
@@ -320,6 +342,19 @@ private fun ActiveWeekendHeroFixed(
     val countryCode = getCountryCodeFixed(state.race.circuit.location.country)
     val flagUrl = "https://flagcdn.com/w320/$countryCode.png"
     
+    // Parallax State
+    val parallax by com.f1tracker.ui.util.rememberParallaxState()
+    val animatedHorizontalBias by animateFloatAsState(
+        targetValue = parallax.horizontalBias,
+        animationSpec = tween(100, easing = LinearEasing),
+        label = "parallaxX"
+    )
+    val animatedVerticalBias by animateFloatAsState(
+        targetValue = parallax.verticalBias,
+        animationSpec = tween(100, easing = LinearEasing),
+        label = "parallaxY"
+    )
+    
     var countdown by remember { mutableStateOf("") }
     
     LaunchedEffect(state.currentEvent?.endsAt) {
@@ -355,14 +390,20 @@ private fun ActiveWeekendHeroFixed(
             )
             .clickable { onRaceClick(state.race) }
     ) {
-        // Circuit track layout as background (very subtle)
+        // Circuit track layout as background (Parallax Layer 1)
         val circuitDrawable = getCircuitDrawableById(state.race.circuit.circuitId)
         AsyncImage(
             model = circuitDrawable,
             contentDescription = null,
             modifier = Modifier
                 .matchParentSize()
-                .alpha(0.02f),
+                .alpha(0.04f) // Reduced visibility further
+                .graphicsLayer {
+                    translationX = animatedHorizontalBias * 25f
+                    translationY = animatedVerticalBias * 25f
+                    scaleX = 1.1f
+                    scaleY = 1.1f
+                },
             contentScale = ContentScale.Crop
         )
         
@@ -391,6 +432,7 @@ private fun ActiveWeekendHeroFixed(
                 verticalAlignment = Alignment.Top,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                // Flag (Static)
                 AsyncImage(
                     model = flagUrl,
                     contentDescription = null,

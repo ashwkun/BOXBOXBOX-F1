@@ -375,20 +375,40 @@ class RaceViewModel @Inject constructor(
         }
 
         // Fetch ESPN session results for completed sessions
+        // Fetch ESPN session results for completed sessions
         val sessionResults = try {
             val round = race.round.toIntOrNull() ?: 0
             if (round > 0) {
                 Log.d("RaceViewModel", "Fetching ESPN results for round $round")
                 val results = repository.getESPNSessionResults(round).getOrNull() ?: emptyList()
-                Log.d("RaceViewModel", "Fetched ${results.size} session results: ${results.map { it.sessionType }}")
-                results
+                
+                if (results.isEmpty()) {
+                    // If fetch failed/empty, try to recover from cache
+                    val cachedState = cachedRaceState
+                    if (cachedState is RaceWeekendState.Active && cachedState.race.round == race.round && cachedState.sessionResults.isNotEmpty()) {
+                        Log.d("RaceViewModel", "Fetch failed/empty, preserving ${cachedState.sessionResults.size} cached session results")
+                        cachedState.sessionResults
+                    } else {
+                        emptyList()
+                    }
+                } else {
+                    Log.d("RaceViewModel", "Fetched ${results.size} session results: ${results.map { it.sessionType }}")
+                    results
+                }
             } else {
                 Log.w("RaceViewModel", "Invalid round number: ${race.round}")
                 emptyList()
             }
         } catch (e: Exception) {
             Log.e("RaceViewModel", "Error fetching ESPN session results", e)
-            emptyList()
+             // Try to recover from cache
+            val cachedState = cachedRaceState
+            if (cachedState is RaceWeekendState.Active && cachedState.race.round == race.round && cachedState.sessionResults.isNotEmpty()) {
+                Log.d("RaceViewModel", "Exception occurred, preserving ${cachedState.sessionResults.size} cached session results")
+                cachedState.sessionResults
+            } else {
+                emptyList()
+            }
         }
 
         return RaceWeekendState.Active(

@@ -47,6 +47,7 @@ fun MainAppScreen(
     var feedRefreshTrigger by remember { mutableLongStateOf(0L) } // Trigger for feed refresh
     var reelsStartPermalink by remember { mutableStateOf<String?>(null) }
     var reelsRefreshTrigger by remember { mutableLongStateOf(0L) }
+    var feedStartPermalink by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
     
     // Handle Intent Data (Deep Links / Notifications)
@@ -177,14 +178,23 @@ fun MainAppScreen(
                             currentDestination = NavDestination.FEED 
                         },
                         onNavigateToPodcasts = { 
-                            feedSelectedTab = 4
+                            feedSelectedTab = 5 
                             currentDestination = NavDestination.FEED 
+                        },
+                        onNavigateToSocial = { permalink ->
+                            feedSelectedTab = 1
+                            feedStartPermalink = permalink
+                            currentDestination = NavDestination.FEED
                         },
                         onRaceClick = { race -> selectedRace = race },
                         onVideoClick = { videoId -> selectedVideoId = videoId },
                         onEpisodeClick = { episode ->
                             currentEpisode = episode
                             audioPlayerManager.playEpisode(episode.audioUrl)
+                        },
+                        onGameClick = {
+                            feedSelectedTab = 4 // Index 4 is Games
+                            currentDestination = NavDestination.FEED
                         },
                         onPlayPause = {
                             if (isPlaying) {
@@ -238,7 +248,8 @@ fun MainAppScreen(
                         isPlaying = isPlaying,
                         initialTab = feedSelectedTab,
                         onTabChanged = { feedSelectedTab = it },
-                        refreshTrigger = feedRefreshTrigger
+                        refreshTrigger = feedRefreshTrigger,
+                        startPermalink = feedStartPermalink
                     )
                     NavDestination.REELS -> ReelsScreen(
                         onClose = { currentDestination = NavDestination.FEED },

@@ -25,53 +25,99 @@ object RetrofitClient {
         level = HttpLoggingInterceptor.Level.BODY
     }
     
-    private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
-        .build()
+    private var okHttpClient: OkHttpClient? = null
     
-    private val f1Retrofit = Retrofit.Builder()
-        .baseUrl(F1_BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    fun initialize(context: android.content.Context) {
+        if (okHttpClient != null) return
+        
+        val cacheSize = 50L * 1024 * 1024 // 50 MB
+        val cache = okhttp3.Cache(context.cacheDir.resolve("http_cache"), cacheSize)
+        
+        okHttpClient = OkHttpClient.Builder()
+            .cache(cache)
+            .addInterceptor(loggingInterceptor)
+            .addNetworkInterceptor { chain ->
+                val response = chain.proceed(chain.request())
+                val cacheControl = response.header("Cache-Control")
+                if (cacheControl == null || cacheControl.contains("no-store") || cacheControl.contains("no-cache") ||
+                    cacheControl.contains("must-revalidate") || cacheControl.contains("max-age=0")
+                ) {
+                    // If server doesn't provide cache headers, forcing a short cache for our JSON files
+                    // GitHub Pages default cache is 10 min (600s).
+                    // We allow using stale cache for up to 1 minute while revalidating
+                    response.newBuilder()
+                        .header("Cache-Control", "public, max-age=300, stale-while-revalidate=60")
+                        .build()
+                } else {
+                    response
+                }
+            }
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
     
-    private val weatherRetrofit = Retrofit.Builder()
-        .baseUrl(WEATHER_BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private val client: OkHttpClient
+        get() = okHttpClient ?: OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .build().also { 
+                // Fallback if not initialized (should not happen if App calls init)
+                android.util.Log.w("RetrofitClient", "OkHttpClient used before initialization! No disk cache available.")
+                okHttpClient = it
+            }
     
-    private val espnRetrofit = Retrofit.Builder()
-        .baseUrl(ESPN_BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private val f1Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(F1_BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
     
-    private val youtubeRssRetrofit = Retrofit.Builder()
-        .baseUrl(YOUTUBE_RSS_BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(Persister()))
-        .build()
+    private val weatherRetrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(WEATHER_BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    
+    private val espnRetrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(ESPN_BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    
+    private val youtubeRssRetrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(YOUTUBE_RSS_BASE_URL)
+            .client(client)
+            .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(Persister()))
+            .build()
+    }
     
     // Generic RSS/XML retrofit for podcast feeds with lenient parsing
-    private val podcastRetrofit = Retrofit.Builder()
-        .baseUrl("https://audioboom.com/") // Base URL (will be overridden with @Url)
-        .client(okHttpClient)
-        .addConverterFactory(
-            SimpleXmlConverterFactory.createNonStrict(
-                Persister(RegistryMatcher())
+    private val podcastRetrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://audioboom.com/") // Base URL (will be overridden with @Url)
+            .client(client)
+            .addConverterFactory(
+                SimpleXmlConverterFactory.createNonStrict(
+                    Persister(RegistryMatcher())
+                )
             )
-        )
-        .build()
+            .build()
+    }
     
-    val f1ApiService: F1ApiService = f1Retrofit.create(F1ApiService::class.java)
-    val weatherApiService: WeatherApiService = weatherRetrofit.create(WeatherApiService::class.java)
-    val espnNewsApiService: ESPNNewsApiService = espnRetrofit.create(ESPNNewsApiService::class.java)
-    val espnApiService: ESPNApiService = espnRetrofit.create(ESPNApiService::class.java)
-    val youtubeRssApiService: YouTubeRssApiService = youtubeRssRetrofit.create(YouTubeRssApiService::class.java)
+    val f1ApiService: F1ApiService by lazy { f1Retrofit.create(F1ApiService::class.java) }
+    val weatherApiService: WeatherApiService by lazy { weatherRetrofit.create(WeatherApiService::class.java) }
+    val espnNewsApiService: ESPNNewsApiService by lazy { espnRetrofit.create(ESPNNewsApiService::class.java) }
+    val espnApiService: ESPNApiService by lazy { espnRetrofit.create(ESPNApiService::class.java) }
+    val youtubeRssApiService: YouTubeRssApiService by lazy { youtubeRssRetrofit.create(YouTubeRssApiService::class.java) }
     val podcastApiService: PodcastApiService by lazy {
         podcastRetrofit.create(PodcastApiService::class.java)
     }
@@ -86,7 +132,7 @@ object RetrofitClient {
     private val f1NewsRetrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl("https://rss-bridge.org/")
-            .client(okHttpClient)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -101,11 +147,13 @@ object RetrofitClient {
 
     private const val MOTORSPORT_RSS_BASE_URL = "https://www.motorsport.com/"
 
-    private val motorsportRetrofit = Retrofit.Builder()
-        .baseUrl(MOTORSPORT_RSS_BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(Persister()))
-        .build()
+    private val motorsportRetrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(MOTORSPORT_RSS_BASE_URL)
+            .client(client)
+            .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(Persister()))
+            .build()
+    }
 
     val motorsportApiService: MotorsportApiService by lazy {
         motorsportRetrofit.create(MotorsportApiService::class.java)

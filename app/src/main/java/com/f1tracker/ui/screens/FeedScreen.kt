@@ -71,12 +71,12 @@ fun FeedScreen(
     isPlaying: Boolean = false,
     initialTab: Int = 0,
     onTabChanged: (Int) -> Unit = {},
-    refreshTrigger: Long = 0L
+    refreshTrigger: Long = 0L,
+    startPermalink: String? = null
 ) {
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
     var isGameFullScreen by remember { mutableStateOf(false) }
-
     
     val newsArticles by newsViewModel.newsArticles.collectAsState()
     val isRefreshing by newsViewModel.isRefreshing.collectAsState()
@@ -92,6 +92,16 @@ fun FeedScreen(
         initialPage = multimediaViewModel.instagramScrollIndex
     ) {
         if (instagramPosts.isEmpty()) 3 else instagramPosts.size
+    }
+
+    // Scroll to specific post if requested
+    LaunchedEffect(startPermalink, instagramPosts) {
+        if (startPermalink != null && instagramPosts.isNotEmpty()) {
+            val index = instagramPosts.indexOfFirst { it.permalink == startPermalink }
+            if (index != -1) {
+                instagramPagerState.scrollToPage(index)
+            }
+        }
     }
 
     // Sync Instagram scroll state to ViewModel
@@ -149,8 +159,9 @@ fun FeedScreen(
         TabItem("AUDIO", Icons.Default.Headphones)
     )
     // Initialize pager with the persisted state or initialTab if provided (though initialTab is mostly 0)
-    // We prioritize the ViewModel state if it's not 0, otherwise we use initialTab
-    val startPage = if (selectedTabIndex != 0) selectedTabIndex else initialTab
+    // Initialize pager with the persisted state or initialTab if provided
+    // We prioritize the explicit initialTab (navigation) over ViewModel state
+    val startPage = if (initialTab != 0) initialTab else selectedTabIndex
     val pagerState = androidx.compose.foundation.pager.rememberPagerState(initialPage = startPage) { tabs.size }
     val coroutineScope = rememberCoroutineScope()
     
