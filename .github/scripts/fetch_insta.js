@@ -188,10 +188,19 @@ async function run() {
 
         // 5. DEDUPLICATE & MERGE (Audio Workaround)
         const groupedPosts = new Map();
+        const ungroupedPosts = []; // Posts with null/empty captions - can't be grouped reliably
 
         // Group by Author + Caption (first 50 chars)
+        // Skip posts with null/empty captions to avoid false matches
         Array.from(feedMap.values()).forEach(post => {
             const captionKey = post.caption ? post.caption.substring(0, 50).trim() : '';
+
+            // If caption is empty or too short, don't group - keep separately
+            if (!captionKey || captionKey.length < 10) {
+                ungroupedPosts.push(post);
+                return;
+            }
+
             const key = `${post.author}|${captionKey}`;
 
             if (!groupedPosts.has(key)) {
@@ -202,27 +211,33 @@ async function run() {
 
         const finalFeedList = [];
 
-        groupedPosts.forEach((group) => {
-            // If we have multiple posts in a group, check for VIDEO + IMAGE/CAROUSEL mix
+        groupedPosts.forEach((group, key) => {
+            // If we have multiple posts in a group, handle deduplication
             if (group.length > 1) {
+                // Sort by timestamp (newest first) for deduplication
+                group.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
                 const videoPost = group.find(p => p.media_type === 'VIDEO');
                 const imagePost = group.find(p => p.media_type === 'IMAGE' || p.media_type === 'CAROUSEL_ALBUM');
 
                 if (videoPost && imagePost) {
+                    // Case 1: VIDEO + IMAGE/CAROUSEL - merge audio
                     console.log(`🔀 Merging audio from Video ${videoPost.id} to ${imagePost.media_type} ${imagePost.id}`);
-                    // Transfer video URL as audio_url
                     imagePost.audio_url = videoPost.media_url;
-                    // Keep only the image post
                     finalFeedList.push(imagePost);
                 } else {
-                    // No clear merge candidate, keep all (or just duplicates of same type)
-                    group.forEach(p => finalFeedList.push(p));
+                    // Case 2: Same-type duplicates - keep only the newest one
+                    console.log(`🔄 Deduplicating ${group.length} posts for "${key.substring(0, 50)}..." - keeping newest`);
+                    finalFeedList.push(group[0]); // Already sorted, so first is newest
                 }
             } else {
                 // Single post, keep it
                 finalFeedList.push(group[0]);
             }
         });
+
+        // Add back ungrouped posts (those with null/empty captions)
+        ungroupedPosts.forEach(post => finalFeedList.push(post));
 
         // 6. SORT & SLICE (Newest First)
         const sortedFeed = finalFeedList
