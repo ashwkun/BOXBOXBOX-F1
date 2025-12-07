@@ -1,5 +1,5 @@
 {
-  "date": "2025-12-06",
+  "date": "2025-12-07",
   "nuclear_sent": [
     {
       "id": "5994ba04d0c33644fb3bb3d86086717b",
@@ -125,7 +125,7 @@
       "image": "https://cdn-6.motorsport.com/images/amp/01Qdzwq0/s6/max-verstappen-red-bull-racing-2.jpg"
     }
   ],
-  "slot1_remaining": 0,
+  "slot1_remaining": 1,
   "slot2_remaining": 2,
   "digest_items": [
     {
@@ -134,7 +134,7 @@
       "url": "https://www.motorsport.com/f1/news/everyone-thinks-i-wont-take-risks-lando-norris-reveals-abu-dhabi-title-advantage/10782928/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 90,
       "timestamp": "2025-12-06T17:09:59",
-      "image": "https://cdn-5.motorsport.com/images/amp/6DGqdA9Y/s6/lando-norris-mclaren-max-verst.jpg"
+      "image": "https://cdn-7.motorsport.com/images/amp/6DGqdA9Y/s6/lando-norris-mclaren-max-verst.jpg"
     },
     {
       "id": "e731cae223b3de8082352e39d807d846",
@@ -142,7 +142,7 @@
       "url": "https://www.motorsport.com/f1/news/zak-brown-denies-mclaren-f1-team-orders-papaya-rules/10782458/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 60,
       "timestamp": "2025-12-05T13:01:08",
-      "image": "https://cdn-4.motorsport.com/images/amp/YE9w9WDY/s6/oscar-piastri-mclaren-zak-brow.jpg"
+      "image": "https://cdn-6.motorsport.com/images/amp/YE9w9WDY/s6/oscar-piastri-mclaren-zak-brow.jpg"
     },
     {
       "id": "b1b251d1b03a196c86565c260250f761",
@@ -150,7 +150,7 @@
       "url": "https://www.motorsport.com/f1/news/martin-brundle-urges-mclaren-to-risk-nuclear-fallout-with-team-orders-in-abu-dhabi-gp/10782450/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 60,
       "timestamp": "2025-12-05T11:43:49",
-      "image": "https://cdn-3.motorsport.com/images/amp/2dE7y4ZY/s6/lando-norris-mclaren-zak-brown.jpg"
+      "image": "https://cdn-5.motorsport.com/images/amp/2dE7y4ZY/s6/lando-norris-mclaren-zak-brown.jpg"
     },
     {
       "id": "66fe4592240bef4cc282d0f4fbbdd797",
@@ -166,7 +166,7 @@
       "url": "https://www.motorsport.com/f1/news/oscar-piastri-confirms-mclaren-team-orders-chat-ahead-of-abu-dhabi-grand-prix/10782911/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 45,
       "timestamp": "2025-12-06T16:38:22",
-      "image": "https://cdn-8.motorsport.com/images/amp/2Qe8ePv2/s6/oscar-piastri-mclaren.jpg"
+      "image": "https://cdn-3.motorsport.com/images/amp/2Qe8ePv2/s6/oscar-piastri-mclaren.jpg"
     },
     {
       "id": "90d8e82a12baf931d0e7bc1ef1ea19e2",
@@ -177,7 +177,7 @@
       "image": "https://cdn-6.motorsport.com/images/amp/6x7Zxy4Y/s6/lewis-hamilton-ferrari-crash.jpg"
     }
   ],
-  "digest_sent": true,
+  "digest_sent": false,
   "ignored_items": [
     "3e0039c1fd3a3bf58758ee669cda54a2",
     "034f34831d976f86686eb198960619b5",
@@ -291,79 +291,79 @@
   ],
   "schema_version": 2,
   "sent_urls": [
-    "https://www.motorsport.com/f1/news/red-bull-confirms-tuesday-announcement-on-2026-f1-driver-line-ups/10781377/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/lewis-hamiltons-priceless-reaction-as-max-verstappens-qatar-win-flips-f1-title-fight/10781668/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/verstappen-red-bull-must-be-faster-after-norris-dominates-f1-abu-dhabi-gp-practice/10782566/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-qatar-gp-race-report/10781244/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/how-the-2025-f1-title-can-be-won-or-lost-at-abu-dhabi-gp/10781252/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f2-champion-leonardo-fornaroli-joins-mclaren-as-test-and-development-driver/10781693/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/who-will-win-the-2025-f1-world-title-in-the-abu-dhabi-decider-our-writers-have-their-say/10782099/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/mclaren-hasnt-discussed-f1-team-orders-for-abu-dhabi-norris-wont-ask-for-them/10782171/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/red-bull-cant-rely-three-times-on-mistakes-from-mclaren-in-f1-abu-dhabi-gp/10782589/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/isack-hadjar-red-bull-f1-2026-arvid-lindblad-racing-bulls/10781791/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/lewis-hamilton-suffers-bizarre-crash-in-abu-dhabi-fp3-as-session-is-red-flagged/10782745/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/who-will-win-the-2025-f1-world-title-in-the-abu-dhabi-decider-our-writers-have-their-say/10782099/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-abu-dhabi-gp-qualifying-report/10782839/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-qatar-gp-race-report/10781244/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f2-champion-leonardo-fornaroli-joins-mclaren-as-test-and-development-driver/10781693/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/charles-leclerc-admits-most-exciting-part-of-qatar-gp-was-working-out-title-fight-maths/10781550/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/james-vowles-hails-dream-come-true-as-williams-secures-p5-in-constructors-championship/10781595/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/business-as-usual-norris-verstappen-and-piastri-weigh-in-on-f1-title-decider/10782248/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/how-the-2025-f1-title-can-be-won-or-lost-at-abu-dhabi-gp/10781252/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
+    "https://www.motorsport.com/f1/news/verstappen-red-bull-must-be-faster-after-norris-dominates-f1-abu-dhabi-gp-practice/10782566/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/isack-hadjar-red-bull-f1-2026-arvid-lindblad-racing-bulls/10781791/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/lewis-hamilton-suffers-bizarre-crash-in-abu-dhabi-fp3-as-session-is-red-flagged/10782745/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-abu-dhabi-gp-qualifying-report/10782839/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/charles-leclerc-admits-most-exciting-part-of-qatar-gp-was-working-out-title-fight-maths/10781550/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/red-bull-confirms-tuesday-announcement-on-2026-f1-driver-line-ups/10781377/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/lewis-hamiltons-priceless-reaction-as-max-verstappens-qatar-win-flips-f1-title-fight/10781668/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
   ],
   "title_fingerprints": [
     {
       "tokens": [
-        "vital",
         "lando",
+        "verstappen",
         "takes",
-        "f1",
-        "position",
-        "gp",
-        "pole",
         "norris",
-        "ahead",
+        "pole",
+        "gp",
         "abu",
+        "ahead",
         "max",
-        "dhabi",
         "of",
-        "verstappen"
+        "position",
+        "vital",
+        "f1",
+        "dhabi"
       ],
       "title": "F1 Abu Dhabi GP: Max Verstappen takes vital pole position ahead of Lando Norris",
       "timestamp": "2025-12-06T15:20:11"
     },
     {
       "tokens": [
+        "lewis",
+        "in",
         "fp3",
         "suffers",
-        "hamilton",
         "as",
-        "session",
-        "is",
-        "flagged",
-        "red",
-        "in",
+        "hamilton",
         "abu",
         "crash",
+        "flagged",
         "bizarre",
+        "red",
+        "is",
         "dhabi",
-        "lewis"
+        "session"
       ],
       "title": "Lewis Hamilton suffers bizarre crash in Abu Dhabi FP3 as session is red-flagged",
       "timestamp": "2025-12-06T11:27:22"
     },
     {
       "tokens": [
-        "to",
-        "t",
-        "win",
-        "fight",
-        "f1",
-        "mclaren",
-        "mistakes",
-        "red",
-        "rely",
         "on",
-        "from",
-        "can",
         "title",
-        "bull"
+        "to",
+        "fight",
+        "red",
+        "win",
+        "t",
+        "from",
+        "mistakes",
+        "can",
+        "rely",
+        "mclaren",
+        "bull",
+        "f1"
       ],
       "title": "Red Bull \u2018can't rely on mistakes\u2019 from McLaren to win F1 title fight",
       "timestamp": "2025-12-05T16:44:26"
@@ -371,20 +371,20 @@
     {
       "tokens": [
         "admits",
-        "to",
+        "verstappen",
         "lando",
-        "we",
-        "need",
+        "to",
+        "norris",
         "practice",
         "gp",
+        "as",
+        "we",
         "faster",
-        "norris",
+        "tops",
         "abu",
         "max",
-        "tops",
+        "need",
         "dhabi",
-        "verstappen",
-        "as",
         "be"
       ],
       "title": "Max Verstappen admits \u2018we need to be faster\u2019 as Lando Norris tops Abu Dhabi GP practice",
@@ -392,225 +392,225 @@
     },
     {
       "tokens": [
-        "lose",
-        "to",
         "has",
         "lando",
-        "s",
-        "as",
-        "fight",
-        "f1",
-        "championship",
-        "norris",
-        "in",
-        "2025",
+        "most",
         "on",
         "rivals",
+        "in",
+        "to",
+        "norris",
+        "lose",
+        "fight",
+        "as",
+        "weigh",
+        "s",
         "title",
-        "most",
-        "weigh"
+        "f1",
+        "championship",
+        "2025"
       ],
       "title": "Lando Norris has \u201cmost to lose\u201d as F1\u2019s title rivals weigh in on 2025 championship fight",
       "timestamp": "2025-12-04T14:54:12"
     },
     {
       "tokens": [
-        "piastri",
-        "t",
         "lando",
-        "to",
-        "team",
-        "help",
-        "f1",
-        "mclaren",
-        "fight",
         "talk",
-        "norris",
-        "oscar",
-        "orders",
         "won",
-        "ask",
-        "avoids",
         "title",
-        "as"
+        "help",
+        "norris",
+        "to",
+        "fight",
+        "avoids",
+        "as",
+        "t",
+        "team",
+        "ask",
+        "mclaren",
+        "piastri",
+        "orders",
+        "f1",
+        "oscar"
       ],
       "title": "McLaren avoids team orders talk as Lando Norris won't ask Oscar Piastri to help F1 title fight",
       "timestamp": "2025-12-04T12:19:25"
     },
     {
       "tokens": [
-        "win",
+        "our",
+        "in",
+        "will",
         "the",
+        "world",
+        "win",
+        "say",
+        "dhabi",
+        "abu",
+        "writers",
+        "who",
+        "their",
+        "have",
         "f1",
         "championship",
-        "say",
-        "in",
-        "abu",
-        "2025",
-        "world",
-        "have",
-        "our",
-        "their",
-        "dhabi",
-        "who",
-        "will",
-        "writers"
+        "2025"
       ],
       "title": "Who will win the 2025 F1 world championship in Abu Dhabi? Our writers have their say",
       "timestamp": "2025-12-04T08:46:02"
     },
     {
       "tokens": [
-        "to",
-        "isack",
-        "at",
-        "bulls",
-        "f1",
-        "moves",
-        "red",
-        "2026",
+        "bull",
         "arvid",
         "in",
-        "racing",
-        "for",
-        "lindblad",
+        "to",
         "hadjar",
-        "bull"
+        "2026",
+        "bulls",
+        "lindblad",
+        "for",
+        "racing",
+        "at",
+        "red",
+        "isack",
+        "moves",
+        "f1"
       ],
       "title": "Isack Hadjar moves to Red Bull for F1 2026, Arvid Lindblad in at Racing Bulls",
       "timestamp": "2025-12-02T15:05:05"
     },
     {
       "tokens": [
-        "champion",
-        "leonardo",
-        "mclaren",
-        "test",
         "development",
-        "fornaroli",
-        "f2",
         "joins",
+        "champion",
         "and",
+        "driver",
+        "leonardo",
+        "f2",
         "as",
-        "driver"
+        "test",
+        "mclaren",
+        "fornaroli"
       ],
       "title": "F2 champion Leonardo Fornaroli joins McLaren as test and development driver",
       "timestamp": "2025-12-02T07:59:18"
     },
     {
       "tokens": [
-        "win",
-        "s",
-        "fight",
-        "priceless",
-        "hamilton",
-        "as",
-        "f1",
-        "reaction",
-        "max",
         "qatar",
-        "title",
+        "lewis",
         "verstappen",
         "flips",
-        "lewis"
+        "fight",
+        "win",
+        "as",
+        "hamilton",
+        "priceless",
+        "reaction",
+        "s",
+        "max",
+        "title",
+        "f1"
       ],
       "title": "Lewis Hamilton\u2019s priceless reaction as Max Verstappen\u2019s Qatar win flips F1 title fight",
       "timestamp": "2025-12-02T00:05:21"
     },
     {
       "tokens": [
-        "constructors",
-        "come",
-        "vowles",
-        "championship",
-        "hails",
-        "in",
         "true",
         "dream",
-        "james",
-        "secures",
-        "williams",
+        "hails",
         "p5",
-        "as"
+        "in",
+        "secures",
+        "come",
+        "vowles",
+        "james",
+        "as",
+        "williams",
+        "constructors",
+        "championship"
       ],
       "title": "James Vowles hails \"dream come true\" as Williams secures P5 in constructors' championship",
       "timestamp": "2025-12-01T22:43:33"
     },
     {
       "tokens": [
-        "charles",
-        "admits",
         "working",
+        "admits",
+        "most",
+        "qatar",
+        "charles",
         "fight",
-        "exciting",
-        "part",
+        "out",
         "gp",
         "was",
-        "title",
-        "out",
-        "qatar",
+        "maths",
+        "exciting",
         "of",
         "leclerc",
-        "most",
-        "maths"
+        "title",
+        "part"
       ],
       "title": "Charles Leclerc admits \"most exciting part\" of Qatar GP was working out title fight maths",
       "timestamp": "2025-12-01T13:54:59"
     },
     {
       "tokens": [
-        "line",
-        "tuesday",
+        "confirms",
+        "on",
         "ups",
         "announcement",
-        "f1",
-        "confirms",
+        "line",
         "red",
+        "driver",
         "2026",
-        "on",
+        "tuesday",
         "bull",
-        "driver"
+        "f1"
       ],
       "title": "Red Bull confirms Tuesday announcement on 2026 F1 driver line-ups",
       "timestamp": "2025-11-30T20:38:19"
     },
     {
       "tokens": [
+        "won",
+        "be",
         "the",
-        "at",
-        "f1",
         "how",
         "gp",
-        "won",
-        "abu",
-        "2025",
-        "lost",
         "dhabi",
+        "lost",
+        "abu",
         "can",
-        "title",
+        "at",
         "or",
-        "be"
+        "title",
+        "f1",
+        "2025"
       ],
       "title": "How the 2025 F1 title can be won, or lost, at Abu Dhabi GP",
       "timestamp": "2025-11-30T18:45:25"
     },
     {
       "tokens": [
-        "piastri",
+        "qatar",
+        "verstappen",
+        "title",
         "fight",
         "to",
-        "f1",
-        "gp",
-        "oscar",
-        "abu",
         "taking",
-        "max",
-        "qatar",
+        "gp",
+        "dhabi",
         "from",
+        "abu",
+        "max",
+        "piastri",
         "wins",
-        "title",
-        "verstappen",
-        "dhabi"
+        "f1",
+        "oscar"
       ],
       "title": "F1 Qatar GP: Max Verstappen wins from Oscar Piastri, taking title fight to Abu Dhabi",
       "timestamp": "2025-11-30T17:51:07"
