@@ -1136,9 +1136,8 @@ private fun VideosList(
                 )
                 
                 videos.filter { video ->
-                    // Must match strict highlight pattern OR have session tags
-                    val isHighlight = strictHighlightPattern.containsMatchIn(video.title) ||
-                        video.tags.any { it in listOf("RACE", "QUALIFYING", "FP1", "FP2", "FP3", "SPRINT", "SPRINT_QUALIFYING") }
+                    // Must match strict highlight pattern (title must contain "Highlights")
+                    val isHighlight = strictHighlightPattern.containsMatchIn(video.title)
                     
                     // Must NOT match any exclusion pattern
                     val isExcluded = exclusionPatterns.any { it.containsMatchIn(video.title) }
