@@ -13,13 +13,13 @@
 
 ---
 
-### 🤖 Built 100% with Antigravity
+### 🤖 Built 100% with 
 
 <table>
   <tr>
-    <td align="center"><img src="screenshots/antigravity_logo.png" width="50" alt="Antigravity"/><br/><sub><b>Antigravity</b></sub></td>
-    <td align="center"><img src="screenshots/gemini_logo.png" width="50" alt="Gemini"/><br/><sub><b>Gemini</b></sub></td>
-    <td align="center"><img src="screenshots/claude_logo.png" width="50" alt="Claude"/><br/><sub><b>Claude</b></sub></td>
+    <td align="center"><img src="screenshots/antigravity_logo.png" width="50" alt="Antigravity"/><br/><sub><b></b></sub></td>
+    <td align="center"><img src="screenshots/gemini_logo.png" width="50" alt="Gemini"/><br/><sub><b></b></sub></td>
+    <td align="center"><img src="screenshots/claude_logo.png" width="50" alt="Claude"/><br/><sub><b></b></sub></td>
   </tr>
 </table>
 
