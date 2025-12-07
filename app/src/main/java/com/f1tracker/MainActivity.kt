@@ -93,6 +93,10 @@ class MainActivity : ComponentActivity() {
                         android.util.Log.d("SignalR-Debug", "Error state: ${state.message}")
                         false
                     }
+                    is com.f1tracker.data.models.RaceWeekendState.SeasonCompleted -> {
+                        android.util.Log.d("SignalR-Debug", "Season Completed state")
+                        false
+                    }
                 }
                 
                 android.util.Log.d("SignalR-Debug", "shouldConnect = $shouldConnect")

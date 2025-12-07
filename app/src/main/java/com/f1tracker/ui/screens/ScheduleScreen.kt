@@ -14,6 +14,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EventBusy
+import androidx.compose.material.icons.filled.History
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -57,7 +60,12 @@ fun ScheduleScreen(
     // Pager state for swipe navigation
     val pagerState = androidx.compose.foundation.pager.rememberPagerState(initialPage = selectedTab) { 2 }
     
-    // Sync external selectedTab with Pager
+    // Auto-switch to Completed tab if Upcoming is empty (Off-Season UX)
+    LaunchedEffect(upcomingRaces.size, completedRaces.size) {
+        if (upcomingRaces.isEmpty() && completedRaces.isNotEmpty() && selectedTab == 0) {
+            onTabChange(1) // Switch to Completed
+        }
+    }
     LaunchedEffect(selectedTab) {
         if (pagerState.currentPage != selectedTab) {
             pagerState.animateScrollToPage(selectedTab)
@@ -94,15 +102,32 @@ fun ScheduleScreen(
             val displayRaces = if (page == 0) upcomingRaces else completedRaces
             
             if (displayRaces.isEmpty()) {
-                Box(
+                Column(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    androidx.compose.material3.Icon(
+                        imageVector = if (page == 0) Icons.Filled.EventBusy else Icons.Filled.History,
+                        contentDescription = null,
+                        tint = Color(0xFFFF0080).copy(alpha = 0.5f),
+                        modifier = Modifier.size(48.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = if (page == 0) "No upcoming races" else "No completed races",
+                        text = if (page == 0) "NO UPCOMING RACES" else "NO COMPLETED RACES",
                         fontFamily = michromaFont,
-                        fontSize = 11.sp,
-                        color = Color.White.copy(alpha = 0.5f)
+                        fontSize = 12.sp,
+                        color = Color.White.copy(alpha = 0.7f),
+                        letterSpacing = 1.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = if (page == 0) "Season concluded or calendar pending" else "Season hasn't started yet",
+                        fontFamily = michromaFont,
+                        fontSize = 10.sp,
+                        color = Color.White.copy(alpha = 0.4f),
+                        modifier = Modifier.padding(top = 4.dp)
                     )
                 }
             } else {

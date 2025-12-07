@@ -20,6 +20,7 @@ sealed class RaceWeekendState {
     
     object Loading : RaceWeekendState()
     data class Error(val message: String) : RaceWeekendState()
+    object SeasonCompleted : RaceWeekendState()
 }
 
 data class UpcomingEvent(

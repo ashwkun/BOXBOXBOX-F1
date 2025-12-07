@@ -1576,6 +1576,115 @@ private fun NoSessionActiveScreen(
                     )
                 }
             }
+            is com.f1tracker.data.models.RaceWeekendState.SeasonCompleted -> {
+                val nextSeasonYear = java.time.Year.now().value + 1
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    Color(0xFF1A1A1A),
+                                    Color.Black
+                                ),
+                                radius = 600f
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(24.dp)
+                    ) {
+                        // Animated Trophy / Flag Icon
+                        val infiniteTransition = rememberInfiniteTransition(label = "season_end")
+                        val scale by infiniteTransition.animateFloat(
+                            initialValue = 1f,
+                            targetValue = 1.05f,
+                            animationSpec = infiniteRepeatable(
+                                animation = tween(2000, easing = FastOutSlowInEasing),
+                                repeatMode = RepeatMode.Reverse
+                            ),
+                            label = "scale"
+                        )
+                        
+                        Box(
+                            modifier = Modifier
+                                .size(100.dp)
+                                .graphicsLayer {
+                                    scaleX = scale
+                                    scaleY = scale
+                                }
+                                .background(
+                                    Color(0xFFFFAA00).copy(alpha = 0.1f),
+                                    CircleShape
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    color = Color(0xFFFFAA00).copy(alpha = 0.3f),
+                                    shape = CircleShape
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.EmojiEvents,
+                                contentDescription = "Season Completed",
+                                tint = Color(0xFFFFAA00),
+                                modifier = Modifier.size(48.dp)
+                            )
+                        }
+
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = "SEASON COMPLETED",
+                                fontFamily = brigendsFont,
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                letterSpacing = 2.sp,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                            
+                            Text(
+                                text = "See you on track in $nextSeasonYear",
+                                fontFamily = michromaFont,
+                                fontSize = 12.sp,
+                                color = Color.White.copy(alpha = 0.6f),
+                                letterSpacing = 1.sp,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                        }
+                        
+                        // Premium Divider
+                        Box(
+                            modifier = Modifier
+                                .width(60.dp)
+                                .height(2.dp)
+                                .background(
+                                    Brush.horizontalGradient(
+                                        colors = listOf(
+                                            Color.Transparent,
+                                            Color(0xFFE6007E),
+                                            Color.Transparent
+                                        )
+                                    )
+                                )
+                        )
+                        
+                        // Action / Subtext
+                        Text(
+                            text = "CHECK NEWS FOR UPDATES",
+                            fontFamily = michromaFont,
+                            fontSize = 10.sp,
+                            color = Color(0xFFE6007E),
+                            letterSpacing = 1.5.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
         }
     }
 }

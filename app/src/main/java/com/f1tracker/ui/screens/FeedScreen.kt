@@ -300,7 +300,17 @@ fun FeedScreen(
                             },
                             listState = latestListState,
                             instagramPosts = instagramPosts,
-                            onNavigateToReels = onNavigateToReels
+                            onNavigateToReels = onNavigateToReels,
+                            onSocialPostClick = { permalink ->
+                                // Find the post index and scroll to it in Social tab
+                                val postIndex = instagramPosts.indexOfFirst { it.permalink == permalink }
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(1) // Go to Social tab
+                                    if (postIndex >= 0) {
+                                        instagramPagerState.animateScrollToPage(postIndex)
+                                    }
+                                }
+                            }
                         )
                     }
                     1 -> {
@@ -361,6 +371,7 @@ fun FeedScreen(
     }
 }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 private fun LatestFeed(
     newsArticles: List<NewsArticle>,
@@ -376,100 +387,586 @@ private fun LatestFeed(
     onExploreClick: (Int) -> Unit,
     instagramPosts: List<com.f1tracker.data.models.InstagramPost>,
     onNavigateToReels: (String) -> Unit,
+    onSocialPostClick: (String) -> Unit, // New: navigate to social with focus
     listState: LazyListState
 ) {
+    val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
+    
     val combinedItems = remember(newsArticles, videos, podcasts, instagramPosts) {
-        val items = mutableListOf<FeedItem>()
-        
-        // Take most recent items from each content type to ensure diversity
-        newsArticles
+        // Collect each type sorted by date
+        val news = newsArticles
             .sortedByDescending { parseDate(it.published) }
-            .take(3)
-            .forEach { items.add(FeedItem.NewsItem(it)) }
+            .take(10)
+            .map { FeedItem.NewsItem(it) }
         
-        videos
+        val videoItems = videos
             .sortedByDescending { parseDate(it.publishedDate) }
-            .take(3)
-            .forEach { items.add(FeedItem.VideoItem(it)) }
+            .take(8)
+            .map { FeedItem.VideoItem(it) }
         
-        instagramPosts
+        val insta = instagramPosts
             .sortedByDescending { parseDate(it.timestamp) }
-            .take(3)
-            .forEach { items.add(FeedItem.InstagramItem(it)) }
+            .take(8)
+            .map { FeedItem.InstagramItem(it) }
         
-        // For podcasts, take the most recent episode from each podcast
-        podcasts.forEach { podcast ->
+        val podcastItems = podcasts.take(3).flatMap { podcast ->
             podcast.episodes
                 .sortedByDescending { parseDate(it.publishedDate) }
                 .take(1)
-                .forEach { episode ->
-                    items.add(FeedItem.PodcastItem(episode))
-                }
+                .map { FeedItem.PodcastItem(it) }
         }
         
-        // Now sort all these items by published date and take top 30
-        items.sortedByDescending { parseDate(it.publishedDate) }.take(30)
+        // Interleave content types for diversity (round-robin)
+        val result = mutableListOf<FeedItem>()
+        val queues = listOf(
+            news.toMutableList(),
+            videoItems.toMutableList(),
+            insta.toMutableList(),
+            podcastItems.toMutableList()
+        )
+        
+        var typeIndex = 0
+        while (result.size < 30 && queues.any { it.isNotEmpty() }) {
+            val queue = queues[typeIndex % queues.size]
+            if (queue.isNotEmpty()) {
+                result.add(queue.removeAt(0))
+            }
+            typeIndex++
+        }
+        
+        result
     }
 
-    LazyColumn(
+    
+    // Create height variation pattern for true Bento look: small, medium, large, medium, small...
+    fun getCardSize(index: Int): Int {
+        val pattern = listOf(1, 2, 3, 2, 1, 2, 3, 1, 2, 1) // Size pattern (1=small, 2=medium, 3=large)
+        return pattern[index % pattern.size]
+    }
+            
+    // Bento Grid using LazyVerticalStaggeredGrid
+    androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid(
+        columns = androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
-        state = listState,
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalItemSpacing = 10.dp
     ) {
-        items(combinedItems) { item ->
-            when (item) {
-                is FeedItem.NewsItem -> com.f1tracker.ui.components.NewsCard(
-                    article = item.article,
-                    onNewsClick = onNewsClick,
-                    showTag = true,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                is FeedItem.VideoItem -> VideoCard(item.video, michromaFont, onVideoClick, showTag = true)
-                is FeedItem.PodcastItem -> LargePodcastCard(
-                    episode = item.episode,
-                    isCurrentlyPlaying = currentlyPlayingEpisode?.audioUrl == item.episode.audioUrl,
-                    isPlaying = isPlaying && currentlyPlayingEpisode?.audioUrl == item.episode.audioUrl,
-                    michromaFont = michromaFont,
-                    onEpisodeClick = onEpisodeClick,
-                    onPlayPause = onPlayPause
-                )
-                is FeedItem.InstagramItem -> {
-                    val isReel = item.post.media_type == "VIDEO"
-                    LatestInstagramCard(
-                        post = item.post,
-                        michromaFont = michromaFont,
-                        onClick = {
-                            if (isReel) {
-                                // Navigate to Reels screen for videos
-                                onNavigateToReels(item.post.permalink)
-                            } else {
-                                // Navigate to Social tab for regular posts
-                                onExploreClick(1) // Social tab is index 1
-                            }
-                        }
-                    )
-                }
-            }
+        // HOTLAP GAME CARD - Featured, spans full width
+        item(
+            span = androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan.FullLine
+        ) {
+            BentoHotlapCard(
+                michromaFont = michromaFont,
+                brigendsFont = brigendsFont,
+                onPlayClick = { onExploreClick(4) }
+            )
         }
         
-        item {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Explore more in the dedicated feeds",
-                    fontFamily = michromaFont,
-                    fontSize = 12.sp,
-                    color = Color.White.copy(alpha = 0.5f)
+        // Feed items with varying heights for Bento effect
+        items(combinedItems.size) { index ->
+            val item = combinedItems[index]
+            val cardSize = getCardSize(index)
+            
+            when (item) {
+                is FeedItem.NewsItem -> BentoNewsCard(
+                    article = item.article,
+                    michromaFont = michromaFont,
+                    onNewsClick = onNewsClick,
+                    cardSize = cardSize
+                )
+                is FeedItem.VideoItem -> BentoVideoCard(
+                    video = item.video,
+                    michromaFont = michromaFont,
+                    onVideoClick = onVideoClick,
+                    cardSize = cardSize
+                )
+                is FeedItem.PodcastItem -> BentoPodcastCard(
+                    episode = item.episode,
+                    michromaFont = michromaFont,
+                    onEpisodeClick = onEpisodeClick,
+                    cardSize = cardSize
+                )
+                is FeedItem.InstagramItem -> BentoInstagramCard(
+                    post = item.post,
+                    michromaFont = michromaFont,
+                    onClick = {
+                        if (item.post.media_type == "VIDEO") {
+                            onNavigateToReels(item.post.permalink)
+                        } else {
+                            onSocialPostClick(item.post.permalink) // Navigate with focus
+                        }
+                    },
+                    cardSize = cardSize
                 )
             }
         }
     }
 }
+
+// BENTO CARD COMPONENTS
+
+
+@Composable
+fun BentoHotlapCard(
+    michromaFont: FontFamily,
+    brigendsFont: FontFamily,
+    onPlayClick: () -> Unit
+) {
+    val infiniteTransition = rememberInfiniteTransition(label = "hotlap")
+    val glowAlpha by infiniteTransition.animateFloat(
+        initialValue = 0.3f,
+        targetValue = 0.6f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "glow"
+    )
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(160.dp)
+            .clickable { onPlayClick() },
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF0D0D0D))
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Game Image background
+            androidx.compose.foundation.Image(
+                painter = androidx.compose.ui.res.painterResource(id = R.drawable.game_hotlap),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(0.4f),
+                contentScale = ContentScale.Crop
+            )
+            
+            // Gradient overlay
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.horizontalGradient(
+                            colors = listOf(
+                                Color(0xFFE10600).copy(alpha = glowAlpha * 0.6f),
+                                Color.Black.copy(alpha = 0.7f),
+                                Color.Black.copy(alpha = 0.5f)
+                            )
+                        )
+                    )
+            )
+            
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.SportsEsports,
+                            contentDescription = null,
+                            tint = Color(0xFFE10600),
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "MINI GAME",
+                            fontFamily = michromaFont,
+                            fontSize = 9.sp,
+                            color = Color(0xFFE10600),
+                            letterSpacing = 2.sp
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "HOTLAP",
+                        fontFamily = brigendsFont,
+                        fontSize = 28.sp,
+                        color = Color.White
+                    )
+                    Text(
+                        text = "CHALLENGE",
+                        fontFamily = brigendsFont,
+                        fontSize = 16.sp,
+                        color = Color.White.copy(alpha = 0.7f)
+                    )
+                }
+                
+                // Play button
+                Box(
+                    modifier = Modifier
+                        .size(52.dp)
+                        .clip(androidx.compose.foundation.shape.CircleShape)
+                        .background(Color(0xFFE10600)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = "Play",
+                        tint = Color.White,
+                        modifier = Modifier.size(28.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun BentoNewsCard(
+    article: NewsArticle,
+    michromaFont: FontFamily,
+    onNewsClick: (String?) -> Unit,
+    cardSize: Int = 2 // 1=small, 2=medium, 3=large
+) {
+    // Taller heights for news to show headlines properly
+    val cardHeight = when (cardSize) {
+        1 -> 180.dp  // Was 140
+        2 -> 220.dp  // Was 180
+        else -> 280.dp // Was 240
+    }
+    val imageUrl = article.images?.firstOrNull { it.type == "header" }?.url 
+        ?: article.images?.firstOrNull()?.url
+    
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(cardHeight)
+            .clickable { onNewsClick(article.links?.web?.href) },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1A1A1A))
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (imageUrl != null) {
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            0f to Color.Transparent,
+                            0.3f to Color.Black.copy(alpha = 0.2f),
+                            1f to Color.Black.copy(alpha = 0.95f)
+                        )
+                    )
+            )
+            
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(14.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(Color(0xFF00D4AA), RoundedCornerShape(4.dp))
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "NEWS",
+                        fontFamily = michromaFont,
+                        fontSize = 9.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                
+                Text(
+                    text = article.headline,
+                    fontFamily = michromaFont,
+                    fontSize = when (cardSize) { 1 -> 11.sp; 2 -> 12.sp; else -> 14.sp },
+                    color = Color.White,
+                    maxLines = when (cardSize) { 1 -> 4; 2 -> 5; else -> 6 },
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = when (cardSize) { 1 -> 15.sp; 2 -> 17.sp; else -> 19.sp }
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun BentoVideoCard(
+    video: F1Video,
+    michromaFont: FontFamily,
+    onVideoClick: (String) -> Unit,
+    cardSize: Int = 2
+) {
+    val cardHeight = when (cardSize) {
+        1 -> 130.dp
+        2 -> 170.dp
+        else -> 220.dp
+    }
+    
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(cardHeight)
+            .clickable { onVideoClick(video.videoId) },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1A1A1A))
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            AsyncImage(
+                model = video.thumbnailUrl,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            0f to Color.Transparent,
+                            0.5f to Color.Black.copy(alpha = 0.4f),
+                            1f to Color.Black.copy(alpha = 0.85f)
+                        )
+                    )
+            )
+            
+            Icon(
+                imageVector = Icons.Default.PlayCircle,
+                contentDescription = "Play",
+                tint = Color.White.copy(alpha = 0.9f),
+                modifier = Modifier
+                    .size(if (cardSize == 3) 48.dp else 36.dp)
+                    .align(Alignment.Center)
+            )
+            
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(Color(0xFFFF0000), RoundedCornerShape(4.dp))
+                        .padding(horizontal = 6.dp, vertical = 3.dp)
+                ) {
+                    Text(
+                        text = "VIDEO",
+                        fontFamily = michromaFont,
+                        fontSize = 8.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                
+                Text(
+                    text = video.title,
+                    fontFamily = michromaFont,
+                    fontSize = when (cardSize) { 1 -> 8.sp; 2 -> 9.sp; else -> 11.sp },
+                    color = Color.White,
+                    maxLines = when (cardSize) { 1 -> 2; 2 -> 2; else -> 3 },
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = when (cardSize) { 1 -> 11.sp; 2 -> 13.sp; else -> 15.sp }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun BentoPodcastCard(
+    episode: PodcastEpisode,
+    michromaFont: FontFamily,
+    onEpisodeClick: (PodcastEpisode) -> Unit,
+    cardSize: Int = 2
+) {
+    val cardHeight = when (cardSize) {
+        1 -> 120.dp
+        2 -> 160.dp
+        else -> 200.dp
+    }
+    
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(cardHeight)
+            .clickable { onEpisodeClick(episode) },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1A1A1A))
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            AsyncImage(
+                model = episode.imageUrl,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            0f to Color.Transparent,
+                            0.5f to Color.Black.copy(alpha = 0.5f),
+                            1f to Color.Black.copy(alpha = 0.9f)
+                        )
+                    )
+            )
+            
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .background(Color(0xFF9B59B6), RoundedCornerShape(4.dp))
+                            .padding(horizontal = 6.dp, vertical = 3.dp)
+                    ) {
+                        Text(
+                            text = "PODCAST",
+                            fontFamily = michromaFont,
+                            fontSize = 8.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                
+                Column {
+                    Text(
+                        text = episode.title,
+                        fontFamily = michromaFont,
+                        fontSize = when (cardSize) { 1 -> 8.sp; 2 -> 9.sp; else -> 11.sp },
+                        color = Color.White,
+                        maxLines = when (cardSize) { 1 -> 2; 2 -> 2; else -> 3 },
+                        overflow = TextOverflow.Ellipsis,
+                        lineHeight = when (cardSize) { 1 -> 11.sp; 2 -> 13.sp; else -> 15.sp }
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Headphones,
+                            contentDescription = null,
+                            tint = Color(0xFF9B59B6),
+                            modifier = Modifier.size(12.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = episode.duration,
+                            fontFamily = michromaFont,
+                            fontSize = 8.sp,
+                            color = Color.White.copy(alpha = 0.6f)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun BentoInstagramCard(
+    post: com.f1tracker.data.models.InstagramPost,
+    michromaFont: FontFamily,
+    onClick: () -> Unit,
+    cardSize: Int = 2
+) {
+    val cardHeight = when (cardSize) {
+        1 -> 160.dp
+        2 -> 200.dp
+        else -> 260.dp
+    }
+    val isVideo = post.media_type == "VIDEO"
+    
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(cardHeight)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1A1A1A))
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            val imageUrl = if (isVideo) post.thumbnail_url ?: post.media_url else post.media_url
+            
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            0f to Color.Transparent,
+                            0.6f to Color.Black.copy(alpha = 0.3f),
+                            1f to Color.Black.copy(alpha = 0.8f)
+                        )
+                    )
+            )
+            
+            if (isVideo) {
+                Icon(
+                    imageVector = Icons.Default.PlayCircle,
+                    contentDescription = "Play",
+                    tint = Color.White.copy(alpha = 0.9f),
+                    modifier = Modifier
+                        .size(if (cardSize == 3) 44.dp else 32.dp)
+                        .align(Alignment.Center)
+                )
+            }
+            
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(Color(0xFFFF0080), RoundedCornerShape(4.dp))
+                        .padding(horizontal = 6.dp, vertical = 3.dp)
+                ) {
+                    Text(
+                        text = if (isVideo) "REEL" else "SOCIAL",
+                        fontFamily = michromaFont,
+                        fontSize = 8.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                
+                if (!post.caption.isNullOrEmpty()) {
+                    Text(
+                        text = post.caption,
+                        fontFamily = michromaFont,
+                        fontSize = when (cardSize) { 1 -> 8.sp; 2 -> 9.sp; else -> 10.sp },
+                        color = Color.White,
+                        maxLines = when (cardSize) { 1 -> 2; 2 -> 2; else -> 3 },
+                        overflow = TextOverflow.Ellipsis,
+                        lineHeight = when (cardSize) { 1 -> 11.sp; 2 -> 13.sp; else -> 14.sp }
+                    )
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 private fun shimmerBrush(showShimmer: Boolean = true, targetValue: Float = 1000f): androidx.compose.ui.graphics.Brush {

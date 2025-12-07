@@ -73,12 +73,10 @@ class MultimediaViewModel @Inject constructor(
             _isInstagramRefreshing.value = false
         }
     }
-    
     /**
-     * Score posts by engagement (likes + comments*3) with time decay.
-     * Formula: (likes + comments*3) / (hours_ago + 2)^1.5
-     * Videos get a 1.2x boost for better visibility.
-     * Also applies author diversity (max 3 consecutive from same author).
+     * Score posts by engagement with AGGRESSIVE time decay.
+     * Formula: (likes + comments*3) / (hours_ago + 2)^2.0
+     * Stronger time decay to surface newer content over high-like old posts.
      */
     private fun sortByEngagement(posts: List<com.f1tracker.data.models.InstagramPost>): List<com.f1tracker.data.models.InstagramPost> {
         val now = java.time.Instant.now()
@@ -86,49 +84,46 @@ class MultimediaViewModel @Inject constructor(
         fun getScore(post: com.f1tracker.data.models.InstagramPost): Double {
             val likes = post.like_count.toDouble()
             val comments = post.comments_count.toDouble()
-            val engagement = likes + (comments * 3) // Comments worth 3x likes
+            val engagement = likes + (comments * 3)
             
             val hoursAgo = try {
                 val postTime = java.time.Instant.parse(post.timestamp)
                 java.time.Duration.between(postTime, now).toHours().toDouble()
             } catch (e: Exception) { 100.0 }
             
-            // Time decay: older posts score lower
-            val timeDecay = Math.pow(hoursAgo + 2.0, 1.5)
+            // AGGRESSIVE time decay: power 2.0 (was 1.5)
+            // 24h old = 676x penalty, 48h old = 2500x penalty
+            val timeDecay = Math.pow(hoursAgo + 2.0, 2.0)
             var score = engagement / timeDecay
             
-            // Boost videos slightly for better visibility
+            // Boost videos
             if (post.media_type == "VIDEO") {
                 score *= 1.2
             }
             
-            // Debuff F1 official account - they have massive follower advantage
-            // This balances their likes to give smaller accounts a fair chance
+            // STRONGER F1 debuff - they dominate too much (was 0.4, now 0.25)
             if (post.author == "f1") {
-                score *= 0.4
+                score *= 0.25
             }
             
-            // Add slight randomization (±15%) so refresh feels fresh
-            val randomFactor = 0.85 + (Math.random() * 0.30)
+            // More randomization (±25%) so refresh feels fresh
+            val randomFactor = 0.75 + (Math.random() * 0.50)
             return score * randomFactor
         }
         
-        // Sort by score
         val scoredPosts = posts.sortedByDescending { getScore(it) }
         
-        // Apply author diversity: no more than 3 consecutive from same author
+        // Author diversity: max 2 consecutive from same author (was 3)
         val diversified = mutableListOf<com.f1tracker.data.models.InstagramPost>()
         val remaining = scoredPosts.toMutableList()
         
         while (remaining.isNotEmpty()) {
-            // Count consecutive from last author
             val lastAuthor = diversified.lastOrNull()?.author
             val consecutiveCount = if (lastAuthor != null) {
                 diversified.takeLastWhile { it.author == lastAuthor }.size
             } else 0
             
-            // Find next post that doesn't exceed 3 consecutive from same author
-            val nextPost = if (consecutiveCount >= 3) {
+            val nextPost = if (consecutiveCount >= 2) {
                 remaining.firstOrNull { it.author != lastAuthor } ?: remaining.first()
             } else {
                 remaining.first()
@@ -140,6 +135,7 @@ class MultimediaViewModel @Inject constructor(
         
         return diversified
     }
+
 
     /**
      * Load videos from multiple sources:

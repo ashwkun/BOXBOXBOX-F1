@@ -127,7 +127,7 @@ NUCLEAR_PATTERNS = [
     r'\b(disqualified|dsq)\b.*\b(race|grand\s+prix|gp)\b',
     
     # Major Team/Driver Changes (confirmed only)
-    r'\b(signs?|signed|confirms?|confirmed|announced?)\b.*\b(driver|contract|2026)\b',
+    r'\b(signs?|signed|confirms?|confirmed|announced?)\b.*\b(driver|contract|2026|2027)\b',
     r'\b(retires?|retirement|retiring)\b.*\b(from\s+(racing|f1|formula))\b',
     r'\b(announces?\s+retirement)\b',
 ]
@@ -136,7 +136,7 @@ NUCLEAR_PATTERNS = [
 MAJOR_PATTERNS = [
     (110, r'\b(dominates?|dominated|dominating)\b.*\b(grand\s+prix|race|gp)\b'),
     (105, r'\b(championship|title)\b.*\b(lead|ahead|battle|fight|gap)\b'),
-    (115, r'\b(signs?|signed|confirms?|confirmed)\b.*\b(2025|2026|2027|contract)\b'),
+    (115, r'\b(signs?|signed|confirms?|confirmed)\b.*\b(2025|2026|2027|2028|contract)\b'),
     (110, r'\b(official:)\b.*\b(driver|seat|signs?|joins?)\b'),
     (120, r'\b(team\s+principal|tp)\b.*\b(leaves?|joins?|appointed)\b'),
     (105, r'\b(grid\s+(drop|penalty)|grid-place\s+penalty)\b'),  # Boosted from 100
@@ -146,7 +146,7 @@ MAJOR_PATTERNS = [
     (100, r'\b(fastest|quickest|tops|leads)\b.*\b(qualifying|q[123]|shootout)\b'),
     (100, r'\b(sprint)\b.*\b(result|report|win|wins?|won)\b'),
     (100, r'\b(summoned|investigation|under\s+investigation)\b.*\b(stewards|fia)\b'),
-    (100, r'\b(reveals?|launche?s?|unveils?|wraps\s+off)\b.*\b(car|livery|challenger|2025|2026)\b'),
+    (100, r'\b(reveals?|launche?s?|unveils?|wraps\s+off)\b.*\b(car|livery|challenger|2025|2026|2027)\b'),
     (100, r'\b(sick|ill|surgery|hospital|medical|appendicitis|operation)\b.*\b(miss|doubt|ruled\s+out|withdraws?)\b'),
     (100, r'\b(ruled\s+out|withdraws?|misses)\b.*\b(grand\s+prix|race|gp)\b'), # Added simpler ruled out pattern
 ]

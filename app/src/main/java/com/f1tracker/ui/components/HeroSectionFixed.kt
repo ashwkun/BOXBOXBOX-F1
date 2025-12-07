@@ -86,6 +86,9 @@ fun HeroSectionFixed(
             is RaceWeekendState.Error -> {
                 ErrorHeroFixed(message = state.message, brigendsFont = brigendsFont)
             }
+            is RaceWeekendState.SeasonCompleted -> {
+                ErrorHeroFixed(message = "Season Completed", brigendsFont = brigendsFont)
+            }
         }
     }
 }

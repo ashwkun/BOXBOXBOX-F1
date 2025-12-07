@@ -83,13 +83,33 @@ class RaceViewModel @Inject constructor(
 
     fun loadRaceWeekendState() {
         viewModelScope.launch {
-            val result = repository.getAllRaces("2025") // TODO: Dynamic year
+            val currentYear = java.time.Year.now().value.toString()
+            Log.d("RaceViewModel", "Attempting to fetch races for current year: $currentYear")
+            
+            // Try fetching current year first
+            var result = repository.getAllRaces(currentYear)
+            var yearToUse = currentYear
+            
+            // If current year is empty or fails (e.g. early Jan 2026 and API not updated yet),
+            // fallback to previous year
+            if (result.isFailure || result.getOrNull().isNullOrEmpty()) {
+                val lastYear = (currentYear.toInt() - 1).toString()
+                Log.d("RaceViewModel", "Current year $currentYear empty/failed, falling back to $lastYear")
+                result = repository.getAllRaces(lastYear)
+                yearToUse = lastYear
+            }
+
             result.onSuccess { races ->
+                if (races.isEmpty()) {
+                    _raceWeekendState.value = RaceWeekendState.Error("No race data available")
+                    return@onSuccess
+                }
+
                 allRacesCache = races
                 _allRaces.value = races
                 
-                // Fetch results for completed races
-                loadCompletedRaceResults(races)
+                // Fetch results for completed races (using the correct year)
+                loadCompletedRaceResults(races, yearToUse)
                 
                 updateFilteredRaces(races)
                 updateRaceWeekendState()
@@ -99,7 +119,7 @@ class RaceViewModel @Inject constructor(
         }
     }
     
-    private fun loadCompletedRaceResults(races: List<Race>) {
+    private fun loadCompletedRaceResults(races: List<Race>, year: String) {
         viewModelScope.launch {
             try {
                 Log.d("RaceViewModel", "Fetching results for completed races...")
@@ -122,7 +142,7 @@ class RaceViewModel @Inject constructor(
                     val isCompleted = completedRacesList.any { it.round == race.round }
                     if (isCompleted) {
                         try {
-                            val result = repository.getRaceResultsByCircuit("2025", race.circuit.circuitId)
+                            val result = repository.getRaceResultsByCircuit(year, race.circuit.circuitId)
                             val raceWithResults = result.getOrNull()
                             if (raceWithResults?.results != null) {
                                 Log.d("RaceViewModel", "Round ${race.round} (${race.raceName}): ${raceWithResults.results.size} results")
@@ -175,7 +195,15 @@ class RaceViewModel @Inject constructor(
 
     fun loadLastRaceResult() {
         viewModelScope.launch {
-            val result = repository.getLastRaceResults("2025")
+            // Dynamic year fetching: try current year first, then fallback
+            val currentYear = java.time.Year.now().value.toString()
+            var result = repository.getLastRaceResults(currentYear)
+            
+            if (result.isFailure || result.getOrNull() == null) {
+                 val lastYear = (currentYear.toInt() - 1).toString()
+                 result = repository.getLastRaceResults(lastYear)
+            }
+
             result.onSuccess { race ->
                 _lastRaceResult.value = race
             }.onFailure { e ->
@@ -273,7 +301,7 @@ class RaceViewModel @Inject constructor(
                 
                 // For completed races: show current year highlights
                 // For upcoming races: show last year highlights (like results)
-                val raceYear = race.date.substringBefore("-") // "2025-03-16" -> "2025"
+                val raceYear = race.date.substringBefore("-") // e.g. "2025-03-16" -> "2025"
                 val targetYear = if (isCompleted) {
                     raceYear
                 } else {
@@ -347,8 +375,17 @@ class RaceViewModel @Inject constructor(
         val currentOrNextRace = findCurrentOrNextRace(now)
 
         if (currentOrNextRace == null) {
-            _raceWeekendState.value = RaceWeekendState.Error("No upcoming races found")
-            cachedRaceState = _raceWeekendState.value
+            // Check if we have races loaded, implying the season is over
+            if (allRacesCache.isNotEmpty()) {
+                val season = allRacesCache.first().season
+                
+                // If we have loaded races but found no upcoming ones, it means the season is over.
+                _raceWeekendState.value = RaceWeekendState.SeasonCompleted
+                cachedRaceState = _raceWeekendState.value
+                return
+            }
+            
+            _raceWeekendState.value = RaceWeekendState.Error("No races found")
             return
         }
 
@@ -617,7 +654,7 @@ class RaceViewModel @Inject constructor(
     }
 
     private fun parseDateTime(date: String, time: String): LocalDateTime {
-        // Ergast API returns UTC (Zulu) time: "2025-11-28T13:30:00Z"
+        // Ergast API returns UTC (Zulu) time: "2024-11-28T13:30:00Z"
         // Rule: Always treat as UTC, convert to IST
         val dateTimeString = "${date}T${time}"
         return try {

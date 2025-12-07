@@ -33,7 +33,9 @@ fun MainAppScreen(
     showUpdateDialog: Boolean,
     onShowUpdateDialogChange: (Boolean) -> Unit,
     intentData: Pair<String, String>? = null,
-    onIntentHandled: () -> Unit = {}
+    onIntentHandled: () -> Unit = {},
+    raceViewModel: com.f1tracker.ui.viewmodels.RaceViewModel = androidx.hilt.navigation.compose.hiltViewModel(),
+    standingsViewModel: com.f1tracker.ui.viewmodels.StandingsViewModel = androidx.hilt.navigation.compose.hiltViewModel()
 ) {
     var currentDestination by remember { mutableStateOf(NavDestination.HOME) }
     var webViewUrl by remember { mutableStateOf<String?>(null) }
@@ -50,6 +52,21 @@ fun MainAppScreen(
     var reelsRefreshTrigger by remember { mutableLongStateOf(0L) }
     var feedStartPermalink by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
+    
+    var hasRedirectedForSeasonBreak by remember { mutableStateOf(false) }
+    val raceWeekendState by raceViewModel.raceWeekendState.collectAsState()
+
+    // Auto-redirect to Feed during Season Break (One-time)
+    LaunchedEffect(raceWeekendState) {
+        if (!hasRedirectedForSeasonBreak && 
+            raceWeekendState is com.f1tracker.data.models.RaceWeekendState.SeasonCompleted &&
+            currentDestination == NavDestination.HOME) {
+            currentDestination = NavDestination.FEED
+            // Set refresh trigger to ensure fresh content
+            feedRefreshTrigger = System.currentTimeMillis()
+            hasRedirectedForSeasonBreak = true
+        }
+    }
     
     // Handle Intent Data (Deep Links / Notifications)
     LaunchedEffect(intentData) {
@@ -179,56 +196,69 @@ fun MainAppScreen(
                 .fillMaxWidth()
         ) {
             when (currentDestination) {
-                    NavDestination.HOME -> HomeScreen(
-                        onNewsClick = { url -> webViewUrl = url },
-                        onNavigateToNews = { 
-                            feedSelectedTab = 2
-                            currentDestination = NavDestination.FEED 
-                        },
-                        onNavigateToVideos = { 
-                            feedSelectedTab = 3
-                            currentDestination = NavDestination.FEED 
-                        },
-                        onNavigateToPodcasts = { 
-                            feedSelectedTab = 5 
-                            currentDestination = NavDestination.FEED 
-                        },
-                        onNavigateToSocial = { permalink ->
-                            feedSelectedTab = 1
-                            feedStartPermalink = permalink
-                            currentDestination = NavDestination.FEED
-                        },
-                        onRaceClick = { race -> selectedRace = race },
-                        onVideoClick = { videoId -> selectedVideoId = videoId },
-                        onEpisodeClick = { episode ->
-                            currentEpisode = episode
-                            audioPlayerManager.playEpisode(episode.audioUrl)
-                        },
-                        onGameClick = {
-                            feedSelectedTab = 4 // Index 4 is Games
-                            currentDestination = NavDestination.FEED
-                        },
-                        onPlayPause = {
-                            if (isPlaying) {
-                                audioPlayerManager.pause()
-                            } else {
-                                audioPlayerManager.play()
-                            }
-                        },
-                        currentlyPlayingEpisode = currentEpisode,
-                        isPlaying = isPlaying,
-                        onNavigateToStandings = { tabIndex ->
-                            standingsSelectedTab = tabIndex
-                            currentDestination = NavDestination.STANDINGS
-                        },
-                        onViewResults = { result, raceName ->
-                            selectedSessionResult = result
-                            selectedSessionRaceName = raceName
-                        },
-                        onNavigateToLive = {
-                            currentDestination = NavDestination.LIVE
+                    NavDestination.HOME -> {
+                        val raceWeekendState by raceViewModel.raceWeekendState.collectAsState()
+                        if (raceWeekendState is com.f1tracker.data.models.RaceWeekendState.SeasonCompleted) {
+                            SeasonBreakScreen(
+                                raceViewModel = raceViewModel,
+                                standingsViewModel = standingsViewModel
+                            )
+                        } else {
+                            HomeScreen(
+                                // Pass the shared viewModel instances to avoid reloading
+                                raceViewModel = raceViewModel,
+                                standingsViewModel = standingsViewModel,
+                                onNewsClick = { url -> webViewUrl = url },
+                                onNavigateToNews = { 
+                                    feedSelectedTab = 2
+                                    currentDestination = NavDestination.FEED 
+                                },
+                                onNavigateToVideos = { 
+                                    feedSelectedTab = 3
+                                    currentDestination = NavDestination.FEED 
+                                },
+                                onNavigateToPodcasts = { 
+                                    feedSelectedTab = 5 
+                                    currentDestination = NavDestination.FEED 
+                                },
+                                onNavigateToSocial = { permalink ->
+                                    feedSelectedTab = 1
+                                    feedStartPermalink = permalink
+                                    currentDestination = NavDestination.FEED
+                                },
+                                onRaceClick = { race -> selectedRace = race },
+                                onVideoClick = { videoId -> selectedVideoId = videoId },
+                                onEpisodeClick = { episode ->
+                                    currentEpisode = episode
+                                    audioPlayerManager.playEpisode(episode.audioUrl)
+                                },
+                                onGameClick = {
+                                    feedSelectedTab = 4 // Index 4 is Games
+                                    currentDestination = NavDestination.FEED
+                                },
+                                onPlayPause = {
+                                    if (isPlaying) {
+                                        audioPlayerManager.pause()
+                                    } else {
+                                        audioPlayerManager.play()
+                                    }
+                                },
+                                currentlyPlayingEpisode = currentEpisode,
+                                isPlaying = isPlaying,
+                                onNavigateToStandings = { tabIndex ->
+                                    standingsSelectedTab = tabIndex
+                                    currentDestination = NavDestination.STANDINGS
+                                },
+                                onViewResults = { result, raceName ->
+                                    selectedSessionResult = result
+                                    selectedSessionRaceName = raceName
+                                },
+                                onNavigateToLive = {
+                                    currentDestination = NavDestination.LIVE
+                                }
+                            )
                         }
-                )
+                    }
                     NavDestination.SCHEDULE -> ScheduleScreen(
                         selectedTab = scheduleSelectedTab,
                         onTabChange = { tab -> scheduleSelectedTab = tab },
