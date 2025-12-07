@@ -1100,21 +1100,23 @@ private fun VideosList(
     selectedFilter: String,
     onFilterSelected: (String) -> Unit
 ) {
-    // New filter chips based on content classification
-    val availableFilters = listOf("Hot", "Official", "Sessions", "Analysis")
+    // Filter chips with distinct sorting strategies
+    val availableFilters = listOf("Hot", "Latest", "Popular", "Official")
     
-    // Filter videos based on selected chip
+    // Apply different sorting/filtering strategies per chip
     val filteredVideos = remember(videos, selectedFilter) {
         when (selectedFilter) {
-            "Hot" -> videos // Already smart-scored by ViewModel
+            "Hot" -> videos // Already smart-scored (freshness + engagement + quality)
+            "Latest" -> videos.sortedByDescending { 
+                try {
+                    java.time.Instant.parse(it.publishedDate)
+                } catch (e: Exception) {
+                    java.time.Instant.EPOCH
+                }
+            }
+            "Popular" -> videos.sortedByDescending { it.viewCount }
             "Official" -> videos.filter { it.channelTitle == "FORMULA 1" }
-            "Sessions" -> videos.filter { video ->
-                video.tags.any { it in listOf("RACE", "QUALI", "SPRINT", "FP", "FP1", "FP2", "FP3", "QUALIFYING", "SPRINT_QUALIFYING") }
-            }
-            "Analysis" -> videos.filter { video ->
-                video.tags.any { it in listOf("ANALYSIS", "TECH", "REACTION") } ||
-                video.channelTitle in listOf("THE RACE", "ESPN F1", "Autosport", "Sky Sports F1")
-            }
+                .sortedByDescending { it.viewCount }
             else -> videos
         }
     }
