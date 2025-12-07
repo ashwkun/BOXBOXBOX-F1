@@ -1156,11 +1156,22 @@ private fun VideosList(
                 }
             }
             "Popular" -> {
-                // Sort by views with F1 debuff and slight randomization
+                // Sort by views with age decay (year-level) and F1 debuff
+                val now = java.time.Instant.now()
                 val sorted = videos.sortedByDescending { video ->
                     val randomFactor = 0.85 + (Math.random() * 0.30)
                     val f1Debuff = if (video.channelTitle == "FORMULA 1") 0.6 else 1.0
-                    video.viewCount * randomFactor * f1Debuff
+                    
+                    // Age decay at year-level (F1: 6 months half-life, Others: 1 year)
+                    val hoursAge = try {
+                        val publishTime = java.time.Instant.parse(video.publishedDate)
+                        java.time.Duration.between(publishTime, now).toHours().toDouble()
+                    } catch (e: Exception) { 8760.0 } // 1 year fallback
+                    
+                    val decayHalfLifeHours = if (video.channelTitle == "FORMULA 1") 4380.0 else 8760.0 // 6 months vs 1 year
+                    val ageFactor = Math.exp(-hoursAge / decayHalfLifeHours)
+                    
+                    video.viewCount * randomFactor * f1Debuff * ageFactor
                 }
                 // Enforce channel diversity: max 3 from same channel in any 6-video window
                 val diversified = mutableListOf<F1Video>()

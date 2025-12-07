@@ -233,16 +233,16 @@ class MultimediaViewModel @Inject constructor(
         val now = java.time.Instant.now()
         val isOfficialF1 = video.channelTitle == "FORMULA 1"
         
-        // Freshness score (exponential decay)
-        // F1 channel: 24h half-life (faster decay)
-        // Others: 48h half-life (slower decay)
+        // Freshness score (exponential decay at week-level)
+        // F1 channel: 1 week half-life (faster decay)
+        // Others: 2 weeks half-life (slower decay)
         val hoursAge = try {
             val publishTime = java.time.Instant.parse(video.publishedDate)
             java.time.Duration.between(publishTime, now).toHours().toDouble()
         } catch (e: Exception) { 720.0 } // 30 days fallback
         
-        val decayHalfLife = if (isOfficialF1) 24.0 else 48.0
-        val freshnessScore = Math.exp(-hoursAge / decayHalfLife)
+        val decayHalfLifeHours = if (isOfficialF1) 168.0 else 336.0 // 1 week vs 2 weeks in hours
+        val freshnessScore = Math.exp(-hoursAge / decayHalfLifeHours)
         
         // Engagement score (normalized)
         val maxViews = 10_000_000.0
