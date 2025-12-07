@@ -36,6 +36,7 @@ def send_notification(args):
             "body": args.body,
             "channel_id": args.channel,
             "target_tab": args.target_tab,
+            "url": args.url if args.url else "",
             "image_url": args.image_url if args.image_url else "",
             "type": "manual_dispatch",
             "timestamp": datetime.utcnow().isoformat()
@@ -61,6 +62,7 @@ if __name__ == "__main__":
     parser.add_argument("--channel", default="f1_major", choices=["f1_major", "f1_nuclear", "f1_digest", "f1_app_updates"], help="Notification Channel (Sound)")
     parser.add_argument("--priority", default="high", choices=["high", "normal"], help="FCM Priority")
     parser.add_argument("--target_tab", default="news", help="App tab to open")
+    parser.add_argument("--url", default="", help="Deep link URL (e.g. YouTube link)")
     parser.add_argument("--image_url", default="", help="Image URL (optional)")
     
     args = parser.parse_args()
