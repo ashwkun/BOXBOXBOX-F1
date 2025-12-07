@@ -153,39 +153,69 @@ The heart of the app is the **Feed** tab, offering five specialized views:
 
 ## 📸 Screenshots
 
-````carousel
-![Feed screen with Pinterest-style Bento grid layout showing mixed content from news, videos, and social posts](screenshots/latest_feed.png)
-<!-- slide -->
-![Home screen with curated F1 content](screenshots/home.png)
-<!-- slide -->
-![Home screen alternate view](screenshots/home2.png)
-<!-- slide -->
-![2025 F1 race schedule with upcoming Grand Prix events](screenshots/schedule.png)
-<!-- slide -->
-![Race weekend details with session times and circuit info](screenshots/race_details.png)
-<!-- slide -->
-![Live race view with real-time driver positions and timing data](screenshots/live_race_view.jpg)
-<!-- slide -->
-![Driver championship standings with points and team colors](screenshots/driver_standings.png)
-<!-- slide -->
-![Constructor championship standings with team rankings](screenshots/constructor_standings.png)
-<!-- slide -->
-![Instagram social feed with F1 content from teams and drivers](screenshots/social_instagram_2.png)
-<!-- slide -->
-![Reddit feed showing r/formula1 hot posts](screenshots/social_reddit.png)
-<!-- slide -->
-![News feed with curated F1 headlines and articles](screenshots/news_feed.png)
-<!-- slide -->
-![Videos feed with YouTube content and smart filters](screenshots/videos_feed.png)
-<!-- slide -->
-![Podcast feed with F1 audio content](screenshots/podcast_feed.png)
-<!-- slide -->
-![Podcasts player interface with playback controls](screenshots/podcasts_player.png)
-<!-- slide -->
-![Games hub showing available mini-games including Hotlap](screenshots/games_feed.png)
-<!-- slide -->
-![Hotlap mini-game with reflex testing gameplay on F1 circuits](screenshots/hotlap_game.png)
-````
+<div align="center">
+
+### Feed & Home
+
+<table>
+  <tr>
+    <td><img src="screenshots/latest_feed.png" width="200" alt="Latest Feed - Bento Grid"/><br/><sub><b>Latest Feed</b> - Bento Grid</sub></td>
+    <td><img src="screenshots/home.png" width="200" alt="Home Screen"/><br/><sub><b>Home</b> - Curated Content</sub></td>
+    <td><img src="screenshots/home2.png" width="200" alt="Home Alternate"/><br/><sub><b>Home</b> - Alternate View</sub></td>
+  </tr>
+</table>
+
+### Schedule & Live Timing
+
+<table>
+  <tr>
+    <td><img src="screenshots/schedule.png" width="200" alt="Race Schedule"/><br/><sub><b>Schedule</b> - 2025 Calendar</sub></td>
+    <td><img src="screenshots/race_details.png" width="200" alt="Race Details"/><br/><sub><b>Race Weekend</b> - Details</sub></td>
+    <td><img src="screenshots/live_race_view.jpg" width="200" alt="Live Race"/><br/><sub><b>Live</b> - Real-time Data</sub></td>
+  </tr>
+</table>
+
+### Standings
+
+<table>
+  <tr>
+    <td><img src="screenshots/driver_standings.png" width="200" alt="Driver Standings"/><br/><sub><b>Drivers</b> Championship</sub></td>
+    <td><img src="screenshots/constructor_standings.png" width="200" alt="Constructor Standings"/><br/><sub><b>Constructors</b> Championship</sub></td>
+  </tr>
+</table>
+
+### Social Feeds
+
+<table>
+  <tr>
+    <td><img src="screenshots/social_instagram_2.png" width="200" alt="Instagram Feed"/><br/><sub><b>Social</b> - Instagram</sub></td>
+    <td><img src="screenshots/social_reddit.png" width="200" alt="Reddit Feed"/><br/><sub><b>Social</b> - Reddit</sub></td>
+  </tr>
+</table>
+
+### News, Videos & Podcasts
+
+<table>
+  <tr>
+    <td><img src="screenshots/news_feed.png" width="200" alt="News Feed"/><br/><sub><b>News</b> - Headlines</sub></td>
+    <td><img src="screenshots/videos_feed.png" width="200" alt="Videos Feed"/><br/><sub><b>Videos</b> - YouTube</sub></td>
+    <td><img src="screenshots/podcast_feed.png" width="200" alt="Podcast Feed"/><br/><sub><b>Podcasts</b> Feed</sub></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/podcasts_player.png" width="200" alt="Podcast Player"/><br/><sub><b>Audio Player</b> Controls</sub></td>
+  </tr>
+</table>
+
+### Games
+
+<table>
+  <tr>
+    <td><img src="screenshots/games_feed.png" width="200" alt="Games Hub"/><br/><sub><b>Games</b> - Hub</sub></td>
+    <td><img src="screenshots/hotlap_game.png" width="200" alt="Hotlap Game"/><br/><sub><b>Hotlap</b> - Mini Game</sub></td>
+  </tr>
+</table>
+
+</div>
 
 ---
 
