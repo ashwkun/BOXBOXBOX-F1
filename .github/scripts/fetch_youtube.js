@@ -70,15 +70,58 @@ async function run() {
         const videos = [];
         const SHORTS_THRESHOLD = 60; // Seconds
 
+        // Non-English patterns in titles (common indicators)
+        const NON_ENGLISH_PATTERNS = [
+            /🔴\s*(LIVE|EN VIVO|AO VIVO|DIRECTO)/i,  // Spanish/Portuguese live streams
+            /\bEN VIVO\b/i,                          // Spanish "live"
+            /\bAO VIVO\b/i,                          // Portuguese "live"
+            /\bDIRECTO\b/i,                          // Spanish "direct/live"
+            /\bCLASIFICACIÓN\b/i,                    // Spanish "qualification"
+            /\bCORRIDA\b/i,                          // Portuguese "race"
+            /\bGP DE\b/i,                            // Spanish/Portuguese GP naming
+            /【.*】/,                                 // Japanese brackets
+            /[\u3040-\u309F\u30A0-\u30FF]/,           // Japanese characters
+            /[\uAC00-\uD7AF]/,                       // Korean characters
+            /[\u4E00-\u9FFF]/,                       // Chinese characters
+            /\bFORMULA EXTREMA\b/i,                  // Spanish channel
+            /\bTRIBUNA MOTORI\b/i,                   // Italian channel
+            /\bPOLEMIC\b.*\bF1\b/i,                  // Non-English content
+        ];
+
+        function isEnglish(item) {
+            // Check audio language if available
+            const audioLang = item.snippet.defaultAudioLanguage;
+            const defaultLang = item.snippet.defaultLanguage;
+
+            // If language is explicitly set and not English, skip
+            if (audioLang && !audioLang.startsWith('en')) {
+                return false;
+            }
+            if (defaultLang && !defaultLang.startsWith('en') && !audioLang) {
+                return false;
+            }
+
+            // Check title for non-English patterns
+            const title = item.snippet.title;
+            for (const pattern of NON_ENGLISH_PATTERNS) {
+                if (pattern.test(title)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         for (const item of videoDetails.items) {
             const durationSec = parseDuration(item.contentDetails.duration);
 
             // Filter: Avoid Shorts (< 60s)
-            // Also filter out vertical videos if dimension info was available, but duration is a good proxy for 'Shorts' feed items on YT.
-            // Snippet title check for #Shorts just in case
             const isShortsTag = item.snippet.title.toLowerCase().includes('#shorts');
 
-            if (durationSec > SHORTS_THRESHOLD && !isShortsTag) {
+            // Filter: English only
+            const isEnglishContent = isEnglish(item);
+
+            if (durationSec > SHORTS_THRESHOLD && !isShortsTag && isEnglishContent) {
                 videos.push({
                     id: item.id,
                     title: item.snippet.title,
@@ -88,14 +131,14 @@ async function run() {
                     channelTitle: item.snippet.channelTitle,
                     viewCount: item.statistics.viewCount,
                     likeCount: item.statistics.likeCount,
-                    duration: item.contentDetails.duration, // Keep ISO format for UI parsing if needed, or pass seconds
+                    duration: item.contentDetails.duration,
                     durationSec: durationSec,
                     url: `https://www.youtube.com/watch?v=${item.id}`
                 });
             }
         }
 
-        console.log(`✅ Filtered ${videoDetails.items.length} -> ${videos.length} videos (removed shorts).`);
+        console.log(`✅ Filtered ${videoDetails.items.length} -> ${videos.length} videos (removed shorts + non-English).`);
 
         // 4. Save to JSON
         fs.writeFileSync(OUTPUT_FILE, JSON.stringify(videos, null, 2));
