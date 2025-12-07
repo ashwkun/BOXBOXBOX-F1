@@ -62,7 +62,18 @@ fun MainAppScreen(
             
             // 2. Open the content
             if (url.isNotEmpty()) {
-                webViewUrl = url
+                // Check if it's a YouTube URL
+                val videoIdMatch = java.util.regex.Pattern.compile(
+                    "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|\\/e\\/|watch\\?v%3D|watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed%2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*"
+                ).matcher(url)
+
+                if (videoIdMatch.find()) {
+                    // It's a YouTube video, use the dedicated player
+                    selectedVideoId = videoIdMatch.group()
+                } else {
+                    // Regular URL, use WebView
+                    webViewUrl = url
+                }
             }
             
             // 3. Mark handled
