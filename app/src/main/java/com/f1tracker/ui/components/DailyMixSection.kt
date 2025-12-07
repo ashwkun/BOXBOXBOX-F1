@@ -272,15 +272,31 @@ fun DailyMixSection(
                             onClick = { latestEpisode?.let { onPodcastClick(it) } },
                             accentColor = accentSpotify
                         ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(
-                                        Brush.linearGradient(
-                                            colors = listOf(Color(0xFF0A1A0A), Color(0xFF0F2510))
+                            // Podcast artwork as background
+                            val podcastImage = latestEpisode?.imageUrl ?: latestPodcast?.imageUrl
+                            if (podcastImage?.isNotEmpty() == true) {
+                                AsyncImage(
+                                    model = podcastImage,
+                                    contentDescription = null,
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(Color.Black.copy(0.5f))
+                                )
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(
+                                            Brush.linearGradient(
+                                                colors = listOf(Color(0xFF0A1A0A), Color(0xFF0F2510))
+                                            )
                                         )
-                                    )
-                            )
+                                )
+                            }
                             
                             IconBadge(
                                 icon = Icons.Default.Headphones,
