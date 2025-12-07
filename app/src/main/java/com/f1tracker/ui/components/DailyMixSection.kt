@@ -1,12 +1,10 @@
 package com.f1tracker.ui.components
 
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.border
@@ -14,18 +12,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Headphones
-import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -51,7 +44,9 @@ private val accentInstagram = Color(0xFFE1306C)
 private val accentSpotify = Color(0xFF1DB954)
 private val accentYouTube = Color(0xFFFF0000)
 private val cardBg = Color(0xFF0D0D0D)
-private val glassWhite = Color.White.copy(alpha = 0.08f)
+private val gridHeight = 240.dp
+private val cardGap = 10.dp
+private val cornerRadius = 16.dp
 
 @Composable
 fun DailyMixSection(
@@ -69,653 +64,527 @@ fun DailyMixSection(
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
     
     Column(modifier = Modifier.fillMaxWidth()) {
-        // Section Header with glow effect
-        Row(
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "DAILY MIX",
-                fontFamily = brigendsFont,
-                fontSize = 13.sp,
-                color = Color.White.copy(alpha = 0.7f),
-                letterSpacing = 3.sp
-            )
-        }
-
-        // Fully Scrollable Premium Cards
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            // 1. HERO NEWS CARD (Large)
-            if (newsArticles.isNotEmpty()) {
-                item {
-                    HeroNewsCard(
-                        newsItem = newsArticles[0],
-                        onNewsClick = onNewsClick,
-                        michromaFont = michromaFont,
-                        brigendsFont = brigendsFont
-                    )
-                }
-            }
-
-            // 2. GAME CARD (Square, punchy)
-            item {
-                GameCard(
-                    onGameClick = onGameClick,
-                    michromaFont = michromaFont,
-                    brigendsFont = brigendsFont
-                )
-            }
-
-            // 3. VIDEO CARD (Wide)
-            if (videos.isNotEmpty()) {
-                item {
-                    VideoCard(
-                        video = videos[0],
-                        onVideoClick = onVideoClick,
-                        michromaFont = michromaFont,
-                        brigendsFont = brigendsFont
-                    )
-                }
-            }
-
-            // 4. SOCIAL CARD (Square with gradient)
-            if (socialPosts.isNotEmpty()) {
-                item {
-                    SocialCard(
-                        post = socialPosts[0],
-                        onSocialClick = onSocialClick,
-                        michromaFont = michromaFont
-                    )
-                }
-            }
-
-            // 5. PODCAST CARD (Wide, dark)
-            val latestPodcast = podcasts.firstOrNull { it.episodes.isNotEmpty() }
-            val latestEpisode = latestPodcast?.episodes?.firstOrNull()
-            if (latestEpisode != null) {
-                item {
-                    PodcastCard(
-                        episode = latestEpisode,
-                        podcastName = latestPodcast.name,
-                        onPodcastClick = onPodcastClick,
-                        michromaFont = michromaFont,
-                        brigendsFont = brigendsFont
-                    )
-                }
-            }
-
-            // 6. NEWS #2 (Medium)
-            if (newsArticles.size > 1) {
-                item {
-                    NewsCard(
-                        newsItem = newsArticles[1],
-                        onNewsClick = onNewsClick,
-                        michromaFont = michromaFont,
-                        brigendsFont = brigendsFont
-                    )
-                }
-            }
-
-            // 7. SOCIAL #2
-            if (socialPosts.size > 1) {
-                item {
-                    SocialCard(
-                        post = socialPosts[1],
-                        onSocialClick = onSocialClick,
-                        michromaFont = michromaFont
-                    )
-                }
-            }
-
-            // 8. VIDEO #2
-            if (videos.size > 1) {
-                item {
-                    VideoCard(
-                        video = videos[1],
-                        onVideoClick = onVideoClick,
-                        michromaFont = michromaFont,
-                        brigendsFont = brigendsFont
-                    )
-                }
-            }
-        }
-    }
-}
-
-// ============== PREMIUM CARD COMPONENTS ==============
-
-@Composable
-private fun HeroNewsCard(
-    newsItem: NewsArticle,
-    onNewsClick: (String?) -> Unit,
-    michromaFont: FontFamily,
-    brigendsFont: FontFamily
-) {
-    Box(
-        modifier = Modifier
-            .width(280.dp)
-            .height(200.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(cardBg)
-            .clickable { onNewsClick(newsItem.links?.web?.href) }
-    ) {
-        // Background Image
-        val imageUrl = newsItem.images?.firstOrNull()?.url
-        if (imageUrl != null) {
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        }
-
-        // Gradient overlay
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            Color.Black.copy(alpha = 0.4f),
-                            Color.Black.copy(alpha = 0.95f)
-                        ),
-                        startY = 0f,
-                        endY = Float.POSITIVE_INFINITY
-                    )
-                )
+        // Section Header
+        Text(
+            text = "DAILY MIX",
+            fontFamily = brigendsFont,
+            fontSize = 12.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            letterSpacing = 3.sp,
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
         )
 
-        // Accent line at top
-        Box(
+        // Horizontal scrolling bento grid (2 rows stacked in blocks)
+        LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(3.dp)
-                .background(
-                    Brush.horizontalGradient(
-                        colors = listOf(accentPink, accentPink.copy(alpha = 0f))
-                    )
-                )
-                .align(Alignment.TopStart)
-        )
-
-        // Content
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Bottom
+                .height(gridHeight),
+            contentPadding = PaddingValues(horizontal = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Badge
-            Box(
-                modifier = Modifier
-                    .background(accentPink, RoundedCornerShape(6.dp))
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
-            ) {
-                Text(
-                    text = "BREAKING",
-                    fontFamily = brigendsFont,
-                    fontSize = 9.sp,
-                    color = Color.White,
-                    letterSpacing = 1.sp
-                )
+            // ═══════════════════════════════════════════════════════════
+            // BLOCK 1: Hero News (tall, spans both rows)
+            // ═══════════════════════════════════════════════════════════
+            if (newsArticles.isNotEmpty()) {
+                item {
+                    BentoTallCard(
+                        modifier = Modifier.width(180.dp).fillMaxHeight(),
+                        onClick = { onNewsClick(newsArticles[0].links?.web?.href) },
+                        accentColor = accentPink
+                    ) {
+                        val imageUrl = newsArticles[0].images?.firstOrNull()?.url
+                        if (imageUrl != null) {
+                            AsyncImage(
+                                model = imageUrl,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                        GradientOverlay()
+                        
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(14.dp),
+                            verticalArrangement = Arrangement.Bottom
+                        ) {
+                            BentoBadge("HEADLINE", accentPink)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = newsArticles[0].headline,
+                                fontFamily = michromaFont,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                                lineHeight = 15.sp,
+                                maxLines = 4,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                }
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = newsItem.headline,
-                fontFamily = michromaFont,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                lineHeight = 18.sp,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "MOTORSPORT.COM",
-                fontFamily = michromaFont,
-                fontSize = 9.sp,
-                color = Color.White.copy(alpha = 0.5f),
-                letterSpacing = 1.sp
-            )
-        }
-    }
-}
-
-@Composable
-private fun GameCard(
-    onGameClick: () -> Unit,
-    michromaFont: FontFamily,
-    brigendsFont: FontFamily
-) {
-    Box(
-        modifier = Modifier
-            .size(140.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(
-                Brush.linearGradient(
-                    colors = listOf(Color(0xFF1A0A0A), Color(0xFF2D0A0A)),
-                    start = Offset(0f, 0f),
-                    end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
-                )
-            )
-            .border(
-                width = 1.dp,
-                brush = Brush.linearGradient(
-                    colors = listOf(accentRed.copy(0.5f), accentRed.copy(0.1f))
-                ),
-                shape = RoundedCornerShape(20.dp)
-            )
-            .clickable { onGameClick() }
-    ) {
-        // Background image
-        Image(
-            painter = androidx.compose.ui.res.painterResource(id = R.drawable.game_hotlap),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize().graphicsLayer { alpha = 0.3f },
-            contentScale = ContentScale.Crop
-        )
-
-        // Content
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(14.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            // Animated glow icon
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(accentRed.copy(0.2f), CircleShape)
-                    .border(2.dp, accentRed.copy(0.6f), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Timer,
-                    contentDescription = null,
-                    tint = accentRed,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = "HOT LAP",
-                fontFamily = brigendsFont,
-                fontSize = 12.sp,
-                color = Color.White,
-                letterSpacing = 2.sp
-            )
-
-            Text(
-                text = "PLAY NOW",
-                fontFamily = michromaFont,
-                fontSize = 8.sp,
-                color = accentRed,
-                letterSpacing = 1.sp
-            )
-        }
-    }
-}
-
-@Composable
-private fun VideoCard(
-    video: F1Video,
-    onVideoClick: (String) -> Unit,
-    michromaFont: FontFamily,
-    brigendsFont: FontFamily
-) {
-    Box(
-        modifier = Modifier
-            .width(200.dp)
-            .height(140.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(cardBg)
-            .clickable { onVideoClick(video.videoId) }
-    ) {
-        AsyncImage(
-            model = video.thumbnailUrl,
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-
-        // Dark overlay
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Black.copy(alpha = 0.2f),
-                            Color.Black.copy(alpha = 0.8f)
-                        )
-                    )
-                )
-        )
-
-        // Play button (center)
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(44.dp)
-                    .background(Color.White.copy(0.15f), CircleShape)
-                    .border(2.dp, Color.White.copy(0.4f), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "Play",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        }
-
-        // YouTube badge + title
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(12.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            // YouTube badge
-            Box(
-                modifier = Modifier
-                    .background(accentYouTube, RoundedCornerShape(4.dp))
-                    .padding(horizontal = 8.dp, vertical = 3.dp)
-            ) {
-                Text(
-                    text = "VIDEO",
-                    fontFamily = brigendsFont,
-                    fontSize = 8.sp,
-                    color = Color.White
-                )
-            }
-
-            Text(
-                text = video.title,
-                fontFamily = michromaFont,
-                fontSize = 10.sp,
-                color = Color.White,
-                maxLines = 2,
-                lineHeight = 13.sp,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
-
-@Composable
-private fun SocialCard(
-    post: InstagramPost,
-    onSocialClick: (String) -> Unit,
-    michromaFont: FontFamily
-) {
-    Box(
-        modifier = Modifier
-            .size(140.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(cardBg)
-            .border(
-                width = 1.dp,
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        accentInstagram.copy(0.4f),
-                        Color(0xFFFFDC80).copy(0.3f),
-                        accentInstagram.copy(0.2f)
-                    )
-                ),
-                shape = RoundedCornerShape(20.dp)
-            )
-            .clickable { onSocialClick(post.permalink) }
-    ) {
-        val img = post.thumbnail_url ?: post.media_url
-        if (img != null) {
-            AsyncImage(
-                model = img,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        }
-
-        // Gradient overlay
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            Color.Black.copy(alpha = 0.7f)
-                        )
-                    )
-                )
-        )
-
-        // Video play indicator
-        if (post.media_type == "VIDEO") {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Box(
+            // ═══════════════════════════════════════════════════════════
+            // BLOCK 2: 2x2 Grid (Game, Social, Video, Podcast)
+            // ═══════════════════════════════════════════════════════════
+            item {
+                Column(
                     modifier = Modifier
-                        .size(36.dp)
-                        .background(Color.White.copy(0.2f), CircleShape),
-                    contentAlignment = Alignment.Center
+                        .width(240.dp)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(cardGap)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(20.dp)
-                    )
+                    // Top row
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(cardGap)
+                    ) {
+                        // Game Card
+                        BentoSmallCard(
+                            modifier = Modifier.weight(1f).fillMaxHeight(),
+                            onClick = onGameClick,
+                            accentColor = accentRed
+                        ) {
+                            Image(
+                                painter = androidx.compose.ui.res.painterResource(id = R.drawable.game_hotlap),
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize().graphicsLayer { alpha = 0.4f },
+                                contentScale = ContentScale.Crop
+                            )
+                            Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(0.4f)))
+                            
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Timer,
+                                    contentDescription = null,
+                                    tint = accentRed,
+                                    modifier = Modifier.size(22.dp)
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = "HOT LAP",
+                                    fontFamily = brigendsFont,
+                                    fontSize = 9.sp,
+                                    color = Color.White
+                                )
+                            }
+                        }
+
+                        // Social Card
+                        val social1 = socialPosts.getOrNull(0)
+                        BentoSmallCard(
+                            modifier = Modifier.weight(1f).fillMaxHeight(),
+                            onClick = { social1?.let { onSocialClick(it.permalink) } },
+                            accentColor = accentInstagram
+                        ) {
+                            if (social1 != null) {
+                                val img = social1.thumbnail_url ?: social1.media_url
+                                if (img != null) {
+                                    AsyncImage(
+                                        model = img,
+                                        contentDescription = null,
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                }
+                                Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(0.3f)))
+                                
+                                if (social1.media_type == "VIDEO") {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        PlayButtonSmall()
+                                    }
+                                }
+                                
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomStart)
+                                        .padding(8.dp)
+                                ) {
+                                    Text(
+                                        text = "@${social1.author}",
+                                        fontFamily = michromaFont,
+                                        fontSize = 7.sp,
+                                        color = Color.White.copy(0.9f)
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    // Bottom row
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(cardGap)
+                    ) {
+                        // Video Card
+                        val video1 = videos.getOrNull(0)
+                        BentoSmallCard(
+                            modifier = Modifier.weight(1f).fillMaxHeight(),
+                            onClick = { video1?.let { onVideoClick(it.videoId) } },
+                            accentColor = accentYouTube
+                        ) {
+                            if (video1 != null) {
+                                AsyncImage(
+                                    model = video1.thumbnailUrl,
+                                    contentDescription = null,
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+                                Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(0.3f)))
+                                
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    PlayButtonSmall()
+                                }
+                                
+                                Box(
+                                    modifier = Modifier.align(Alignment.TopStart).padding(6.dp)
+                                ) {
+                                    BentoBadge("VIDEO", accentYouTube)
+                                }
+                            }
+                        }
+
+                        // Podcast Card
+                        val latestPodcast = podcasts.firstOrNull { it.episodes.isNotEmpty() }
+                        val latestEpisode = latestPodcast?.episodes?.firstOrNull()
+                        
+                        BentoSmallCard(
+                            modifier = Modifier.weight(1f).fillMaxHeight(),
+                            onClick = { latestEpisode?.let { onPodcastClick(it) } },
+                            accentColor = accentSpotify
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        Brush.linearGradient(
+                                            colors = listOf(Color(0xFF0A1A0A), Color(0xFF0D2010))
+                                        )
+                                    )
+                            )
+                            
+                            Column(
+                                modifier = Modifier.fillMaxSize().padding(10.dp),
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Headphones,
+                                    contentDescription = null,
+                                    tint = accentSpotify,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = latestEpisode?.title ?: "Podcast",
+                                    fontFamily = michromaFont,
+                                    fontSize = 8.sp,
+                                    color = Color.White,
+                                    maxLines = 2,
+                                    lineHeight = 10.sp,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // ═══════════════════════════════════════════════════════════
+            // BLOCK 3: News #2 (Tall card)
+            // ═══════════════════════════════════════════════════════════
+            if (newsArticles.size > 1) {
+                item {
+                    BentoTallCard(
+                        modifier = Modifier.width(150.dp).fillMaxHeight(),
+                        onClick = { onNewsClick(newsArticles[1].links?.web?.href) },
+                        accentColor = Color(0xFF00D2BE) // Teal
+                    ) {
+                        val imageUrl = newsArticles[1].images?.firstOrNull()?.url
+                        if (imageUrl != null) {
+                            AsyncImage(
+                                model = imageUrl,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                        GradientOverlay()
+                        
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(12.dp),
+                            verticalArrangement = Arrangement.Bottom
+                        ) {
+                            BentoBadge("NEWS", Color(0xFF00D2BE))
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = newsArticles[1].headline,
+                                fontFamily = michromaFont,
+                                fontSize = 10.sp,
+                                color = Color.White,
+                                lineHeight = 13.sp,
+                                maxLines = 4,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                }
+            }
+
+            // ═══════════════════════════════════════════════════════════
+            // BLOCK 4: 2x1 Stack (Social + Video)
+            // ═══════════════════════════════════════════════════════════
+            item {
+                Column(
+                    modifier = Modifier
+                        .width(140.dp)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(cardGap)
+                ) {
+                    // Social #2
+                    val social2 = socialPosts.getOrNull(1)
+                    BentoSmallCard(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        onClick = { social2?.let { onSocialClick(it.permalink) } },
+                        accentColor = accentInstagram
+                    ) {
+                        if (social2 != null) {
+                            val img = social2.thumbnail_url ?: social2.media_url
+                            if (img != null) {
+                                AsyncImage(
+                                    model = img,
+                                    contentDescription = null,
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                            Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(0.25f)))
+                            
+                            if (social2.media_type == "VIDEO") {
+                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    PlayButtonSmall()
+                                }
+                            }
+                        }
+                    }
+
+                    // Video #2
+                    val video2 = videos.getOrNull(1)
+                    BentoSmallCard(
+                        modifier = Modifier.weight(1f).fillMaxWidth(),
+                        onClick = { video2?.let { onVideoClick(it.videoId) } },
+                        accentColor = accentYouTube
+                    ) {
+                        if (video2 != null) {
+                            AsyncImage(
+                                model = video2.thumbnailUrl,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                            Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(0.25f)))
+                            
+                            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                PlayButtonSmall()
+                            }
+                        }
+                    }
+                }
+            }
+
+            // ═══════════════════════════════════════════════════════════
+            // BLOCK 5: Social #3 (Tall)
+            // ═══════════════════════════════════════════════════════════
+            if (socialPosts.size > 2) {
+                item {
+                    val social3 = socialPosts[2]
+                    BentoTallCard(
+                        modifier = Modifier.width(130.dp).fillMaxHeight(),
+                        onClick = { onSocialClick(social3.permalink) },
+                        accentColor = accentInstagram
+                    ) {
+                        val img = social3.thumbnail_url ?: social3.media_url
+                        if (img != null) {
+                            AsyncImage(
+                                model = img,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+                        Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(0.2f)))
+                        
+                        if (social3.media_type == "VIDEO") {
+                            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                PlayButtonMedium()
+                            }
+                        }
+                        
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .padding(10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "@${social3.author}",
+                                fontFamily = michromaFont,
+                                fontSize = 8.sp,
+                                color = Color.White
+                            )
+                            if (social3.author == "f1") {
+                                Spacer(modifier = Modifier.width(3.dp))
+                                Icon(
+                                    imageVector = Icons.Default.Verified,
+                                    contentDescription = null,
+                                    tint = Color(0xFF1DA1F2),
+                                    modifier = Modifier.size(10.dp)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
-
-        // Author badge
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "@${post.author}",
-                fontFamily = michromaFont,
-                fontSize = 9.sp,
-                color = Color.White
-            )
-            if (post.author == "f1") {
-                Spacer(modifier = Modifier.width(4.dp))
-                Icon(
-                    imageVector = Icons.Default.Verified,
-                    contentDescription = null,
-                    tint = Color(0xFF1DA1F2),
-                    modifier = Modifier.size(12.dp)
-                )
-            }
-        }
     }
 }
 
+// ═══════════════════════════════════════════════════════════
+// BENTO CARD COMPONENTS
+// ═══════════════════════════════════════════════════════════
+
 @Composable
-private fun PodcastCard(
-    episode: PodcastEpisode,
-    podcastName: String,
-    onPodcastClick: (PodcastEpisode) -> Unit,
-    michromaFont: FontFamily,
-    brigendsFont: FontFamily
+private fun BentoTallCard(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    accentColor: Color,
+    content: @Composable BoxScope.() -> Unit
 ) {
     Box(
-        modifier = Modifier
-            .width(200.dp)
-            .height(100.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(
-                Brush.horizontalGradient(
-                    colors = listOf(
-                        Color(0xFF0A1A0A),
-                        Color(0xFF0D2D0D)
-                    )
-                )
-            )
+        modifier = modifier
+            .clip(RoundedCornerShape(cornerRadius))
+            .background(cardBg)
             .border(
                 width = 1.dp,
-                brush = Brush.linearGradient(
-                    colors = listOf(accentSpotify.copy(0.4f), accentSpotify.copy(0.1f))
+                brush = Brush.verticalGradient(
+                    colors = listOf(accentColor.copy(0.4f), Color.White.copy(0.05f))
                 ),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(cornerRadius)
             )
-            .clickable { onPodcastClick(episode) }
+            .clickable { onClick() },
+        content = content
+    )
+}
+
+@Composable
+private fun BentoSmallCard(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    accentColor: Color,
+    content: @Composable BoxScope.() -> Unit
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(cardBg)
+            .border(
+                width = 1.dp,
+                color = accentColor.copy(0.2f),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable { onClick() },
+        content = content
+    )
+}
+
+@Composable
+private fun BentoBadge(text: String, color: Color) {
+    Box(
+        modifier = Modifier
+            .background(color.copy(0.9f), RoundedCornerShape(4.dp))
+            .padding(horizontal = 8.dp, vertical = 3.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Icon
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(accentSpotify.copy(0.2f), RoundedCornerShape(12.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Headphones,
-                    contentDescription = null,
-                    tint = accentSpotify,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "PODCAST",
-                    fontFamily = brigendsFont,
-                    fontSize = 8.sp,
-                    color = accentSpotify,
-                    letterSpacing = 1.sp
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = episode.title,
-                    fontFamily = michromaFont,
-                    fontSize = 10.sp,
-                    color = Color.White,
-                    maxLines = 2,
-                    lineHeight = 13.sp,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = podcastName,
-                    fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(0.5f)
-                )
-            }
-        }
+        Text(
+            text = text,
+            fontSize = 8.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            letterSpacing = 1.sp
+        )
     }
 }
 
 @Composable
-private fun NewsCard(
-    newsItem: NewsArticle,
-    onNewsClick: (String?) -> Unit,
-    michromaFont: FontFamily,
-    brigendsFont: FontFamily
-) {
+private fun PlayButtonSmall() {
     Box(
         modifier = Modifier
-            .width(180.dp)
-            .height(140.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(cardBg)
-            .clickable { onNewsClick(newsItem.links?.web?.href) }
+            .size(28.dp)
+            .background(Color.White.copy(0.2f), CircleShape)
+            .border(1.dp, Color.White.copy(0.4f), CircleShape),
+        contentAlignment = Alignment.Center
     ) {
-        val imageUrl = newsItem.images?.firstOrNull()?.url
-        if (imageUrl != null) {
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            Color.Black.copy(alpha = 0.9f)
-                        )
-                    )
-                )
+        Icon(
+            imageVector = Icons.Default.PlayArrow,
+            contentDescription = "Play",
+            tint = Color.White,
+            modifier = Modifier.size(16.dp)
         )
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(12.dp),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Box(
-                modifier = Modifier
-                    .background(accentPink.copy(0.9f), RoundedCornerShape(4.dp))
-                    .padding(horizontal = 8.dp, vertical = 3.dp)
-            ) {
-                Text(
-                    text = "NEWS",
-                    fontFamily = brigendsFont,
-                    fontSize = 8.sp,
-                    color = Color.White
-                )
-            }
-
-            Text(
-                text = newsItem.headline,
-                fontFamily = michromaFont,
-                fontSize = 10.sp,
-                color = Color.White,
-                maxLines = 3,
-                lineHeight = 13.sp,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
     }
 }
 
-// Backward compatibility
+@Composable
+private fun PlayButtonMedium() {
+    Box(
+        modifier = Modifier
+            .size(40.dp)
+            .background(Color.White.copy(0.15f), CircleShape)
+            .border(2.dp, Color.White.copy(0.3f), CircleShape),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Default.PlayArrow,
+            contentDescription = "Play",
+            tint = Color.White,
+            modifier = Modifier.size(22.dp)
+        )
+    }
+}
+
+@Composable
+private fun GradientOverlay() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Transparent,
+                        Color.Black.copy(alpha = 0.3f),
+                        Color.Black.copy(alpha = 0.9f)
+                    )
+                )
+            )
+    )
+}
+
+// Backward compatibility exports
 @Composable
 fun BentoCard(
     modifier: Modifier = Modifier,
@@ -729,23 +598,6 @@ fun BentoCard(
             .border(1.dp, Color.White.copy(alpha = 0.08f), RoundedCornerShape(16.dp))
             .clickable { onClick() },
         content = content
-    )
-}
-
-@Composable
-fun GradientOverlay() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Transparent,
-                        Color.Black.copy(alpha = 0.5f),
-                        Color.Black.copy(alpha = 0.9f)
-                    )
-                )
-            )
     )
 }
 
