@@ -1100,8 +1100,14 @@ private fun VideosList(
     selectedFilter: String,
     onFilterSelected: (String) -> Unit
 ) {
-    // Filter chips with distinct sorting strategies
-    val availableFilters = listOf("Hot", "Latest", "Popular", "Official")
+    // Filter chips: Hot (default), Latest, Highlights, Popular, Official
+    val availableFilters = listOf("Hot", "Latest", "Highlights", "Popular", "Official")
+    
+    // Highlight keyword pattern matching (from fetch_highlights.js)
+    val highlightPattern = Regex(
+        "(Race|FP1|FP2|FP3|Qualifying|Sprint|Sprint Qualifying)\\s*(Highlights?|Highlight)",
+        RegexOption.IGNORE_CASE
+    )
     
     // Apply different sorting/filtering strategies per chip
     val filteredVideos = remember(videos, selectedFilter) {
@@ -1112,6 +1118,20 @@ private fun VideosList(
                     java.time.Instant.parse(it.publishedDate)
                 } catch (e: Exception) {
                     java.time.Instant.EPOCH
+                }
+            }
+            "Highlights" -> {
+                // Filter videos that match highlight keywords OR come from f1_highlights.json (have session tags)
+                videos.filter { video ->
+                    highlightPattern.containsMatchIn(video.title) ||
+                    video.tags.any { it in listOf("RACE", "QUALI", "QUALIFYING", "FP", "FP1", "FP2", "FP3", "SPRINT", "SPRINT_QUALIFYING") }
+                }.sortedByDescending {
+                    // Sort by freshness
+                    try {
+                        java.time.Instant.parse(it.publishedDate)
+                    } catch (e: Exception) {
+                        java.time.Instant.EPOCH
+                    }
                 }
             }
             "Popular" -> {
