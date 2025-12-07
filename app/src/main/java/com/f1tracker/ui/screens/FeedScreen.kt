@@ -1126,13 +1126,17 @@ private fun VideosList(
                     "^(Race|FP1|FP2|FP3|Qualifying|Sprint|Sprint Qualifying)\\s+Highlights",
                     RegexOption.IGNORE_CASE
                 )
-                // Exclusion patterns for shorts and reactions
+                // Exclusion patterns for shorts, reactions, and non-F1 series
                 val exclusionPatterns = listOf(
                     Regex("#shorts", RegexOption.IGNORE_CASE),
                     Regex("react", RegexOption.IGNORE_CASE),
                     Regex("interview", RegexOption.IGNORE_CASE),
                     Regex("debrief", RegexOption.IGNORE_CASE),
-                    Regex("press conference", RegexOption.IGNORE_CASE)
+                    Regex("press conference", RegexOption.IGNORE_CASE),
+                    Regex("\\bF2\\b", RegexOption.IGNORE_CASE),
+                    Regex("\\bF3\\b", RegexOption.IGNORE_CASE),
+                    Regex("Formula 2", RegexOption.IGNORE_CASE),
+                    Regex("Formula 3", RegexOption.IGNORE_CASE)
                 )
                 
                 videos.filter { video ->
