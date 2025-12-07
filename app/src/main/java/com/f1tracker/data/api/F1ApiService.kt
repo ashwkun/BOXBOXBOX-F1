@@ -71,4 +71,7 @@ interface F1ApiService {
 
     @GET
     suspend fun getHighlights(@Url url: String): List<com.f1tracker.data.models.HighlightVideo>
+
+    @GET
+    suspend fun getYouTubeVideosJson(@Url url: String): List<com.f1tracker.data.models.YouTubeVideo>
 }

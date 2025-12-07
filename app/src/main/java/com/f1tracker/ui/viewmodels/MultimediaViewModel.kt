@@ -141,22 +141,80 @@ class MultimediaViewModel @Inject constructor(
         return diversified
     }
 
+    /**
+     * Load videos from 3 sources:
+     * 1. YouTube RSS feed (real-time, 15 videos)
+     * 2. f1_youtube.json (multi-channel curated videos)
+     * 3. f1_highlights.json (official F1 session highlights)
+     * 
+     * Deduplicates by videoId and sorts by publish date.
+     */
     fun loadYouTubeVideos() {
         viewModelScope.launch {
-            val result = repository.getYouTubeVideos("UULFB_qr75-ydFVKSF9Dmo6izg")
-            result.onSuccess { videos ->
-                // Apply formatting
-                val formattedVideos = videos.map { video ->
-                    video.copy(
-                        views = formatViews(video.views),
-                        duration = formatDuration(video.duration.toIntOrNull() ?: 0),
-                        viewCount = video.views.toLongOrNull() ?: 0L
-                    )
+            val allVideos = mutableListOf<F1Video>()
+            val seenIds = mutableSetOf<String>()
+            
+            // Source 1: RSS Feed (fastest, real-time)
+            val rssResult = repository.getYouTubeVideos("UULFB_qr75-ydFVKSF9Dmo6izg")
+            rssResult.onSuccess { videos ->
+                videos.forEach { video ->
+                    if (seenIds.add(video.videoId)) {
+                        allVideos.add(video.copy(
+                            views = formatViews(video.views),
+                            duration = formatDuration(video.duration.toIntOrNull() ?: 0),
+                            viewCount = video.views.toLongOrNull() ?: 0L
+                        ))
+                    }
                 }
-                _youtubeVideos.value = formattedVideos
-            }.onFailure { e ->
-                Log.e("MultimediaViewModel", "Failed to load YouTube videos", e)
             }
+            
+            // Source 2: f1_youtube.json (multi-channel videos)
+            val jsonResult = repository.getYouTubeVideosFromJson()
+            jsonResult.onSuccess { videos ->
+                videos.forEach { video ->
+                    if (seenIds.add(video.id)) {
+                        allVideos.add(F1Video(
+                            videoId = video.id,
+                            title = video.title,
+                            thumbnailUrl = video.thumbnail,
+                            views = formatViews(video.viewCount),
+                            publishedDate = video.publishedAt,
+                            duration = formatDuration(video.durationSec),
+                            viewCount = video.viewCount.toLongOrNull() ?: 0L
+                        ))
+                    }
+                }
+            }
+            
+            // Source 3: f1_highlights.json (official highlights)
+            val highlightsResult = repository.getHighlights()
+            highlightsResult.onSuccess { highlights ->
+                highlights.forEach { highlight ->
+                    if (seenIds.add(highlight.id)) {
+                        allVideos.add(F1Video(
+                            videoId = highlight.id,
+                            title = highlight.title,
+                            thumbnailUrl = highlight.thumbnail ?: "https://i.ytimg.com/vi/${highlight.id}/maxresdefault.jpg",
+                            views = "", // Not available from highlights
+                            publishedDate = highlight.publishedAt,
+                            duration = "",
+                            viewCount = 0L
+                        ))
+                    }
+                }
+            }
+            
+            // Sort by publish date (newest first)
+            val sortedVideos = allVideos.sortedByDescending { 
+                try {
+                    java.time.ZonedDateTime.parse(it.publishedDate, java.time.format.DateTimeFormatter.ISO_DATE_TIME)
+                } catch (e: Exception) {
+                    java.time.ZonedDateTime.now().minusYears(1)
+                }
+            }
+            
+            Log.d("MultimediaViewModel", "Loaded ${sortedVideos.size} videos from 3 sources (deduplicated)")
+            _youtubeVideos.value = sortedVideos
         }
     }
 

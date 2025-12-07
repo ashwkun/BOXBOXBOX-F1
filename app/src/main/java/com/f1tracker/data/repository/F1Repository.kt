@@ -21,6 +21,7 @@ interface F1Repository {
     suspend fun getInstagramFeed(forceRefresh: Boolean = false): Result<List<com.f1tracker.data.models.InstagramPost>>
     suspend fun getInstagramReels(forceRefresh: Boolean = false): Result<List<com.f1tracker.data.models.InstagramPost>>
     suspend fun getHighlights(): Result<List<com.f1tracker.data.models.HighlightVideo>>
+    suspend fun getYouTubeVideosFromJson(): Result<List<com.f1tracker.data.models.YouTubeVideo>>
 }
 
 class F1RepositoryImpl @Inject constructor(
@@ -449,6 +450,17 @@ class F1RepositoryImpl @Inject constructor(
             Result.success(response)
         } catch (e: Exception) {
             android.util.Log.e("F1Repository", "Error fetching highlights", e)
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getYouTubeVideosFromJson(): Result<List<com.f1tracker.data.models.YouTubeVideo>> = withContext(Dispatchers.IO) {
+        try {
+            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_youtube.json"
+            val response = f1ApiService.getYouTubeVideosJson(url)
+            Result.success(response)
+        } catch (e: Exception) {
+            android.util.Log.e("F1Repository", "Error fetching YouTube videos from JSON", e)
             Result.failure(e)
         }
     }
