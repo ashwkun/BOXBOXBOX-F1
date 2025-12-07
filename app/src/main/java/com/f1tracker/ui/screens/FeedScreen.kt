@@ -1114,10 +1114,25 @@ private fun VideosList(
                     java.time.Instant.EPOCH
                 }
             }
-            "Popular" -> videos.sortedByDescending { 
-                // Add slight randomization (±15%) to break F1 channel dominance
-                val randomFactor = 0.85 + (Math.random() * 0.30)
-                it.viewCount * randomFactor
+            "Popular" -> {
+                // Sort by views with slight randomization
+                val sorted = videos.sortedByDescending { 
+                    val randomFactor = 0.85 + (Math.random() * 0.30)
+                    it.viewCount * randomFactor
+                }
+                // Enforce channel diversity: max 3 from same channel in any 6-video window
+                val diversified = mutableListOf<F1Video>()
+                val pending = sorted.toMutableList()
+                while (pending.isNotEmpty()) {
+                    val candidate = pending.firstOrNull { video ->
+                        // Check last 5 videos for channel count
+                        val recentChannels = diversified.takeLast(5).map { it.channelTitle }
+                        recentChannels.count { it == video.channelTitle } < 3
+                    } ?: pending.first() // Fallback if all blocked
+                    diversified.add(candidate)
+                    pending.remove(candidate)
+                }
+                diversified
             }
             "Official" -> videos.filter { it.channelTitle == "FORMULA 1" }
                 .sortedByDescending { it.viewCount }
