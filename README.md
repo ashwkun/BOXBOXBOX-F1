@@ -4,12 +4,26 @@
 
 ### *The Ultimate F1 Companion App For Android*
 
-[![MIT License](https://img.shields.io/badge/License-MIT-ff0080.svg)](https://opensource.org/licenses/MIT)
+[![GPL v3 License](https://img.shields.io/badge/License-GPLv3-ff0080.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Android](https://img.shields.io/badge/Platform-Android-3DDC84.svg)](https://www.android.com/)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-7F52FF.svg)](https://kotlinlang.org/)
 [![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4.svg)](https://developer.android.com/jetpack/compose)
 
 *Because antigravity is free and I love F1* 🏁
+
+---
+
+### 🤖 Built 100% with Antigravity
+
+<table>
+  <tr>
+    <td align="center"><img src="screenshots/antigravity_logo.png" width="50" alt="Antigravity"/><br/><sub><b>Antigravity</b></sub></td>
+    <td align="center"><img src="screenshots/gemini_logo.png" width="50" alt="Gemini"/><br/><sub><b>Gemini</b></sub></td>
+    <td align="center"><img src="screenshots/claude_logo.png" width="50" alt="Claude"/><br/><sub><b>Claude</b></sub></td>
+  </tr>
+</table>
+
+---
 
 [Download APK](boxboxbox.apk) • [Features](#-features) • [Screenshots](#-screenshots) • [Tech Stack](#-tech-stack)
 
@@ -337,19 +351,42 @@ This is a personal passion project, but contributions are welcome! Here's how yo
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **GNU General Public License v3.0** — see the [LICENSE](LICENSE) file for details.
+
+**Key Terms:**
+- ✅ You may use, modify, and distribute this software
+- ✅ Any derivative work **must also be open source** under GPL v3
+- ✅ You must disclose the source code of any modifications
+- ⚠️ No warranty is provided
 
 ---
 
 ## ⚖️ Legal Disclaimer
 
+> [!IMPORTANT]
 > **BOX·BOX·BOX** is an **unofficial, fan-made application** and is **not affiliated with, endorsed by, or connected to** Formula 1, Formula One Management, Formula One Licensing B.V., or any F1 teams, drivers, or sponsors.
->
+
+> [!WARNING]
 > **F1**, **FORMULA ONE**, **FORMULA 1**, **FIA FORMULA ONE WORLD CHAMPIONSHIP**, **GRAND PRIX**, and related marks are trademarks of **Formula One Licensing B.V.**
->
-> All team logos, driver images, circuit layouts, and other F1-related media used in this app are the property of their respective owners and are used here solely for **identification and informational purposes** under fair use principles.
->
-> This app is provided **free of charge** and is not monetized in any way. It is a non-commercial, open-source project created by a fan, for fans.
+
+### Content Attribution
+
+This application aggregates publicly available content from various sources including:
+- Formula 1 official media and data feeds
+- Instagram posts from F1 teams, drivers, and fan accounts
+- YouTube videos from F1 channels and creators
+- Reddit posts from r/formula1
+- News articles from F1 publications
+- Race data from public APIs (Ergast, OpenF1)
+
+**All content remains the property of their respective copyright holders.** This app:
+- Does **not claim ownership** of any third-party content
+- Uses content solely for **informational and educational purposes**
+- Generates **no commercial gain or revenue** whatsoever
+- Is provided **completely free of charge** with no monetization
+- Is a **non-profit, open-source** fan project
+
+Users of this app are responsible for complying with the Terms of Service of content providers (Instagram, YouTube, Reddit, etc.) when accessing their content through this application.
 
 ---
 
