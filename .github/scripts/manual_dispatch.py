@@ -30,7 +30,7 @@ def send_notification(args):
     # We use DATA payload to ensure onMessageReceived is triggered in the app,
     # which is where the custom sound logic resides.
     message = messaging.Message(
-        topic="f1_updates",
+        topic="all_users",
         data={
             "title": args.title,
             "body": args.body,
