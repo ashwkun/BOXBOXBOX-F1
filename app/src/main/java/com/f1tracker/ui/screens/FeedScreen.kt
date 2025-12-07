@@ -1114,7 +1114,11 @@ private fun VideosList(
                     java.time.Instant.EPOCH
                 }
             }
-            "Popular" -> videos.sortedByDescending { it.viewCount }
+            "Popular" -> videos.sortedByDescending { 
+                // Add slight randomization (±15%) to break F1 channel dominance
+                val randomFactor = 0.85 + (Math.random() * 0.30)
+                it.viewCount * randomFactor
+            }
             "Official" -> videos.filter { it.channelTitle == "FORMULA 1" }
                 .sortedByDescending { it.viewCount }
             else -> videos
