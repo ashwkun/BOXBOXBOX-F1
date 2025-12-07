@@ -13,7 +13,7 @@
 
 ---
 
-### 🤖 Built 100% with 
+### 100% built by
 
 <table>
   <tr>
