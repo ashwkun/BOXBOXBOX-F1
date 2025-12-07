@@ -24,6 +24,9 @@ on:
       image_url:
         description: 'Image URL (Optional)'
         required: false
+      url:
+        description: 'Deep Link URL (Optional - e.g. YouTube)'
+        required: false
       target_tab:
         description: 'Target Tab'
         required: true
@@ -61,4 +64,5 @@ jobs:
             --body "${{ inputs.body }}" \
             --channel "${{ inputs.channel }}" \
             --image_url "${{ inputs.image_url }}" \
-            --target_tab "${{ inputs.target_tab }}"
+            --target_tab "${{ inputs.target_tab }}" \
+            --url "${{ inputs.url }}"
