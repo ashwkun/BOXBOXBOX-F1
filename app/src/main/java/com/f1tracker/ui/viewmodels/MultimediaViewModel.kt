@@ -34,7 +34,7 @@ class MultimediaViewModel @Inject constructor(
         _selectedTabIndex.value = index
     }
 
-    private val _selectedVideoFilter = MutableStateFlow("Top")
+    private val _selectedVideoFilter = MutableStateFlow("Hot")
     val selectedVideoFilter: StateFlow<String> = _selectedVideoFilter.asStateFlow()
 
     fun setSelectedVideoFilter(filter: String) {
@@ -142,19 +142,19 @@ class MultimediaViewModel @Inject constructor(
     }
 
     /**
-     * Load videos from 3 sources:
-     * 1. YouTube RSS feed (real-time, 15 videos)
-     * 2. f1_youtube.json (multi-channel curated videos)
+     * Load videos from multiple sources:
+     * 1. YouTube RSS feed (real-time, 15 videos, official F1 only)
+     * 2. f1_youtube.json (merged feed with tags and channel scores)
      * 3. f1_highlights.json (official F1 session highlights)
      * 
-     * Deduplicates by videoId and sorts by publish date.
+     * Deduplicates by videoId, applies smart scoring, and sorts.
      */
     fun loadYouTubeVideos() {
         viewModelScope.launch {
             val allVideos = mutableListOf<F1Video>()
             val seenIds = mutableSetOf<String>()
             
-            // Source 1: RSS Feed (fastest, real-time)
+            // Source 1: RSS Feed (fastest, real-time official F1 content)
             val rssResult = repository.getYouTubeVideos("UULFB_qr75-ydFVKSF9Dmo6izg")
             rssResult.onSuccess { videos ->
                 videos.forEach { video ->
@@ -162,13 +162,16 @@ class MultimediaViewModel @Inject constructor(
                         allVideos.add(video.copy(
                             views = formatViews(video.views),
                             duration = formatDuration(video.duration.toIntOrNull() ?: 0),
-                            viewCount = video.views.toLongOrNull() ?: 0L
+                            viewCount = video.views.toLongOrNull() ?: 0L,
+                            channelTitle = "FORMULA 1",
+                            channelScore = 1.0,
+                            tags = classifyVideoContent(video.title)
                         ))
                     }
                 }
             }
             
-            // Source 2: f1_youtube.json (multi-channel videos)
+            // Source 2: f1_youtube.json (merged multi-feed with tags and scores)
             val jsonResult = repository.getYouTubeVideosFromJson()
             jsonResult.onSuccess { videos ->
                 videos.forEach { video ->
@@ -180,13 +183,16 @@ class MultimediaViewModel @Inject constructor(
                             views = formatViews(video.viewCount),
                             publishedDate = video.publishedAt,
                             duration = formatDuration(video.durationSec),
-                            viewCount = video.viewCount.toLongOrNull() ?: 0L
+                            viewCount = video.viewCount.toLongOrNull() ?: 0L,
+                            channelTitle = video.channelTitle,
+                            channelScore = video.channelScore,
+                            tags = (video.tags ?: emptyList()).ifEmpty { classifyVideoContent(video.title) }
                         ))
                     }
                 }
             }
             
-            // Source 3: f1_highlights.json (official highlights)
+            // Source 3: f1_highlights.json (official session highlights)
             val highlightsResult = repository.getHighlights()
             highlightsResult.onSuccess { highlights ->
                 highlights.forEach { highlight ->
@@ -195,28 +201,84 @@ class MultimediaViewModel @Inject constructor(
                             videoId = highlight.id,
                             title = highlight.title,
                             thumbnailUrl = highlight.thumbnail ?: "https://i.ytimg.com/vi/${highlight.id}/maxresdefault.jpg",
-                            views = "", // Not available from highlights
+                            views = "",
                             publishedDate = highlight.publishedAt,
                             duration = "",
-                            viewCount = 0L
+                            viewCount = 0L,
+                            channelTitle = "FORMULA 1",
+                            channelScore = 1.0,
+                            tags = listOf(highlight.sessionType.uppercase().replace(" ", "_"))
                         ))
                     }
                 }
             }
             
-            // Sort by publish date (newest first)
-            val sortedVideos = allVideos.sortedByDescending { 
-                try {
-                    java.time.ZonedDateTime.parse(it.publishedDate, java.time.format.DateTimeFormatter.ISO_DATE_TIME)
-                } catch (e: Exception) {
-                    java.time.ZonedDateTime.now().minusYears(1)
-                }
-            }
+            // Apply smart scoring and sort
+            val scoredVideos = allVideos.map { video ->
+                video to calculateSmartScore(video)
+            }.sortedByDescending { it.second }
+             .map { it.first }
             
-            Log.d("MultimediaViewModel", "Loaded ${sortedVideos.size} videos from 3 sources (deduplicated)")
-            _youtubeVideos.value = sortedVideos
+            Log.d("MultimediaViewModel", "Loaded ${scoredVideos.size} videos from 3 sources (deduplicated, scored)")
+            _youtubeVideos.value = scoredVideos
         }
     }
+    
+    /**
+     * Calculate smart score for video ranking.
+     * Score = (freshness * 0.35) + (engagement * 0.25) + (channelQuality * 0.25) + (contentType * 0.15)
+     */
+    private fun calculateSmartScore(video: F1Video): Double {
+        val now = java.time.Instant.now()
+        
+        // Freshness score (exponential decay, half-life 48 hours)
+        val hoursAge = try {
+            val publishTime = java.time.Instant.parse(video.publishedDate)
+            java.time.Duration.between(publishTime, now).toHours().toDouble()
+        } catch (e: Exception) { 720.0 } // 30 days fallback
+        
+        val freshnessScore = Math.exp(-hoursAge / 48.0)
+        
+        // Engagement score (normalized)
+        val maxViews = 10_000_000.0 // Normalize against 10M views
+        val engagementScore = Math.min(video.viewCount / maxViews, 1.0)
+        
+        // Channel quality score (from JSON or default)
+        val channelScore = video.channelScore
+        
+        // Content type boost (session content preferred)
+        val contentBoost = when {
+            video.tags.any { it in listOf("RACE", "QUALI", "SPRINT") } -> 1.0
+            video.tags.any { it in listOf("FP", "FP1", "FP2", "FP3") } -> 0.8
+            video.tags.any { it in listOf("ANALYSIS", "TECH") } -> 0.7
+            video.tags.any { it in listOf("REACTION", "NEWS") } -> 0.6
+            else -> 0.5
+        }
+        
+        return (freshnessScore * 0.35) + 
+               (engagementScore * 0.25) + 
+               (channelScore * 0.25) + 
+               (contentBoost * 0.15)
+    }
+    
+    /**
+     * Classify video content based on title patterns.
+     */
+    private fun classifyVideoContent(title: String): List<String> {
+        val tags = mutableListOf<String>()
+        
+        if (title.contains(Regex("Race.*Highlight|Grand Prix.*Highlight", RegexOption.IGNORE_CASE))) tags.add("RACE")
+        if (title.contains(Regex("Qualifying|Pole Lap|Q[123]", RegexOption.IGNORE_CASE))) tags.add("QUALI")
+        if (title.contains(Regex("FP[123]|Free Practice", RegexOption.IGNORE_CASE))) tags.add("FP")
+        if (title.contains(Regex("Sprint.*Highlight|Sprint Quali", RegexOption.IGNORE_CASE))) tags.add("SPRINT")
+        if (title.contains(Regex("React|Interview|Debrief|Press Conference", RegexOption.IGNORE_CASE))) tags.add("REACTION")
+        if (title.contains(Regex("Explain|Analysis|Breakdown|Deep Dive", RegexOption.IGNORE_CASE))) tags.add("ANALYSIS")
+        if (title.contains(Regex("Onboard|Hot Lap", RegexOption.IGNORE_CASE))) tags.add("ONBOARD")
+        if (title.contains(Regex("Tech Talk|Upgrade|Aero|Wing", RegexOption.IGNORE_CASE))) tags.add("TECH")
+        
+        return tags.ifEmpty { listOf("GENERAL") }
+    }
+
 
     fun loadPodcasts() {
         viewModelScope.launch {

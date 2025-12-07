@@ -1098,26 +1098,21 @@ private fun VideosList(
     selectedFilter: String,
     onFilterSelected: (String) -> Unit
 ) {
-    // Determine available filters based on content
-    val availableFilters = remember(videos) {
-        val filters = mutableListOf("All", "Top")
-        
-        if (videos.any { it.title.contains("highlight", ignoreCase = true) }) {
-            filters.add("Highlights")
-        }
-        if (videos.any { it.title.contains("react", ignoreCase = true) || it.title.contains("reaction", ignoreCase = true) }) {
-            filters.add("Reactions")
-        }
-        filters
-    }
+    // New filter chips based on content classification
+    val availableFilters = listOf("Hot", "Official", "Sessions", "Analysis")
     
-    // Filter and sort videos
+    // Filter videos based on selected chip
     val filteredVideos = remember(videos, selectedFilter) {
         when (selectedFilter) {
-            "All" -> videos // Default order (latest)
-            "Top" -> videos.sortedByDescending { it.viewCount }
-            "Highlights" -> videos.filter { it.title.contains("highlight", ignoreCase = true) }
-            "Reactions" -> videos.filter { it.title.contains("react", ignoreCase = true) || it.title.contains("reaction", ignoreCase = true) }
+            "Hot" -> videos // Already smart-scored by ViewModel
+            "Official" -> videos.filter { it.channelTitle == "FORMULA 1" }
+            "Sessions" -> videos.filter { video ->
+                video.tags.any { it in listOf("RACE", "QUALI", "SPRINT", "FP", "FP1", "FP2", "FP3", "QUALIFYING", "SPRINT_QUALIFYING") }
+            }
+            "Analysis" -> videos.filter { video ->
+                video.tags.any { it in listOf("ANALYSIS", "TECH", "REACTION") } ||
+                video.channelTitle in listOf("THE RACE", "ESPN F1", "Autosport", "Sky Sports F1")
+            }
             else -> videos
         }
     }
@@ -1125,19 +1120,26 @@ private fun VideosList(
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         state = listState,
-        contentPadding = PaddingValues(bottom = 16.dp), // Bottom padding for list
+        contentPadding = PaddingValues(bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Filter Chips Row (Fixed, no scrolling)
+        // Filter Chips Row
         item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp, horizontal = 20.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .padding(vertical = 16.dp, horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 availableFilters.forEach { filter ->
                     val isSelected = selectedFilter == filter
+                    val icon = when (filter) {
+                        "Hot" -> "🔥"
+                        "Official" -> "⭐"
+                        "Sessions" -> "🏁"
+                        "Analysis" -> "📊"
+                        else -> ""
+                    }
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(50))
@@ -1146,22 +1148,33 @@ private fun VideosList(
                             )
                             .border(
                                 width = 1.dp,
-                                color = if (isSelected) Color(0xFFFF0080) else Color.White.copy(alpha = 0.1f),
+                                color = if (isSelected) Color(0xFFFF0080) else Color.White.copy(alpha = 0.15f),
                                 shape = RoundedCornerShape(50)
                             )
                             .clickable { onFilterSelected(filter) }
-                            .padding(horizontal = 12.dp, vertical = 6.dp) // Smaller padding
+                            .padding(horizontal = 14.dp, vertical = 8.dp)
                     ) {
                         Text(
-                            text = filter.uppercase(),
+                            text = "$icon ${filter.uppercase()}",
                             fontFamily = michromaFont,
-                            fontSize = 9.sp, // Smaller font
+                            fontSize = 9.sp,
                             color = if (isSelected) Color.White else Color.White.copy(alpha = 0.7f),
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                         )
                     }
                 }
             }
+        }
+        
+        // Video count indicator
+        item {
+            Text(
+                text = "${filteredVideos.size} videos",
+                modifier = Modifier.padding(horizontal = 20.dp),
+                fontFamily = michromaFont,
+                fontSize = 10.sp,
+                color = Color.White.copy(alpha = 0.5f)
+            )
         }
 
         items(filteredVideos) { video ->

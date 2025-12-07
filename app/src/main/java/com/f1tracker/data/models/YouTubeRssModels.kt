@@ -96,6 +96,9 @@ data class F1Video(
     val views: String,
     val publishedDate: String,
     val duration: String = "",
-    val viewCount: Long = 0
+    val viewCount: Long = 0,
+    val channelTitle: String = "FORMULA 1",
+    val channelScore: Double = 1.0,
+    val tags: List<String> = emptyList()
 )
 
