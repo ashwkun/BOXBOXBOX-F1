@@ -1121,12 +1121,30 @@ private fun VideosList(
                 }
             }
             "Highlights" -> {
-                // Filter videos that match highlight keywords OR come from f1_highlights.json (have session tags)
+                // Strict highlight pattern: "(Session) Highlights | YYYY GP" format
+                val strictHighlightPattern = Regex(
+                    "^(Race|FP1|FP2|FP3|Qualifying|Sprint|Sprint Qualifying)\\s+Highlights",
+                    RegexOption.IGNORE_CASE
+                )
+                // Exclusion patterns for shorts and reactions
+                val exclusionPatterns = listOf(
+                    Regex("#shorts", RegexOption.IGNORE_CASE),
+                    Regex("react", RegexOption.IGNORE_CASE),
+                    Regex("interview", RegexOption.IGNORE_CASE),
+                    Regex("debrief", RegexOption.IGNORE_CASE),
+                    Regex("press conference", RegexOption.IGNORE_CASE)
+                )
+                
                 videos.filter { video ->
-                    highlightPattern.containsMatchIn(video.title) ||
-                    video.tags.any { it in listOf("RACE", "QUALI", "QUALIFYING", "FP", "FP1", "FP2", "FP3", "SPRINT", "SPRINT_QUALIFYING") }
+                    // Must match strict highlight pattern OR have session tags
+                    val isHighlight = strictHighlightPattern.containsMatchIn(video.title) ||
+                        video.tags.any { it in listOf("RACE", "QUALIFYING", "FP1", "FP2", "FP3", "SPRINT", "SPRINT_QUALIFYING") }
+                    
+                    // Must NOT match any exclusion pattern
+                    val isExcluded = exclusionPatterns.any { it.containsMatchIn(video.title) }
+                    
+                    isHighlight && !isExcluded
                 }.sortedByDescending {
-                    // Sort by freshness
                     try {
                         java.time.Instant.parse(it.publishedDate)
                     } catch (e: Exception) {
