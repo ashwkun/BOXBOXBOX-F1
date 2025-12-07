@@ -42,7 +42,9 @@ enum class HotlapState { NAME_ENTRY, READY, COUNTDOWN, PLAYING, DNF, FINISHED }
 data class TrackData(
     val name: String,
     val location: String,
-    val points: List<Offset>
+    val points: List<Offset>,
+    val totalDistance: Float = 0f,    // B5 Fix: Total path length
+    val pointDistances: List<Float> = emptyList() // B5 Fix: Cumulative distance at each point
 )
 
 data class GhostFrame(
@@ -55,10 +57,11 @@ data class GhostFrame(
 data class LeaderboardEntry(
     val name: String = "",
     val time: Long = 0,
-    val timestamp: Long = 0
+    val timestamp: Long = 0,
+    val uid: String = ""
 )
 
-private val GAME_SCREEN_SIZE = 300.dp
+
 
 @Composable
 fun HotlapGame(
@@ -122,6 +125,14 @@ fun HotlapGame(
     val trackId = "masters-circuit"
     
     var playerName by remember { mutableStateOf(prefs.getString("player_name", "") ?: "") }
+    val playerUuid = remember {
+        var id = prefs.getString("player_uuid", null)
+        if (id == null) {
+            id = java.util.UUID.randomUUID().toString()
+            prefs.edit().putString("player_uuid", id).apply()
+        }
+        id!!
+    }
     var trackData by remember { mutableStateOf<TrackData?>(null) }
     var gameState by remember { mutableStateOf(
         if (playerName.isEmpty()) HotlapState.NAME_ENTRY else HotlapState.READY
@@ -143,12 +154,17 @@ fun HotlapGame(
         prefs.getLong("best_sector_2_$trackId", Long.MAX_VALUE)
     )) }  // PB sector times
     var wrSectorTimes by remember { mutableStateOf(listOf(Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE)) }  // WR sector times
+    var sectorTimesLoaded by remember { mutableStateOf(false) }  // B7 Fix: Track when Firebase sector times are loaded
     // Sector results: -1=pending, 0=yellow(slower), 1=green(PB), 2=purple(WR)
     var sectorResults by remember { mutableStateOf(listOf(-1, -1, -1)) }
     // Original WR sector times at lap start (for delta display - these don't get updated mid-lap)
     var originalWrSectorTimes by remember { mutableStateOf(listOf(Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE)) }
+    // Original PB sector times at lap start (for delta fallback)
+    var originalBestSectorTimes by remember { mutableStateOf(listOf(Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE)) }
     // Pending WR sector updates (to apply after lap completion)
     var pendingWrSectorUpdates by remember { mutableStateOf(mutableMapOf<Int, Long>()) }
+    // Pending PB sector updates (Strict Mode: only apply on finish)
+    var pendingPbSectorUpdates by remember { mutableStateOf(mutableMapOf<Int, Long>()) }
     
     var carPosition by remember { mutableStateOf(Offset.Zero) }
     var carAngle by remember { mutableFloatStateOf(0f) }
@@ -159,6 +175,9 @@ fun HotlapGame(
     var steeringDuration by remember { mutableLongStateOf(0L) }
     var lastSteerTime by remember { mutableLongStateOf(0L) }
     var screechStreamId by remember { mutableIntStateOf(0) }
+    
+    // E2 Enhancement: Live Delta
+    var liveDelta by remember { mutableStateOf<Long?>(null) }
     
     // Ghost data - track specific
     var myGhostEnabled by remember { mutableStateOf(false) }
@@ -174,6 +193,7 @@ fun HotlapGame(
     var showSettings by remember { mutableStateOf(false) }  // Settings panel state
     var globalBestTime by remember { mutableLongStateOf(Long.MAX_VALUE) }
     var worldRecordHolder by remember { mutableStateOf("---") }
+    var worldRecordHolderUid by remember { mutableStateOf("") } // Track WR Holder by UID
     var yourRank by remember { mutableIntStateOf(0) }
     
     // Name entry dialog state
@@ -195,11 +215,12 @@ fun HotlapGame(
                     leaderboard = entries.sortedBy { it.time }
                     val topEntry = leaderboard.firstOrNull()
                     globalBestTime = topEntry?.time ?: Long.MAX_VALUE
-                    val newWrHolder = topEntry?.name ?: "---"
+                    val newWrHolderName = topEntry?.name ?: "---"
+                    val newWrHolderUid = topEntry?.uid ?: ""
                     
-                    // Fetch WR ghost if holder changed
-                    if (newWrHolder != worldRecordHolder && newWrHolder != "---") {
-                        ghostsRef.child(trackId).child(newWrHolder)
+                    // Fetch WR ghost if holder changed (check by UID)
+                    if (newWrHolderUid != worldRecordHolderUid && newWrHolderUid.isNotEmpty()) {
+                        ghostsRef.child(trackId).child(newWrHolderUid) // Key by UID
                             .addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(ghostSnapshot: DataSnapshot) {
                                     val frames = mutableListOf<GhostFrame>()
@@ -215,9 +236,11 @@ fun HotlapGame(
                                 override fun onCancelled(error: DatabaseError) {}
                             })
                     }
-                    worldRecordHolder = newWrHolder
+                    worldRecordHolder = newWrHolderName
+                    worldRecordHolderUid = newWrHolderUid
                     
-                    yourRank = entries.indexOfFirst { it.name == playerName && it.time == bestLapTimeMs } + 1
+                    // Rank by UID
+                    yourRank = entries.indexOfFirst { it.uid == playerUuid && it.time == bestLapTimeMs } + 1
                     if (yourRank == 0 && bestLapTimeMs < Long.MAX_VALUE) {
                         yourRank = entries.count { it.time < bestLapTimeMs } + 1
                     }
@@ -241,8 +264,11 @@ fun HotlapGame(
                 val s2 = snapshot.child("s2").getValue(Long::class.java) ?: Long.MAX_VALUE
                 val s3 = snapshot.child("s3").getValue(Long::class.java) ?: Long.MAX_VALUE
                 wrSectorTimes = listOf(s1, s2, s3)
+                sectorTimesLoaded = true  // B7 Fix: Mark as loaded when Firebase responds
             }
-            override fun onCancelled(error: DatabaseError) {}
+            override fun onCancelled(error: DatabaseError) {
+                sectorTimesLoaded = true  // B7 Fix: Also mark loaded on error to not block forever
+            }
         })
     }
     
@@ -358,8 +384,8 @@ fun HotlapGame(
             lastSectorTime = 0L
             sectorTimes = listOf(0L, 0L, 0L)
             sectorResults = listOf(-1, -1, -1)
-            originalWrSectorTimes = wrSectorTimes  // Capture WR times at lap start for delta display
             pendingWrSectorUpdates = mutableMapOf()  // Clear pending updates
+            pendingPbSectorUpdates = mutableMapOf()  // Clear pending PB updates
             
             var hasLeftStart = false
             
@@ -399,7 +425,12 @@ fun HotlapGame(
                         closestPointIndex = i
                     }
                 }
-                val trackProgress = closestPointIndex.toFloat() / track.points.size.toFloat()
+                // B5 Fix: Use distance-based progress instead of index-based
+                val trackProgress = if (track.totalDistance > 0) {
+                    track.pointDistances[closestPointIndex] / track.totalDistance
+                } else {
+                    closestPointIndex.toFloat() / track.points.size.toFloat()
+                }
                 val newSector = when {
                     trackProgress < 0.33f -> 0
                     trackProgress < 0.66f -> 1
@@ -420,9 +451,10 @@ fun HotlapGame(
                     val newResults = sectorResults.toMutableList()
                     val wrTime = originalWrSectorTimes[completedSector]  // Use original, not current
                     val pbTime = bestSectorTimes[completedSector]
-                    val isWRSector = sectorTime < wrTime
+                    val wrExists = wrTime < Long.MAX_VALUE  // B1 Fix: Check if WR actually exists
+                    val isWRSector = wrExists && sectorTime < wrTime  // Only WR if WR exists AND beaten
                     newResults[completedSector] = when {
-                        isWRSector -> 2  // Purple - WR
+                        isWRSector -> 2  // Purple - WR (only if WR exists and beaten)
                         sectorTime < pbTime -> 1  // Green - PB
                         else -> 0  // Yellow - slower
                     }
@@ -437,16 +469,15 @@ fun HotlapGame(
                     
                     // Update best sector times if this was a PB
                     if (sectorTime < pbTime) {
-                        val newBestSectors = bestSectorTimes.toMutableList()
-                        newBestSectors[completedSector] = sectorTime
-                        bestSectorTimes = newBestSectors
-                        prefs.edit().putLong("best_sector_${completedSector}_$trackId", sectorTime).apply()
+                         // Strict Mode: Queue update, don't apply until finish
+                         pendingPbSectorUpdates[completedSector] = sectorTime
                     }
                     
                     // Queue WR sector update for Firebase (don't update local state mid-lap)
                     if (isWRSector) {
-                        val sectorKey = "s${completedSector + 1}"
-                        sectorTimesRef.child(trackId).child(sectorKey).setValue(sectorTime)
+                        // B6 Fix: Don't upload immediately! Only queue.
+                        // val sectorKey = "s${completedSector + 1}"
+                        // sectorTimesRef.child(trackId).child(sectorKey).setValue(sectorTime)
                         pendingWrSectorUpdates[completedSector] = sectorTime
                     }
                     
@@ -460,6 +491,32 @@ fun HotlapGame(
                     gameState = HotlapState.DNF
                     playSound("dnf")
                     break
+                }
+                
+                // E2 Enhancement: Calculate Live Delta
+                if (lapTimeMs > 0) {
+                   val refGhost = if (wrSectorTimes[0] < Long.MAX_VALUE && wrGhostData.isNotEmpty()) wrGhostData else if (myGhostData.isNotEmpty()) myGhostData else null
+                   if (refGhost != null) {
+                       // Find timestamp where ghost was at this position
+                       var minEqDist = 1000f // Squared distance
+                       var ghostTimeAtPos = -1L
+                       
+                       // Simple linear search is fast enough for ~1000 points
+                       refGhost.forEach { frame ->
+                           val dx = frame.x - carPosition.x
+                           val dy = frame.y - carPosition.y
+                           val d2 = dx*dx + dy*dy
+                           if (d2 < minEqDist) {
+                               minEqDist = d2
+                               ghostTimeAtPos = frame.timeMs
+                           }
+                       }
+                       
+                       // Only show if we found a reasonably close point (approx 5% of screen width)
+                       if (minEqDist < 0.0025f) {
+                           liveDelta = lapTimeMs - ghostTimeAtPos
+                       }
+                   }
                 }
                 
                 val distToStart = distance(carPosition, track.points[0])
@@ -481,9 +538,10 @@ fun HotlapGame(
                         val newResults = sectorResults.toMutableList()
                         val wrTime = originalWrSectorTimes[2]  // Use original, not updated
                         val pbTime = bestSectorTimes[2]
-                        val isWRSector = sector3Time < wrTime
+                        val wrExists = wrTime < Long.MAX_VALUE  // B1 Fix: Check if WR actually exists
+                        val isWRSector = wrExists && sector3Time < wrTime  // Only WR if WR exists AND beaten
                         newResults[2] = when {
-                            isWRSector -> 2  // Purple - WR
+                            isWRSector -> 2  // Purple - WR (only if WR exists and beaten)
                             sector3Time < pbTime -> 1  // Green - PB
                             else -> 0  // Yellow - slower
                         }
@@ -497,15 +555,14 @@ fun HotlapGame(
                         }
                         
                         if (sector3Time < pbTime) {
-                            val newBestSectors = bestSectorTimes.toMutableList()
-                            newBestSectors[2] = sector3Time
-                            bestSectorTimes = newBestSectors
-                            prefs.edit().putLong("best_sector_2_$trackId", sector3Time).apply()
+                            // Strict Mode: Queue update
+                            pendingPbSectorUpdates[2] = sector3Time
                         }
                         
                         // Queue WR sector update (don't update local state mid-lap)
                         if (isWRSector) {
-                            sectorTimesRef.child(trackId).child("s3").setValue(sector3Time)
+                            // B6 Fix: Don't upload immediately! Only queue.
+                            // sectorTimesRef.child(trackId).child("s3").setValue(sector3Time)
                             pendingWrSectorUpdates[2] = sector3Time
                         }
                     }
@@ -515,9 +572,23 @@ fun HotlapGame(
                         val newWrSectors = wrSectorTimes.toMutableList()
                         pendingWrSectorUpdates.forEach { (sector, time) ->
                             newWrSectors[sector] = time
+                            // B6 Fix: Upload to Firebase NOW that lap is finished
+                            val sectorKey = "s${sector + 1}"
+                            sectorTimesRef.child(trackId).child(sectorKey).setValue(time)
                         }
                         wrSectorTimes = newWrSectors
                         pendingWrSectorUpdates.clear()
+                    }
+                    
+                    // Apply pending PB sector updates (Strict Mode)
+                    if (pendingPbSectorUpdates.isNotEmpty()) {
+                        val newBestSectors = bestSectorTimes.toMutableList()
+                        pendingPbSectorUpdates.forEach { (sector, time) ->
+                            newBestSectors[sector] = time
+                            prefs.edit().putLong("best_sector_${sector}_$trackId", time).apply()
+                        }
+                        bestSectorTimes = newBestSectors
+                        pendingPbSectorUpdates.clear()
                     }
                     
                     // Check for PB/WR BEFORE updating values
@@ -542,10 +613,11 @@ fun HotlapGame(
                         val entry = mapOf(
                             "name" to playerName,
                             "time" to lapTimeMs,
-                            "timestamp" to System.currentTimeMillis()
+                            "timestamp" to System.currentTimeMillis(),
+                            "uid" to playerUuid
                         )
-                        leaderboardRef.child(trackId).child(playerName).setValue(entry)
-                            .addOnSuccessListener { android.util.Log.d("Firebase", "Leaderboard updated for $playerName") }
+                        leaderboardRef.child(trackId).child(playerUuid).setValue(entry)
+                            .addOnSuccessListener { android.util.Log.d("Firebase", "Leaderboard updated for $playerName ($playerUuid)") }
                             .addOnFailureListener { e -> android.util.Log.e("Firebase", "Leaderboard update failed", e) }
                         
                         // Upload ghost data to Firebase (sampled for smaller size)
@@ -558,7 +630,7 @@ fun HotlapGame(
                                 "t" to frame.timeMs
                             )
                         }
-                        ghostsRef.child(trackId).child(playerName).setValue(ghostFrames)
+                        ghostsRef.child(trackId).child(playerUuid).setValue(ghostFrames)
                             .addOnSuccessListener { android.util.Log.d("Firebase", "Ghost data updated for $playerName") }
                             .addOnFailureListener { e -> android.util.Log.e("Firebase", "Ghost data update failed", e) }
                         
@@ -747,7 +819,8 @@ fun HotlapGame(
         ) {
             Box(
                 modifier = Modifier
-                    .size(GAME_SCREEN_SIZE)
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
                     .background(Color(0xFFEEEEEE), RoundedCornerShape(8.dp))
                     .border(4.dp, Color.Black, RoundedCornerShape(8.dp)),
                 contentAlignment = Alignment.Center
@@ -804,14 +877,14 @@ fun HotlapGame(
                                 },
                                 fontFamily = pixelFont,
                                 fontSize = 12.sp,
-                                color = if (isNewWR) Color.Black else Color.White
+                                color = if (isNewWR || isNewPB) Color.Black else Color.White
                             )
                             Spacer(Modifier.height(4.dp))
                             Text(
                                 text = formatLapTime(lapTimeMs),
                                 fontFamily = pixelFont,
                                 fontSize = 20.sp,
-                                color = if (isNewWR) Color.Black else Color.White
+                                color = if (isNewWR || isNewPB) Color.Black else Color.White
                             )
                             Spacer(Modifier.height(8.dp))
                             
@@ -822,14 +895,20 @@ fun HotlapGame(
                             ) {
                                 for (i in 0 until 3) {
                                     val sectorTime = sectorTimes[i]
-                                    val wrTime = originalWrSectorTimes[i]  // Use original WR times for delta (not updated ones)
+                                    val wrTime = originalWrSectorTimes[i]  // Use original WR times for delta
+                                    val pbTime = originalBestSectorTimes[i] // Use original PB times for fallback
                                     val result = sectorResults[i]
                                     
-                                    // Calculate delta only if both times are valid
+                                    // Calculate delta comparison reference (Priority: WR -> PB)
                                     val hasValidSectorTime = sectorTime > 0
                                     val hasValidWrTime = wrTime < Long.MAX_VALUE
-                                    val delta = if (hasValidSectorTime && hasValidWrTime) {
-                                        sectorTime - wrTime
+                                    val hasValidPbTime = pbTime < Long.MAX_VALUE
+                                    
+                                    val comparisonTime = if (hasValidWrTime) wrTime else if (hasValidPbTime) pbTime else Long.MAX_VALUE
+                                    val hasValidReference = comparisonTime < Long.MAX_VALUE
+                                    
+                                    val delta = if (hasValidSectorTime && hasValidReference) {
+                                        sectorTime - comparisonTime
                                     } else null
                                     
                                     val sectorColor = when (result) {
@@ -848,22 +927,35 @@ fun HotlapGame(
                                             text = "S${i + 1}",
                                             fontFamily = pixelFont,
                                             fontSize = 7.sp,
-                                            color = if (isNewWR) Color.Black else Color.White
+                                            color = if (isNewWR || isNewPB) Color.Black else Color.White
                                         )
                                         Text(
                                             text = when {
                                                 !hasValidSectorTime -> "---"  // Sector not completed
-                                                !hasValidWrTime -> "NEW"  // No WR existed, this is the first
+                                                !hasValidReference -> "NEW"  // No reference (WR or PB) existed
                                                 delta != null && delta > 0 -> "+${String.format("%.2f", delta / 1000.0)}"
                                                 delta != null && delta < 0 -> String.format("%.2f", delta / 1000.0)
                                                 else -> "0.00"  // Exactly equal (rare)
                                             },
                                             fontFamily = pixelFont,
                                             fontSize = 8.sp,
-                                            color = sectorColor
+                                            color = if (isNewWR || isNewPB) Color.Black else sectorColor
                                         )
                                     }
                                 }
+                            }
+                            
+                            // E1 Enhancement: Theoretical Best
+                            val canCalcTheoretical = bestSectorTimes.none { it == Long.MAX_VALUE }
+                            if (canCalcTheoretical) {
+                                val theoreticalBest = bestSectorTimes.sum()
+                                Spacer(Modifier.height(8.dp))
+                                Text(
+                                    text = "THEORETICAL BEST: ${formatLapTime(theoreticalBest)}",
+                                    fontFamily = pixelFont,
+                                    fontSize = 10.sp,
+                                    color = if (isNewWR) Color.Black else Color.Gray
+                                )
                             }
                         }
                     }
@@ -1131,26 +1223,40 @@ fun HotlapGame(
                     .weight(1f)
                     .height(80.dp)
                     .background(
-                        when (gameState) {
-                            HotlapState.READY -> Color(0xFF00AA00)
-                            HotlapState.DNF -> Color(0xFFFFAA00)
-                            HotlapState.FINISHED -> Color(0xFF00AA00)
+                        when {
+                            !sectorTimesLoaded -> Color.Gray  // B7 Fix: Gray while loading
+                            gameState == HotlapState.READY -> Color(0xFF00AA00)
+                            gameState == HotlapState.PLAYING -> Color.Black // Delta Display BG
+                            gameState == HotlapState.DNF -> Color(0xFFFFAA00)
+                            gameState == HotlapState.FINISHED -> Color(0xFF00AA00)
                             else -> Color.Gray
                         },
                         RoundedCornerShape(4.dp)
                     )
                     .border(3.dp, Color.Black, RoundedCornerShape(4.dp))
-                    .pointerInput(gameState) {
+                    .pointerInput(gameState, sectorTimesLoaded) {  // B7 Fix: Also depend on sectorTimesLoaded
                         awaitPointerEventScope {
                             while (true) {
                                 val event = awaitPointerEvent()
                                 if (event.changes.any { it.pressed }) {
                                     when (gameState) {
-                                        HotlapState.READY -> gameState = HotlapState.COUNTDOWN
+                                        HotlapState.READY -> {
+                                            if (sectorTimesLoaded) {  // B7 Fix: Only start if data is loaded
+                                                // Capture reference times imperatively
+                                                originalWrSectorTimes = wrSectorTimes.toList()
+                                                originalBestSectorTimes = bestSectorTimes.toList()
+                                                gameState = HotlapState.COUNTDOWN
+                                            }
+                                        }
                                         HotlapState.DNF, HotlapState.FINISHED -> {
-                                            carPathIndex = 0f
-                                            lapTimeMs = 0L
-                                            gameState = HotlapState.COUNTDOWN
+                                            if (sectorTimesLoaded) {  // B7 Fix: Only retry if data is loaded
+                                                carPathIndex = 0f
+                                                lapTimeMs = 0L
+                                                // Capture reference times imperatively
+                                                originalWrSectorTimes = wrSectorTimes.toList()
+                                                originalBestSectorTimes = bestSectorTimes.toList()
+                                                gameState = HotlapState.COUNTDOWN
+                                            }
                                         }
                                         else -> {}
                                     }
@@ -1160,16 +1266,51 @@ fun HotlapGame(
                     },
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    when (gameState) {
-                        HotlapState.READY -> "START"
-                        HotlapState.DNF, HotlapState.FINISHED -> "RETRY"
-                        else -> "GO"
-                    },
-                    fontFamily = pixelFont,
-                    fontSize = 10.sp,
-                    color = Color.White
-                )
+                if (gameState == HotlapState.PLAYING) {
+                     val d = liveDelta ?: 0L
+                     val sign = if (d > 0) "+" else ""
+                     val deltaStr = "$sign${String.format("%.2f", d / 1000.0)}"
+                     val deltaColor = if (d < 0) Color(0xFF00E676) else Color(0xFFFF5252)
+                     
+                     Column(
+                         horizontalAlignment = Alignment.CenterHorizontally,
+                         verticalArrangement = Arrangement.Center
+                     ) {
+                         Text(
+                             text = "DELTA",
+                             fontFamily = pixelFont,
+                             fontSize = 8.sp,
+                             color = Color.Gray
+                         )
+                         if (liveDelta != null) {
+                             Text(
+                                 text = deltaStr,
+                                 fontFamily = pixelFont,
+                                 fontSize = 16.sp,
+                                 color = deltaColor
+                             )
+                         } else {
+                             Text(
+                                 text = "GO",
+                                 fontFamily = pixelFont,
+                                 fontSize = 16.sp,
+                                 color = Color.DarkGray
+                             )
+                         }
+                     }
+                } else {
+                    Text(
+                        text = when {
+                            !sectorTimesLoaded -> "LOADING..."
+                            gameState == HotlapState.READY -> "START"
+                            gameState == HotlapState.DNF || gameState == HotlapState.FINISHED -> "RETRY"
+                            else -> "GO"
+                        },
+                        fontFamily = pixelFont,
+                        fontSize = if (!sectorTimesLoaded) 8.sp else 10.sp,
+                        color = Color.White
+                    )
+                }
             }
             
             Box(
@@ -1239,7 +1380,15 @@ private fun GameCanvas(
             style = Stroke(width = trackWidth * canvasSize * 0.2f, cap = StrokeCap.Square, join = StrokeJoin.Miter))
         
         // Draw colored sector overlays
-        val sectorSize = screenPoints.size / 3
+        // B5 Fix: Calculate indices based on distance
+        val s1End = if (track.totalDistance > 0 && track.pointDistances.isNotEmpty()) 
+            track.pointDistances.indexOfFirst { it >= track.totalDistance * 0.33f }.let { if (it == -1) screenPoints.size / 3 else it }
+            else screenPoints.size / 3
+            
+        val s2End = if (track.totalDistance > 0 && track.pointDistances.isNotEmpty())
+            track.pointDistances.indexOfFirst { it >= track.totalDistance * 0.66f }.let { if (it == -1) (screenPoints.size / 3) * 2 else it }
+            else (screenPoints.size / 3) * 2
+
         for (sector in 0 until 3) {
             val result = sectorResults[sector]
             if (result >= 0) {  // Only draw if sector is complete
@@ -1249,8 +1398,8 @@ private fun GameCanvas(
                     else -> Color(0xFFFFAA00).copy(alpha = 0.4f)  // Yellow - slower
                 }
                 
-                val startIdx = sector * sectorSize
-                val endIdx = minOf((sector + 1) * sectorSize, screenPoints.size - 1)
+                val startIdx = when(sector) { 0 -> 0; 1 -> s1End; else -> s2End }
+                val endIdx = when(sector) { 0 -> s1End; 1 -> s2End; else -> screenPoints.size - 1 }
                 
                 if (startIdx < screenPoints.size && endIdx > startIdx) {
                     val sectorPath = Path().apply {
@@ -1502,8 +1651,8 @@ private fun loadGhostData(prefs: android.content.SharedPreferences, trackId: Str
 
 private fun saveGhostData(prefs: android.content.SharedPreferences, trackId: String, data: List<GhostFrame>) {
     val array = JSONArray()
-    // Sample every 3rd frame to reduce storage
-    data.filterIndexed { index, _ -> index % 3 == 0 }.forEach { frame ->
+    // Sample every 5th frame to reduce storage - B3 Fix: Match Firebase upload rate (5)
+    data.filterIndexed { index, _ -> index % 5 == 0 }.forEach { frame ->
         val obj = JSONObject()
         obj.put("x", frame.x)
         obj.put("y", frame.y)
@@ -1568,10 +1717,27 @@ private fun loadRandomTrack(context: Context): TrackData? {
             Offset((point.x - minX) / maxRange, 1f - (point.y - minY) / maxRange)
         }
         
+        // B5 Fix: Calculate cumulative distances
+        val pointDistances = mutableListOf<Float>()
+        var currentDist = 0f
+        pointDistances.add(0f)
+        
+        for (i in 0 until normalizedPoints.size - 1) {
+            val dist = distance(normalizedPoints[i], normalizedPoints[i+1])
+            currentDist += dist
+            pointDistances.add(currentDist)
+        }
+        // Add closing segment for total distance
+        if (normalizedPoints.isNotEmpty()) {
+            currentDist += distance(normalizedPoints.last(), normalizedPoints.first())
+        }
+        
         TrackData(
             name = properties.optString("Name", "Unknown"),
             location = properties.optString("Location", ""),
-            points = normalizedPoints
+            points = normalizedPoints,
+            totalDistance = currentDist,
+            pointDistances = pointDistances
         )
     } catch (e: Exception) {
         e.printStackTrace()
