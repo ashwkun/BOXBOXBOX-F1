@@ -483,12 +483,27 @@ class RaceViewModel @Inject constructor(
     }
 
     private fun findCurrentSession(events: List<Pair<SessionType, SessionInfo>>, now: LocalDateTime): SessionEvent? {
+        Log.d("SignalR-Debug", "=== findCurrentSession ===")
+        Log.d("SignalR-Debug", "Current time (IST): $now")
+        Log.d("SignalR-Debug", "Number of events to check: ${events.size}")
+        
         events.forEach { (type, session) ->
             val sessionStartIST = parseDateTime(session.date, session.time)
             val sessionEndIST = sessionStartIST.plus(getSessionDuration(type))
             
+            Log.d("SignalR-Debug", "Session: ${type.name}")
+            Log.d("SignalR-Debug", "  Raw date/time: ${session.date} / ${session.time}")
+            Log.d("SignalR-Debug", "  Start (IST): $sessionStartIST")
+            Log.d("SignalR-Debug", "  End (IST): $sessionEndIST")
+            Log.d("SignalR-Debug", "  now.isBefore(start): ${now.isBefore(sessionStartIST)}")
+            Log.d("SignalR-Debug", "  now.isBefore(end): ${now.isBefore(sessionEndIST)}")
+            
             // Check if current time is within the session window
-            if (!now.isBefore(sessionStartIST) && now.isBefore(sessionEndIST)) {
+            val isWithinWindow = !now.isBefore(sessionStartIST) && now.isBefore(sessionEndIST)
+            Log.d("SignalR-Debug", "  IS LIVE: $isWithinWindow")
+            
+            if (isWithinWindow) {
+                Log.d("SignalR-Debug", ">>> FOUND LIVE SESSION: ${type.name}")
                 return SessionEvent(
                     sessionType = type,
                     sessionInfo = session,
@@ -497,6 +512,7 @@ class RaceViewModel @Inject constructor(
                 )
             }
         }
+        Log.d("SignalR-Debug", ">>> No live session found")
         return null
     }
 

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.CircularProgressIndicator
@@ -99,8 +101,8 @@ fun LiveScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFF0A0A0A))
-                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                    .background(Color.Black)
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -132,10 +134,13 @@ fun LiveScreen(
                     Text(
                         text = if (sessionName.isNotEmpty()) sessionName.uppercase() else "LIVE",
                         fontFamily = michromaFont,
-                        fontSize = 11.sp,
+                        fontSize = 10.sp,
                         color = Color.White,
-                        letterSpacing = 1.sp,
-                        fontWeight = FontWeight.Bold
+                        letterSpacing = 0.5.sp,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                        modifier = Modifier.widthIn(max = 120.dp)
                     )
                     
                     // Lap counter (only for Race/Sprint sessions)
@@ -448,11 +453,13 @@ fun LiveScreen(
                                 letterSpacing = 3.sp
                             )
                             Text(
-                                text = "Session data will appear shortly",
+                                text = "Session data will appear shortly. If specific data is missing, the session may have ended.",
                                 fontFamily = michromaFont,
                                 fontSize = 10.sp,
                                 color = Color.White.copy(alpha = 0.5f),
-                                letterSpacing = 0.5.sp
+                                letterSpacing = 0.5.sp,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+
                             )
                         }
                     }
@@ -526,69 +533,88 @@ private fun SessionHeader(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Black)
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+            .padding(horizontal = 8.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Position column - always present
+        // Position column
         Text(
             text = "P",
             fontFamily = michromaFont,
-            fontSize = 8.sp,
-            color = Color.White.copy(alpha = 0.4f),
-            modifier = Modifier.width(24.dp),
-            fontWeight = FontWeight.Bold
+            fontSize = 9.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            modifier = Modifier.width(if (sessionType == SessionType.RACE || sessionType == SessionType.SPRINT) 48.dp else 24.dp),
+            fontWeight = FontWeight.Bold,
+            maxLines = 1
         )
         
-        // Driver column - always present
+        // Driver column
         Text(
-            text = "DRIVER",
+            text = "DVR",
             fontFamily = michromaFont,
-            fontSize = 8.sp,
-            color = Color.White.copy(alpha = 0.4f),
-            modifier = Modifier.width(44.dp),
-            fontWeight = FontWeight.Bold
+            fontSize = 9.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            modifier = Modifier.width(50.dp),
+            fontWeight = FontWeight.Bold,
+            maxLines = 1
         )
         
         when (sessionType) {
             SessionType.RACE, SessionType.SPRINT -> {
                 // Tyre
                 Text(
-                    text = "TYRE",
+                    text = "TYR",
                     fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
                     modifier = Modifier.width(36.dp),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
                 )
-                // Interval
-                Text(
-                    text = "INT",
-                    fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
-                    modifier = Modifier.weight(1f),
-                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
-                    fontWeight = FontWeight.Bold
-                )
+                
                 // Pits
                 Text(
                     text = "PIT",
                     fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
                     modifier = Modifier.width(24.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
+                )
+                
+                // Sectors
+                Text(
+                    text = "SEC",
+                    fontFamily = michromaFont,
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
+                    modifier = Modifier.width(42.dp),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
+                )
+                
+                // Interval/Gap
+                Text(
+                    text = "GAP",
+                    fontFamily = michromaFont,
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
+                    modifier = Modifier.weight(1f),
                     textAlign = androidx.compose.ui.text.style.TextAlign.End,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
                 )
             }
             SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> {
-                // Sectors
+                // Sectors S1, S2, S3
                 Text(
                     text = "S1",
                     fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
                     modifier = Modifier.width(36.dp),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     fontWeight = FontWeight.Bold
@@ -596,8 +622,8 @@ private fun SessionHeader(
                 Text(
                     text = "S2",
                     fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
                     modifier = Modifier.width(36.dp),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     fontWeight = FontWeight.Bold
@@ -605,8 +631,8 @@ private fun SessionHeader(
                 Text(
                     text = "S3",
                     fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
                     modifier = Modifier.width(36.dp),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     fontWeight = FontWeight.Bold
@@ -615,8 +641,8 @@ private fun SessionHeader(
                 Text(
                     text = "BEST",
                     fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
                     modifier = Modifier.weight(1f),
                     textAlign = androidx.compose.ui.text.style.TextAlign.End,
                     fontWeight = FontWeight.Bold
@@ -625,41 +651,31 @@ private fun SessionHeader(
                 Text(
                     text = "GAP",
                     fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
                     modifier = Modifier.width(48.dp),
                     textAlign = androidx.compose.ui.text.style.TextAlign.End,
                     fontWeight = FontWeight.Bold
                 )
             }
-            SessionType.PRACTICE -> {
+             SessionType.PRACTICE -> {
                 // Best Lap
                 Text(
                     text = "BEST",
                     fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
                     modifier = Modifier.weight(1f),
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
                     fontWeight = FontWeight.Bold
                 )
                 // Gap
                 Text(
                     text = "GAP",
                     fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
-                    modifier = Modifier.weight(1f),
-                    textAlign = androidx.compose.ui.text.style.TextAlign.End,
-                    fontWeight = FontWeight.Bold
-                )
-                // Laps
-                Text(
-                    text = "LAPS",
-                    fontFamily = michromaFont,
-                    fontSize = 8.sp,
-                    color = Color.White.copy(alpha = 0.4f),
-                    modifier = Modifier.width(32.dp),
+                    fontSize = 9.sp,
+                    color = Color.White.copy(alpha = 0.6f),
+                    modifier = Modifier.width(48.dp),
                     textAlign = androidx.compose.ui.text.style.TextAlign.End,
                     fontWeight = FontWeight.Bold
                 )
@@ -697,7 +713,7 @@ private fun getTeamColor(teamName: String?): Color {
     }
 }
 
-// RACE / SPRINT Driver Row
+// RACE / SPRINT Driver Row - Compact Single-Line
 @Composable
 private fun RaceDriverRow(
     driver: LiveDriver,
@@ -710,78 +726,93 @@ private fun RaceDriverRow(
     val tyreColor = getTyreColor(driver.tyreCompound)
     val gapToAhead = calculateGapToCarAhead(drivers, index)
     
-    // Position accent colors
+    val isRetired = driver.status == 2 || driver.status == 3
+    val isInPit = driver.status == 1
+    
     val positionColor = when (driver.positionDisplay?.toIntOrNull()) {
-        1 -> Color(0xFFFFD700)  // Gold
-        2 -> Color(0xFFC0C0C0)  // Silver
-        3 -> Color(0xFFCD7F32)  // Bronze
-        else -> Color(0xFFE6007E) // Hot Pink
+        1 -> Color(0xFFFFD700)
+        2 -> Color(0xFFC0C0C0)
+        3 -> Color(0xFFCD7F32)
+        else -> Color(0xFFE6007E)
     }
     
-    // Status indicator
-    val statusColor = when (driver.status) {
-        1 -> Color(0xFFFFAA00)  // In pit
-        2 -> Color(0xFFFF0040)  // Retired
-        3 -> Color(0xFFFF0040)  // Stopped
-        else -> null
+    val rowBackground = when {
+        isRetired -> Brush.horizontalGradient(listOf(Color(0xFFFF0040).copy(alpha = 0.15f), Color(0xFF121212)))
+        isInPit -> Brush.horizontalGradient(listOf(Color(0xFFFFAA00).copy(alpha = 0.12f), Color(0xFF121212)))
+        else -> Brush.horizontalGradient(listOf(Color(0xFF161616), Color(0xFF121212)))
     }
     
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        if (statusColor != null) statusColor.copy(alpha = 0.1f) else Color(0xFF161616),
-                        Color(0xFF121212)
-                    )
-                ),
-                RoundedCornerShape(6.dp)
-            )
+            .height(38.dp)
+            .background(rowBackground, RoundedCornerShape(4.dp))
             .border(
                 width = 1.dp,
                 brush = Brush.horizontalGradient(
                     colors = listOf(
-                        teamColor.copy(alpha = 0.3f),
+                        teamColor.copy(alpha = if (isRetired) 0.15f else 0.3f),
                         Color.White.copy(alpha = 0.05f)
                     )
                 ),
-                shape = RoundedCornerShape(6.dp)
+                shape = RoundedCornerShape(4.dp)
             )
-            .padding(horizontal = 6.dp, vertical = 6.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+            .padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Position
+        // 1. Position + Change (Fixed 48dp)
         Row(
-            modifier = Modifier.width(24.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(2.dp)
-                    .height(14.dp)
-                    .background(positionColor.copy(alpha = 0.8f), RoundedCornerShape(1.dp))
-            )
-            Spacer(modifier = Modifier.width(3.dp))
-            Text(
-                text = driver.positionDisplay ?: "-",
-                fontFamily = michromaFont,
-                fontSize = 11.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        
-        // Driver code with team color
-        Row(
-            modifier = Modifier.width(44.dp),
+            modifier = Modifier.width(48.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
                     .width(3.dp)
-                    .height(20.dp)
+                    .height(14.dp)
+                    .background(positionColor, RoundedCornerShape(1.5.dp))
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            
+            Text(
+                text = driver.positionDisplay ?: "-",
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = if (isRetired) Color.White.copy(alpha = 0.4f) else Color.White,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
+            )
+            
+            // Position Change
+            val grid = driver.gridPos?.toIntOrNull()
+            val current = driver.positionDisplay?.toIntOrNull()
+            if (grid != null && current != null && grid > 0 && current > 0) {
+                val change = grid - current
+                if (change != 0) {
+                    Spacer(modifier = Modifier.width(2.dp))
+                    val color = if (change > 0) Color.Green else Color.Red
+                    val arrow = if (change > 0) "▲" else "▼"
+                    Text(
+                        text = "$arrow${kotlin.math.abs(change)}",
+                        fontFamily = michromaFont,
+                        fontSize = 8.sp,
+                        color = color,
+                        maxLines = 1,
+                        letterSpacing = (-0.5).sp
+                    )
+                }
+            }
+        }
+        
+        // 2. Driver Code (Fixed 50dp)
+        Row(
+            modifier = Modifier.width(50.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(3.dp)
+                    .height(18.dp)
                     .background(teamColor, RoundedCornerShape(1.5.dp))
             )
             Spacer(modifier = Modifier.width(4.dp))
@@ -789,51 +820,107 @@ private fun RaceDriverRow(
                 text = driverCode,
                 fontFamily = michromaFont,
                 fontSize = 11.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
+                color = if (isRetired) Color.White.copy(alpha = 0.4f) else Color.White,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
             )
         }
         
-        // Tyre indicator (colored dot + age)
+        // 3. Tyre (Fixed 36dp)
         Row(
             modifier = Modifier.width(36.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            horizontalArrangement = Arrangement.spacedBy(3.dp)
         ) {
             Box(
                 modifier = Modifier
-                    .size(10.dp)
-                    .background(tyreColor, RoundedCornerShape(5.dp))
+                    .size(8.dp)
+                    .background(tyreColor, CircleShape)
             )
-            Spacer(modifier = Modifier.width(3.dp))
             Text(
-                text = driver.tyreAge?.toString() ?: "-",
+                text = "${driver.tyreAge ?: 0}",
                 fontFamily = michromaFont,
-                fontSize = 9.sp,
-                color = Color.White.copy(alpha = 0.7f)
+                fontSize = 10.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
             )
         }
         
-        // Interval/Gap
-        Text(
-            text = gapToAhead,
-            fontFamily = michromaFont,
-            fontSize = 10.sp,
-            color = if (index == 0) Color(0xFFFFD700) else Color.White.copy(alpha = 0.9f),
-            modifier = Modifier.weight(1f),
-            textAlign = androidx.compose.ui.text.style.TextAlign.End,
-            fontWeight = if (index == 0) FontWeight.Bold else FontWeight.Normal
-        )
+        // 4. Pit Count (Fixed 24dp)
+        Box(
+            modifier = Modifier
+                .width(24.dp)
+                .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(2.dp))
+                .padding(vertical = 1.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = driver.pits ?: "0",
+                fontFamily = michromaFont,
+                fontSize = 10.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
+            )
+        }
+
+        // 5. Mini Sectors (Fixed 42dp)
+        Row(
+            modifier = Modifier.width(42.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            for (i in 0 until 3) {
+                val colorCode = driver.sectorColors.getOrNull(i) ?: 0
+                val color = when (colorCode) {
+                    1 -> Color(0xFF00FF00) // Personal Best
+                    2 -> Color(0xFFAA00FF) // Overall Best
+                    else -> Color(0xFF333333) // Visible gray
+                }
+                Box(
+                    modifier = Modifier
+                        .width(10.dp)
+                        .height(4.dp)
+                        .background(color, RoundedCornerShape(1.dp))
+                )
+            }
+        }
         
-        // Pit stops
-        Text(
-            text = driver.pits ?: "0",
-            fontFamily = michromaFont,
-            fontSize = 10.sp,
-            color = Color.White.copy(alpha = 0.6f),
-            modifier = Modifier.width(24.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.End
-        )
+        // 6. Gap / Status (Flex)
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+             if (isRetired) {
+                Text(
+                    text = "OUT",
+                    fontFamily = michromaFont,
+                    fontSize = 10.sp,
+                    color = Color(0xFFFF0040),
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
+                )
+            } else if (isInPit) {
+                Text(
+                    text = "PIT",
+                    fontFamily = michromaFont,
+                    fontSize = 10.sp,
+                    color = Color(0xFFFFAA00),
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
+                )
+            } else {
+                Text(
+                    text = gapToAhead,
+                    fontFamily = michromaFont,
+                    fontSize = 11.sp,
+                    color = if (index == 0) Color(0xFFFFD700) else Color.White,
+                    fontWeight = if (index == 0) FontWeight.Bold else FontWeight.Normal,
+                    maxLines = 1
+                )
+            }
+        }
     }
 }
 

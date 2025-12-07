@@ -69,14 +69,39 @@ class MainActivity : ComponentActivity() {
         // Manage SignalR connection based on session state (persists across navigation)
         lifecycleScope.launch {
             raceViewModel.raceWeekendState.collect { state ->
+                android.util.Log.d("SignalR-Debug", "=== RaceWeekendState Changed ===")
+                android.util.Log.d("SignalR-Debug", "State type: ${state::class.simpleName}")
+                
                 val shouldConnect = when (state) {
-                    is com.f1tracker.data.models.RaceWeekendState.Active -> state.currentEvent?.isLive == true
-                    else -> false
+                    is com.f1tracker.data.models.RaceWeekendState.Active -> {
+                        android.util.Log.d("SignalR-Debug", "Active state - Race: ${state.race.raceName}")
+                        android.util.Log.d("SignalR-Debug", "currentEvent: ${state.currentEvent}")
+                        android.util.Log.d("SignalR-Debug", "currentEvent?.isLive: ${state.currentEvent?.isLive}")
+                        android.util.Log.d("SignalR-Debug", "upcomingEvents: ${state.upcomingEvents.size}")
+                        android.util.Log.d("SignalR-Debug", "completedEvents: ${state.completedEvents.size}")
+                        state.currentEvent?.isLive == true
+                    }
+                    is com.f1tracker.data.models.RaceWeekendState.ComingUp -> {
+                        android.util.Log.d("SignalR-Debug", "ComingUp state - Race: ${state.race.raceName}")
+                        false
+                    }
+                    is com.f1tracker.data.models.RaceWeekendState.Loading -> {
+                        android.util.Log.d("SignalR-Debug", "Loading state")
+                        false
+                    }
+                    is com.f1tracker.data.models.RaceWeekendState.Error -> {
+                        android.util.Log.d("SignalR-Debug", "Error state: ${state.message}")
+                        false
+                    }
                 }
                 
+                android.util.Log.d("SignalR-Debug", "shouldConnect = $shouldConnect")
+                
                 if (shouldConnect) {
+                    android.util.Log.d("SignalR-Debug", ">>> Calling liveClient.connect()")
                     liveClient.connect()
                 } else {
+                    android.util.Log.d("SignalR-Debug", ">>> Calling liveClient.disconnect()")
                     liveClient.disconnect()
                 }
             }

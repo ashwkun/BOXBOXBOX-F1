@@ -63,6 +63,7 @@ data class LeaderboardEntry(
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HotlapGame(
     michromaFont: FontFamily,
@@ -122,7 +123,14 @@ fun HotlapGame(
     val sectorTimesRef = remember { database.getReference("hotlap/sector_times") }
     
     // Current track ID for storage keys
-    val trackId = "masters-circuit"
+    // Current track ID for storage keys
+    var trackId by remember { mutableStateOf(prefs.getString("last_track_id", "track_masters") ?: "track_masters") }
+    // Difficulty Filter State (Null = All, 1=Easy, 3=Med, 5=Hard)
+    var difficultyFilter by remember { mutableStateOf<Int?>(null) }
+
+    
+    // Settings visibility
+    var showSettings by remember { mutableStateOf(false) }
     
     var playerName by remember { mutableStateOf(prefs.getString("player_name", "") ?: "") }
     val playerUuid = remember {
@@ -133,14 +141,19 @@ fun HotlapGame(
         }
         id!!
     }
-    var trackData by remember { mutableStateOf<TrackData?>(null) }
+    // Load track from Factory instead of GeoJSON
+    // Use derived state or effect to reload when trackId changes
+    var trackData by remember(trackId) { mutableStateOf(TrackFactory.getTrack(trackId)) }
+    
+    // Reload Best Time when trackId changes
+    var bestLapTimeMs by remember(trackId) { mutableStateOf(prefs.getLong("best_time_$trackId", Long.MAX_VALUE)) }
+
     var gameState by remember { mutableStateOf(
         if (playerName.isEmpty()) HotlapState.NAME_ENTRY else HotlapState.READY
     ) }
     var countdownValue by remember { mutableIntStateOf(3) }
     var startTime by remember { mutableLongStateOf(0L) }
     var lapTimeMs by remember { mutableLongStateOf(0L) }
-    var bestLapTimeMs by remember { mutableLongStateOf(prefs.getLong("best_time_$trackId", Long.MAX_VALUE)) }
     var isNewPB by remember { mutableStateOf(false) }  // Track if last finish was a PB
     var isNewWR by remember { mutableStateOf(false) }  // Track if last finish was a WR
     
@@ -148,7 +161,7 @@ fun HotlapGame(
     var currentSector by remember { mutableIntStateOf(0) }  // Current sector (0, 1, 2)
     var lastSectorTime by remember { mutableLongStateOf(0L) }  // Time when entered current sector
     var sectorTimes by remember { mutableStateOf(listOf(0L, 0L, 0L)) }  // Current lap sector times
-    var bestSectorTimes by remember { mutableStateOf(listOf(
+    var bestSectorTimes by remember(trackId) { mutableStateOf(listOf(
         prefs.getLong("best_sector_0_$trackId", Long.MAX_VALUE),
         prefs.getLong("best_sector_1_$trackId", Long.MAX_VALUE),
         prefs.getLong("best_sector_2_$trackId", Long.MAX_VALUE)
@@ -181,7 +194,7 @@ fun HotlapGame(
     
     // Ghost data - track specific
     var myGhostEnabled by remember { mutableStateOf(false) }
-    var myGhostData by remember { mutableStateOf<List<GhostFrame>>(loadGhostData(prefs, trackId)) }
+    var myGhostData by remember(trackId) { mutableStateOf<List<GhostFrame>>(loadGhostData(prefs, trackId)) }
     var worldGhostEnabled by remember { mutableStateOf(false) }
     var wrGhostData by remember { mutableStateOf<List<GhostFrame>>(emptyList()) }
     var currentGhostFrame by remember { mutableIntStateOf(0) }
@@ -190,7 +203,7 @@ fun HotlapGame(
     // Leaderboard state
     var leaderboard by remember { mutableStateOf<List<LeaderboardEntry>>(emptyList()) }
     var showLeaderboard by remember { mutableStateOf(false) }
-    var showSettings by remember { mutableStateOf(false) }  // Settings panel state
+
     var globalBestTime by remember { mutableLongStateOf(Long.MAX_VALUE) }
     var worldRecordHolder by remember { mutableStateOf("---") }
     var worldRecordHolderUid by remember { mutableStateOf("") } // Track WR Holder by UID
@@ -273,7 +286,11 @@ fun HotlapGame(
     }
     
     LaunchedEffect(Unit) {
-        trackData = loadRandomTrack(context)
+        // No longer need async loading for TrackFactory, it is synchronous.
+        // But if we want to simulate loading or ensure state:
+        if (trackData == null) {
+            trackData = TrackFactory.getTrack(trackId)
+        }
         trackData?.let {
             if (it.points.isNotEmpty()) {
                 carPosition = it.points[0]
@@ -451,11 +468,15 @@ fun HotlapGame(
                     val newResults = sectorResults.toMutableList()
                     val wrTime = originalWrSectorTimes[completedSector]  // Use original, not current
                     val pbTime = bestSectorTimes[completedSector]
-                    val wrExists = wrTime < Long.MAX_VALUE  // B1 Fix: Check if WR actually exists
-                    val isWRSector = wrExists && sectorTime < wrTime  // Only WR if WR exists AND beaten
+                    val isWRSector = sectorTime < wrTime
+                    val isPBSector = sectorTime < pbTime
+                    
+                    android.util.Log.d("SectorDebug", "Sector $completedSector: Time=$sectorTime, WR=$wrTime, PB=$pbTime")
+                    android.util.Log.d("SectorDebug", "Result: isWR=$isWRSector, isPB=$isPBSector")
+
                     newResults[completedSector] = when {
-                        isWRSector -> 2  // Purple - WR (only if WR exists and beaten)
-                        sectorTime < pbTime -> 1  // Green - PB
+                        isWRSector -> 2  // Purple - WR
+                        isPBSector -> 1  // Green - PB
                         else -> 0  // Yellow - slower
                     }
                     sectorResults = newResults
@@ -538,11 +559,15 @@ fun HotlapGame(
                         val newResults = sectorResults.toMutableList()
                         val wrTime = originalWrSectorTimes[2]  // Use original, not updated
                         val pbTime = bestSectorTimes[2]
-                        val wrExists = wrTime < Long.MAX_VALUE  // B1 Fix: Check if WR actually exists
-                        val isWRSector = wrExists && sector3Time < wrTime  // Only WR if WR exists AND beaten
+                        val isWRSector = sector3Time < wrTime
+                        val isPBSector = sector3Time < pbTime
+                        
+                        android.util.Log.d("SectorDebug", "Sector 2 (S3): Time=$sector3Time, WR=$wrTime, PB=$pbTime")
+                        android.util.Log.d("SectorDebug", "Result: isWR=$isWRSector, isPB=$isPBSector")
+
                         newResults[2] = when {
-                            isWRSector -> 2  // Purple - WR (only if WR exists and beaten)
-                            sector3Time < pbTime -> 1  // Green - PB
+                            isWRSector -> 2  // Purple - WR
+                            isPBSector -> 1  // Green - PB
                             else -> 0  // Yellow - slower
                         }
                         sectorResults = newResults
@@ -574,7 +599,14 @@ fun HotlapGame(
                             newWrSectors[sector] = time
                             // B6 Fix: Upload to Firebase NOW that lap is finished
                             val sectorKey = "s${sector + 1}"
+                            android.util.Log.d("SectorDebug", "Uploading WR Sector $sectorKey: $time")
                             sectorTimesRef.child(trackId).child(sectorKey).setValue(time)
+                                .addOnFailureListener { e ->
+                                    android.util.Log.e("SectorDebug", "Upload Failed for $sectorKey: ${e.message}")
+                                }
+                                .addOnSuccessListener {
+                                    android.util.Log.d("SectorDebug", "Upload Success for $sectorKey")
+                                }
                         }
                         wrSectorTimes = newWrSectors
                         pendingWrSectorUpdates.clear()
@@ -647,7 +679,8 @@ fun HotlapGame(
         }
     }
     
-    // Name Entry Dialog
+
+
     if (gameState == HotlapState.NAME_ENTRY) {
         Dialog(onDismissRequest = {}) {
             Box(
@@ -741,6 +774,9 @@ fun HotlapGame(
                     }
                 )
             }
+
+            
+
         }
         
         // Stats Header (PB + WR + Rank)
@@ -1046,6 +1082,93 @@ fun HotlapGame(
                                 fontSize = 12.sp,
                                 color = Color(0xFFFFD700)
                             )
+                            Spacer(Modifier.height(16.dp))
+
+                            // Difficulty Filter
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val filters = listOf("ALL" to null, "EASY" to 1, "MED" to 3, "HARD" to 5)
+                                filters.forEach { (label, diff) ->
+                                    Box(
+                                        modifier = Modifier
+                                            .background(
+                                                if (difficultyFilter == diff) Color.White else Color.DarkGray,
+                                                RoundedCornerShape(4.dp)
+                                            )
+                                            .clickable { difficultyFilter = diff }
+                                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                                    ) {
+                                        Text(label, fontFamily = pixelFont, fontSize = 8.sp, color = if (difficultyFilter == diff) Color.Black else Color.White)
+                                    }
+                                }
+                            }
+
+                            // Track Selection List
+                            Text("SELECT TRACK", fontFamily = pixelFont, fontSize = 10.sp, color = Color.White, modifier = Modifier.padding(bottom = 8.dp))
+                    
+                            LazyColumn(
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                                modifier = Modifier.weight(1f).fillMaxWidth()
+                            ) {
+                                val filteredTracks = TrackFactory.tracks.filter { track ->
+                                    when (difficultyFilter) {
+                                        null -> true
+                                        1 -> track.difficulty <= 2
+                                        3 -> track.difficulty == 3
+                                        5 -> track.difficulty >= 4
+                                        else -> true
+                                    }
+                                }
+                                
+                                itemsIndexed(filteredTracks) { _, track ->
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .background(
+                                                if (track.id == trackId) Color.White else Color(0xFF333333),
+                                                RoundedCornerShape(4.dp)
+                                            )
+                                            .clickable {
+                                                trackId = track.id
+                                                prefs.edit().putString("last_track_id", track.id).apply()
+                                                // Reset Game State on track change
+                                                gameState = HotlapState.READY
+                                                sectorResults = listOf(-1, -1, -1)
+                                            }
+                                            .padding(8.dp)
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Column {
+                                                Text(
+                                                    text = track.name,
+                                                    fontFamily = pixelFont,
+                                                    fontSize = 8.sp,
+                                                    color = if (track.id == trackId) Color.Black else Color.White
+                                                )
+                                                Text(
+                                                    text = "*".repeat(track.difficulty),
+                                                    fontSize = 8.sp,
+                                                    color = if (track.id == trackId) Color.DarkGray else Color.Gray
+                                                )
+                                            }
+                                            if (track.id == trackId) {
+                                                Text("SELECTED", fontSize = 8.sp, color = Color(0xFF00AA00), fontFamily = pixelFont)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            Spacer(Modifier.height(16.dp))
+                            
+                            // Sound Toggle
                             Spacer(Modifier.height(16.dp))
                             
                             // Sound Toggle

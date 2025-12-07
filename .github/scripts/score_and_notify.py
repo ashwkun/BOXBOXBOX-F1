@@ -115,11 +115,12 @@ NUCLEAR_PATTERNS = [
     
     # Race Results (will be age-gated)
     r'\b(wins?|won|victory|victorious)\b.*\b(grand\s+prix|race|gp)\b',
+    r'\b(grand\s+prix|race|gp)\b.*\b(wins?|won|victory|victorious)\b',  # Reverse order support
     r'\b(pole\s+position|takes\s+pole|claims\s+pole|grabs\s+pole)\b',
     r'\b(sprint)\b.*\b(win|wins?|won|victory)\b',
     
     # Championships (decisive only)
-    r'\b(clinches?|secures?|wins?|seals?)\b.*\b(championship|title|wdc|wcc)\b',
+    r'\b(clinches?|secures?|wins?|seals?|claims?|takes?|grabs?)\b.*\b(championship|title|wdc|wcc)\b',
     r'\b(mathematically|officially)\b.*\b(eliminated|out\s+of\s+contention)\b',
     
     # Disqualifications
@@ -138,9 +139,16 @@ MAJOR_PATTERNS = [
     (115, r'\b(signs?|signed|confirms?|confirmed)\b.*\b(2025|2026|2027|contract)\b'),
     (110, r'\b(official:)\b.*\b(driver|seat|signs?|joins?)\b'),
     (120, r'\b(team\s+principal|tp)\b.*\b(leaves?|joins?|appointed)\b'),
-    (100, r'\b(grid\s+(drop|penalty)|grid-place\s+penalty)\b'),
-    (90, r'\b(penalty|penali[sz]ed)\b.*\b(grid|race|time|points|seconds)\b'),
-    (90, r'\b(protest|appeal)\b.*\b(upheld|dismissed|successful)\b'),
+    (105, r'\b(grid\s+(drop|penalty)|grid-place\s+penalty)\b'),  # Boosted from 100
+    (105, r'\b(penalty|penali[sz]ed)\b.*\b(grid|race|time|points|seconds)\b'), # Boosted from 90
+    (100, r'\b(protest|appeal)\b.*\b(upheld|dismissed|successful)\b'), # Boosted from 90
+    # New Broadened Major Categories
+    (100, r'\b(fastest|quickest|tops|leads)\b.*\b(qualifying|q[123]|shootout)\b'),
+    (100, r'\b(sprint)\b.*\b(result|report|win|wins?|won)\b'),
+    (100, r'\b(summoned|investigation|under\s+investigation)\b.*\b(stewards|fia)\b'),
+    (100, r'\b(reveals?|launche?s?|unveils?|wraps\s+off)\b.*\b(car|livery|challenger|2025|2026)\b'),
+    (100, r'\b(sick|ill|surgery|hospital|medical|appendicitis|operation)\b.*\b(miss|doubt|ruled\s+out|withdraws?)\b'),
+    (100, r'\b(ruled\s+out|withdraws?|misses)\b.*\b(grand\s+prix|race|gp)\b'), # Added simpler ruled out pattern
 ]
 
 # --- Medium Patterns (Refined) ---
@@ -879,9 +887,17 @@ def main():
     all_sent_ids = set(x['id'] for x in state['nuclear_sent']) | set(x['id'] for x in state['major_sent'])
     all_digest_candidates = [item for item in all_digest_candidates if item['id'] not in all_sent_ids]
     
-    # Sort and keep top 6
-    all_digest_candidates.sort(key=lambda x: (x['score'], x['timestamp']), reverse=True)
-    state['digest_items'] = all_digest_candidates[:6]
+    # Sort and keep (Protect Majors)
+    pending_majors = [x for x in all_digest_candidates if x['score'] >= MAJOR_THRESHOLD]
+    pending_digests = [x for x in all_digest_candidates if x['score'] < MAJOR_THRESHOLD]
+
+    # Cap only digest items (keep top 12)
+    pending_digests.sort(key=lambda x: (x['score'], x['timestamp']), reverse=True)
+    pending_digests = pending_digests[:12]
+
+    # Recombine and sort
+    state['digest_items'] = pending_majors + pending_digests
+    state['digest_items'].sort(key=lambda x: (x['score'], x['timestamp']), reverse=True)
     
     print(f"\n[INFO] Digest queue: {len(state['digest_items'])} items")
     if state['digest_items']:
