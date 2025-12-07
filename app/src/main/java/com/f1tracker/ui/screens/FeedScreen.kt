@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -1123,23 +1125,17 @@ private fun VideosList(
         contentPadding = PaddingValues(bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Filter Chips Row
+        // Filter Chips Row (Horizontally scrollable)
         item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
                     .padding(vertical = 16.dp, horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 availableFilters.forEach { filter ->
                     val isSelected = selectedFilter == filter
-                    val icon = when (filter) {
-                        "Hot" -> "🔥"
-                        "Official" -> "⭐"
-                        "Sessions" -> "🏁"
-                        "Analysis" -> "📊"
-                        else -> ""
-                    }
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(50))
@@ -1152,12 +1148,12 @@ private fun VideosList(
                                 shape = RoundedCornerShape(50)
                             )
                             .clickable { onFilterSelected(filter) }
-                            .padding(horizontal = 14.dp, vertical = 8.dp)
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         Text(
-                            text = "$icon ${filter.uppercase()}",
+                            text = filter.uppercase(),
                             fontFamily = michromaFont,
-                            fontSize = 9.sp,
+                            fontSize = 10.sp,
                             color = if (isSelected) Color.White else Color.White.copy(alpha = 0.7f),
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                         )
