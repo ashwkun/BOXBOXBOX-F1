@@ -227,24 +227,29 @@ class MultimediaViewModel @Inject constructor(
     /**
      * Calculate smart score for video ranking.
      * Score = (freshness * 0.35) + (engagement * 0.25) + (channelQuality * 0.25) + (contentType * 0.15)
+     * F1 official channel gets a debuff and faster age decay to balance their dominance.
      */
     private fun calculateSmartScore(video: F1Video): Double {
         val now = java.time.Instant.now()
+        val isOfficialF1 = video.channelTitle == "FORMULA 1"
         
-        // Freshness score (exponential decay, half-life 48 hours)
+        // Freshness score (exponential decay)
+        // F1 channel: 24h half-life (faster decay)
+        // Others: 48h half-life (slower decay)
         val hoursAge = try {
             val publishTime = java.time.Instant.parse(video.publishedDate)
             java.time.Duration.between(publishTime, now).toHours().toDouble()
         } catch (e: Exception) { 720.0 } // 30 days fallback
         
-        val freshnessScore = Math.exp(-hoursAge / 48.0)
+        val decayHalfLife = if (isOfficialF1) 24.0 else 48.0
+        val freshnessScore = Math.exp(-hoursAge / decayHalfLife)
         
         // Engagement score (normalized)
-        val maxViews = 10_000_000.0 // Normalize against 10M views
+        val maxViews = 10_000_000.0
         val engagementScore = Math.min(video.viewCount / maxViews, 1.0)
         
-        // Channel quality score (from JSON or default)
-        val channelScore = video.channelScore
+        // Channel quality score with F1 debuff
+        val channelScore = if (isOfficialF1) video.channelScore * 0.6 else video.channelScore
         
         // Content type boost (session content preferred)
         val contentBoost = when {

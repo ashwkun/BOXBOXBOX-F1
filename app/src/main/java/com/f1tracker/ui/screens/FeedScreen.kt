@@ -1156,10 +1156,11 @@ private fun VideosList(
                 }
             }
             "Popular" -> {
-                // Sort by views with slight randomization
-                val sorted = videos.sortedByDescending { 
+                // Sort by views with F1 debuff and slight randomization
+                val sorted = videos.sortedByDescending { video ->
                     val randomFactor = 0.85 + (Math.random() * 0.30)
-                    it.viewCount * randomFactor
+                    val f1Debuff = if (video.channelTitle == "FORMULA 1") 0.6 else 1.0
+                    video.viewCount * randomFactor * f1Debuff
                 }
                 // Enforce channel diversity: max 3 from same channel in any 6-video window
                 val diversified = mutableListOf<F1Video>()
