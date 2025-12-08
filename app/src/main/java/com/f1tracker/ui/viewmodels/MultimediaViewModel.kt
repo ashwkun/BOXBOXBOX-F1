@@ -73,68 +73,93 @@ class MultimediaViewModel @Inject constructor(
             _isInstagramRefreshing.value = false
         }
     }
+    
     /**
-     * Score posts by engagement with AGGRESSIVE time decay.
-     * Formula: (likes + comments*3) / (hours_ago + 2)^2.0
-     * Stronger time decay to surface newer content over high-like old posts.
+     * Re-shuffle posts without refetching for fresh feel on tab visits.
+     * Uses the same scoring algorithm with new random seeds.
      */
-    private fun sortByEngagement(posts: List<com.f1tracker.data.models.InstagramPost>): List<com.f1tracker.data.models.InstagramPost> {
-        val now = java.time.Instant.now()
-        
-        fun getScore(post: com.f1tracker.data.models.InstagramPost): Double {
-            val likes = post.like_count.toDouble()
-            val comments = post.comments_count.toDouble()
-            val engagement = likes + (comments * 3)
-            
-            val hoursAgo = try {
-                val postTime = java.time.Instant.parse(post.timestamp)
-                java.time.Duration.between(postTime, now).toHours().toDouble()
-            } catch (e: Exception) { 100.0 }
-            
-            // AGGRESSIVE time decay: power 2.0 (was 1.5)
-            // 24h old = 676x penalty, 48h old = 2500x penalty
-            val timeDecay = Math.pow(hoursAgo + 2.0, 2.0)
-            var score = engagement / timeDecay
-            
-            // Boost videos
-            if (post.media_type == "VIDEO") {
-                score *= 1.2
-            }
-            
-            // STRONGER F1 debuff - they dominate too much (was 0.4, now 0.25)
-            if (post.author == "f1") {
-                score *= 0.25
-            }
-            
-            // More randomization (±25%) so refresh feels fresh
-            val randomFactor = 0.75 + (Math.random() * 0.50)
-            return score * randomFactor
+    fun reshuffleInstagramFeed() {
+        val current = _instagramPosts.value
+        if (current.isNotEmpty()) {
+            _instagramPosts.value = sortByEngagement(current)
+            Log.d("MultimediaViewModel", "Feed reshuffled with ${current.size} posts")
         }
-        
-        val scoredPosts = posts.sortedByDescending { getScore(it) }
-        
-        // Author diversity: max 2 consecutive from same author (was 3)
-        val diversified = mutableListOf<com.f1tracker.data.models.InstagramPost>()
-        val remaining = scoredPosts.toMutableList()
-        
-        while (remaining.isNotEmpty()) {
-            val lastAuthor = diversified.lastOrNull()?.author
-            val consecutiveCount = if (lastAuthor != null) {
-                diversified.takeLastWhile { it.author == lastAuthor }.size
-            } else 0
-            
-            val nextPost = if (consecutiveCount >= 2) {
-                remaining.firstOrNull { it.author != lastAuthor } ?: remaining.first()
-            } else {
-                remaining.first()
-            }
-            
-            diversified.add(nextPost)
-            remaining.remove(nextPost)
-        }
-        
-        return diversified
     }
+    /**
+ * Score posts by engagement with balanced time decay and high randomization.
+ * Formula: (likes + comments*3) / (hours_ago + 2)^1.7
+ * Moderate time decay to allow variety while surfacing newer content.
+ * High randomization ensures fresh feel on each refresh.
+ */
+private fun sortByEngagement(posts: List<com.f1tracker.data.models.InstagramPost>): List<com.f1tracker.data.models.InstagramPost> {
+    val now = java.time.Instant.now()
+    
+    fun getScore(post: com.f1tracker.data.models.InstagramPost): Double {
+        val likes = post.like_count.toDouble()
+        val comments = post.comments_count.toDouble()
+        val engagement = likes + (comments * 3)
+        
+        val hoursAgo = try {
+            val postTime = java.time.Instant.parse(post.timestamp)
+            java.time.Duration.between(postTime, now).toHours().toDouble()
+        } catch (e: Exception) { 100.0 }
+        
+        // MODERATE time decay: power 1.7 (was 2.0) - allows more variety
+        // 24h old = 338x penalty, 48h old = 1265x penalty
+        val timeDecay = Math.pow(hoursAgo + 2.0, 1.7)
+        var score = engagement / timeDecay
+        
+        // Boost videos
+        if (post.media_type == "VIDEO") {
+            score *= 1.2
+        }
+        
+        // F1 debuff - they dominate too much
+        if (post.author == "f1") {
+            score *= 0.25
+        }
+        
+        // HIGH randomization (±40%) so each refresh feels completely fresh
+        val randomFactor = 0.60 + (Math.random() * 0.80)
+        return score * randomFactor
+    }
+    
+    val scoredPosts = posts.map { it to getScore(it) }
+        .sortedByDescending { it.second }
+    
+    Log.d("MultimediaViewModel", "Feed scoring: Top 5 scores: ${scoredPosts.take(5).map { "${it.first.author}:${it.second.toInt()}" }}")
+    
+    // Take top 30 and shuffle them for maximum variety
+    val top30 = scoredPosts.take(30).map { it.first }.toMutableList()
+    top30.shuffle()
+    
+    // Add remaining posts in score order
+    val remaining = scoredPosts.drop(30).map { it.first }
+    val allPosts = (top30 + remaining).toMutableList()
+    
+    // Author diversity: max 2 consecutive from same author
+    val diversified = mutableListOf<com.f1tracker.data.models.InstagramPost>()
+    val pending = allPosts.toMutableList()
+    
+    while (pending.isNotEmpty()) {
+        val lastAuthor = diversified.lastOrNull()?.author
+        val consecutiveCount = if (lastAuthor != null) {
+            diversified.takeLastWhile { it.author == lastAuthor }.size
+        } else 0
+        
+        val nextPost = if (consecutiveCount >= 2) {
+            pending.firstOrNull { it.author != lastAuthor } ?: pending.first()
+        } else {
+            pending.first()
+        }
+        
+        diversified.add(nextPost)
+        pending.remove(nextPost)
+    }
+    
+    Log.d("MultimediaViewModel", "Feed diversity: First 10 authors: ${diversified.take(10).map { it.author }}")
+    return diversified
+}
 
 
     /**

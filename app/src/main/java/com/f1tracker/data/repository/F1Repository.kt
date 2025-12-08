@@ -36,7 +36,7 @@ class F1RepositoryImpl @Inject constructor(
 
     // Smart caching: 5-minute TTL to balance freshness and performance
     private companion object {
-        const val CACHE_TTL_MS = 5 * 60 * 1000L // 5 minutes
+        const val CACHE_TTL_MS = 2 * 60 * 1000L // 2 minutes - fresher content
     }
     
     // In-memory cache with timestamp

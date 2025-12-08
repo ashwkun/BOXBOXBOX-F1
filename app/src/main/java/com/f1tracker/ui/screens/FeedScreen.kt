@@ -404,10 +404,40 @@ private fun LatestFeed(
             .take(8)
             .map { FeedItem.VideoItem(it) }
         
+        // Score Instagram posts for better quality selection (not just recency)
+        val now = java.time.Instant.now()
         val insta = instagramPosts
-            .sortedByDescending { parseDate(it.timestamp) }
+            .map { post ->
+                val likes = post.like_count.toDouble()
+                val comments = post.comments_count.toDouble()
+                val engagement = likes + (comments * 3)
+                
+                val hoursAgo = try {
+                    val postTime = java.time.Instant.parse(post.timestamp)
+                    java.time.Duration.between(postTime, now).toHours().toDouble()
+                } catch (e: Exception) { 100.0 }
+                
+                // Moderate time decay (1.5 power) for Latest feed
+                val timeDecay = Math.pow(hoursAgo + 2.0, 1.5)
+                var score = engagement / timeDecay
+                
+                // Boost videos for visual appeal
+                if (post.media_type == "VIDEO") {
+                    score *= 1.3
+                }
+                
+                // F1 debuff - reduce dominance
+                if (post.author == "f1") {
+                    score *= 0.4
+                }
+                
+                // Randomization for variety (±30%)
+                val randomFactor = 0.70 + (Math.random() * 0.60)
+                post to (score * randomFactor)
+            }
+            .sortedByDescending { it.second }
             .take(8)
-            .map { FeedItem.InstagramItem(it) }
+            .map { FeedItem.InstagramItem(it.first) }
         
         val podcastItems = podcasts.take(3).flatMap { podcast ->
             podcast.episodes

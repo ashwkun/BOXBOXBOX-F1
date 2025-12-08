@@ -127,7 +127,7 @@ fun InstagramFeedList(
     ) {
         androidx.compose.foundation.pager.VerticalPager(
             state = pagerState,
-            beyondBoundsPageCount = 1, // Preload next page
+            beyondBoundsPageCount = 3, // Preload 3 pages for seamless doomscrolling
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(nestedScrollConnection),
