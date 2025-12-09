@@ -10,7 +10,7 @@ from firebase_admin import credentials, messaging
 
 # --- Configuration ---
 RSS_URL = "https://www.motorsport.com/rss/f1/news/"
-STATE_FILE = "notification_state.json"
+STATE_FILE = "data/notification_state.json"
 FCM_TOPIC = "all_users" # Target topic for notifications
 
 # =============================================================================

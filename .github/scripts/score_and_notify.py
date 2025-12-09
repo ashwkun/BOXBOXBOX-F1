@@ -11,7 +11,7 @@ from difflib import SequenceMatcher
 
 # --- Configuration ---
 RSS_URL = "https://www.motorsport.com/rss/f1/news/"
-STATE_FILE = "notification_state.json"
+STATE_FILE = "data/notification_state.json"
 FCM_TOPIC = "all_users"
 DRY_RUN = os.environ.get('NOTIFICATION_DRY_RUN', 'false').lower() == 'true'
 

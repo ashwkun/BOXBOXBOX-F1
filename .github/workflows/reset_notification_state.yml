@@ -13,24 +13,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         
-      - name: Reset notification_state.json
+      - name: Reset data/notification_state.json
         run: |
           echo '{
-            "date": "1970-01-01",
-            "nuclear_sent": [],
-            "nuclear_queue": [],
-            "major_sent": [],
-            "slot1_remaining": 1,
-            "slot2_remaining": 2,
-            "digest_items": [],
-            "digest_sent": false,
-            "ignored_items": []
-          }' > notification_state.json
-          
-      - name: Commit and push reset state
+            "last_nuclear_run": null,
+            "last_major_run": null,
+            "last_digest_run": null,
+            "sent_notifications": []
+          }' > data/notification_state.json
+      
+      - name: Commit Reset
         run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
-          git add notification_state.json
+          git config user.name "F1 Bot"
+          git config user.email "bot@boxboxbox.app"
+          git add data/notification_state.json
           git commit -m "Reset notification state [skip ci]"
           git push
