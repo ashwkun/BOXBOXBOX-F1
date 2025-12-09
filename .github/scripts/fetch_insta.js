@@ -4,9 +4,9 @@ const https = require('https');
 // CONFIG
 // CONFIG
 const MAX_FEED_POSTS = 300;  // Increased to 300 for more content
-const FEED_FILE = 'f1_feed.json';        // Mixed content (images + videos)
-const REELS_FILE = 'f1_reels.json';      // Videos only
-const ARCHIVE_FILE = 'f1_archive.json';  // Full history
+const FEED_FILE = 'data/f1_feed.json';        // Mixed content (images + videos)
+const REELS_FILE = 'data/f1_reels.json';      // Videos only
+const ARCHIVE_FILE = 'data/f1_archive.json';  // Full history
 
 // ACCOUNT LISTS (BRD Section 2.1)
 const OFFICIAL_ACCOUNTS = [

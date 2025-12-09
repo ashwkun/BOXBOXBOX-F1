@@ -219,13 +219,13 @@ async function run() {
         merged.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
         // Keep f1_youtube.json as the merged feed for backward compatibility
-        fs.writeFileSync('f1_youtube.json', JSON.stringify(merged, null, 2));
+        fs.writeFileSync('data/f1_youtube.json', JSON.stringify(merged, null, 2));
 
         console.log('\n═══════════════════════════════════════');
-        console.log(`💾 Saved: f1_official.json (${official.length})`);
-        console.log(`💾 Saved: f1_trending.json (${trending.length})`);
-        console.log(`💾 Saved: f1_analysis.json (${analysis.length})`);
-        console.log(`💾 Saved: f1_youtube.json (${merged.length} merged)`);
+        console.log(`💾 Saved: data/f1_official.json (${official.length})`);
+        console.log(`💾 Saved: data/f1_trending.json (${trending.length})`);
+        console.log(`💾 Saved: data/f1_analysis.json (${analysis.length})`);
+        console.log(`💾 Saved: data/f1_youtube.json (${merged.length} merged)`);
         console.log('═══════════════════════════════════════');
 
     } catch (error) {

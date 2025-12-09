@@ -27,7 +27,7 @@ jobs:
       run: |
         git config user.name "F1 Bot"
         git config user.email "bot@boxboxbox.app"
-        git add f1_youtube.json f1_official.json f1_trending.json f1_analysis.json
+        git add data/f1_youtube.json data/f1_official.json data/f1_trending.json data/f1_analysis.json
         timestamp=$(date -u)
         git commit -m "YouTube Feed update: ${timestamp}" || exit 0
         git push

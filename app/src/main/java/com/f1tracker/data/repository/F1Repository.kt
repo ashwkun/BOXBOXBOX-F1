@@ -391,7 +391,7 @@ class F1RepositoryImpl @Inject constructor(
             }
             
             // Fetch fresh - append timestamp ONLY if forcing refresh to bypass all caches
-            val baseUrl = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_feed.json"
+            val baseUrl = "https://ashwkun.github.io/BOXBOXBOX-F1/data/f1_feed.json"
             val url = if (forceRefresh) "$baseUrl?t=${System.currentTimeMillis()}" else baseUrl
             val response = f1ApiService.getInstagramFeed(url)
             
@@ -422,7 +422,7 @@ class F1RepositoryImpl @Inject constructor(
             }
             
             // Fetch fresh - append timestamp ONLY if forcing refresh to bypass all caches
-            val baseUrl = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_reels.json"
+            val baseUrl = "https://ashwkun.github.io/BOXBOXBOX-F1/data/f1_reels.json"
             val url = if (forceRefresh) "$baseUrl?t=${System.currentTimeMillis()}" else baseUrl
             val response = f1ApiService.getInstagramFeed(url) // Uses same endpoint, different file
             
