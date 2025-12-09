@@ -308,19 +308,41 @@ class RaceViewModel @Inject constructor(
                     (raceYear.toIntOrNull()?.minus(1) ?: raceYear).toString()
                 }
                 
-                // Normalize race name for matching (e.g., "Bahrain Grand Prix" -> "bahrain")
+                // Race name aliases for matching (official name -> highlight name variations)
+                val raceAliases = mapOf(
+                    "são paulo" to listOf("brazil", "brazilian", "interlagos", "sao paulo"),
+                    "sao paulo" to listOf("brazil", "brazilian", "interlagos"),
+                    "emilia romagna" to listOf("imola", "emilia-romagna"),
+                    "monaco" to listOf("monte carlo", "monte-carlo"),
+                    "las vegas" to listOf("vegas"),
+                    "united states" to listOf("usa", "austin", "cota", "americas"),
+                    "miami" to listOf("miami"),
+                    "qatar" to listOf("lusail"),
+                    "saudi arabia" to listOf("saudi", "jeddah"),
+                    "abu dhabi" to listOf("yas marina", "yas"),
+                    "great britain" to listOf("british", "silverstone"),
+                    "united kingdom" to listOf("british", "silverstone", "great britain")
+                )
+                
+                // Normalize race name for matching (e.g., "São Paulo Grand Prix" -> "são paulo")
                 val raceNameNormalized = race.raceName
                     .lowercase()
                     .replace("grand prix", "")
                     .trim()
                 
+                // Get all possible names to match against
+                val namesToMatch = mutableListOf(raceNameNormalized)
+                raceAliases[raceNameNormalized]?.let { namesToMatch.addAll(it) }
+                
                 // Filter highlights for this specific race
                 val filteredHighlights = allHighlights.filter { highlight ->
                     val highlightRaceNormalized = highlight.raceName.lowercase().trim()
-                    highlight.year == targetYear && highlightRaceNormalized.contains(raceNameNormalized)
+                    highlight.year == targetYear && namesToMatch.any { name ->
+                        highlightRaceNormalized.contains(name) || name.contains(highlightRaceNormalized)
+                    }
                 }
                 
-                Log.d("RaceViewModel", "Found ${filteredHighlights.size} highlights for ${race.raceName} (year: $targetYear, completed: $isCompleted)")
+                Log.d("RaceViewModel", "Found ${filteredHighlights.size} highlights for ${race.raceName} (year: $targetYear, completed: $isCompleted, aliases: $namesToMatch)")
                 _raceHighlights.value = filteredHighlights
             }.onFailure { e ->
                 Log.e("RaceViewModel", "Failed to load highlights", e)

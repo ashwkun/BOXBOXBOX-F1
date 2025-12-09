@@ -62,45 +62,25 @@ data class F1HubMessage(
     @SerializedName("A") val args: List<JsonElement>  // Changed from JsonObject to JsonElement to handle primitives
 )
 
-// --- Driver Database (2025 Season Grid) ---
+// --- Driver Database (reads from F1DataProvider which loads from JSON) ---
 object DriverDatabase {
     data class DriverInfo(val firstName: String, val lastName: String, val team: String)
 
-    private val drivers = mapOf(
-        // Red Bull Racing
-        "1" to DriverInfo("Max", "Verstappen", "Red Bull Racing"),
-        "22" to DriverInfo("Yuki", "Tsunoda", "Red Bull Racing"),
-        // Ferrari
-        "16" to DriverInfo("Charles", "Leclerc", "Ferrari"),
-        "44" to DriverInfo("Lewis", "Hamilton", "Ferrari"),
-        // Mercedes
-        "63" to DriverInfo("George", "Russell", "Mercedes"),
-        "12" to DriverInfo("Andrea Kimi", "Antonelli", "Mercedes"),
-        // McLaren
-        "4" to DriverInfo("Lando", "Norris", "McLaren"),
-        "81" to DriverInfo("Oscar", "Piastri", "McLaren"),
-        // Aston Martin
-        "14" to DriverInfo("Fernando", "Alonso", "Aston Martin"),
-        "18" to DriverInfo("Lance", "Stroll", "Aston Martin"),
-        // Alpine
-        "10" to DriverInfo("Pierre", "Gasly", "Alpine"),
-        "43" to DriverInfo("Franco", "Colapinto", "Alpine"),
-        // Williams
-        "23" to DriverInfo("Alex", "Albon", "Williams"),
-        "55" to DriverInfo("Carlos", "Sainz", "Williams"),
-        // RB (VCARB)
-        "30" to DriverInfo("Liam", "Lawson", "RB"),
-        "6" to DriverInfo("Isack", "Hadjar", "RB"),
-        // Kick Sauber (Audi)
-        "27" to DriverInfo("Nico", "Hulkenberg", "Kick Sauber"),
-        "5" to DriverInfo("Gabriel", "Bortoleto", "Kick Sauber"),
-        // Haas F1 Team
-        "31" to DriverInfo("Esteban", "Ocon", "Haas F1 Team"),
-        "87" to DriverInfo("Oliver", "Bearman", "Haas F1 Team")
-    )
-
+    /**
+     * Get driver by racing number. Data comes from f1_2025_drivers_reformed.json
+     * via F1DataProvider - no more hardcoded driver lists!
+     */
     fun getDriver(number: String): DriverInfo {
-        return drivers[number] ?: DriverInfo("Driver", "#$number", "Unknown Team")
+        val driver = com.f1tracker.data.local.F1DataProvider.getDriverByRacingNumber(number)
+        return if (driver != null) {
+            // Map team ID to display name for live timing
+            val teamDisplayName = com.f1tracker.data.local.F1DataProvider.getTeamByApiId(driver.team)?.displayName 
+                ?: driver.team.replace("_", " ").replaceFirstChar { it.uppercase() }
+            DriverInfo(driver.givenName, driver.familyName, teamDisplayName)
+        } else {
+            // Fallback for unknown drivers (shouldn't happen if JSON is up to date)
+            DriverInfo("Driver", "#$number", "Unknown Team")
+        }
     }
 }
 

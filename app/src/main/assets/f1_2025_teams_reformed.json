@@ -4,181 +4,111 @@
       "id": "alpine",
       "espnId": "106922",
       "name": "Alpine F1 Team",
-      "nationality": "French",
-      "wikipediaUrl": "http://en.wikipedia.org/wiki/Alpine_F1_Team",
-      "drivers": [
-        "gasly",
-        "doohan"
-      ],
       "displayName": "Alpine",
       "abbreviation": "ALP",
       "color": "FF87BC",
       "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2025:fallback:car:2025fallbackcarright.webp/v1740000000/common/f1/2025/alpine/2025alpinecarright.webp",
       "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/alpine/2025alpinelogowhite.webp",
-      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/alpine/2025alpinelogowhite.webp",
-      "dropdownLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2025/alpine/2025alpinelogowhite.webp"
+      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/alpine/2025alpinelogowhite.webp"
     },
     "aston_martin": {
       "id": "aston_martin",
       "espnId": "123986",
       "name": "Aston Martin",
-      "nationality": "British",
-      "wikipediaUrl": "http://en.wikipedia.org/wiki/Aston_Martin_in_Formula_One",
-      "drivers": [
-        "alonso",
-        "stroll"
-      ],
       "displayName": "Aston Martin",
       "abbreviation": "AMR",
       "color": "229971",
       "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2025:fallback:car:2025fallbackcarright.webp/v1740000000/common/f1/2025/astonmartin/2025astonmartincarright.webp",
       "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/astonmartin/2025astonmartinlogowhite.webp",
-      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/astonmartin/2025astonmartinlogowhite.webp",
-      "dropdownLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2025/astonmartin/2025astonmartinlogowhite.webp"
+      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/astonmartin/2025astonmartinlogowhite.webp"
     },
     "ferrari": {
       "id": "ferrari",
       "espnId": "106842",
       "name": "Ferrari",
-      "nationality": "Italian",
-      "wikipediaUrl": "http://en.wikipedia.org/wiki/Scuderia_Ferrari",
-      "drivers": [
-        "leclerc",
-        "hamilton"
-      ],
       "displayName": "Ferrari",
       "abbreviation": "FER",
       "color": "E8002D",
       "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2025:fallback:car:2025fallbackcarright.webp/v1740000000/common/f1/2025/ferrari/2025ferraricarright.webp",
       "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/ferrari/2025ferrarilogowhite.webp",
-      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/ferrari/2025ferrarilogowhite.webp",
-      "dropdownLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2025/ferrari/2025ferrarilogowhite.webp"
+      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/ferrari/2025ferrarilogowhite.webp"
     },
     "haas": {
       "id": "haas",
       "espnId": "111427",
       "name": "Haas F1 Team",
-      "nationality": "American",
-      "wikipediaUrl": "http://en.wikipedia.org/wiki/Haas_F1_Team",
-      "drivers": [
-        "ocon",
-        "bearman"
-      ],
       "displayName": "Haas F1 Team",
       "abbreviation": "HAA",
       "color": "B6BABD",
       "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2025:fallback:car:2025fallbackcarright.webp/v1740000000/common/f1/2025/haasf1team/2025haasf1teamcarright.webp",
       "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/haasf1team/2025haasf1teamlogowhite.webp",
-      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/haasf1team/2025haasf1teamlogowhite.webp",
-      "dropdownLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2025/haasf1team/2025haasf1teamlogowhite.webp"
+      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/haasf1team/2025haasf1teamlogowhite.webp"
     },
     "mclaren": {
       "id": "mclaren",
       "espnId": "106892",
       "name": "McLaren",
-      "nationality": "British",
-      "wikipediaUrl": "http://en.wikipedia.org/wiki/McLaren",
-      "drivers": [
-        "norris",
-        "piastri"
-      ],
       "displayName": "McLaren",
       "abbreviation": "MCL",
       "color": "FF8000",
       "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2025:fallback:car:2025fallbackcarright.webp/v1740000000/common/f1/2025/mclaren/2025mclarencarright.webp",
       "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/mclaren/2025mclarenlogowhite.webp",
-      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/mclaren/2025mclarenlogowhite.webp",
-      "dropdownLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2025/mclaren/2025mclarenlogowhite.webp"
+      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/mclaren/2025mclarenlogowhite.webp"
     },
     "mercedes": {
       "id": "mercedes",
       "espnId": "106893",
       "name": "Mercedes",
-      "nationality": "German",
-      "wikipediaUrl": "http://en.wikipedia.org/wiki/Mercedes-Benz_in_Formula_One",
-      "drivers": [
-        "russell",
-        "antonelli"
-      ],
       "displayName": "Mercedes",
       "abbreviation": "MER",
       "color": "27F4D2",
       "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2025:fallback:car:2025fallbackcarright.webp/v1740000000/common/f1/2025/mercedes/2025mercedescarright.webp",
       "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/mercedes/2025mercedeslogowhite.webp",
-      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/mercedes/2025mercedeslogowhite.webp",
-      "dropdownLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2025/mercedes/2025mercedeslogowhite.webp"
+      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/mercedes/2025mercedeslogowhite.webp"
     },
     "rb": {
       "id": "rb",
       "espnId": "123988",
       "name": "RB F1 Team",
-      "nationality": "Italian",
-      "wikipediaUrl": "http://en.wikipedia.org/wiki/RB_Formula_One_Team",
-      "drivers": [
-        "lawson",
-        "hadjar"
-      ],
       "displayName": "RB",
       "abbreviation": "VCARB",
       "color": "6692FF",
       "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2025:fallback:car:2025fallbackcarright.webp/v1740000000/common/f1/2025/racingbulls/2025racingbullscarright.webp",
       "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/racingbulls/2025racingbullslogowhite.webp",
-      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/racingbulls/2025racingbullslogowhite.webp",
-      "dropdownLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2025/racingbulls/2025racingbullslogowhite.webp"
+      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/racingbulls/2025racingbullslogowhite.webp"
     },
     "red_bull": {
       "id": "red_bull",
       "espnId": "106921",
       "name": "Red Bull",
-      "nationality": "Austrian",
-      "wikipediaUrl": "http://en.wikipedia.org/wiki/Red_Bull_Racing",
-      "drivers": [
-        "max_verstappen",
-        "tsunoda"
-      ],
       "displayName": "Red Bull Racing",
       "abbreviation": "RBR",
       "color": "3671C6",
       "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2025:fallback:car:2025fallbackcarright.webp/v1740000000/common/f1/2025/redbullracing/2025redbullracingcarright.webp",
       "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/redbullracing/2025redbullracinglogowhite.webp",
-      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/redbullracing/2025redbullracinglogowhite.webp",
-      "dropdownLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2025/redbullracing/2025redbullracinglogowhite.webp"
+      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/redbullracing/2025redbullracinglogowhite.webp"
     },
     "sauber": {
       "id": "sauber",
       "espnId": "106925",
       "name": "Sauber",
-      "nationality": "Swiss",
-      "wikipediaUrl": "http://en.wikipedia.org/wiki/Sauber_Motorsport",
-      "drivers": [
-        "hulkenberg",
-        "bortoleto"
-      ],
       "displayName": "Sauber",
       "abbreviation": "SAU",
       "color": "52E252",
       "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2025:fallback:car:2025fallbackcarright.webp/v1740000000/common/f1/2025/kicksauber/2025kicksaubercarright.webp",
       "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/kicksauber/2025kicksauberlogowhite.webp",
-      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/kicksauber/2025kicksauberlogowhite.webp",
-      "dropdownLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2025/kicksauber/2025kicksauberlogowhite.webp"
+      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/kicksauber/2025kicksauberlogowhite.webp"
     },
     "williams": {
       "id": "williams",
       "espnId": "106967",
       "name": "Williams",
-      "nationality": "British",
-      "wikipediaUrl": "http://en.wikipedia.org/wiki/Williams_Grand_Prix_Engineering",
-      "drivers": [
-        "albon",
-        "sainz"
-      ],
       "displayName": "Williams",
       "abbreviation": "WIL",
       "color": "64C4FF",
       "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2025:fallback:car:2025fallbackcarright.webp/v1740000000/common/f1/2025/williams/2025williamscarright.webp",
       "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2025/williams/2025williamslogowhite.webp",
-      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/williams/2025williamslogowhite.webp",
-      "dropdownLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_64/q_auto/v1740000000/common/f1/2025/williams/2025williamslogowhite.webp"
+      "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2025/williams/2025williamslogowhite.webp"
     }
   },
   "metadata": {

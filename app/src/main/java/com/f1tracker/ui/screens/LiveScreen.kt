@@ -696,20 +696,20 @@ private fun getTyreColor(compound: String?): Color {
     }
 }
 
-// Get team color for a driver
+// Get team color for a driver - reads from JSON via F1DataProvider
 private fun getTeamColor(teamName: String?): Color {
-    return when {
-        teamName?.contains("Red Bull", ignoreCase = true) == true -> Color(0xFF3671C6)
-        teamName?.contains("Ferrari", ignoreCase = true) == true -> Color(0xFFE8002D)
-        teamName?.contains("Mercedes", ignoreCase = true) == true -> Color(0xFF27F4D2)
-        teamName?.contains("McLaren", ignoreCase = true) == true -> Color(0xFFFF8000)
-        teamName?.contains("Aston Martin", ignoreCase = true) == true -> Color(0xFF229971)
-        teamName?.contains("Alpine", ignoreCase = true) == true -> Color(0xFFFF87BC)
-        teamName?.contains("Williams", ignoreCase = true) == true -> Color(0xFF64C4FF)
-        teamName?.contains("RB", ignoreCase = true) == true -> Color(0xFF6692FF)
-        teamName?.contains("Kick Sauber", ignoreCase = true) == true -> Color(0xFF52E252)
-        teamName?.contains("Haas", ignoreCase = true) == true -> Color(0xFFB6BABD)
-        else -> Color(0xFF888888)
+    if (teamName == null) return Color(0xFF888888)
+    
+    // Try to get color from F1DataProvider
+    val colorHex = com.f1tracker.data.local.F1DataProvider.getTeamColorByName(teamName)
+    return if (colorHex != null) {
+        try {
+            Color(android.graphics.Color.parseColor("#$colorHex"))
+        } catch (e: Exception) {
+            Color(0xFF888888)
+        }
+    } else {
+        Color(0xFF888888) // Fallback gray
     }
 }
 
@@ -1204,48 +1204,14 @@ private fun Container(
 private fun generateDriverCode(firstName: String?, lastName: String?): String {
     if (firstName.isNullOrEmpty() && lastName.isNullOrEmpty()) return "???"
     
-    // Create full name key for lookup
-    val fullName = "${firstName?.trim()?.lowercase() ?: ""} ${lastName?.trim()?.lowercase() ?: ""}".trim()
+    // Create full name for lookup
+    val fullName = "${firstName?.trim() ?: ""} ${lastName?.trim() ?: ""}".trim()
     
-    // Comprehensive driver name to code mapping
-    val driverMap = mapOf(
-        // Current Grid 2025
-        "max verstappen" to "VER",
-        "lewis hamilton" to "HAM",
-        "charles leclerc" to "LEC",
-        "carlos sainz" to "SAI",
-        "george russell" to "RUS",
-        "lando norris" to "NOR",
-        "oscar piastri" to "PIA",
-        "fernando alonso" to "ALO",
-        "lance stroll" to "STR",
-        "esteban ocon" to "OCO",
-        "pierre gasly" to "GAS",
-        "alex albon" to "ALB",
-        "franco colapinto" to "COL",
-        "yuki tsunoda" to "TSU",
-        "liam lawson" to "LAW",
-        "nico hulkenberg" to "HUL",
-        "kevin magnussen" to "MAG",
-        "oliver bearman" to "BEA",
-        "valtteri bottas" to "BOT",
-        "guanyu zhou" to "ZHO",
-        "kimi antonelli" to "ANT",
-        "andrea kimi antonelli" to "ANT",
-        "isack hadjar" to "HAD",
-        "gabriel bortoleto" to "BOR",
-        // Additional variations
-        "sergio perez" to "PER",
-        "sergio pérez" to "PER",
-        "checo perez" to "PER"
-    )
-    
-    // Try exact match first
-    driverMap[fullName]?.let { return it }
-    
-    // Try matching by last name only
-    val lastNameLower = lastName?.trim()?.lowercase()
-    driverMap.entries.find { it.key.endsWith(" $lastNameLower") }?.let { return it.value }
+    // Try to get driver code from F1DataProvider (reads from JSON)
+    val driver = com.f1tracker.data.local.F1DataProvider.getDriverByName(fullName)
+    if (driver != null) {
+        return driver.code
+    }
     
     // Fallback: generate code from name
     return if (!firstName.isNullOrEmpty() && !lastName.isNullOrEmpty()) {
@@ -1311,20 +1277,8 @@ private fun LiveDriverRow(
     // Generate 3-letter abbreviation
     val driverCode = generateDriverCode(driver.firstName, driver.lastName)
     
-    // Map team name to color
-    val teamColor = when {
-        driver.externalTeam?.contains("Red Bull", ignoreCase = true) == true -> Color(0xFF3671C6)
-        driver.externalTeam?.contains("Ferrari", ignoreCase = true) == true -> Color(0xFFE8002D)
-        driver.externalTeam?.contains("Mercedes", ignoreCase = true) == true -> Color(0xFF27F4D2)
-        driver.externalTeam?.contains("McLaren", ignoreCase = true) == true -> Color(0xFFFF8000)
-        driver.externalTeam?.contains("Aston Martin", ignoreCase = true) == true -> Color(0xFF229971)
-        driver.externalTeam?.contains("Alpine", ignoreCase = true) == true -> Color(0xFFFF87BC)
-        driver.externalTeam?.contains("Williams", ignoreCase = true) == true -> Color(0xFF64C4FF)
-        driver.externalTeam?.contains("RB", ignoreCase = true) == true -> Color(0xFF6692FF)
-        driver.externalTeam?.contains("Kick Sauber", ignoreCase = true) == true -> Color(0xFF52E252)
-        driver.externalTeam?.contains("Haas", ignoreCase = true) == true -> Color(0xFFB6BABD)
-        else -> Color(0xFF888888)
-    }
+    // Map team name to color - use centralized function
+    val teamColor = getTeamColor(driver.externalTeam)
     
     // Position-based accent color
     val positionColor = when (driver.positionDisplay?.toIntOrNull()) {
