@@ -7,7 +7,7 @@
     "publishedAt": "2025-12-09T14:08:39Z",
     "channelTitle": "FuelUpDaily",
     "channelScore": 0.5,
-    "viewCount": "2",
+    "viewCount": "20",
     "likeCount": "0",
     "durationSec": 497,
     "tags": [
@@ -23,8 +23,8 @@
     "publishedAt": "2025-12-07T19:10:00Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "94736",
-    "likeCount": "3173",
+    "viewCount": "95304",
+    "likeCount": "3182",
     "durationSec": 1118,
     "tags": [
       "ANALYSIS"
@@ -39,7 +39,7 @@
     "publishedAt": "2025-12-07T01:19:17Z",
     "channelTitle": "mobile explain 2025",
     "channelScore": 0.5,
-    "viewCount": "331",
+    "viewCount": "358",
     "likeCount": "0",
     "durationSec": 199,
     "tags": [
@@ -55,7 +55,7 @@
     "publishedAt": "2025-12-06T12:41:09Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "10186",
+    "viewCount": "10238",
     "likeCount": "819",
     "durationSec": 86,
     "tags": [
@@ -79,6 +79,22 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=3CRcgnD_7XY"
+  },
+  {
+    "id": "kKd4_XOHusA",
+    "title": "How good is Max Verstappen? A data analysis",
+    "description": "The full analysis, including the Python code and extra charts that didn't make the final cut, is available in my repository below.\n\n📂 Full Code & Analysis (GitHub): https://github.com/oaojVSM/f1_analytics\n\n📊 Data Source: The historical data used in this analysis was provided by the Jolpica-F1 API (based on the Ergast Developer API). 🔗 https://github.com/jolpica/jolpica-f1\n\nA special thanks to the Jolpica project team for keeping this database open and free for the community.\n\ne-mail: refactor",
+    "thumbnail": "https://i.ytimg.com/vi/kKd4_XOHusA/maxresdefault.jpg",
+    "publishedAt": "2025-12-02T23:16:06Z",
+    "channelTitle": "Refactor F1",
+    "channelScore": 0.5,
+    "viewCount": "136065",
+    "likeCount": "6022",
+    "durationSec": 1420,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=kKd4_XOHusA"
   },
   {
     "id": "VZlT6fANOIU",
@@ -152,8 +168,8 @@
     "publishedAt": "2025-11-25T18:03:20Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "372872",
-    "likeCount": "6934",
+    "viewCount": "381675",
+    "likeCount": "7072",
     "durationSec": 695,
     "tags": [
       "ANALYSIS"
@@ -168,8 +184,8 @@
     "publishedAt": "2025-11-25T16:30:31Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "162425",
-    "likeCount": "3382",
+    "viewCount": "162463",
+    "likeCount": "3383",
     "durationSec": 740,
     "tags": [
       "ANALYSIS"
@@ -200,7 +216,7 @@
     "publishedAt": "2025-11-23T15:13:39Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "550416",
+    "viewCount": "550430",
     "likeCount": "10397",
     "durationSec": 631,
     "tags": [
@@ -216,7 +232,7 @@
     "publishedAt": "2025-11-23T11:21:51Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "129073",
+    "viewCount": "129078",
     "likeCount": "3654",
     "durationSec": 1202,
     "tags": [
@@ -264,7 +280,7 @@
     "publishedAt": "2025-11-10T03:21:36Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "348993",
+    "viewCount": "349000",
     "likeCount": "7129",
     "durationSec": 648,
     "tags": [
@@ -280,7 +296,7 @@
     "publishedAt": "2025-11-09T21:57:45Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "110037",
+    "viewCount": "110038",
     "likeCount": "3507",
     "durationSec": 1160,
     "tags": [
@@ -296,7 +312,7 @@
     "publishedAt": "2025-11-09T03:53:19Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "4368",
+    "viewCount": "4369",
     "likeCount": "181",
     "durationSec": 1247,
     "tags": [
@@ -329,7 +345,7 @@
     "publishedAt": "2025-10-27T17:57:39Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "377660",
+    "viewCount": "377688",
     "likeCount": "6978",
     "durationSec": 592,
     "tags": [
@@ -345,7 +361,7 @@
     "publishedAt": "2025-10-27T06:51:31Z",
     "channelTitle": "Kym Illman",
     "channelScore": 0.5,
-    "viewCount": "210169",
+    "viewCount": "210175",
     "likeCount": "3398",
     "durationSec": 64,
     "tags": [
@@ -361,44 +377,12 @@
     "publishedAt": "2025-10-27T03:13:37Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "276572",
+    "viewCount": "276575",
     "likeCount": "4918",
     "durationSec": 526,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=9_DTz4z3eJw"
-  },
-  {
-    "id": "a8BbQ-a3VWQ",
-    "title": "2025 F1 Mexican GP Analysis",
-    "description": "2025 F1 Mexican GP Analysis. 👀 Driver Coach Martin Villari provides insight into the technical and tactical sides of the Mexican GP on YouTube. Thoughts? 💭\nFULL VIDEO: https://youtu.be/6ngakSMtf64  #mexicangp #f1\n\n❓ Have a question or thought? Drop it in the comments for me!\n👍 Like the video? Give it a thumbs up!\n🔔 Like this content and insight? Subscribe to my channel and turn the bell icon on!\n\nCHAPTERS:\n\n-------------------------------------------------------------------------------------",
-    "thumbnail": "https://i.ytimg.com/vi/a8BbQ-a3VWQ/maxresdefault.jpg",
-    "publishedAt": "2025-10-27T00:55:00Z",
-    "channelTitle": "lowerlaptime",
-    "channelScore": 0.5,
-    "viewCount": "3082",
-    "likeCount": "82",
-    "durationSec": 112,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=a8BbQ-a3VWQ"
-  },
-  {
-    "id": "U5MIuQwEHhI",
-    "title": "2025 F1 MEXICAN GP race analysis by Peter Windsor",
-    "description": "On the face of it, a Lando Norris/McLaren-Mercedes walkover seemed inevitable.  In reality, the 2025 Mexican GP was anything but. It produced stunning drives not only from Lando but also from Max Verstappen, Charles Leclerc and Oliver Bearman. It included a dramatically-spectacular first corner melée. And it created, one-on-one, a Max-versus-Charles, Red Bull-versus-Ferrari, soft Pirelli-versus-Hard closing battle for P2 that...ended in a VSC. It had almost everything, in other words - as Peter ",
-    "thumbnail": "https://i.ytimg.com/vi/U5MIuQwEHhI/maxresdefault.jpg",
-    "publishedAt": "2025-10-27T00:46:19Z",
-    "channelTitle": "Peter Windsor",
-    "channelScore": 0.5,
-    "viewCount": "93616",
-    "likeCount": "3009",
-    "durationSec": 1719,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=U5MIuQwEHhI"
   }
 ]
