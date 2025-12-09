@@ -92,8 +92,8 @@ async function run() {
         console.log(`📡 Fetching from ${ALL_ACCOUNTS.length} accounts...`);
 
         // 1. SEQUENTIAL FETCH FROM ALL ACCOUNTS (Rate Limit Safe)
-        // Reduced limit to 10 to lower CPU cost (Step 4)
-        const fields = 'media.limit(10){id,caption,media_url,thumbnail_url,permalink,media_type,timestamp,like_count,comments_count,children{id,media_type,media_url,thumbnail_url,timestamp}}';
+        // Increased to 25 to get more fresh URLs - prevents stale content
+        const fields = 'media.limit(25){id,caption,media_url,thumbnail_url,permalink,media_type,timestamp,like_count,comments_count,children{id,media_type,media_url,thumbnail_url,timestamp}}';
         let allPosts = [];
 
         for (const username of ALL_ACCOUNTS) {
@@ -176,15 +176,17 @@ async function run() {
         // 4. MERGE & DEDUPLICATE
         const feedMap = new Map();
         const archiveMap = new Map();
+        const freshPostIds = new Set(); // Track posts with fresh URLs
 
         // Existing data
         existingFeed.forEach(p => feedMap.set(p.id, p));
         existingArchive.forEach(p => archiveMap.set(p.id, p));
 
-        // New data (overwrites to update metrics)
+        // New data (overwrites to update metrics AND URLs)
         allPosts.forEach(p => {
             feedMap.set(p.id, p);
             archiveMap.set(p.id, p);
+            freshPostIds.add(p.id); // Mark as having fresh URLs
         });
 
         // 5. DEDUPLICATE & MERGE (Audio Workaround)
@@ -249,14 +251,30 @@ async function run() {
 
         // 7. GENERATE DUAL-FILE OUTPUT
 
-        // A) MIXED FEED (f1_feed.json) - Images + Videos, limit 60
-        const finalFeed = sortedFeed.slice(0, MAX_FEED_POSTS);
+        // A) MIXED FEED (f1_feed.json) - Images + Videos
+        // Filter: Videos need fresh URLs (expire in 4-6h), photos can be stale (expire in 24-48h)
+        const finalFeed = sortedFeed
+            .filter(p => {
+                // Videos require fresh URLs
+                if (p.media_type === 'VIDEO' && !freshPostIds.has(p.id)) {
+                    console.log(`   ⏭️ Skipping stale video from feed: ${p.id}`);
+                    return false;
+                }
+                return true;
+            })
+            .slice(0, MAX_FEED_POSTS);
         fs.writeFileSync(FEED_FILE, JSON.stringify(finalFeed, null, 2));
         console.log(`💾 Saved ${finalFeed.length} posts to ${FEED_FILE}`);
 
-        // B) REELS FEED (f1_reels.json) - Only posts with actual video content
+        // B) REELS FEED (f1_reels.json) - Only posts with actual video content AND fresh URLs
         const videoFeed = sortedFeed
             .filter(p => {
+                // CRITICAL: Only include posts with fresh URLs (fetched in this run)
+                if (!freshPostIds.has(p.id)) {
+                    console.log(`   ⏭️ Skipping stale URL post: ${p.id}`);
+                    return false;
+                }
+
                 // Pure video posts - always include
                 if (p.media_type === 'VIDEO') return true;
 
