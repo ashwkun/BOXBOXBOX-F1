@@ -199,9 +199,9 @@ async function run() {
         ]);
 
         // Save individual feeds
-        fs.writeFileSync('f1_official.json', JSON.stringify(official, null, 2));
-        fs.writeFileSync('f1_trending.json', JSON.stringify(trending, null, 2));
-        fs.writeFileSync('f1_analysis.json', JSON.stringify(analysis, null, 2));
+        fs.writeFileSync('data/f1_official.json', JSON.stringify(official, null, 2));
+        fs.writeFileSync('data/f1_trending.json', JSON.stringify(trending, null, 2));
+        fs.writeFileSync('data/f1_analysis.json', JSON.stringify(analysis, null, 2));
 
         // Create merged feed with deduplication
         const seenIds = new Set();
