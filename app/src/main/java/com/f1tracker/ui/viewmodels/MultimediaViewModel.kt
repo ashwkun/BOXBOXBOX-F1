@@ -165,8 +165,8 @@ private fun sortByEngagement(posts: List<com.f1tracker.data.models.InstagramPost
     /**
      * Load videos from multiple sources:
      * 1. YouTube RSS feed (real-time, 15 videos, official F1 only)
-     * 2. f1_youtube.json (merged feed with tags and channel scores)
-     * 3. f1_highlights.json (official F1 session highlights)
+     * 2. data/f1_youtube.json (merged feed with tags and channel scores)
+     * 3. data/f1_highlights.json (official F1 session highlights)
      * 
      * Deduplicates by videoId, applies smart scoring, and sorts.
      */
@@ -192,7 +192,7 @@ private fun sortByEngagement(posts: List<com.f1tracker.data.models.InstagramPost
                 }
             }
             
-            // Source 2: f1_youtube.json (merged multi-feed with tags and scores)
+            // Source 2: data/f1_youtube.json (merged multi-feed with tags and scores)
             val jsonResult = repository.getYouTubeVideosFromJson()
             jsonResult.onSuccess { videos ->
                 videos.forEach { video ->
@@ -213,7 +213,7 @@ private fun sortByEngagement(posts: List<com.f1tracker.data.models.InstagramPost
                 }
             }
             
-            // Source 3: f1_highlights.json (official session highlights)
+            // Source 3: data/f1_highlights.json (official session highlights)
             val highlightsResult = repository.getHighlights()
             highlightsResult.onSuccess { highlights ->
                 highlights.forEach { highlight ->

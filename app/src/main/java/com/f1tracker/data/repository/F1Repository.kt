@@ -445,7 +445,7 @@ class F1RepositoryImpl @Inject constructor(
 
     override suspend fun getHighlights(): Result<List<com.f1tracker.data.models.HighlightVideo>> = withContext(Dispatchers.IO) {
         try {
-            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_highlights.json"
+            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/data/f1_highlights.json"
             val response = f1ApiService.getHighlights(url)
             Result.success(response)
         } catch (e: Exception) {
@@ -456,7 +456,7 @@ class F1RepositoryImpl @Inject constructor(
 
     override suspend fun getYouTubeVideosFromJson(): Result<List<com.f1tracker.data.models.YouTubeVideo>> = withContext(Dispatchers.IO) {
         try {
-            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_youtube.json"
+            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/data/f1_youtube.json"
             val response = f1ApiService.getYouTubeVideosJson(url)
             Result.success(response)
         } catch (e: Exception) {

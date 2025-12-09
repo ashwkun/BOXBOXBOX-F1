@@ -3,8 +3,8 @@ package com.f1tracker.data.models
 import com.google.gson.annotations.SerializedName
 
 /**
- * Model for videos from f1_youtube.json and specialized feeds
- * (f1_official.json, f1_trending.json, f1_analysis.json)
+ * Model for videos from data/f1_youtube.json and specialized feeds
+ * (data/f1_official.json, data/f1_trending.json, data/f1_analysis.json)
  */
 data class YouTubeVideo(
     @SerializedName("id") val id: String,
