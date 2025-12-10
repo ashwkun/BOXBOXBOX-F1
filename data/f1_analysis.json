@@ -7,7 +7,7 @@
     "publishedAt": "2025-12-09T14:08:39Z",
     "channelTitle": "FuelUpDaily",
     "channelScore": 0.5,
-    "viewCount": "25",
+    "viewCount": "48",
     "likeCount": "1",
     "durationSec": 497,
     "tags": [
@@ -23,8 +23,8 @@
     "publishedAt": "2025-12-07T19:10:00Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "95846",
-    "likeCount": "3189",
+    "viewCount": "96384",
+    "likeCount": "3201",
     "durationSec": 1118,
     "tags": [
       "ANALYSIS"
@@ -39,7 +39,7 @@
     "publishedAt": "2025-12-07T01:19:17Z",
     "channelTitle": "mobile explain 2025",
     "channelScore": 0.5,
-    "viewCount": "379",
+    "viewCount": "467",
     "likeCount": "0",
     "durationSec": 199,
     "tags": [
@@ -55,8 +55,8 @@
     "publishedAt": "2025-12-06T12:41:09Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "10238",
-    "likeCount": "819",
+    "viewCount": "10273",
+    "likeCount": "820",
     "durationSec": 86,
     "tags": [
       "FP",
@@ -81,6 +81,22 @@
     "url": "https://www.youtube.com/watch?v=3CRcgnD_7XY"
   },
   {
+    "id": "KwKTHRITxp4",
+    "title": "A Closer Look At McLaren's Costly Error In Qatar | Jolyon Palmer’s F1 TV Analysis",
+    "description": "Jolyon Palmer takes a close look at exactly what went wrong for McLaren from every angle during Sunday's race in Qatar. \n\nFor more F1® videos, visit: https://www.Formula1.com\n\nVisit our store: https://f1store.formula1.com/\n\nFollow F1®:\nhttps://www.instagram.com/F1\nhttps://www.facebook.com/Formula1/\nhttps://www.twitter.com/F1\nhttps://www.twitch.tv/formula1\nhttps://www.tiktok.com/@f1\n\n#F1 #QatarGP",
+    "thumbnail": "https://i.ytimg.com/vi/KwKTHRITxp4/maxresdefault.jpg",
+    "publishedAt": "2025-12-03T17:30:07Z",
+    "channelTitle": "FORMULA 1",
+    "channelScore": 1,
+    "viewCount": "206881",
+    "likeCount": "4019",
+    "durationSec": 879,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=KwKTHRITxp4"
+  },
+  {
     "id": "kKd4_XOHusA",
     "title": "How good is Max Verstappen? A data analysis",
     "description": "The full analysis, including the Python code and extra charts that didn't make the final cut, is available in my repository below.\n\n📂 Full Code & Analysis (GitHub): https://github.com/oaojVSM/f1_analytics\n\n📊 Data Source: The historical data used in this analysis was provided by the Jolpica-F1 API (based on the Ergast Developer API). 🔗 https://github.com/jolpica/jolpica-f1\n\nA special thanks to the Jolpica project team for keeping this database open and free for the community.\n\ne-mail: refactor",
@@ -88,8 +104,8 @@
     "publishedAt": "2025-12-02T23:16:06Z",
     "channelTitle": "Refactor F1",
     "channelScore": 0.5,
-    "viewCount": "136364",
-    "likeCount": "6030",
+    "viewCount": "136943",
+    "likeCount": "6051",
     "durationSec": 1420,
     "tags": [
       "ANALYSIS"
@@ -111,6 +127,22 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=VZlT6fANOIU"
+  },
+  {
+    "id": "3ZGBpcwCnHI",
+    "title": "Zak Brown & Andrea Stella Explain McLaren's Pit-Stop Conundrum | 2025 Qatar Grand Prix",
+    "description": "McLaren CEO Zak Brown & Team Principal Andrea Stella join the post-race show to discuss their difficult decisions following an early safety car in Qatar.\n\nFor more F1® videos, visit: https://www.Formula1.com\n\nVisit our store: https://f1store.formula1.com/\n\nFollow F1®:\nhttps://www.instagram.com/F1\nhttps://www.facebook.com/Formula1/\nhttps://www.twitter.com/F1\nhttps://www.twitch.tv/formula1\nhttps://www.tiktok.com/@f1\n\n#F1 #QatarGP",
+    "thumbnail": "https://i.ytimg.com/vi/3ZGBpcwCnHI/maxresdefault.jpg",
+    "publishedAt": "2025-11-30T19:24:32Z",
+    "channelTitle": "FORMULA 1",
+    "channelScore": 1,
+    "viewCount": "389560",
+    "likeCount": "6451",
+    "durationSec": 264,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=3ZGBpcwCnHI"
   },
   {
     "id": "__-Pe2IPphg",
@@ -161,6 +193,23 @@
     "url": "https://www.youtube.com/watch?v=uTKC07fufK0"
   },
   {
+    "id": "YRLbx8Vm4Kg",
+    "title": "Verstappen vs Tsunoda: Shock Qatar GP Qualifying Explained! | F1 2025 Sprint Race Analysis",
+    "description": "Max Verstappen suffered a surprise defeat to Yuki Tsunoda in Qatar GP sprint qualifying! We break down what went wrong for Verstappen, how Tsunoda turned his session around, and what this means for Red Bull's 2026 driver lineup. \nIn this video, we'll analyze:\nVerstappen's floor damage and its impact on his lap times\nTsunoda's bold setup change and its payoff\nThe significance of Tsunoda outpacing Verstappen for the first time\nRed Bull's 2026 driver plans and Tsunoda's future\nDon't miss this in-de",
+    "thumbnail": "https://i.ytimg.com/vi/YRLbx8Vm4Kg/maxresdefault.jpg",
+    "publishedAt": "2025-11-28T20:32:47Z",
+    "channelTitle": "The Everything Channel",
+    "channelScore": 0.5,
+    "viewCount": "81",
+    "likeCount": "1",
+    "durationSec": 314,
+    "tags": [
+      "QUALI",
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=YRLbx8Vm4Kg"
+  },
+  {
     "id": "ij4376o04ow",
     "title": "New F1 2026 car pace fears explained",
     "description": "This week, you can get 50% off your first month when you join The Race Members’ Club as part of our special Black Friday promotion: https://www.patreon.com/c/TheRace\n\nDisagreement over whether F1’s brand new cars in 2026 will be closer to Formula 2 cars in pace has been an unexpectedly polarising point of discussion as next year’s rules overhaul gets closer. That the new cars will be slower next year has never been in dispute. The question is how bad it will be. \n\n00:00 An alarming comparison\n03",
@@ -168,8 +217,8 @@
     "publishedAt": "2025-11-25T18:03:20Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "388116",
-    "likeCount": "7118",
+    "viewCount": "393828",
+    "likeCount": "7184",
     "durationSec": 695,
     "tags": [
       "ANALYSIS"
@@ -184,7 +233,7 @@
     "publishedAt": "2025-11-25T16:30:31Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "162488",
+    "viewCount": "162522",
     "likeCount": "3383",
     "durationSec": 740,
     "tags": [
@@ -216,7 +265,7 @@
     "publishedAt": "2025-11-23T15:13:39Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "550432",
+    "viewCount": "550455",
     "likeCount": "10397",
     "durationSec": 631,
     "tags": [
@@ -232,7 +281,7 @@
     "publishedAt": "2025-11-23T11:21:51Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "129079",
+    "viewCount": "129084",
     "likeCount": "3654",
     "durationSec": 1202,
     "tags": [
@@ -248,7 +297,7 @@
     "publishedAt": "2025-11-23T06:18:26Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "10096",
+    "viewCount": "10095",
     "likeCount": "294",
     "durationSec": 1403,
     "tags": [
@@ -280,7 +329,7 @@
     "publishedAt": "2025-11-10T03:21:36Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "349007",
+    "viewCount": "349021",
     "likeCount": "7129",
     "durationSec": 648,
     "tags": [
@@ -296,7 +345,7 @@
     "publishedAt": "2025-11-09T21:57:45Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "110039",
+    "viewCount": "110044",
     "likeCount": "3507",
     "durationSec": 1160,
     "tags": [
@@ -320,69 +369,5 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=Y3qAKH6lCgY"
-  },
-  {
-    "id": "_PRLpDwFJcU",
-    "title": "The Wild Four-Way Fight To Turn 1 In Mexico | Jolyon Palmer’s F1 TV Analysis",
-    "description": "Former F1 driver Jolyon Palmer analyses the lengthy run to Turn 1 in Mexico, as the race leaders went four-wide in one of the most dramatic starts of the season.\n\nFor more F1® videos, visit: https://www.Formula1.com\n\nVisit our store: https://f1store.formula1.com/\n\nFollow F1®:\nhttps://www.instagram.com/F1\nhttps://www.facebook.com/Formula1/\nhttps://www.twitter.com/F1\nhttps://www.twitch.tv/formula1\nhttps://www.tiktok.com/@f1\n\n#F1 #MexicoGP",
-    "thumbnail": "https://i.ytimg.com/vi/_PRLpDwFJcU/maxresdefault.jpg",
-    "publishedAt": "2025-10-28T17:01:05Z",
-    "channelTitle": "FORMULA 1",
-    "channelScore": 1,
-    "viewCount": "232276",
-    "likeCount": "4922",
-    "durationSec": 583,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=_PRLpDwFJcU"
-  },
-  {
-    "id": "AoeHy08NKP0",
-    "title": "What's really behind Oscar Piastri's strange F1 title slump",
-    "description": "Oscar Piastri’s F1 championship lead has crumbled to nothing after back-to-back difficult weekends and a big performance swing towards McLaren team-mate Lando Norris. \n\nPiastri’s drop-off has been so sudden, and so severe, it seems very strange on the surface, as our latest video explains. \n\n00:00 Piastri’s strange slump\n02:00 Conspiracy theories\n04:45 Extreme technique effect?\n07:35 Title bid collapsing?\n\nSubscribe: http://the-race.com/youtube_subscribe\nWebsite: http://the-race.com/\nTwitter: @w",
-    "thumbnail": "https://i.ytimg.com/vi/AoeHy08NKP0/maxresdefault.jpg",
-    "publishedAt": "2025-10-27T17:57:39Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "377704",
-    "likeCount": "6978",
-    "durationSec": 592,
-    "tags": [
-      "GENERAL"
-    ],
-    "url": "https://www.youtube.com/watch?v=AoeHy08NKP0"
-  },
-  {
-    "id": "tdd5kx4mYhc",
-    "title": "Why LANDO NORRIS Was Booed EXPLAINED!",
-    "description": "Lando Norris was BOOED over the entire Mexican GP weekend, but why was the new Championship leader the target of the Mexican fans' jeers?\n\n#f1 #formula1 #mexicangp",
-    "thumbnail": "https://i.ytimg.com/vi/tdd5kx4mYhc/maxresdefault.jpg",
-    "publishedAt": "2025-10-27T06:51:31Z",
-    "channelTitle": "Kym Illman",
-    "channelScore": 0.5,
-    "viewCount": "210181",
-    "likeCount": "3398",
-    "durationSec": 64,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=tdd5kx4mYhc"
-  },
-  {
-    "id": "9_DTz4z3eJw",
-    "title": "F1’s dangerous Mexico GP marshal incident and weird ending explained",
-    "description": "A dangerous near-miss in F1's Mexican Grand Prix left one driver believing he 'could have killed' someone. Our latest video explains what happened. \n\n00:00 A scary near-miss \n00:59 How this happened \n02:09 Why it's so dangerous \n05:07 The VSC timing\n\nREAD MORE HERE: https://www.the-race.com/formula-1/fia-response-two-incidents-mexican-gp-f1-have-clear-answer-for-mexico-f1/\n\nSubscribe: http://the-race.com/youtube_subscribe\nThe Race Members' Club: https://www.patreon.com/c/TheRace\nWebsite: http://",
-    "thumbnail": "https://i.ytimg.com/vi/9_DTz4z3eJw/maxresdefault.jpg",
-    "publishedAt": "2025-10-27T03:13:37Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "276577",
-    "likeCount": "4918",
-    "durationSec": 526,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=9_DTz4z3eJw"
   }
 ]
