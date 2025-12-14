@@ -488,18 +488,16 @@ private fun DriverResultRow(
 
 @Composable
 private fun getTeamColor(constructorId: String): Color {
-    return when (constructorId) {
-        "red_bull" -> Color(0xFF3671C6)
-        "ferrari" -> Color(0xFFE8002D)
-        "mercedes" -> Color(0xFF27F4D2)
-        "mclaren" -> Color(0xFFFF8000)
-        "aston_martin" -> Color(0xFF229971)
-        "alpine" -> Color(0xFF0093CC)
-        "williams" -> Color(0xFF64C4FF)
-        "rb" -> Color(0xFF6692FF)
-        "sauber" -> Color(0xFF52E252)
-        "haas" -> Color(0xFFB6BABD)
-        else -> Color.Gray
+    // Read color from F1DataProvider (loaded from JSON)
+    val colorHex = F1DataProvider.getTeamColorHex(constructorId)
+    return if (colorHex != null) {
+        try {
+            Color(android.graphics.Color.parseColor("#$colorHex"))
+        } catch (e: Exception) {
+            Color.Gray
+        }
+    } else {
+        Color.Gray
     }
 }
 

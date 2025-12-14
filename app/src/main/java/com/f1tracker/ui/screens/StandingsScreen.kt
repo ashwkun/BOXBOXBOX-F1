@@ -59,7 +59,7 @@ fun StandingsScreen(
     val error by viewModel.error.collectAsState()
     
     var showYearDropdown by remember { mutableStateOf(false) }
-    val availableYears = (2022..2025).toList().reversed()
+    val availableYears = com.f1tracker.data.SeasonConfig.AVAILABLE_YEARS
     
     // Reset to current year when leaving the screen
     DisposableEffect(Unit) {
@@ -117,17 +117,36 @@ fun StandingsScreen(
                 DropdownMenu(
                     expanded = showYearDropdown,
                     onDismissRequest = { showYearDropdown = false },
-                    modifier = Modifier.background(Color(0xFF0F0F0F))
+                    modifier = Modifier
+                        .background(Color(0xFF0F0F0F))
+                        .heightIn(max = 250.dp) // Limit height for scrollability
                 ) {
-                    availableYears.forEach { year ->
+                    // Show only recent seasons (last 5 years) for cleaner UI
+                    availableYears.take(5).forEach { year ->
+                        val isSelected = year.toString() == selectedYear
                         DropdownMenuItem(
                             text = {
-                                Text(
-                                    text = year.toString(),
-                                    fontFamily = michromaFont,
-                                    fontSize = 12.sp,
-                                    color = if (year.toString() == selectedYear) Color(0xFFFF0080) else Color.White
-                                )
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    // Selection indicator
+                                    Box(
+                                        modifier = Modifier
+                                            .size(4.dp)
+                                            .background(
+                                                if (isSelected) Color(0xFFFF0080) else Color.Transparent,
+                                                CircleShape
+                                            )
+                                    )
+                                    Text(
+                                        text = year.toString(),
+                                        fontFamily = michromaFont,
+                                        fontSize = 12.sp,
+                                        color = if (isSelected) Color(0xFFFF0080) else Color.White,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                                    )
+                                }
                             },
                             onClick = {
                                 viewModel.selectYear(year.toString())
@@ -711,13 +730,21 @@ private fun PodiumConstructorCard(
     Box(
         modifier = modifier
             .fillMaxHeight()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                color = Color.White.copy(alpha = 0.08f),
+                shape = RoundedCornerShape(12.dp)
+            )
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.White,
-                        teamColor
-                    )
+                        Color(0xFF0D0D0D),           // Near black at top
+                        Color(0xFF111111),           // Slightly lighter
+                        teamColor.copy(alpha = 0.4f), // Team color blends in
+                        teamColor.copy(alpha = 0.6f)  // Stronger team color at bottom
+                    ),
+                    startY = 0f
                 )
             )
     ) {
@@ -729,7 +756,6 @@ private fun PodiumConstructorCard(
                     .clip(RectangleShape),
                 contentAlignment = Alignment.Center
             ) {
-                // Use AsyncImage directly like in ConstructorStandingsCard
                 AsyncImage(
                     model = teamInfo.carImageUrl,
                     contentDescription = standing.constructor.name,
@@ -751,35 +777,27 @@ private fun PodiumConstructorCard(
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            Color.Black.copy(alpha = 0.6f),
-                            Color.Black
+                            Color.Black.copy(alpha = 0.5f),
+                            Color.Black.copy(alpha = 0.85f)
                         ),
-                        startY = 150f
+                        startY = 100f
                     )
                 )
         )
         
-        // Top Logo (No background container)
+        // Top Logo
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 12.dp),
+                .padding(top = 14.dp),
             contentAlignment = Alignment.TopCenter
         ) {
-            val logoResource = getTeamBigLogo(standing.constructor.constructorId)
-            
-            if (logoResource != null) {
-                Image(
-                    painter = painterResource(id = logoResource),
-                    contentDescription = null,
-                    modifier = Modifier.size(80.dp),
-                    contentScale = ContentScale.Fit
-                )
-            } else if (teamInfo?.symbolUrl != null) {
+            val logoUrl = teamInfo?.fullLogoUrl ?: teamInfo?.symbolUrl
+            if (logoUrl != null) {
                 SubcomposeAsyncImage(
-                    model = teamInfo.symbolUrl,
-                    contentDescription = null,
-                    modifier = Modifier.size(80.dp),
+                    model = logoUrl,
+                    contentDescription = standing.constructor.name,
+                    modifier = Modifier.size(72.dp),
                     contentScale = ContentScale.Fit
                 )
             }
@@ -844,22 +862,7 @@ private fun PodiumConstructorCard(
     }
 }
 
-@Composable
-private fun getTeamBigLogo(constructorId: String): Int? {
-    return when (constructorId) {
-        "mclaren" -> R.drawable.mclaren
-        "mercedes" -> R.drawable.mercedes
-        "red_bull" -> R.drawable.red_bull
-        "ferrari" -> R.drawable.ferrari
-        "williams" -> R.drawable.williams
-        "rb" -> R.drawable.racing_bulls
-        "aston_martin" -> R.drawable.aston_martin
-        "haas" -> R.drawable.haas
-        "sauber" -> R.drawable.kick_sauber
-        "alpine" -> R.drawable.alpine
-        else -> null
-    }
-}
+
 
 private fun formatConstructorName(name: String): String {
     return name.replace("F1 Team", "", ignoreCase = true)

@@ -185,11 +185,11 @@ private fun ConstructorRow(
                 // Spacer for left side (where car image is)
                 Spacer(modifier = Modifier.weight(0.3f))
                 
-                // Center: Big team logo from local folder (bigger size)
-                val logoResource = getTeamBigLogo(standing.constructor.constructorId)
-                if (logoResource != null) {
-                    Image(
-                        painter = painterResource(id = logoResource),
+                // Center: Team logo from JSON (no local drawables)
+                val logoUrl = teamInfo?.fullLogoUrl ?: teamInfo?.symbolUrl
+                if (logoUrl != null) {
+                    AsyncImage(
+                        model = logoUrl,
                         contentDescription = teamInfo?.displayName,
                         modifier = Modifier
                             .height(50.dp)
@@ -209,23 +209,6 @@ private fun ConstructorRow(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun getTeamBigLogo(constructorId: String): Int? {
-    return when (constructorId) {
-        "mclaren" -> R.drawable.mclaren
-        "mercedes" -> R.drawable.mercedes
-        "red_bull" -> R.drawable.red_bull
-        "ferrari" -> R.drawable.ferrari
-        "williams" -> R.drawable.williams
-        "rb" -> R.drawable.racing_bulls
-        "aston_martin" -> R.drawable.aston_martin
-        "haas" -> R.drawable.haas
-        "sauber" -> R.drawable.kick_sauber
-        "alpine" -> R.drawable.alpine
-        else -> null
     }
 }
 

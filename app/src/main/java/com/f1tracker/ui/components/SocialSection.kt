@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.f1tracker.R
 import com.f1tracker.data.models.InstagramPost
+import com.f1tracker.ui.screens.feed.components.InstagramPostCard
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
