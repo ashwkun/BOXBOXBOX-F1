@@ -391,7 +391,7 @@ class F1RepositoryImpl @Inject constructor(
             }
             
             // Fetch fresh - append timestamp ONLY if forcing refresh to bypass all caches
-            val baseUrl = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_feed.json"
+            val baseUrl = "https://ashwkun.github.io/BOXBOXBOX-F1/data/f1_feed.json"
             val url = if (forceRefresh) "$baseUrl?t=${System.currentTimeMillis()}" else baseUrl
             val response = f1ApiService.getInstagramFeed(url)
             
@@ -422,7 +422,7 @@ class F1RepositoryImpl @Inject constructor(
             }
             
             // Fetch fresh - append timestamp ONLY if forcing refresh to bypass all caches
-            val baseUrl = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_reels.json"
+            val baseUrl = "https://ashwkun.github.io/BOXBOXBOX-F1/data/f1_reels.json"
             val url = if (forceRefresh) "$baseUrl?t=${System.currentTimeMillis()}" else baseUrl
             val response = f1ApiService.getInstagramFeed(url) // Uses same endpoint, different file
             
@@ -445,7 +445,7 @@ class F1RepositoryImpl @Inject constructor(
 
     override suspend fun getHighlights(): Result<List<com.f1tracker.data.models.HighlightVideo>> = withContext(Dispatchers.IO) {
         try {
-            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_highlights.json"
+            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/data/f1_highlights.json"
             val response = f1ApiService.getHighlights(url)
             Result.success(response)
         } catch (e: Exception) {
@@ -456,7 +456,7 @@ class F1RepositoryImpl @Inject constructor(
 
     override suspend fun getYouTubeVideosFromJson(): Result<List<com.f1tracker.data.models.YouTubeVideo>> = withContext(Dispatchers.IO) {
         try {
-            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/f1_youtube.json"
+            val url = "https://ashwkun.github.io/BOXBOXBOX-F1/data/f1_youtube.json"
             val response = f1ApiService.getYouTubeVideosJson(url)
             Result.success(response)
         } catch (e: Exception) {

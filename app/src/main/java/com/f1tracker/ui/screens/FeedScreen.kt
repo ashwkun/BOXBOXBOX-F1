@@ -20,6 +20,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,7 +66,7 @@ import com.f1tracker.ui.screens.feed.tabs.NewsTab
 import com.f1tracker.ui.screens.feed.tabs.PodcastsTab
 import com.f1tracker.ui.screens.feed.tabs.LatestTab
 
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class, FlowPreview::class)
 @Composable
 fun FeedScreen(
     newsViewModel: NewsViewModel = hiltViewModel(),
@@ -95,13 +97,15 @@ fun FeedScreen(
     val selectedVideoFilter by multimediaViewModel.selectedVideoFilter.collectAsState()
     
     // Hoisted Pager State for Instagram Feed
+    // IMPORTANT: Use actual posts.size always - don't use skeleton pages
+    val vmScrollIndex = multimediaViewModel.instagramScrollIndex
     val instagramPagerState = androidx.compose.foundation.pager.rememberPagerState(
-        initialPage = multimediaViewModel.instagramScrollIndex
+        initialPage = vmScrollIndex.coerceIn(0, (instagramPosts.size - 1).coerceAtLeast(0))
     ) {
-        if (instagramPosts.isEmpty()) 3 else instagramPosts.size
+        instagramPosts.size.coerceAtLeast(1)
     }
 
-    // Scroll to specific post if requested
+    // Scroll to specific post if requested (from notification/deep link)
     LaunchedEffect(startPermalink, instagramPosts) {
         if (startPermalink != null && instagramPosts.isNotEmpty()) {
             val index = instagramPosts.indexOfFirst { it.permalink == startPermalink }
@@ -111,9 +115,11 @@ fun FeedScreen(
         }
     }
 
-    // Sync Instagram scroll state to ViewModel
-    LaunchedEffect(instagramPagerState.currentPage) {
-        multimediaViewModel.updateInstagramScrollPosition(instagramPagerState.currentPage)
+    // Sync scroll position when user scrolls (pager settles at new position)
+    LaunchedEffect(instagramPagerState.currentPage, instagramPagerState.isScrollInProgress) {
+        if (!instagramPagerState.isScrollInProgress && instagramPosts.isNotEmpty()) {
+            multimediaViewModel.updateInstagramScrollPosition(instagramPagerState.currentPage)
+        }
     }
     val isInstagramRefreshing by multimediaViewModel.isInstagramRefreshing.collectAsState()
     
@@ -202,9 +208,12 @@ fun FeedScreen(
 
     }
 
-    // Handle Navbar Refresh Trigger
+    // Handle Navbar Refresh Trigger - ONLY for NEW triggers, not when screen recreates
+    var lastProcessedTrigger by remember { mutableLongStateOf(refreshTrigger) }
     LaunchedEffect(refreshTrigger) {
-        if (refreshTrigger > 0) {
+        // Only process if this is a NEW trigger (not the initial value on screen creation)
+        if (refreshTrigger > 0 && refreshTrigger != lastProcessedTrigger) {
+            lastProcessedTrigger = refreshTrigger
             // Scroll to top and refresh current tab
             when (pagerState.currentPage) {
                 0 -> latestListState.animateScrollToItem(0)
