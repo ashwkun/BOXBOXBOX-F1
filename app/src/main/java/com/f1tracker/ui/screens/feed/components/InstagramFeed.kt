@@ -1,4 +1,4 @@
-package com.f1tracker.ui.components
+package com.f1tracker.ui.screens.feed.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background

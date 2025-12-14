@@ -5,7 +5,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import com.f1tracker.data.models.InstagramPost
-import com.f1tracker.ui.components.InstagramFeedList
+import com.f1tracker.ui.screens.feed.components.InstagramFeedList
 
 /**
  * Social tab wrapper that displays Instagram feed content.

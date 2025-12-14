@@ -95,3 +95,6 @@ lint/tmp/
 *~
 
 
+
+# Node modules
+node_modules/

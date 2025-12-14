@@ -50,7 +50,7 @@ import com.f1tracker.ui.viewmodels.NewsViewModel
 import com.f1tracker.ui.viewmodels.MultimediaViewModel
 import com.f1tracker.ui.components.TabSelector
 import com.f1tracker.ui.models.FeedItem
-import com.f1tracker.ui.components.InstagramFeedList
+import com.f1tracker.ui.screens.feed.components.InstagramFeedList
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
