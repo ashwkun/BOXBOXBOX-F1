@@ -23,8 +23,8 @@
     "publishedAt": "2025-12-07T19:10:00Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "99744",
-    "likeCount": "3244",
+    "viewCount": "99756",
+    "likeCount": "3245",
     "durationSec": 1118,
     "tags": [
       "ANALYSIS"
@@ -39,7 +39,7 @@
     "publishedAt": "2025-12-07T17:00:02Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "11214",
+    "viewCount": "11216",
     "likeCount": "464",
     "durationSec": 1732,
     "tags": [
@@ -55,8 +55,8 @@
     "publishedAt": "2025-12-06T20:30:01Z",
     "channelTitle": "Not Applicable",
     "channelScore": 0.5,
-    "viewCount": "82672",
-    "likeCount": "3623",
+    "viewCount": "82691",
+    "likeCount": "3625",
     "durationSec": 125,
     "tags": [
       "ANALYSIS"
@@ -71,7 +71,7 @@
     "publishedAt": "2025-12-06T19:52:54Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "287697",
+    "viewCount": "287699",
     "likeCount": "5328",
     "durationSec": 606,
     "tags": [
@@ -104,7 +104,7 @@
     "publishedAt": "2025-12-06T12:41:09Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "10559",
+    "viewCount": "10560",
     "likeCount": "830",
     "durationSec": 86,
     "tags": [
@@ -121,8 +121,8 @@
     "publishedAt": "2025-12-05T19:25:01Z",
     "channelTitle": "Formula Neon F1",
     "channelScore": 0.5,
-    "viewCount": "29473",
-    "likeCount": "1375",
+    "viewCount": "29496",
+    "likeCount": "1377",
     "durationSec": 153,
     "tags": [
       "ANALYSIS"
@@ -137,8 +137,8 @@
     "publishedAt": "2025-12-05T16:21:39Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "342133",
-    "likeCount": "19052",
+    "viewCount": "342241",
+    "likeCount": "19054",
     "durationSec": 76,
     "tags": [
       "ANALYSIS"
@@ -153,7 +153,7 @@
     "publishedAt": "2025-12-03T17:30:07Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "209314",
+    "viewCount": "209322",
     "likeCount": "4043",
     "durationSec": 879,
     "tags": [
@@ -169,8 +169,8 @@
     "publishedAt": "2025-12-02T23:16:06Z",
     "channelTitle": "Refactor F1",
     "channelScore": 0.5,
-    "viewCount": "155252",
-    "likeCount": "6702",
+    "viewCount": "155314",
+    "likeCount": "6704",
     "durationSec": 1420,
     "tags": [
       "ANALYSIS"
@@ -201,7 +201,7 @@
     "publishedAt": "2025-11-30T21:01:18Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "149448",
+    "viewCount": "149451",
     "likeCount": "4805",
     "durationSec": 945,
     "tags": [
@@ -217,7 +217,7 @@
     "publishedAt": "2025-11-30T19:24:32Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "390583",
+    "viewCount": "390584",
     "likeCount": "6459",
     "durationSec": 264,
     "tags": [
@@ -282,8 +282,8 @@
     "publishedAt": "2025-11-25T18:03:20Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "443249",
-    "likeCount": "7738",
+    "viewCount": "443350",
+    "likeCount": "7740",
     "durationSec": 695,
     "tags": [
       "ANALYSIS"
@@ -298,12 +298,28 @@
     "publishedAt": "2025-11-25T16:30:31Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "164367",
+    "viewCount": "164368",
     "likeCount": "3390",
     "durationSec": 740,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=q5Cf7Sd-jR8"
+  },
+  {
+    "id": "a7zJO_cj1QA",
+    "title": "Disastrous McLaren disqualification & huge F1 title fight twist explained",
+    "description": "Experience an effortless experience where security and networking converge in a single, cloud-native SASE platform: https://www.catonetworks.com/sase/?utm_source=youtube&utm_medium=referral&utm_campaign=catopia-the-race\n\nThe shock disqualification of both McLarens from the Las Vegas Grand Prix has made the F1 title fight much more interesting with just two rounds remaining. \n\n00:00 Dramatic F1 title race twist\n01:47 How did this happen?\n04:53 The help Max needed\n07:50 Weaknesses to exploit\n\nREAD",
+    "thumbnail": "https://i.ytimg.com/vi/a7zJO_cj1QA/maxresdefault.jpg",
+    "publishedAt": "2025-11-23T15:13:39Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "550901",
+    "likeCount": "10395",
+    "durationSec": 631,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=a7zJO_cj1QA"
   }
 ]
