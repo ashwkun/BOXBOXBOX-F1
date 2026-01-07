@@ -7,7 +7,7 @@
     "publishedAt": "2025-12-23T15:23:02Z",
     "channelTitle": "F1Creed",
     "channelScore": 0.5,
-    "viewCount": "165",
+    "viewCount": "166",
     "likeCount": "3",
     "durationSec": 721,
     "tags": [
@@ -55,7 +55,7 @@
     "publishedAt": "2025-12-06T20:30:01Z",
     "channelTitle": "Not Applicable",
     "channelScore": 0.5,
-    "viewCount": "83238",
+    "viewCount": "83239",
     "likeCount": "3644",
     "durationSec": 125,
     "tags": [
@@ -71,7 +71,7 @@
     "publishedAt": "2025-12-06T19:52:54Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "287822",
+    "viewCount": "287823",
     "likeCount": "5330",
     "durationSec": 606,
     "tags": [
@@ -87,7 +87,7 @@
     "publishedAt": "2025-12-06T17:39:03Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "105057",
+    "viewCount": "105058",
     "likeCount": "3275",
     "durationSec": 743,
     "tags": [
@@ -104,7 +104,7 @@
     "publishedAt": "2025-12-06T12:41:09Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "10642",
+    "viewCount": "10644",
     "likeCount": "829",
     "durationSec": 86,
     "tags": [
@@ -137,8 +137,8 @@
     "publishedAt": "2025-12-05T16:21:39Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "346757",
-    "likeCount": "19082",
+    "viewCount": "346811",
+    "likeCount": "19083",
     "durationSec": 76,
     "tags": [
       "ANALYSIS"
@@ -169,8 +169,8 @@
     "publishedAt": "2025-12-02T23:16:06Z",
     "channelTitle": "Refactor F1",
     "channelScore": 0.5,
-    "viewCount": "162784",
-    "likeCount": "6921",
+    "viewCount": "162850",
+    "likeCount": "6922",
     "durationSec": 1420,
     "tags": [
       "ANALYSIS"
@@ -201,7 +201,7 @@
     "publishedAt": "2025-11-30T19:24:32Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "391043",
+    "viewCount": "391049",
     "likeCount": "6466",
     "durationSec": 264,
     "tags": [
@@ -217,7 +217,7 @@
     "publishedAt": "2025-11-25T18:03:20Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "447809",
+    "viewCount": "447830",
     "likeCount": "7780",
     "durationSec": 695,
     "tags": [
@@ -233,7 +233,7 @@
     "publishedAt": "2025-11-25T16:30:31Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "164616",
+    "viewCount": "164617",
     "likeCount": "3390",
     "durationSec": 740,
     "tags": [
@@ -281,7 +281,7 @@
     "publishedAt": "2025-11-23T06:18:26Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "10125",
+    "viewCount": "10126",
     "likeCount": "295",
     "durationSec": 1403,
     "tags": [
@@ -305,5 +305,21 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=u5bb0B59KdM"
+  },
+  {
+    "id": "k8y_obeRiyo",
+    "title": "Perez’s Ferrari F1 test for Cadillac explained",
+    "description": "Sergio Perez is back in F1 action - but in a blacked-out, de-branded 2023 Ferrari!\n\nIt's a rare case of one F1 team using another F1 team’s car - and testing allocation - to gain some valuable on-track experience as Cadillac's preparation for its F1 debut reaches its final phase.\n\nHere's the full story behind Perez's Ferrari/Cadillac Imola test and all the latest on Cadillac's progress.\n\n00:00 Cadillac and Perez on track\n04:36 How Cadillac's first car is shaping up\n07:09 Future engine uncertaint",
+    "thumbnail": "https://i.ytimg.com/vi/k8y_obeRiyo/maxresdefault.jpg",
+    "publishedAt": "2025-11-13T15:11:19Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "659952",
+    "likeCount": "9899",
+    "durationSec": 553,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=k8y_obeRiyo"
   }
 ]
