@@ -39,14 +39,17 @@ object RetrofitClient {
             .addNetworkInterceptor { chain ->
                 val response = chain.proceed(chain.request())
                 val cacheControl = response.header("Cache-Control")
+                
+                // For GitHub Pages JSON (Instagram feeds), use shorter cache to get fresh CDN URLs
+                val isInstagramFeed = chain.request().url.toString().contains("ashwkun.github.io")
+                val maxAge = if (isInstagramFeed) 60 else 300 // 1 min for Instagram, 5 min for others
+                
                 if (cacheControl == null || cacheControl.contains("no-store") || cacheControl.contains("no-cache") ||
                     cacheControl.contains("must-revalidate") || cacheControl.contains("max-age=0")
                 ) {
-                    // If server doesn't provide cache headers, forcing a short cache for our JSON files
-                    // GitHub Pages default cache is 10 min (600s).
-                    // We allow using stale cache for up to 1 minute while revalidating
+                    // Instagram CDN URLs expire in 4-6 hours, so we use short cache for feed JSON
                     response.newBuilder()
-                        .header("Cache-Control", "public, max-age=300, stale-while-revalidate=60")
+                        .header("Cache-Control", "public, max-age=$maxAge, stale-while-revalidate=30")
                         .build()
                 } else {
                     response

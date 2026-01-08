@@ -439,6 +439,24 @@ fun InstagramPostCard(
                                                         .fillMaxSize()
                                                         .background(shimmerBrush())
                                                 )
+                                            },
+                                            error = {
+                                                // Log the error for debugging
+                                                android.util.Log.e("InstagramFeed", "Failed to load image: $imageUrl")
+                                                // Fallback for expired CDN URLs
+                                                Box(
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .background(Color(0xFF2A2A2A)),
+                                                    contentAlignment = Alignment.Center
+                                                ) {
+                                                    Icon(
+                                                        imageVector = Icons.Default.Collections,
+                                                        contentDescription = "Image unavailable",
+                                                        tint = Color.Gray,
+                                                        modifier = Modifier.size(48.dp)
+                                                    )
+                                                }
                                             }
                                         )
                                     }
@@ -495,6 +513,22 @@ fun InstagramPostCard(
                                                         .fillMaxSize()
                                                         .background(shimmerBrush())
                                                 )
+                                            },
+                                            error = {
+                                                android.util.Log.e("InstagramFeed", "Failed to load preview image: $imageUrl")
+                                                Box(
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .background(Color(0xFF2A2A2A)),
+                                                    contentAlignment = Alignment.Center
+                                                ) {
+                                                    Icon(
+                                                        imageVector = Icons.Default.Collections,
+                                                        contentDescription = "Image unavailable",
+                                                        tint = Color.Gray,
+                                                        modifier = Modifier.size(48.dp)
+                                                    )
+                                                }
                                             }
                                         )
                                     }
@@ -558,6 +592,23 @@ fun InstagramPostCard(
                                             .fillMaxSize()
                                             .background(shimmerBrush())
                                     )
+                                },
+                                error = {
+                                    android.util.Log.e("InstagramFeed", "Failed to load single image: $imageUrl")
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(200.dp)
+                                            .background(Color(0xFF2A2A2A)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Collections,
+                                            contentDescription = "Image unavailable",
+                                            tint = Color.Gray,
+                                            modifier = Modifier.size(48.dp)
+                                        )
+                                    }
                                 }
                             )
                         }

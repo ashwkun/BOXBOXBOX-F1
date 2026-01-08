@@ -59,8 +59,9 @@ object F1ImageLoader {
             // Smooth transitions
             .crossfade(true)
             .crossfade(200) // 200ms crossfade duration
-            // Respect cache headers from server
-            .respectCacheHeaders(true)
+            // Instagram CDN URLs expire in 4-6 hours, so we ignore their cache headers
+            // to prevent caching images with expiring URL keys (causes grey screens)
+            .respectCacheHeaders(false)
             .build()
     }
     
