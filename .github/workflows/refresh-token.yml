@@ -1,0 +1,31 @@
+name: Auto Refresh Instagram Token
+
+on:
+  schedule:
+    # Run at 00:00 on the 1st of every month
+    - cron: '0 0 1 * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  refresh-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Refresh Token
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }} # Important for gh CLI authentication
+        run: |
+          # Authenticate gh CLI with PAT
+          echo "${{ secrets.GH_PAT }}" | gh auth login --with-token
+          
+          # Run the refresh script
+          node .github/scripts/refresh_instagram_token.js
