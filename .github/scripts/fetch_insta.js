@@ -252,17 +252,24 @@ async function run() {
         // 7. GENERATE DUAL-FILE OUTPUT
 
         // A) MIXED FEED (f1_feed.json) - Images + Videos
-        // Filter: Videos need fresh URLs (expire in 4-6h), photos can be stale (expire in 24-48h)
+        // CRITICAL: Instagram CDN URLs expire in 4-6 hours. ONLY include posts with fresh URLs.
+        const staleCount = { images: 0, videos: 0, carousels: 0 };
         const finalFeed = sortedFeed
             .filter(p => {
-                // Videos require fresh URLs
-                if (p.media_type === 'VIDEO' && !freshPostIds.has(p.id)) {
-                    console.log(`   ⏭️ Skipping stale video from feed: ${p.id}`);
+                // REQUIRE fresh URLs for ALL post types - stale URLs will 404
+                if (!freshPostIds.has(p.id)) {
+                    if (p.media_type === 'VIDEO') staleCount.videos++;
+                    else if (p.media_type === 'CAROUSEL_ALBUM') staleCount.carousels++;
+                    else staleCount.images++;
                     return false;
                 }
                 return true;
             })
             .slice(0, MAX_FEED_POSTS);
+
+        if (staleCount.images + staleCount.videos + staleCount.carousels > 0) {
+            console.log(`   ⏭️ Filtered stale posts: ${staleCount.images} images, ${staleCount.videos} videos, ${staleCount.carousels} carousels`);
+        }
         fs.writeFileSync(FEED_FILE, JSON.stringify(finalFeed, null, 2));
         console.log(`💾 Saved ${finalFeed.length} posts to ${FEED_FILE}`);
 
