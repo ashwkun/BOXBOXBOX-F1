@@ -181,24 +181,24 @@ fun FeedScreen(
     // State for selected podcast detail view
     var selectedPodcast by remember { mutableStateOf<Podcast?>(null) }
     
-    // Sync pager state with ViewModel
-    // Sync pager state with ViewModel
-    LaunchedEffect(pagerState.currentPage) {
-        multimediaViewModel.setSelectedTab(pagerState.currentPage)
-        onTabChanged(pagerState.currentPage)
+    // Sync pager state with ViewModel - only after animation completes
+    // Using settledPage instead of currentPage to prevent race conditions during swipe/animation
+    LaunchedEffect(pagerState.settledPage) {
+        multimediaViewModel.setSelectedTab(pagerState.settledPage)
+        onTabChanged(pagerState.settledPage)
         
-        // Reset scroll positions if switching away from tabs
-        if (pagerState.currentPage != 0) { // Not Latest
+        // Reset scroll positions ONLY after settling on a new tab (not during animation)
+        if (pagerState.settledPage != 0) { // Not Latest
             multimediaViewModel.resetLatestScrollPosition()
             latestListState.scrollToItem(0)
         }
         
-        if (pagerState.currentPage != 2) { // Not News (Index 2)
+        if (pagerState.settledPage != 2) { // Not News (Index 2)
             newsViewModel.resetScrollPosition()
             newsListState.scrollToItem(0)
         }
         
-        if (pagerState.currentPage != 3) { // Not Videos (Index 3)
+        if (pagerState.settledPage != 3) { // Not Videos (Index 3)
             multimediaViewModel.resetVideosScrollPosition()
             videosListState.scrollToItem(0)
         }
