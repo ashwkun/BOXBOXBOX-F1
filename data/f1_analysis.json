@@ -16,6 +16,22 @@
     "url": "https://www.youtube.com/watch?v=JF41qdYepqo"
   },
   {
+    "id": "7U1kOf_BEZQ",
+    "title": "Precision, Recall & F1 Score Explained | Boost Your AI Model Performance",
+    "description": "Unlock the power of accuracy metrics in machine learning! In this video, we break down Precision, Recall, and F1 Score with simple examples so you can clearly understand how each one impacts model performance. Whether you're testing classifiers or improving AI predictions, these metrics are essential for better decision-making and results. Perfect for beginners and data enthusiasts!\n\n#Precision #Recall #F1Score #DatamitesInstitute \n\nDataMites is a renowned global institution offering specialized",
+    "thumbnail": "https://i.ytimg.com/vi/7U1kOf_BEZQ/maxresdefault.jpg",
+    "publishedAt": "2026-01-05T06:15:01Z",
+    "channelTitle": "DataMites",
+    "channelScore": 0.5,
+    "viewCount": "42",
+    "likeCount": "3",
+    "durationSec": 539,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=7U1kOf_BEZQ"
+  },
+  {
     "id": "bxpawB1uCYE",
     "title": "F1 Aerodynamics Explained: The Complete History & Evolution 🏁",
     "description": "A complete breakdown of Formula 1 aerodynamics. We analyze how the pursuit of downforce has shaped the sport over 70 years.\n\nThis video is a transformative educational work under Fair Use. All rights belong to their respective owners. Analysis and Commentary based on visual concepts from @Formula1",
@@ -56,7 +72,7 @@
     "publishedAt": "2025-12-07T19:10:00Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "99952",
+    "viewCount": "99956",
     "likeCount": "3246",
     "durationSec": 1118,
     "tags": [
@@ -88,7 +104,7 @@
     "publishedAt": "2025-12-06T20:30:01Z",
     "channelTitle": "Not Applicable",
     "channelScore": 0.5,
-    "viewCount": "83281",
+    "viewCount": "83284",
     "likeCount": "3645",
     "durationSec": 125,
     "tags": [
@@ -137,7 +153,7 @@
     "publishedAt": "2025-12-06T12:41:09Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "10664",
+    "viewCount": "10665",
     "likeCount": "830",
     "durationSec": 86,
     "tags": [
@@ -170,7 +186,7 @@
     "publishedAt": "2025-12-05T16:21:39Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "347317",
+    "viewCount": "347329",
     "likeCount": "19088",
     "durationSec": 76,
     "tags": [
@@ -186,7 +202,7 @@
     "publishedAt": "2025-12-03T17:30:07Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "210716",
+    "viewCount": "210734",
     "likeCount": "4056",
     "durationSec": 879,
     "tags": [
@@ -202,8 +218,8 @@
     "publishedAt": "2025-12-02T23:16:06Z",
     "channelTitle": "Refactor F1",
     "channelScore": 0.5,
-    "viewCount": "163855",
-    "likeCount": "6946",
+    "viewCount": "163901",
+    "likeCount": "6947",
     "durationSec": 1420,
     "tags": [
       "ANALYSIS"
@@ -234,7 +250,7 @@
     "publishedAt": "2025-11-30T19:24:32Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "391108",
+    "viewCount": "391109",
     "likeCount": "6469",
     "durationSec": 264,
     "tags": [
@@ -250,8 +266,8 @@
     "publishedAt": "2025-11-25T18:03:20Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "448185",
-    "likeCount": "7782",
+    "viewCount": "448202",
+    "likeCount": "7783",
     "durationSec": 695,
     "tags": [
       "ANALYSIS"
@@ -266,7 +282,7 @@
     "publishedAt": "2025-11-25T16:30:31Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "164652",
+    "viewCount": "164655",
     "likeCount": "3390",
     "durationSec": 740,
     "tags": [
@@ -282,28 +298,12 @@
     "publishedAt": "2025-11-23T15:13:39Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "551134",
+    "viewCount": "551135",
     "likeCount": "10396",
     "durationSec": 631,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=a7zJO_cj1QA"
-  },
-  {
-    "id": "fruS0U7_3VY",
-    "title": "2025 F1 Las Vegas RACE analysis by Peter Windsor",
-    "description": "The sensational news from Vegas is that both McLaren-Mercedes were disqualified post-race when the thickness of their plank assemblies was found in Parc Fermé to be below the permitted minimum. Peter talks about this at the beginning of this video before detailing the beautifully-constructed win by Max Verstappen and Red Bull-Honda. The factory Mercedes of George Russell and Kimi Antonelli finish second and third following the McLaren DSQ; Ferrari's Charles Leclerc is elevated to P5 after a torr",
-    "thumbnail": "https://i.ytimg.com/vi/fruS0U7_3VY/maxresdefault.jpg",
-    "publishedAt": "2025-11-23T11:21:51Z",
-    "channelTitle": "Peter Windsor",
-    "channelScore": 0.5,
-    "viewCount": "129267",
-    "likeCount": "3649",
-    "durationSec": 1202,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=fruS0U7_3VY"
   }
 ]
