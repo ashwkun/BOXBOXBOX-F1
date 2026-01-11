@@ -23,7 +23,7 @@
     "publishedAt": "2026-01-05T06:15:01Z",
     "channelTitle": "DataMites",
     "channelScore": 0.5,
-    "viewCount": "43",
+    "viewCount": "44",
     "likeCount": "3",
     "durationSec": 539,
     "tags": [
@@ -39,7 +39,7 @@
     "publishedAt": "2026-01-04T12:59:46Z",
     "channelTitle": "Formula Lab",
     "channelScore": 0.5,
-    "viewCount": "85",
+    "viewCount": "86",
     "likeCount": "1",
     "durationSec": 445,
     "tags": [
@@ -146,39 +146,6 @@
     "url": "https://www.youtube.com/watch?v=Kxd9dbtlMNw"
   },
   {
-    "id": "7TZoEvvCLwk",
-    "title": "LEWIS HAMILTON ABU DHABI FP3 CRASH EXPLAINED",
-    "description": "Driver Coach Martin Villari explains why the entry curb was not at play with Lewis Hamiltons Crash in FP3 In Abu Dhabi #lewishamilton #abudhabigp #f1\n\n------------------------------------------------------------------------------------------------------------------------\n❓ Have a question or thought? Drop it in the comments for me!\n👍 Like the video? Give it a thumbs up!\n🔔 Like this content and insight? Subscribe to my channel and turn the bell icon on!\n-----------------------------------------",
-    "thumbnail": "https://i.ytimg.com/vi/7TZoEvvCLwk/maxresdefault.jpg",
-    "publishedAt": "2025-12-06T12:41:09Z",
-    "channelTitle": "lowerlaptime",
-    "channelScore": 0.5,
-    "viewCount": "10669",
-    "likeCount": "830",
-    "durationSec": 86,
-    "tags": [
-      "FP",
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=7TZoEvvCLwk"
-  },
-  {
-    "id": "FrVy4pDkNDE",
-    "title": "Abu Dhabi GP Track Analysis – Everything You Need to Know! 🏎🔥#f1 #formula1 #f1shorts",
-    "description": "",
-    "thumbnail": "https://i.ytimg.com/vi/FrVy4pDkNDE/maxresdefault.jpg",
-    "publishedAt": "2025-12-05T19:25:01Z",
-    "channelTitle": "Formula Neon F1",
-    "channelScore": 0.5,
-    "viewCount": "33430",
-    "likeCount": "1518",
-    "durationSec": 153,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=FrVy4pDkNDE"
-  },
-  {
     "id": "O1rjD4s7q0A",
     "title": "The 2025 F1 Title Decider Explained 🏆",
     "description": "Your quick guide to how any of three world champions could be crowned in Abu Dhabi!\n\nFor more F1® videos, visit: https://www.Formula1.com\n\nVisit our store: https://f1store.formula1.com/\n\nFollow F1®:\nhttps://www.instagram.com/F1\nhttps://www.facebook.com/Formula1/\nhttps://www.twitter.com/F1\nhttps://www.twitch.tv/formula1\nhttps://www.tiktok.com/@f1\n\n#F1 #AbuDhabiGP",
@@ -186,7 +153,7 @@
     "publishedAt": "2025-12-05T16:21:39Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "347465",
+    "viewCount": "347484",
     "likeCount": "19090",
     "durationSec": 76,
     "tags": [
@@ -202,29 +169,13 @@
     "publishedAt": "2025-12-03T17:30:07Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "210786",
+    "viewCount": "210798",
     "likeCount": "4056",
     "durationSec": 879,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=KwKTHRITxp4"
-  },
-  {
-    "id": "kKd4_XOHusA",
-    "title": "How good is Max Verstappen? A data analysis",
-    "description": "The full analysis, including the Python code and extra charts that didn't make the final cut, is available in my repository below.\n\n📂 Full Code & Analysis (GitHub): https://github.com/oaojVSM/f1_analytics\n\n📊 Data Source: The historical data used in this analysis was provided by the Jolpica-F1 API (based on the Ergast Developer API). 🔗 https://github.com/jolpica/jolpica-f1\n\nA special thanks to the Jolpica project team for keeping this database open and free for the community.\n\ne-mail: refactor",
-    "thumbnail": "https://i.ytimg.com/vi/kKd4_XOHusA/maxresdefault.jpg",
-    "publishedAt": "2025-12-02T23:16:06Z",
-    "channelTitle": "Refactor F1",
-    "channelScore": 0.5,
-    "viewCount": "164051",
-    "likeCount": "6951",
-    "durationSec": 1420,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=kKd4_XOHusA"
   },
   {
     "id": "foAwsHPKZ10",
@@ -250,7 +201,7 @@
     "publishedAt": "2025-11-30T19:24:32Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "391129",
+    "viewCount": "391142",
     "likeCount": "6469",
     "durationSec": 264,
     "tags": [
@@ -266,8 +217,8 @@
     "publishedAt": "2025-11-25T18:03:20Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "448249",
-    "likeCount": "7784",
+    "viewCount": "448268",
+    "likeCount": "7783",
     "durationSec": 695,
     "tags": [
       "ANALYSIS"
@@ -282,7 +233,7 @@
     "publishedAt": "2025-11-25T16:30:31Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "164664",
+    "viewCount": "164666",
     "likeCount": "3390",
     "durationSec": 740,
     "tags": [
@@ -298,8 +249,8 @@
     "publishedAt": "2025-11-23T15:13:39Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "551149",
-    "likeCount": "10396",
+    "viewCount": "551152",
+    "likeCount": "10395",
     "durationSec": 631,
     "tags": [
       "ANALYSIS"
@@ -321,5 +272,70 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=fruS0U7_3VY"
+  },
+  {
+    "id": "MyYdnZV374o",
+    "title": "Lando BLEW IT! 2025 F1 Las Vegas GP RACE Analysis",
+    "description": "Lando BLEW IT! 2025 F1 Las Vegas GP RACE Analysis. Lando Norris lost the lead off the line wit lack of defensive posture to Red Bull's Max Verstappen who went on to win the Grand Prix.\n\n❓ Have a question or thought? Drop it in the comments for me!\n👍 Like the video? Give it a thumbs up!\n🔔 Like this content and insight? Subscribe to my channel and turn the bell icon on!\n\nCHAPTERS:\n00:00 Introduction\n00:19 Deeper Qualifying Insights - Turn 1\n03:38 Deeper Qualifying Insights - Turn 3\n07:07 Deeper ",
+    "thumbnail": "https://i.ytimg.com/vi/MyYdnZV374o/maxresdefault.jpg",
+    "publishedAt": "2025-11-23T06:18:26Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "10126",
+    "likeCount": "295",
+    "durationSec": 1403,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=MyYdnZV374o"
+  },
+  {
+    "id": "k8y_obeRiyo",
+    "title": "Perez’s Ferrari F1 test for Cadillac explained",
+    "description": "Sergio Perez is back in F1 action - but in a blacked-out, de-branded 2023 Ferrari!\n\nIt's a rare case of one F1 team using another F1 team’s car - and testing allocation - to gain some valuable on-track experience as Cadillac's preparation for its F1 debut reaches its final phase.\n\nHere's the full story behind Perez's Ferrari/Cadillac Imola test and all the latest on Cadillac's progress.\n\n00:00 Cadillac and Perez on track\n04:36 How Cadillac's first car is shaping up\n07:09 Future engine uncertaint",
+    "thumbnail": "https://i.ytimg.com/vi/k8y_obeRiyo/maxresdefault.jpg",
+    "publishedAt": "2025-11-13T15:11:19Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "664547",
+    "likeCount": "9929",
+    "durationSec": 553,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=k8y_obeRiyo"
+  },
+  {
+    "id": "AZjSgHl1pbA",
+    "title": "2025 F1 BRAZILIAN GP race analysis by Peter Windsor",
+    "description": "Lando Norris won it for McLaren-Mercedes - won the Brazilian GP (São Paulo GP) in the best car on a spectacular track - but it was Max Verstappen who stole the plaudits for Red Bull-Honda. After starting from the pit lane, Max eventually finished a dazzling P3 behind the Mercedes of Kimi Antonelli, beating in the process the sister Mercedes of George Russell and the other McLaren-Mercedes of Oscar Piastri. The race was punctuated by VSC and SC interventions - and, with the hard compound Pirelli ",
+    "thumbnail": "https://i.ytimg.com/vi/AZjSgHl1pbA/maxresdefault.jpg",
+    "publishedAt": "2025-11-09T21:57:45Z",
+    "channelTitle": "Peter Windsor",
+    "channelScore": 0.5,
+    "viewCount": "110209",
+    "likeCount": "3504",
+    "durationSec": 1160,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=AZjSgHl1pbA"
+  },
+  {
+    "id": "Y3qAKH6lCgY",
+    "title": "Lando is DIALLED! 2025 F1 Brazilian GP QUALIFYING Analysis",
+    "description": "Lando is DIALLED! 2025 F1 Brazilian GP QUALIFYING Analysis\n\n❓ Have a question or thought? Drop it in the comments for me!\n👍 Like the video? Give it a thumbs up!\n🔔 Like this content and insight? Subscribe to my channel and turn the bell icon on!\n\nCHAPTERS:\n00:00 Introduction\n00:31 Tyre Temps Were Key\n02:18 Rear Grip & Max OUT In Q1\n05:19 Lando Is Now DIALLED IN\n10:07 Benefits of Patient Steering\n12:54 Hamilton Q2 Radio\n14:25 Lando's Pole Lap Under Pressure / Oscar's Banker\n16:32 LEC and ANT Did",
+    "thumbnail": "https://i.ytimg.com/vi/Y3qAKH6lCgY/maxresdefault.jpg",
+    "publishedAt": "2025-11-09T03:53:19Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "4408",
+    "likeCount": "181",
+    "durationSec": 1247,
+    "tags": [
+      "QUALI",
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=Y3qAKH6lCgY"
   }
 ]
