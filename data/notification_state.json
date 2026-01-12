@@ -595,213 +595,214 @@
     "08a66790db7eecb9ddb7d360f9311368",
     "aaa3dbff8bb9f544a2e461ec2811b87f",
     "74ee43fcd4e5eedcb44838bd8ed23d45",
-    "e5b95ce6fb7657d8be3a85880a38cea3"
+    "e5b95ce6fb7657d8be3a85880a38cea3",
+    "2d70c0fe5493185c26019bd07512a228"
   ],
   "schema_version": 2,
   "sent_urls": [
-    "https://www.motorsport.com/f1/news/jacques-villeneuve-lando-norriss-2025-title-fight-brought-back-michael-schumacher-memories/10785672/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mercedes-announces-w17-livery-reveal-date-and-2026-f1-season-launch-event/10788127/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-and-fia-unveil-new-renders-and-terminology-for-2026/10785237/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/lando-norris-reveals-the-texts-from-lewis-hamilton-and-sebastian-vettel-that-helped-win-his-title/10787188/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/toto-wolff-hails-doriane-pin-after-crushing-f1-academy-to-win-2025-title/10786423/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/f1-reveals-which-track-will-replace-zandvoort-on-2027-f1-calendar/10784971/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/arvid-lindblad-reveals-motocross-roots-ahead-of-2026-f1-rookie-debut/10785772/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/fia-reveals-f1-2026-entry-list-sauber-name-surprise-appearance/10785674/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/williams-f1-unveils-fan-voted-2026-pre-season-testing-livery/10785952/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/audi-reveals-f1-team-name-season-launch-date/10784832/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/ferrari-reveals-name-of-2026-f1-car/10788954/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/williams-confirms-fw48-livery-reveal-date-for-2026-f1-season-/10788148/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/max-verstappen-we-didnt-lose-f1-title-because-we-were-never-really-in-it/10785462/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
+    "https://www.motorsport.com/f1/news/jacques-villeneuve-lando-norriss-2025-title-fight-brought-back-michael-schumacher-memories/10785672/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/fia-reveals-f1-2026-entry-list-sauber-name-surprise-appearance/10785674/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/lando-norris-reveals-the-texts-from-lewis-hamilton-and-sebastian-vettel-that-helped-win-his-title/10787188/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/ferrari-reveals-name-of-2026-f1-car/10788954/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-and-fia-unveil-new-renders-and-terminology-for-2026/10785237/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/arvid-lindblad-reveals-motocross-roots-ahead-of-2026-f1-rookie-debut/10785772/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/williams-f1-unveils-fan-voted-2026-pre-season-testing-livery/10785952/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/toto-wolff-hails-doriane-pin-after-crushing-f1-academy-to-win-2025-title/10786423/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/max-verstappen-we-didnt-lose-f1-title-because-we-were-never-really-in-it/10785462/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/audi-reveals-f1-team-name-season-launch-date/10784832/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mercedes-announces-w17-livery-reveal-date-and-2026-f1-season-launch-event/10788127/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
   ],
   "title_fingerprints": [
     {
       "tokens": [
-        "name",
-        "2026",
-        "ferrari",
         "reveals",
-        "of",
+        "2026",
+        "car",
+        "ferrari",
         "f1",
-        "car"
+        "of",
+        "name"
       ],
       "title": "Ferrari reveals name of 2026 F1 car",
       "timestamp": "2026-01-09T12:31:13"
     },
     {
       "tokens": [
-        "name",
-        "for",
-        "2026",
-        "pivotal",
-        "ferrari",
         "reveals",
+        "2026",
+        "car",
+        "ferrari",
         "f1",
-        "car"
+        "pivotal",
+        "name",
+        "for"
       ],
       "title": "Ferrari reveals name for pivotal 2026 F1 car",
       "timestamp": "2026-01-09T12:31:13"
     },
     {
       "tokens": [
-        "date",
-        "for",
         "2026",
-        "reveal",
         "confirms",
-        "fw48",
         "f1",
+        "season",
+        "date",
+        "reveal",
         "livery",
+        "for",
         "williams",
-        "season"
+        "fw48"
       ],
       "title": "Williams confirms FW48 livery reveal date for 2026 F1 season ",
       "timestamp": "2026-01-05T15:30:37"
     },
     {
       "tokens": [
-        "date",
-        "2026",
-        "reveal",
         "launch",
-        "event",
-        "announces",
-        "f1",
-        "livery",
-        "season",
+        "2026",
         "w17",
+        "f1",
+        "season",
+        "event",
+        "and",
         "mercedes",
-        "and"
+        "date",
+        "reveal",
+        "livery",
+        "announces"
       ],
       "title": "Mercedes announces W17 livery reveal date and 2026 F1 season launch event",
       "timestamp": "2026-01-05T14:18:51"
     },
     {
       "tokens": [
-        "texts",
-        "hamilton",
-        "title",
+        "lewis",
+        "reveals",
         "win",
         "that",
-        "reveals",
-        "lewis",
+        "hamilton",
+        "helped",
         "the",
-        "vettel",
-        "his",
+        "and",
+        "title",
         "sebastian",
-        "lando",
+        "vettel",
+        "texts",
         "from",
         "norris",
-        "and",
-        "helped"
+        "his",
+        "lando"
       ],
       "title": "Lando Norris reveals the texts from Lewis Hamilton and Sebastian Vettel that helped win his title",
       "timestamp": "2025-12-29T16:01:23"
     },
     {
       "tokens": [
+        "hails",
+        "doriane",
         "wolff",
         "academy",
-        "doriane",
+        "crushing",
+        "f1",
         "pin",
         "to",
-        "title",
-        "win",
-        "2025",
-        "f1",
-        "hails",
         "after",
-        "crushing",
-        "toto"
+        "2025",
+        "title",
+        "toto",
+        "win"
       ],
       "title": "Toto Wolff hails Doriane Pin after 'crushing' F1 Academy to win 2025 title",
       "timestamp": "2025-12-23T22:03:30"
     },
     {
       "tokens": [
-        "voted",
-        "unveils",
         "2026",
         "testing",
-        "pre",
+        "livery",
         "f1",
         "team",
-        "williams",
+        "unveils",
+        "pre",
         "season",
-        "livery",
-        "fan"
+        "voted",
+        "fan",
+        "williams"
       ],
       "title": "Williams F1 team unveils fan-voted 2026 pre-season testing livery",
       "timestamp": "2025-12-21T16:54:05"
     },
     {
       "tokens": [
+        "schumacher",
+        "michael",
+        "back",
+        "battle",
+        "jacques",
+        "fight",
         "title",
         "brought",
-        "back",
         "memories",
-        "fight",
+        "s",
         "villeneuve",
-        "michael",
-        "schumacher",
-        "lando",
-        "battle",
         "norris",
-        "jacques",
-        "s"
+        "lando"
       ],
       "title": "Jacques Villeneuve: Lando Norris\u2019s title fight brought back Michael Schumacher battle memories",
       "timestamp": "2025-12-19T18:12:42"
     },
     {
       "tokens": [
-        "roots",
-        "lindblad",
         "ahead",
+        "arvid",
+        "reveals",
         "2026",
         "motocross",
-        "rookie",
-        "reveals",
-        "arvid",
-        "of",
         "f1",
-        "debut"
+        "debut",
+        "roots",
+        "rookie",
+        "of",
+        "lindblad"
       ],
       "title": "Arvid Lindblad reveals motocross roots ahead of 2026 F1 rookie debut",
       "timestamp": "2025-12-19T15:29:42"
     },
     {
       "tokens": [
-        "as",
-        "list",
-        "name",
-        "2026",
-        "appearance",
-        "entry",
         "reveals",
+        "2026",
+        "list",
+        "fia",
+        "entry",
         "makes",
         "f1",
         "surprise",
         "sauber",
-        "fia"
+        "name",
+        "as",
+        "appearance"
       ],
       "title": "FIA reveals F1 2026 entry list as Sauber name makes surprise appearance",
       "timestamp": "2025-12-19T11:33:15"
     },
     {
       "tokens": [
-        "didn",
-        "title",
-        "fight",
         "t",
+        "we",
+        "max",
+        "never",
         "because",
         "in",
         "verstappen",
         "f1",
         "the",
-        "never",
         "really",
-        "max",
-        "we",
+        "didn",
+        "fight",
+        "title",
         "were",
         "lose"
       ],
@@ -810,51 +811,51 @@
     },
     {
       "tokens": [
-        "new",
-        "unveils",
+        "2026",
+        "fia",
+        "you",
+        "the",
+        "f1",
+        "need",
+        "terminology",
+        "know",
         "for",
         "to",
-        "2026",
-        "know",
-        "terminology",
-        "the",
-        "need",
-        "f1",
-        "you",
+        "unveils",
         "season",
-        "fia"
+        "new"
       ],
       "title": "FIA unveils the new F1 terminology you need to know for the 2026 season",
       "timestamp": "2025-12-17T13:00:30"
     },
     {
       "tokens": [
+        "track",
+        "which",
+        "reveals",
         "zandvoort",
         "on",
-        "calendar",
         "will",
-        "replace",
-        "reveals",
-        "f1",
         "2027",
-        "track",
-        "which"
+        "f1",
+        "replace",
+        "calendar"
       ],
       "title": "F1 reveals which track will replace Zandvoort on 2027 F1 calendar",
       "timestamp": "2025-12-16T09:01:53"
     },
     {
       "tokens": [
-        "name",
-        "date",
-        "2026",
         "launch",
         "reveals",
+        "2026",
         "f1",
         "team",
         "season",
+        "and",
+        "date",
         "audi",
-        "and"
+        "name"
       ],
       "title": "Audi reveals F1 team name and 2026 season launch date",
       "timestamp": "2025-12-15T12:51:04"
