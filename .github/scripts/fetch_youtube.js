@@ -45,13 +45,8 @@ const NON_ENGLISH_PATTERNS = [
 
 // Helper: HTTP GET Promise
 function fetchJson(url) {
-    const options = {
-        headers: {
-            'Referer': 'https://boxboxboxapp.firebaseapp.com'
-        }
-    };
     return new Promise((resolve, reject) => {
-        https.get(url, options, (res) => {
+        https.get(url, (res) => {
             let data = '';
             res.on('data', chunk => data += chunk);
             res.on('end', () => {
