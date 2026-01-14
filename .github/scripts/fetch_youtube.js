@@ -47,7 +47,7 @@ const NON_ENGLISH_PATTERNS = [
 function fetchJson(url) {
     const options = {
         headers: {
-            'Referer': 'https://boxboxboxapp.web.app'
+            'Referer': 'https://boxboxboxapp.firebaseapp.com'
         }
     };
     return new Promise((resolve, reject) => {
