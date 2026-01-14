@@ -47,7 +47,7 @@ const NON_ENGLISH_PATTERNS = [
 function fetchJson(url) {
     const options = {
         headers: {
-            'Referer': 'https://aswin.cx'
+            'Referer': 'https://boxboxboxapp.web.app'
         }
     };
     return new Promise((resolve, reject) => {
