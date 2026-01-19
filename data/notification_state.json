@@ -652,37 +652,38 @@
     "cdce1df511bac7e0e87f528cdbad1512",
     "2a4539862e98a89d7d37ab4b5ec18548",
     "a295edb19e9c0f5bd85d6b333880feae",
-    "4cd2b39f76f73ff18641f11991e92003"
+    "4cd2b39f76f73ff18641f11991e92003",
+    "80f4b7791f21b934468aa96f91da0ce5"
   ],
   "schema_version": 2,
   "sent_urls": [
-    "https://www.motorsport.com/f1/news/mercedes-announces-w17-livery-reveal-date-and-2026-f1-season-launch-event/10788127/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/yuki-tsunoda-sign-2026-honda-contract-red-bull-ford-role/10789702/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/williams-reveals-f1-2026-reserve-driver-and-academy-line-up/10790464/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mclaren-signs-fornaroli-and-oward-as-f1-2026-reserve-drivers/10790268/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/williams-confirms-fw48-livery-reveal-date-for-2026-f1-season-/10788148/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/cadillac-launches-stealthy-first-f1-livery-for-barcelona-testing/10789753/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/ferrari-reveals-name-of-2026-f1-car/10788954/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/williams-confirms-fw48-livery-reveal-date-for-2026-f1-season-/10788148/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/yuki-tsunoda-sign-2026-honda-contract-red-bull-ford-role/10789702/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/mercedes-f1-reveals-2026-team-kit-as-fans-weigh-in/10790188/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mercedes-announces-w17-livery-reveal-date-and-2026-f1-season-launch-event/10788127/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/toto-wolff-hails-doriane-pin-after-crushing-f1-academy-to-win-2025-title/10786423/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/lando-norris-reveals-the-texts-from-lewis-hamilton-and-sebastian-vettel-that-helped-win-his-title/10787188/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/f1-fans-deliver-verdict-as-racing-bulls-reveal-2026-team-kit-and-race-suits/10789935/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/toto-wolff-hails-doriane-pin-after-crushing-f1-academy-to-win-2025-title/10786423/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/red-bull-reveals-refreshed-2026-f1-livery-at-detroit-launch/10790360/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/cadillac-launches-stealthy-first-f1-livery-for-barcelona-testing/10789753/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/williams-reveals-f1-2026-reserve-driver-and-academy-line-up/10790464/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mclaren-signs-fornaroli-and-oward-as-f1-2026-reserve-drivers/10790268/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/williams-f1-unveils-fan-voted-2026-pre-season-testing-livery/10785952/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
   ],
   "title_fingerprints": [
     {
       "tokens": [
+        "academy",
+        "2026",
+        "reveals",
+        "up",
         "driver",
+        "line",
         "f1",
         "williams",
-        "academy",
-        "line",
         "reserve",
-        "and",
-        "reveals",
-        "2026",
-        "up"
+        "and"
       ],
       "title": "Williams reveals F1 2026 reserve driver and academy line-up",
       "timestamp": "2026-01-16T10:52:55"
@@ -690,104 +691,104 @@
     {
       "tokens": [
         "f1",
-        "red",
-        "bull",
-        "detroit",
-        "launch",
-        "reveals",
-        "livery",
         "at",
+        "launch",
         "2026",
-        "refreshed"
+        "bull",
+        "reveals",
+        "detroit",
+        "livery",
+        "refreshed",
+        "red"
       ],
       "title": "Red Bull reveals refreshed 2026 F1 livery at Detroit launch",
       "timestamp": "2026-01-16T03:49:42"
     },
     {
       "tokens": [
+        "drivers",
         "pato",
-        "f1",
+        "2026",
+        "leonardo",
         "as",
         "fornaroli",
-        "and",
-        "reserve",
-        "mclaren",
         "o",
-        "leonardo",
+        "mclaren",
+        "signs",
         "ward",
-        "2026",
-        "drivers",
-        "signs"
+        "f1",
+        "reserve",
+        "and"
       ],
       "title": "McLaren signs Leonardo Fornaroli and Pato O'Ward as 2026 F1 reserve drivers",
       "timestamp": "2026-01-15T14:47:16"
     },
     {
       "tokens": [
-        "f1",
-        "in",
-        "as",
-        "mercedes",
-        "reveals",
         "fans",
-        "team",
-        "weigh",
+        "mercedes",
         "2026",
-        "kit"
+        "weigh",
+        "in",
+        "reveals",
+        "kit",
+        "as",
+        "team",
+        "f1"
       ],
       "title": "Mercedes F1 reveals 2026 team kit as fans weigh in",
       "timestamp": "2026-01-15T11:35:21"
     },
     {
       "tokens": [
-        "f1",
-        "as",
-        "reveal",
-        "verdict",
-        "racing",
-        "and",
-        "kit",
-        "suits",
         "fans",
-        "team",
+        "bulls",
         "race",
-        "deliver",
+        "suits",
         "2026",
-        "bulls"
+        "as",
+        "kit",
+        "racing",
+        "team",
+        "reveal",
+        "f1",
+        "verdict",
+        "deliver",
+        "and"
       ],
       "title": "F1 fans deliver verdict as Racing Bulls reveal 2026 team kit and race suits",
       "timestamp": "2026-01-14T12:19:22"
     },
     {
       "tokens": [
-        "f1",
-        "first",
         "testing",
-        "launches",
-        "livery",
-        "barcelona",
-        "stealthy",
+        "first",
         "for",
-        "cadillac"
+        "cadillac",
+        "launches",
+        "barcelona",
+        "livery",
+        "f1",
+        "stealthy"
       ],
       "title": "Cadillac launches stealthy first F1 livery for Barcelona testing",
       "timestamp": "2026-01-13T15:07:39"
     },
     {
       "tokens": [
-        "sign",
-        "amid",
-        "red",
-        "bull",
-        "to",
         "honda",
-        "role",
-        "yuki",
+        "ford",
         "yet",
-        "contract",
+        "sign",
         "2026",
+        "amid",
+        "bull",
+        "yuki",
         "tsunoda",
-        "ford"
+        "role",
+        "contract",
+        "to",
+        "red"
       ],
       "title": "Yuki Tsunoda yet to sign 2026 Honda contract amid Red Bull-Ford role",
       "timestamp": "2026-01-13T14:09:15"
@@ -795,12 +796,12 @@
     {
       "tokens": [
         "name",
-        "f1",
-        "ferrari",
         "car",
-        "reveals",
         "2026",
-        "of"
+        "ferrari",
+        "of",
+        "reveals",
+        "f1"
       ],
       "title": "Ferrari reveals name of 2026 F1 car",
       "timestamp": "2026-01-09T12:31:13"
@@ -808,13 +809,13 @@
     {
       "tokens": [
         "name",
-        "f1",
-        "pivotal",
-        "ferrari",
-        "car",
-        "reveals",
         "for",
-        "2026"
+        "car",
+        "ferrari",
+        "2026",
+        "reveals",
+        "pivotal",
+        "f1"
       ],
       "title": "Ferrari reveals name for pivotal 2026 F1 car",
       "timestamp": "2026-01-09T12:31:13"
@@ -822,91 +823,91 @@
     {
       "tokens": [
         "fw48",
-        "confirms",
-        "f1",
-        "williams",
-        "reveal",
+        "for",
         "date",
+        "2026",
+        "williams",
         "livery",
         "season",
-        "for",
-        "2026"
+        "reveal",
+        "f1",
+        "confirms"
       ],
       "title": "Williams confirms FW48 livery reveal date for 2026 F1 season ",
       "timestamp": "2026-01-05T15:30:37"
     },
     {
       "tokens": [
-        "f1",
-        "reveal",
-        "event",
         "mercedes",
+        "w17",
         "date",
-        "announces",
-        "and",
+        "2026",
         "launch",
         "livery",
-        "w17",
         "season",
-        "2026"
+        "event",
+        "announces",
+        "reveal",
+        "f1",
+        "and"
       ],
       "title": "Mercedes announces W17 livery reveal date and 2026 F1 season launch event",
       "timestamp": "2026-01-05T14:18:51"
     },
     {
       "tokens": [
-        "the",
-        "win",
         "lewis",
-        "vettel",
-        "his",
-        "that",
-        "texts",
-        "and",
-        "sebastian",
-        "reveals",
-        "norris",
-        "from",
+        "helped",
         "title",
+        "norris",
+        "sebastian",
+        "from",
+        "the",
         "lando",
+        "reveals",
+        "that",
         "hamilton",
-        "helped"
+        "win",
+        "vettel",
+        "texts",
+        "his",
+        "and"
       ],
       "title": "Lando Norris reveals the texts from Lewis Hamilton and Sebastian Vettel that helped win his title",
       "timestamp": "2025-12-29T16:01:23"
     },
     {
       "tokens": [
-        "hails",
-        "crushing",
         "f1",
+        "2025",
+        "title",
         "academy",
+        "crushing",
         "win",
+        "after",
+        "wolff",
         "to",
         "pin",
-        "2025",
-        "wolff",
         "doriane",
-        "after",
-        "title",
-        "toto"
+        "toto",
+        "hails"
       ],
       "title": "Toto Wolff hails Doriane Pin after 'crushing' F1 Academy to win 2025 title",
       "timestamp": "2025-12-23T22:03:30"
     },
     {
       "tokens": [
-        "f1",
-        "williams",
-        "voted",
-        "pre",
         "testing",
-        "livery",
         "fan",
-        "team",
-        "season",
+        "voted",
         "2026",
-        "unveils"
+        "livery",
+        "season",
+        "team",
+        "unveils",
+        "pre",
+        "f1",
+        "williams"
       ],
       "title": "Williams F1 team unveils fan-voted 2026 pre-season testing livery",
       "timestamp": "2025-12-21T16:54:05"
