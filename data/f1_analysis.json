@@ -7,13 +7,29 @@
     "publishedAt": "2026-01-24T17:15:01Z",
     "channelTitle": "Global Formula Apex",
     "channelScore": 0.5,
-    "viewCount": "22",
+    "viewCount": "26",
     "likeCount": "0",
     "durationSec": 961,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=Bar13JA9s7I"
+  },
+  {
+    "id": "bhdSx5CT7-Q",
+    "title": "The risk Ferrari is taking with its basic 2026 F1 car",
+    "description": "Get more analysis of the new Ferrari and how F1 is shaping up for the first test of 2026 at Barcelona by joining The Race Members' Club. Claim your 7-day free trial: https://www.patreon.com/cw/TheRace/membership\n\nFerrari’s new Formula 1 car is here - but already it looks like F1’s most famous team has a lot of work to do to mould the SF-26 into something that can meet the lofty expectations of its passionate fanbase.\n\n00:00 2026 Ferrari breaks cover\n03:08 Ferrari and Mercedes compared\n07:23 Hami",
+    "thumbnail": "https://i.ytimg.com/vi/bhdSx5CT7-Q/maxresdefault.jpg",
+    "publishedAt": "2026-01-23T21:53:10Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "238065",
+    "likeCount": "6084",
+    "durationSec": 570,
+    "tags": [
+      "GENERAL"
+    ],
+    "url": "https://www.youtube.com/watch?v=bhdSx5CT7-Q"
   },
   {
     "id": "qEfdSELCq6w",
@@ -39,8 +55,8 @@
     "publishedAt": "2026-01-19T14:15:50Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "334441",
-    "likeCount": "6410",
+    "viewCount": "334881",
+    "likeCount": "6416",
     "durationSec": 588,
     "tags": [
       "GENERAL"
@@ -55,8 +71,8 @@
     "publishedAt": "2026-01-16T06:56:56Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "100760",
-    "likeCount": "3837",
+    "viewCount": "101180",
+    "likeCount": "3848",
     "durationSec": 1393,
     "tags": [
       "ANALYSIS",
@@ -72,8 +88,8 @@
     "publishedAt": "2026-01-16T05:23:32Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "557006",
-    "likeCount": "9831",
+    "viewCount": "557609",
+    "likeCount": "9836",
     "durationSec": 679,
     "tags": [
       "GENERAL"
@@ -136,7 +152,7 @@
     "publishedAt": "2025-12-06T20:30:01Z",
     "channelTitle": "Not Applicable",
     "channelScore": 0.5,
-    "viewCount": "83392",
+    "viewCount": "83393",
     "likeCount": "3646",
     "durationSec": 125,
     "tags": [
@@ -185,7 +201,7 @@
     "publishedAt": "2025-12-06T12:41:09Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "10697",
+    "viewCount": "10698",
     "likeCount": "831",
     "durationSec": 86,
     "tags": [
@@ -202,7 +218,7 @@
     "publishedAt": "2025-12-05T19:25:01Z",
     "channelTitle": "Formula Neon F1",
     "channelScore": 0.5,
-    "viewCount": "34733",
+    "viewCount": "34749",
     "likeCount": "1586",
     "durationSec": 153,
     "tags": [
@@ -212,13 +228,13 @@
   },
   {
     "id": "O1rjD4s7q0A",
-    "title": "The 2025 F1 Title Decider Explained 🏆",
+    "title": "The 2025 F1 Title Decider Explained ��",
     "description": "Your quick guide to how any of three world champions could be crowned in Abu Dhabi!\n\nFor more F1® videos, visit: https://www.Formula1.com\n\nVisit our store: https://f1store.formula1.com/\n\nFollow F1®:\nhttps://www.instagram.com/F1\nhttps://www.facebook.com/Formula1/\nhttps://www.twitter.com/F1\nhttps://www.twitch.tv/formula1\nhttps://www.tiktok.com/@f1\n\n#F1 #AbuDhabiGP",
     "thumbnail": "https://i.ytimg.com/vi/O1rjD4s7q0A/maxresdefault.jpg",
     "publishedAt": "2025-12-05T16:21:39Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "349336",
+    "viewCount": "349354",
     "likeCount": "19097",
     "durationSec": 76,
     "tags": [
@@ -234,76 +250,12 @@
     "publishedAt": "2025-12-03T17:30:07Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "211550",
+    "viewCount": "211565",
     "likeCount": "4057",
     "durationSec": 879,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=KwKTHRITxp4"
-  },
-  {
-    "id": "kKd4_XOHusA",
-    "title": "How good is Max Verstappen? A data analysis",
-    "description": "The full analysis, including the Python code and extra charts that didn't make the final cut, is available in my repository below.\n\n📂 Full Code & Analysis (GitHub): https://github.com/oaojVSM/f1_analytics\n\n📊 Data Source: The historical data used in this analysis was provided by the Jolpica-F1 API (based on the Ergast Developer API). 🔗 https://github.com/jolpica/jolpica-f1\n\nA special thanks to the Jolpica project team for keeping this database open and free for the community.\n\ne-mail: refactor",
-    "thumbnail": "https://i.ytimg.com/vi/kKd4_XOHusA/maxresdefault.jpg",
-    "publishedAt": "2025-12-02T23:16:06Z",
-    "channelTitle": "Refactor F1",
-    "channelScore": 0.5,
-    "viewCount": "166316",
-    "likeCount": "7033",
-    "durationSec": 1420,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=kKd4_XOHusA"
-  },
-  {
-    "id": "foAwsHPKZ10",
-    "title": "2025 F1 Qatar GP RACE analysis by Peter Windsor",
-    "description": "Against all odds - against all logic - Max Verstappen and Red Bull-Honda decisively and clinically won the Qatar GP on Sunday, with McLaren-Mercedes finishing only P2-P4, sandwiching the Williams-Mercedes of Carlos Sainz. In what will be remembered as the most inexplicable strategy call of the 2025 season, both McLaren drivers were told to stay out when a Safety Car was deployed on lap seven. Thus went their chance of a \"free\" tyre change in a race in which the use of each set of Pirellis was un",
-    "thumbnail": "https://i.ytimg.com/vi/foAwsHPKZ10/maxresdefault.jpg",
-    "publishedAt": "2025-11-30T21:01:18Z",
-    "channelTitle": "Peter Windsor",
-    "channelScore": 0.5,
-    "viewCount": "149711",
-    "likeCount": "4798",
-    "durationSec": 945,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=foAwsHPKZ10"
-  },
-  {
-    "id": "3ZGBpcwCnHI",
-    "title": "Zak Brown & Andrea Stella Explain McLaren's Pit-Stop Conundrum | 2025 Qatar Grand Prix",
-    "description": "McLaren CEO Zak Brown & Team Principal Andrea Stella join the post-race show to discuss their difficult decisions following an early safety car in Qatar.\n\nFor more F1® videos, visit: https://www.Formula1.com\n\nVisit our store: https://f1store.formula1.com/\n\nFollow F1®:\nhttps://www.instagram.com/F1\nhttps://www.facebook.com/Formula1/\nhttps://www.twitter.com/F1\nhttps://www.twitch.tv/formula1\nhttps://www.tiktok.com/@f1\n\n#F1 #QatarGP",
-    "thumbnail": "https://i.ytimg.com/vi/3ZGBpcwCnHI/maxresdefault.jpg",
-    "publishedAt": "2025-11-30T19:24:32Z",
-    "channelTitle": "FORMULA 1",
-    "channelScore": 1,
-    "viewCount": "391413",
-    "likeCount": "6468",
-    "durationSec": 264,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=3ZGBpcwCnHI"
-  },
-  {
-    "id": "ij4376o04ow",
-    "title": "New F1 2026 car pace fears explained",
-    "description": "This week, you can get 50% off your first month when you join The Race Members’ Club as part of our special Black Friday promotion: https://www.patreon.com/c/TheRace\n\nDisagreement over whether F1’s brand new cars in 2026 will be closer to Formula 2 cars in pace has been an unexpectedly polarising point of discussion as next year’s rules overhaul gets closer. That the new cars will be slower next year has never been in dispute. The question is how bad it will be. \n\n00:00 An alarming comparison\n03",
-    "thumbnail": "https://i.ytimg.com/vi/ij4376o04ow/maxresdefault.jpg",
-    "publishedAt": "2025-11-25T18:03:20Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "449475",
-    "likeCount": "7789",
-    "durationSec": 695,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=ij4376o04ow"
   }
 ]
