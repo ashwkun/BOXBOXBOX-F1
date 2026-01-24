@@ -23,13 +23,30 @@
     "publishedAt": "2026-01-19T14:15:50Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "332731",
-    "likeCount": "6398",
+    "viewCount": "333109",
+    "likeCount": "6401",
     "durationSec": 588,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=6UG1QdneAuA"
+  },
+  {
+    "id": "6rgMkkEdvGc",
+    "title": "Red Bull RB22  -  Aerodynamics Analysis and Initial Thoughts",
+    "description": "We were expecting a show car only, but the secondary images from the launch revealed a whole bunch more! It may not be the final testing spec, but its's certainly some level of developed car. \n\n00:00 Introduction\n0:59 Front Wing\n07:57 Front Caketin \n10:32 Forward Floor\n11:35 Floor Board\n16:19 Sidepod\n18:53 Floor Corner\n20:24 Rear Wing\n\nAero courses: https://courses.jkfaero.com\nRace car consulting: http://www.jkfaero.com\n\nFacebook: https://www.facebook.com/Kyleengineers\nPatreon: https://www.patre",
+    "thumbnail": "https://i.ytimg.com/vi/6rgMkkEdvGc/maxresdefault.jpg",
+    "publishedAt": "2026-01-16T06:56:56Z",
+    "channelTitle": "KYLE.ENGINEERS",
+    "channelScore": 0.5,
+    "viewCount": "99855",
+    "likeCount": "3807",
+    "durationSec": 1393,
+    "tags": [
+      "ANALYSIS",
+      "TECH"
+    ],
+    "url": "https://www.youtube.com/watch?v=6rgMkkEdvGc"
   },
   {
     "id": "k2dyLBDmJSo",
@@ -39,8 +56,8 @@
     "publishedAt": "2026-01-16T05:23:32Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "554644",
-    "likeCount": "9816",
+    "viewCount": "555088",
+    "likeCount": "9820",
     "durationSec": 679,
     "tags": [
       "GENERAL"
@@ -87,7 +104,7 @@
     "publishedAt": "2025-12-07T17:00:02Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "11449",
+    "viewCount": "11450",
     "likeCount": "468",
     "durationSec": 1732,
     "tags": [
@@ -185,8 +202,8 @@
     "publishedAt": "2025-12-05T16:21:39Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "349227",
-    "likeCount": "19096",
+    "viewCount": "349247",
+    "likeCount": "19097",
     "durationSec": 76,
     "tags": [
       "ANALYSIS"
@@ -201,7 +218,7 @@
     "publishedAt": "2025-12-03T17:30:07Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "211514",
+    "viewCount": "211515",
     "likeCount": "4058",
     "durationSec": 879,
     "tags": [
@@ -217,8 +234,8 @@
     "publishedAt": "2025-12-02T23:16:06Z",
     "channelTitle": "Refactor F1",
     "channelScore": 0.5,
-    "viewCount": "166243",
-    "likeCount": "7030",
+    "viewCount": "166256",
+    "likeCount": "7031",
     "durationSec": 1420,
     "tags": [
       "ANALYSIS"
@@ -233,7 +250,7 @@
     "publishedAt": "2025-11-30T21:01:18Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "149710",
+    "viewCount": "149711",
     "likeCount": "4798",
     "durationSec": 945,
     "tags": [
@@ -249,7 +266,7 @@
     "publishedAt": "2025-11-30T19:24:32Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "391400",
+    "viewCount": "391402",
     "likeCount": "6468",
     "durationSec": 264,
     "tags": [
@@ -265,7 +282,7 @@
     "publishedAt": "2025-11-25T18:03:20Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "449412",
+    "viewCount": "449420",
     "likeCount": "7789",
     "durationSec": 695,
     "tags": [
@@ -288,21 +305,5 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=q5Cf7Sd-jR8"
-  },
-  {
-    "id": "a7zJO_cj1QA",
-    "title": "Disastrous McLaren disqualification & huge F1 title fight twist explained",
-    "description": "Experience an effortless experience where security and networking converge in a single, cloud-native SASE platform: https://www.catonetworks.com/sase/?utm_source=youtube&utm_medium=referral&utm_campaign=catopia-the-race\n\nThe shock disqualification of both McLarens from the Las Vegas Grand Prix has made the F1 title fight much more interesting with just two rounds remaining. \n\n00:00 Dramatic F1 title race twist\n01:47 How did this happen?\n04:53 The help Max needed\n07:50 Weaknesses to exploit\n\nREAD",
-    "thumbnail": "https://i.ytimg.com/vi/a7zJO_cj1QA/maxresdefault.jpg",
-    "publishedAt": "2025-11-23T15:13:39Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "551227",
-    "likeCount": "10396",
-    "durationSec": 631,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=a7zJO_cj1QA"
   }
 ]
