@@ -7,7 +7,7 @@
     "publishedAt": "2026-01-26T09:59:18Z",
     "channelTitle": "USA SportsLine",
     "channelScore": 0.5,
-    "viewCount": "117",
+    "viewCount": "129",
     "likeCount": "0",
     "durationSec": 149,
     "tags": [
@@ -39,7 +39,7 @@
     "publishedAt": "2026-01-24T17:15:01Z",
     "channelTitle": "Global Formula Apex",
     "channelScore": 0.5,
-    "viewCount": "127",
+    "viewCount": "132",
     "likeCount": "0",
     "durationSec": 961,
     "tags": [
@@ -55,8 +55,8 @@
     "publishedAt": "2026-01-23T21:53:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "348945",
-    "likeCount": "7788",
+    "viewCount": "351097",
+    "likeCount": "7822",
     "durationSec": 570,
     "tags": [
       "GENERAL"
@@ -71,8 +71,8 @@
     "publishedAt": "2026-01-21T17:37:25Z",
     "channelTitle": "Sky Sports F1",
     "channelScore": 0.85,
-    "viewCount": "177769",
-    "likeCount": "3129",
+    "viewCount": "178731",
+    "likeCount": "3143",
     "durationSec": 3413,
     "tags": [
       "ANALYSIS"
@@ -87,7 +87,7 @@
     "publishedAt": "2026-01-19T14:15:50Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "339892",
+    "viewCount": "339914",
     "likeCount": "6457",
     "durationSec": 588,
     "tags": [
@@ -103,7 +103,7 @@
     "publishedAt": "2026-01-16T06:56:56Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "104688",
+    "viewCount": "104713",
     "likeCount": "3907",
     "durationSec": 1393,
     "tags": [
@@ -120,7 +120,7 @@
     "publishedAt": "2026-01-16T05:23:32Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "563397",
+    "viewCount": "563476",
     "likeCount": "9871",
     "durationSec": 679,
     "tags": [
@@ -266,8 +266,8 @@
     "publishedAt": "2025-12-05T16:21:39Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "349719",
-    "likeCount": "19100",
+    "viewCount": "349740",
+    "likeCount": "19101",
     "durationSec": 76,
     "tags": [
       "ANALYSIS"
@@ -282,60 +282,12 @@
     "publishedAt": "2025-12-03T17:30:07Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "211724",
+    "viewCount": "211726",
     "likeCount": "4057",
     "durationSec": 879,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=KwKTHRITxp4"
-  },
-  {
-    "id": "kKd4_XOHusA",
-    "title": "How good is Max Verstappen? A data analysis",
-    "description": "The full analysis, including the Python code and extra charts that didn't make the final cut, is available in my repository below.\n\n📂 Full Code & Analysis (GitHub): https://github.com/oaojVSM/f1_analytics\n\n📊 Data Source: The historical data used in this analysis was provided by the Jolpica-F1 API (based on the Ergast Developer API). 🔗 https://github.com/jolpica/jolpica-f1\n\nA special thanks to the Jolpica project team for keeping this database open and free for the community.\n\ne-mail: refactor",
-    "thumbnail": "https://i.ytimg.com/vi/kKd4_XOHusA/maxresdefault.jpg",
-    "publishedAt": "2025-12-02T23:16:06Z",
-    "channelTitle": "Refactor F1",
-    "channelScore": 0.5,
-    "viewCount": "166678",
-    "likeCount": "7042",
-    "durationSec": 1420,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=kKd4_XOHusA"
-  },
-  {
-    "id": "foAwsHPKZ10",
-    "title": "2025 F1 Qatar GP RACE analysis by Peter Windsor",
-    "description": "Against all odds - against all logic - Max Verstappen and Red Bull-Honda decisively and clinically won the Qatar GP on Sunday, with McLaren-Mercedes finishing only P2-P4, sandwiching the Williams-Mercedes of Carlos Sainz. In what will be remembered as the most inexplicable strategy call of the 2025 season, both McLaren drivers were told to stay out when a Safety Car was deployed on lap seven. Thus went their chance of a \"free\" tyre change in a race in which the use of each set of Pirellis was un",
-    "thumbnail": "https://i.ytimg.com/vi/foAwsHPKZ10/maxresdefault.jpg",
-    "publishedAt": "2025-11-30T21:01:18Z",
-    "channelTitle": "Peter Windsor",
-    "channelScore": 0.5,
-    "viewCount": "149719",
-    "likeCount": "4799",
-    "durationSec": 945,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=foAwsHPKZ10"
-  },
-  {
-    "id": "3ZGBpcwCnHI",
-    "title": "Zak Brown & Andrea Stella Explain McLaren's Pit-Stop Conundrum | 2025 Qatar Grand Prix",
-    "description": "McLaren CEO Zak Brown & Team Principal Andrea Stella join the post-race show to discuss their difficult decisions following an early safety car in Qatar.\n\nFor more F1® videos, visit: https://www.Formula1.com\n\nVisit our store: https://f1store.formula1.com/\n\nFollow F1®:\nhttps://www.instagram.com/F1\nhttps://www.facebook.com/Formula1/\nhttps://www.twitter.com/F1\nhttps://www.twitch.tv/formula1\nhttps://www.tiktok.com/@f1\n\n#F1 #QatarGP",
-    "thumbnail": "https://i.ytimg.com/vi/3ZGBpcwCnHI/maxresdefault.jpg",
-    "publishedAt": "2025-11-30T19:24:32Z",
-    "channelTitle": "FORMULA 1",
-    "channelScore": 1,
-    "viewCount": "391453",
-    "likeCount": "6468",
-    "durationSec": 264,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=3ZGBpcwCnHI"
   }
 ]
