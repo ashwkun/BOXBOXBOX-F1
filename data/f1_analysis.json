@@ -23,7 +23,7 @@
     "publishedAt": "2026-01-26T08:35:00Z",
     "channelTitle": "Global Formula Apex",
     "channelScore": 0.5,
-    "viewCount": "94",
+    "viewCount": "96",
     "likeCount": "3",
     "durationSec": 1006,
     "tags": [
@@ -39,8 +39,8 @@
     "publishedAt": "2026-01-23T21:53:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "358659",
-    "likeCount": "7921",
+    "viewCount": "359174",
+    "likeCount": "7925",
     "durationSec": 570,
     "tags": [
       "GENERAL"
@@ -55,29 +55,13 @@
     "publishedAt": "2026-01-21T17:37:25Z",
     "channelTitle": "Sky Sports F1",
     "channelScore": 0.85,
-    "viewCount": "182015",
-    "likeCount": "3178",
+    "viewCount": "182301",
+    "likeCount": "3180",
     "durationSec": 3413,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=OGUnLAmvC_E"
-  },
-  {
-    "id": "2_j5G8C_f34",
-    "title": "Audi’s odd F1 2026 launch - everything we learned",
-    "description": "Ad-free detailed analysis of every 2026 F1 cars as it emerges is available right now in The Race Members' Club. Claim your 7-day free trial: https://www.patreon.com/cw/TheRace/membership\n\nAudi’s officially launched its new F1 team but the real car’s being kept hidden and remains a mystery even though it’s already run on track. \n\nThe Audi R26 completed an early shakedown at Barcelona nearly two weeks ago, when grainy images and video of it emerged as some tried to capture it from a distance outsi",
-    "thumbnail": "https://i.ytimg.com/vi/2_j5G8C_f34/maxresdefault.jpg",
-    "publishedAt": "2026-01-20T23:49:46Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "190325",
-    "likeCount": "4017",
-    "durationSec": 617,
-    "tags": [
-      "GENERAL"
-    ],
-    "url": "https://www.youtube.com/watch?v=2_j5G8C_f34"
   },
   {
     "id": "6UG1QdneAuA",
@@ -87,8 +71,8 @@
     "publishedAt": "2026-01-19T14:15:50Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "340611",
-    "likeCount": "6461",
+    "viewCount": "340732",
+    "likeCount": "6462",
     "durationSec": 588,
     "tags": [
       "GENERAL"
@@ -103,7 +87,7 @@
     "publishedAt": "2026-01-16T06:56:56Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "105274",
+    "viewCount": "105275",
     "likeCount": "3921",
     "durationSec": 1393,
     "tags": [
@@ -120,8 +104,8 @@
     "publishedAt": "2026-01-16T05:23:32Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "564267",
-    "likeCount": "9876",
+    "viewCount": "564347",
+    "likeCount": "9877",
     "durationSec": 679,
     "tags": [
       "GENERAL"
@@ -250,8 +234,8 @@
     "publishedAt": "2025-12-05T19:25:01Z",
     "channelTitle": "Formula Neon F1",
     "channelScore": 0.5,
-    "viewCount": "35019",
-    "likeCount": "1594",
+    "viewCount": "35032",
+    "likeCount": "1595",
     "durationSec": 153,
     "tags": [
       "ANALYSIS"
@@ -266,7 +250,7 @@
     "publishedAt": "2025-12-05T16:21:39Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "349840",
+    "viewCount": "349843",
     "likeCount": "19102",
     "durationSec": 76,
     "tags": [
@@ -282,44 +266,12 @@
     "publishedAt": "2025-12-03T17:30:07Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "211778",
+    "viewCount": "211801",
     "likeCount": "4057",
     "durationSec": 879,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=KwKTHRITxp4"
-  },
-  {
-    "id": "kKd4_XOHusA",
-    "title": "How good is Max Verstappen? A data analysis",
-    "description": "The full analysis, including the Python code and extra charts that didn't make the final cut, is available in my repository below.\n\n📂 Full Code & Analysis (GitHub): https://github.com/oaojVSM/f1_analytics\n\n📊 Data Source: The historical data used in this analysis was provided by the Jolpica-F1 API (based on the Ergast Developer API). 🔗 https://github.com/jolpica/jolpica-f1\n\nA special thanks to the Jolpica project team for keeping this database open and free for the community.\n\ne-mail: refactor",
-    "thumbnail": "https://i.ytimg.com/vi/kKd4_XOHusA/maxresdefault.jpg",
-    "publishedAt": "2025-12-02T23:16:06Z",
-    "channelTitle": "Refactor F1",
-    "channelScore": 0.5,
-    "viewCount": "166784",
-    "likeCount": "7044",
-    "durationSec": 1420,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=kKd4_XOHusA"
-  },
-  {
-    "id": "foAwsHPKZ10",
-    "title": "2025 F1 Qatar GP RACE analysis by Peter Windsor",
-    "description": "Against all odds - against all logic - Max Verstappen and Red Bull-Honda decisively and clinically won the Qatar GP on Sunday, with McLaren-Mercedes finishing only P2-P4, sandwiching the Williams-Mercedes of Carlos Sainz. In what will be remembered as the most inexplicable strategy call of the 2025 season, both McLaren drivers were told to stay out when a Safety Car was deployed on lap seven. Thus went their chance of a \"free\" tyre change in a race in which the use of each set of Pirellis was un",
-    "thumbnail": "https://i.ytimg.com/vi/foAwsHPKZ10/maxresdefault.jpg",
-    "publishedAt": "2025-11-30T21:01:18Z",
-    "channelTitle": "Peter Windsor",
-    "channelScore": 0.5,
-    "viewCount": "149719",
-    "likeCount": "4799",
-    "durationSec": 945,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=foAwsHPKZ10"
   }
 ]
