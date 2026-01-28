@@ -32,6 +32,22 @@
     "url": "https://www.youtube.com/watch?v=OWP-rVNbMXI"
   },
   {
+    "id": "PW5aQ1Q5Pr8",
+    "title": "What Are Formula 1 Regulations? | 2026 F1 Regulations Explained",
+    "description": "Why does Formula 1 have regulations, and what are they? Sam Collins breaks down these rules, how they shape the sport, and what to expect as F1 enters a new year of technical regulations.\n\nFor more F1® videos, visit: https://www.Formula1.com\n\nVisit our store: https://f1store.formula1.com/\n\nFollow F1®:\nhttps://www.instagram.com/F1\nhttps://www.facebook.com/Formula1/\nhttps://www.twitter.com/F1\nhttps://www.twitch.tv/formula1\nhttps://www.tiktok.com/@f1\n\n#F1",
+    "thumbnail": "https://i.ytimg.com/vi/PW5aQ1Q5Pr8/maxresdefault.jpg",
+    "publishedAt": "2026-01-24T13:00:57Z",
+    "channelTitle": "FORMULA 1",
+    "channelScore": 1,
+    "viewCount": "181340",
+    "likeCount": "5791",
+    "durationSec": 825,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=PW5aQ1Q5Pr8"
+  },
+  {
     "id": "bhdSx5CT7-Q",
     "title": "The risk Ferrari is taking with its basic 2026 F1 car",
     "description": "Get more analysis of the new Ferrari and how F1 is shaping up for the first test of 2026 at Barcelona by joining The Race Members' Club. Claim your 7-day free trial: https://www.patreon.com/cw/TheRace/membership\n\nFerrari’s new Formula 1 car is here - but already it looks like F1’s most famous team has a lot of work to do to mould the SF-26 into something that can meet the lofty expectations of its passionate fanbase.\n\n00:00 2026 Ferrari breaks cover\n03:08 Ferrari and Mercedes compared\n07:23 Hami",
@@ -39,8 +55,8 @@
     "publishedAt": "2026-01-23T21:53:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "359174",
-    "likeCount": "7925",
+    "viewCount": "359648",
+    "likeCount": "7931",
     "durationSec": 570,
     "tags": [
       "GENERAL"
@@ -55,8 +71,8 @@
     "publishedAt": "2026-01-21T17:37:25Z",
     "channelTitle": "Sky Sports F1",
     "channelScore": 0.85,
-    "viewCount": "182301",
-    "likeCount": "3180",
+    "viewCount": "182596",
+    "likeCount": "3183",
     "durationSec": 3413,
     "tags": [
       "ANALYSIS"
@@ -71,8 +87,8 @@
     "publishedAt": "2026-01-19T14:15:50Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "340732",
-    "likeCount": "6462",
+    "viewCount": "340777",
+    "likeCount": "6463",
     "durationSec": 588,
     "tags": [
       "GENERAL"
@@ -87,7 +103,7 @@
     "publishedAt": "2026-01-16T06:56:56Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "105275",
+    "viewCount": "105360",
     "likeCount": "3921",
     "durationSec": 1393,
     "tags": [
@@ -104,7 +120,7 @@
     "publishedAt": "2026-01-16T05:23:32Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "564347",
+    "viewCount": "564422",
     "likeCount": "9877",
     "durationSec": 679,
     "tags": [
@@ -184,7 +200,7 @@
     "publishedAt": "2025-12-06T19:52:54Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "287916",
+    "viewCount": "287917",
     "likeCount": "5332",
     "durationSec": 606,
     "tags": [
@@ -234,7 +250,7 @@
     "publishedAt": "2025-12-05T19:25:01Z",
     "channelTitle": "Formula Neon F1",
     "channelScore": 0.5,
-    "viewCount": "35032",
+    "viewCount": "35034",
     "likeCount": "1595",
     "durationSec": 153,
     "tags": [
@@ -250,7 +266,7 @@
     "publishedAt": "2025-12-05T16:21:39Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "349843",
+    "viewCount": "349861",
     "likeCount": "19102",
     "durationSec": 76,
     "tags": [
@@ -266,12 +282,44 @@
     "publishedAt": "2025-12-03T17:30:07Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "211801",
+    "viewCount": "211819",
     "likeCount": "4057",
     "durationSec": 879,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=KwKTHRITxp4"
+  },
+  {
+    "id": "kKd4_XOHusA",
+    "title": "How good is Max Verstappen? A data analysis",
+    "description": "The full analysis, including the Python code and extra charts that didn't make the final cut, is available in my repository below.\n\n📂 Full Code & Analysis (GitHub): https://github.com/oaojVSM/f1_analytics\n\n📊 Data Source: The historical data used in this analysis was provided by the Jolpica-F1 API (based on the Ergast Developer API). 🔗 https://github.com/jolpica/jolpica-f1\n\nA special thanks to the Jolpica project team for keeping this database open and free for the community.\n\ne-mail: refactor",
+    "thumbnail": "https://i.ytimg.com/vi/kKd4_XOHusA/maxresdefault.jpg",
+    "publishedAt": "2025-12-02T23:16:06Z",
+    "channelTitle": "Refactor F1",
+    "channelScore": 0.5,
+    "viewCount": "166813",
+    "likeCount": "7044",
+    "durationSec": 1420,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=kKd4_XOHusA"
+  },
+  {
+    "id": "foAwsHPKZ10",
+    "title": "2025 F1 Qatar GP RACE analysis by Peter Windsor",
+    "description": "Against all odds - against all logic - Max Verstappen and Red Bull-Honda decisively and clinically won the Qatar GP on Sunday, with McLaren-Mercedes finishing only P2-P4, sandwiching the Williams-Mercedes of Carlos Sainz. In what will be remembered as the most inexplicable strategy call of the 2025 season, both McLaren drivers were told to stay out when a Safety Car was deployed on lap seven. Thus went their chance of a \"free\" tyre change in a race in which the use of each set of Pirellis was un",
+    "thumbnail": "https://i.ytimg.com/vi/foAwsHPKZ10/maxresdefault.jpg",
+    "publishedAt": "2025-11-30T21:01:18Z",
+    "channelTitle": "Peter Windsor",
+    "channelScore": 0.5,
+    "viewCount": "149720",
+    "likeCount": "4799",
+    "durationSec": 945,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=foAwsHPKZ10"
   }
 ]
