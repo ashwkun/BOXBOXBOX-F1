@@ -7,8 +7,8 @@
     "publishedAt": "2026-01-31T02:06:53Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "343",
-    "likeCount": "8",
+    "viewCount": "679",
+    "likeCount": "28",
     "durationSec": 148,
     "tags": [
       "ANALYSIS"
@@ -23,8 +23,8 @@
     "publishedAt": "2026-01-30T20:11:29Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "208253",
-    "likeCount": "5211",
+    "viewCount": "246372",
+    "likeCount": "5781",
     "durationSec": 633,
     "tags": [
       "ANALYSIS"
@@ -39,7 +39,7 @@
     "publishedAt": "2026-01-29T18:36:44Z",
     "channelTitle": "ScuderiaFans",
     "channelScore": 0.5,
-    "viewCount": "1493",
+    "viewCount": "1512",
     "likeCount": "52",
     "durationSec": 105,
     "tags": [
@@ -55,8 +55,8 @@
     "publishedAt": "2026-01-24T13:06:18Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "112951",
-    "likeCount": "3596",
+    "viewCount": "113064",
+    "likeCount": "3599",
     "durationSec": 1182,
     "tags": [
       "ANALYSIS",
@@ -72,8 +72,8 @@
     "publishedAt": "2026-01-24T13:00:57Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "202071",
-    "likeCount": "6289",
+    "viewCount": "202369",
+    "likeCount": "6296",
     "durationSec": 825,
     "tags": [
       "ANALYSIS"
@@ -88,8 +88,8 @@
     "publishedAt": "2026-01-23T21:53:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "382400",
-    "likeCount": "8148",
+    "viewCount": "382604",
+    "likeCount": "8150",
     "durationSec": 570,
     "tags": [
       "GENERAL"
@@ -121,8 +121,8 @@
     "publishedAt": "2026-01-23T12:55:20Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "57676",
-    "likeCount": "2095",
+    "viewCount": "57746",
+    "likeCount": "2098",
     "durationSec": 1518,
     "tags": [
       "ANALYSIS",
@@ -138,8 +138,8 @@
     "publishedAt": "2026-01-22T21:21:11Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "779782",
-    "likeCount": "13428",
+    "viewCount": "779943",
+    "likeCount": "13430",
     "durationSec": 493,
     "tags": [
       "GENERAL"
@@ -154,8 +154,8 @@
     "publishedAt": "2026-01-21T17:37:25Z",
     "channelTitle": "Sky Sports F1",
     "channelScore": 0.85,
-    "viewCount": "189754",
-    "likeCount": "3224",
+    "viewCount": "189885",
+    "likeCount": "3225",
     "durationSec": 3413,
     "tags": [
       "ANALYSIS"
@@ -170,7 +170,7 @@
     "publishedAt": "2026-01-20T23:49:46Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "191303",
+    "viewCount": "191334",
     "likeCount": "4025",
     "durationSec": 617,
     "tags": [
@@ -186,8 +186,8 @@
     "publishedAt": "2026-01-19T14:15:50Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "342319",
-    "likeCount": "6475",
+    "viewCount": "342367",
+    "likeCount": "6476",
     "durationSec": 588,
     "tags": [
       "GENERAL"
@@ -202,8 +202,8 @@
     "publishedAt": "2026-01-16T06:56:56Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "106815",
-    "likeCount": "3945",
+    "viewCount": "106853",
+    "likeCount": "3946",
     "durationSec": 1393,
     "tags": [
       "ANALYSIS",
@@ -219,13 +219,29 @@
     "publishedAt": "2026-01-16T05:23:32Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "566178",
+    "viewCount": "566245",
     "likeCount": "9884",
     "durationSec": 679,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=k2dyLBDmJSo"
+  },
+  {
+    "id": "7U1kOf_BEZQ",
+    "title": "Precision, Recall & F1 Score Explained | Boost Your AI Model Performance",
+    "description": "Unlock the power of accuracy metrics in machine learning! In this video, we break down Precision, Recall, and F1 Score with simple examples so you can clearly understand how each one impacts model performance. Whether you're testing classifiers or improving AI predictions, these metrics are essential for better decision-making and results. Perfect for beginners and data enthusiasts!\n\n#Precision #Recall #F1Score #DatamitesInstitute \n\nDataMites is a renowned global institution offering specialized",
+    "thumbnail": "https://i.ytimg.com/vi/7U1kOf_BEZQ/maxresdefault.jpg",
+    "publishedAt": "2026-01-05T06:15:01Z",
+    "channelTitle": "DataMites",
+    "channelScore": 0.5,
+    "viewCount": "61",
+    "likeCount": "3",
+    "durationSec": 539,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=7U1kOf_BEZQ"
   },
   {
     "id": "11-OOxmusAQ",
@@ -251,7 +267,7 @@
     "publishedAt": "2025-12-07T17:00:02Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "11501",
+    "viewCount": "11504",
     "likeCount": "471",
     "durationSec": 1732,
     "tags": [
@@ -267,7 +283,7 @@
     "publishedAt": "2025-12-06T20:30:01Z",
     "channelTitle": "Not Applicable",
     "channelScore": 0.5,
-    "viewCount": "83440",
+    "viewCount": "83441",
     "likeCount": "3645",
     "durationSec": 125,
     "tags": [
@@ -307,22 +323,5 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=Kxd9dbtlMNw"
-  },
-  {
-    "id": "7TZoEvvCLwk",
-    "title": "LEWIS HAMILTON ABU DHABI FP3 CRASH EXPLAINED",
-    "description": "Driver Coach Martin Villari explains why the entry curb was not at play with Lewis Hamiltons Crash in FP3 In Abu Dhabi #lewishamilton #abudhabigp #f1\n\n------------------------------------------------------------------------------------------------------------------------\n❓ Have a question or thought? Drop it in the comments for me!\n👍 Like the video? Give it a thumbs up!\n🔔 Like this content and insight? Subscribe to my channel and turn the bell icon on!\n-----------------------------------------",
-    "thumbnail": "https://i.ytimg.com/vi/7TZoEvvCLwk/maxresdefault.jpg",
-    "publishedAt": "2025-12-06T12:41:09Z",
-    "channelTitle": "lowerlaptime",
-    "channelScore": 0.5,
-    "viewCount": "10721",
-    "likeCount": "831",
-    "durationSec": 86,
-    "tags": [
-      "FP",
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=7TZoEvvCLwk"
   }
 ]
