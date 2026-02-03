@@ -40,8 +40,8 @@
     "publishedAt": "2026-01-31T02:06:53Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "3257",
-    "likeCount": "144",
+    "viewCount": "3265",
+    "likeCount": "145",
     "durationSec": 148,
     "tags": [
       "ANALYSIS"
@@ -56,8 +56,8 @@
     "publishedAt": "2026-01-30T20:11:29Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "617509",
-    "likeCount": "10229",
+    "viewCount": "619622",
+    "likeCount": "10250",
     "durationSec": 633,
     "tags": [
       "ANALYSIS"
@@ -72,8 +72,8 @@
     "publishedAt": "2026-01-29T19:08:51Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "366250",
-    "likeCount": "6532",
+    "viewCount": "366829",
+    "likeCount": "6535",
     "durationSec": 521,
     "tags": [
       "GENERAL"
@@ -88,7 +88,7 @@
     "publishedAt": "2026-01-27T19:19:51Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "357297",
+    "viewCount": "357299",
     "likeCount": "7137",
     "durationSec": 530,
     "tags": [
@@ -104,8 +104,8 @@
     "publishedAt": "2026-01-24T13:06:18Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "117436",
-    "likeCount": "3682",
+    "viewCount": "117531",
+    "likeCount": "3684",
     "durationSec": 1182,
     "tags": [
       "ANALYSIS",
@@ -121,8 +121,8 @@
     "publishedAt": "2026-01-24T13:00:57Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "208876",
-    "likeCount": "6442",
+    "viewCount": "208972",
+    "likeCount": "6444",
     "durationSec": 825,
     "tags": [
       "ANALYSIS"
@@ -137,7 +137,7 @@
     "publishedAt": "2026-01-23T21:53:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "386613",
+    "viewCount": "386705",
     "likeCount": "8194",
     "durationSec": 570,
     "tags": [
@@ -170,8 +170,8 @@
     "publishedAt": "2026-01-23T12:55:20Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "59336",
-    "likeCount": "2124",
+    "viewCount": "59354",
+    "likeCount": "2125",
     "durationSec": 1518,
     "tags": [
       "ANALYSIS",
@@ -187,7 +187,7 @@
     "publishedAt": "2026-01-22T21:21:11Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "782754",
+    "viewCount": "782813",
     "likeCount": "13455",
     "durationSec": 493,
     "tags": [
@@ -203,7 +203,7 @@
     "publishedAt": "2026-01-21T17:37:25Z",
     "channelTitle": "Sky Sports F1",
     "channelScore": 0.85,
-    "viewCount": "193890",
+    "viewCount": "193950",
     "likeCount": "3262",
     "durationSec": 3413,
     "tags": [
@@ -219,7 +219,7 @@
     "publishedAt": "2026-01-20T23:49:46Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "192063",
+    "viewCount": "192074",
     "likeCount": "4037",
     "durationSec": 617,
     "tags": [
@@ -235,13 +235,29 @@
     "publishedAt": "2026-01-19T14:15:50Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "343268",
+    "viewCount": "343288",
     "likeCount": "6487",
     "durationSec": 588,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=6UG1QdneAuA"
+  },
+  {
+    "id": "11-OOxmusAQ",
+    "title": "2025 F1 ABU DHABI GP Race analysis by Peter Windsor",
+    "description": "And so it ended.  Max, Oscar and Lando finished one-two-three on the Abu Dhabi road - but it was Lando who was thus ahead in the final standings of the FIA Drivers' World Championship by the margin of two points. Lando Norris = World Champion. Max was magnificent from the pole; Oscar ran hard Pirellis from the start (rather than the Mediums selected by all the other major runners) and, in so doing, applied some pressure on Max for most of the distance; towards the end, though, on old-ish Hards, ",
+    "thumbnail": "https://i.ytimg.com/vi/11-OOxmusAQ/maxresdefault.jpg",
+    "publishedAt": "2025-12-07T19:10:00Z",
+    "channelTitle": "Peter Windsor",
+    "channelScore": 0.5,
+    "viewCount": "100055",
+    "likeCount": "3247",
+    "durationSec": 1118,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=11-OOxmusAQ"
   },
   {
     "id": "6rgMkkEdvGc",
@@ -251,13 +267,61 @@
     "publishedAt": "2026-01-16T06:56:56Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "108138",
-    "likeCount": "3966",
+    "viewCount": "108165",
+    "likeCount": "3969",
     "durationSec": 1393,
     "tags": [
       "ANALYSIS",
       "TECH"
     ],
     "url": "https://www.youtube.com/watch?v=6rgMkkEdvGc"
+  },
+  {
+    "id": "k2dyLBDmJSo",
+    "title": "What Red Bull/Ford actually revealed at first F1 2026 launch",
+    "description": "Take a look behind the scenes at how we covered the Red Bull-Ford launch with Scott Mitchell-Malm, who's recorded a bonus video over in The Race Members' Club. Join now to claim a free 7-day trial: https://www.patreon.com/c/TheRace\n\nFord took centre stage as Red Bull’s F1 teams became the first to hold a 2026 launch - which revealed some surprising details as what was billed as a livery unveiling used a showcar with some key differences to F1's original model.\n\nHere's everything we can deduce fr",
+    "thumbnail": "https://i.ytimg.com/vi/k2dyLBDmJSo/maxresdefault.jpg",
+    "publishedAt": "2026-01-16T05:23:32Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "567420",
+    "likeCount": "9892",
+    "durationSec": 679,
+    "tags": [
+      "GENERAL"
+    ],
+    "url": "https://www.youtube.com/watch?v=k2dyLBDmJSo"
+  },
+  {
+    "id": "duq5Y5xml5Q",
+    "title": "2025 F1 Abu Dhabi GP RACE Analysis - Lando Norris Is A World Champion!!!!",
+    "description": "2025 F1 Abu Dhabi GP RACE Analysis! Lando Norris is World Champion for Mclaren by 2 points and  Max Verstappen won the race!\n\nLando Norris is a worthy WDC and drives like Melbourne, Monaco and Brazil tell you as much! During the race it wasn't without controversy!  Was Lando's overtake off-track fair, and was Yuki's driving dirty? Driver Coach Martin Villari Analyses!\n\nCHAPTERS:\n00:00 Introduction\n00:22 My General Comments / Thoughts\n04:00 The Start - Quick Lights & Defensive Posture\n05:14 Oscar",
+    "thumbnail": "https://i.ytimg.com/vi/duq5Y5xml5Q/maxresdefault.jpg",
+    "publishedAt": "2025-12-07T17:00:02Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "11521",
+    "likeCount": "471",
+    "durationSec": 1732,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=duq5Y5xml5Q"
+  },
+  {
+    "id": "72yq1II9crI",
+    "title": "The 2025 F1 Title Battle Explained",
+    "description": "🏎️ Who will take home the 2025 World Championship? 🏆The final race in Abu Dhabi is going to be a nail-biter! 😮 Lando, Max, and Oscar all have a shot, but the paths are complex 🌟 From winning scenarios to the crucial positions needed from opponents, every point counts 🫣 Will Lando secure his title, or can Max or Oscar pull off a surprise? 🤔\n#shorts   #f1   #formula1\n----------------------------------------------------------------------\n🏆Become a Member | https://www.youtube.com/@NotApplica",
+    "thumbnail": "https://i.ytimg.com/vi/72yq1II9crI/maxresdefault.jpg",
+    "publishedAt": "2025-12-06T20:30:01Z",
+    "channelTitle": "Not Applicable",
+    "channelScore": 0.5,
+    "viewCount": "83450",
+    "likeCount": "3645",
+    "durationSec": 125,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=72yq1II9crI"
   }
 ]
