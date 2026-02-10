@@ -80,9 +80,7 @@
       "score": 999,
       "timestamp": "2026-02-03T10:00:22",
       "image": "https://cdn-1.motorsport.com/images/amp/6zoJPbw0/s6/jack-doohan-kondo-racing.jpg"
-    }
-  ],
-  "nuclear_queue": [
+    },
     {
       "id": "4d42dcddd6ed8f49a358763b99cf99ea",
       "title": "Aston Martin signs multi-year deal with AI coding agent firm ahead of 2026 launch event",
@@ -92,6 +90,7 @@
       "image": "https://cdn-4.motorsport.com/images/amp/0RrXQxg0/s6/fernando-alonso-aston-martin-r.jpg"
     }
   ],
+  "nuclear_queue": [],
   "major_sent": [
     {
       "id": "1370be55fbc3b6facc0cd1391d251a85",
@@ -1138,284 +1137,307 @@
   ],
   "schema_version": 2,
   "sent_urls": [
-    "https://www.motorsport.com/f1/news/kimi-antonelli-eyeing-f1-2026-title-fight-with-mercedes-currently-favourite/10794688/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/watch-live-alpine-launches-2026-f1-season/10792156/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mclaren-confirms-controversial-papaya-rules-will-stay-for-2026-f1-season/10791815/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/red-bull-reveals-actual-2026-f1-car-as-barcelona-test-begins/10792803/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/george-russell-launches-signature-blue-iwc-pilots-watches-ahead-of-2026-f1-season/10795427/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/aston-martin-signs-multi-year-deal-with-ai-coding-agent-firm-ahead-of-2026-launch-event/10796267/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/ferrari-unveils-2026-f1-car-at-fiorano/10792168/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/red-bull-reveals-refreshed-2026-f1-livery-at-detroit-launch/10790360/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/cadillac-launches-stealthy-first-f1-livery-for-barcelona-testing/10789753/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/why-karun-chandhok-believes-george-russell-can-win-the-2026-f1-drivers-title/10793491/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/progress-but-no-title-battle-williams-on-f1-2026-ambitions/10795184/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/williams-unveils-2026-f1-car-livery/10794926/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/miami-gp-unveils-superyacht-themed-hospitality-enclosure-for-2026-race-weekend/10793839/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/haas-unveils-car-design-for-f1-2026/10791084/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/controversial-2026-f1-engine-loophole-will-not-be-resolved-before-the-racing-begins/10792189/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/alpine-reveals-livery-2026-f1-season/10792201/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/charles-leclerc-unveils-2026-f1-helmet-ahead-of-ferrari-season-launch-event/10791301/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mclaren-officially-unveils-papaya-livery-for-2026-f1-car/10796219/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/isack-hadjar-reveals-bold-ayrton-senna-inspired-2026-f1-helmet/10792923/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/culture/news/red-bull-supercars-drivers-take-on-five-lap-f1-challenge-in-title-winning-rb7/10794405/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mclaren-confirms-controversial-papaya-rules-will-stay-for-2026-f1-season/10791815/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/george-russell-launches-signature-blue-iwc-pilots-watches-ahead-of-2026-f1-season/10795427/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mercedes-unveils-w17-livery-as-new-stripes-draw-mixed-reaction-ahead-of-2026-f1-season/10792098/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/aston-martin-2026-car-red-flag/10793849/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/audi-unveils-debut-f1-car-for-2026/10791452/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/russell-eager-for-f1-2026-title-battle-against-verstappen/10795170/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/lando-norris-reveals-david-beckham-was-among-the-stars-to-reach-out-after-2025-f1-title-win/10795491/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mercedes-officially-confirms-full-time-f1-safety-and-medical-car-contract/10794091/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/audi-signs-formula-regional-champion-as-first-academy-driver/10792838/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/max-verstappen-admits-underdog-2025-f1-title-fight-felt-nice-amid-change-in-fan-support/10793367/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mercedes-reveals-new-look-f1-design-for-2026/10791867/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/yuki-tsunoda-sign-2026-honda-contract-red-bull-ford-role/10789702/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/haas-signs-doohan-reserve-driver/10794861/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/mclaren-signs-fornaroli-and-oward-as-f1-2026-reserve-drivers/10790268/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/honda-f1-2026-aston-martin-power-unit/10791254/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mercedes-reveals-new-look-f1-design-for-2026/10791867/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/red-bull-reveals-refreshed-2026-f1-livery-at-detroit-launch/10790360/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/isack-hadjar-reveals-bold-ayrton-senna-inspired-2026-f1-helmet/10792923/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/progress-but-no-title-battle-williams-on-f1-2026-ambitions/10795184/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/aston-martin-2026-car-red-flag/10793849/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mclaren-reveals-renders-of-new-mcl40-f1-car/10792792/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/haas-unveils-car-design-for-f1-2026/10791084/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mercedes-unveils-w17-livery-as-new-stripes-draw-mixed-reaction-ahead-of-2026-f1-season/10792098/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/max-verstappen-admits-underdog-2025-f1-title-fight-felt-nice-amid-change-in-fan-support/10793367/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/lando-norris-reveals-david-beckham-was-among-the-stars-to-reach-out-after-2025-f1-title-win/10795491/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/williams-reveals-f1-2026-reserve-driver-and-academy-line-up/10790464/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/russell-eager-for-f1-2026-title-battle-against-verstappen/10795170/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/haas-signs-doohan-reserve-driver/10794861/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/mercedes-f1-reveals-2026-team-kit-as-fans-weigh-in/10790188/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/miami-gp-unveils-superyacht-themed-hospitality-enclosure-for-2026-race-weekend/10793839/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/charles-leclerc-unveils-2026-f1-helmet-ahead-of-ferrari-season-launch-event/10791301/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/watch-live-alpine-launches-2026-f1-season/10792156/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/williams-reveals-f1-2026-reserve-driver-and-academy-line-up/10790464/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/f1-fans-deliver-verdict-as-racing-bulls-reveal-2026-team-kit-and-race-suits/10789935/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/red-bull-reveals-actual-2026-f1-car-as-barcelona-test-begins/10792803/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/cadillac-reveals-two-sided-2026-livery-for-its-maiden-f1-season/10796105/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mclaren-reveals-renders-of-new-mcl40-f1-car/10792792/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/watch-live-ferrari-unveils-2026-f1-car/10792150/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/controversial-2026-f1-engine-loophole-will-not-be-resolved-before-the-racing-begins/10792189/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/williams-unveils-2026-f1-car-livery/10794926/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mclaren-officially-unveils-papaya-livery-for-2026-f1-car/10796219/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/audi-unveils-debut-f1-car-for-2026/10791452/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/alpine-reveals-livery-2026-f1-season/10792201/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/yuki-tsunoda-sign-2026-honda-contract-red-bull-ford-role/10789702/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/culture/news/red-bull-supercars-drivers-take-on-five-lap-f1-challenge-in-title-winning-rb7/10794405/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/audi-signs-formula-regional-champion-as-first-academy-driver/10792838/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mercedes-officially-confirms-full-time-f1-safety-and-medical-car-contract/10794091/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/why-karun-chandhok-believes-george-russell-can-win-the-2026-f1-drivers-title/10793491/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/cadillac-launches-stealthy-first-f1-livery-for-barcelona-testing/10789753/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
+    "https://www.motorsport.com/f1/news/kimi-antonelli-eyeing-f1-2026-title-fight-with-mercedes-currently-favourite/10794688/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
   ],
   "title_fingerprints": [
     {
       "tokens": [
+        "agent",
+        "ai",
+        "of",
+        "year",
+        "with",
+        "signs",
+        "deal",
+        "launch",
+        "ahead",
+        "martin",
+        "aston",
+        "coding",
+        "event",
+        "2026",
+        "firm",
+        "multi"
+      ],
+      "title": "Aston Martin signs multi-year deal with AI coding agent firm ahead of 2026 launch event",
+      "timestamp": "2026-02-09T17:50:22"
+    },
+    {
+      "tokens": [
+        "livery",
+        "car",
+        "f1",
+        "papaya",
         "mclaren",
         "unveils",
-        "papaya",
-        "car",
-        "2026",
-        "livery",
         "ly",
         "for",
-        "f1"
+        "2026"
       ],
       "title": "McLaren officially unveils papaya livery for 2026 F1 car",
       "timestamp": "2026-02-09T15:26:18"
     },
     {
       "tokens": [
-        "cadillac",
-        "f1",
-        "two",
-        "reveals",
-        "2026",
         "livery",
-        "sided"
+        "f1",
+        "sided",
+        "reveals",
+        "two",
+        "cadillac",
+        "2026"
       ],
       "title": "Cadillac reveals two-sided 2026 F1 livery",
       "timestamp": "2026-02-09T03:02:32"
     },
     {
       "tokens": [
-        "after",
-        "lando",
-        "beckham",
-        "stars",
         "2025",
-        "reach",
-        "norris",
-        "reveals",
-        "the",
         "among",
-        "david",
-        "to",
-        "was",
-        "title",
+        "beckham",
+        "out",
         "f1",
+        "title",
+        "stars",
+        "reveals",
+        "to",
+        "lando",
+        "after",
+        "david",
+        "the",
+        "reach",
         "win",
-        "out"
+        "was",
+        "norris"
       ],
       "title": "Lando Norris reveals David Beckham was among the stars to reach out after 2025 F1 title win",
       "timestamp": "2026-02-05T12:18:33"
     },
     {
       "tokens": [
-        "s",
-        "ahead",
-        "f1",
-        "two",
-        "of",
         "russell",
-        "pilot",
+        "of",
         "watches",
-        "2026",
-        "launches",
+        "f1",
         "iwc",
-        "blue",
+        "launches",
+        "two",
+        "pilot",
+        "s",
         "george",
+        "ahead",
         "season",
-        "signature"
+        "2026",
+        "signature",
+        "blue"
       ],
       "title": "George Russell launches two signature blue IWC Pilot\u2019s watches ahead of 2026 F1 season",
       "timestamp": "2026-02-05T09:46:07"
     },
     {
       "tokens": [
+        "its",
+        "on",
+        "f1",
+        "williams",
+        "title",
+        "ambitions",
         "battle",
         "progress",
-        "williams",
-        "on",
-        "its",
         "but",
-        "no",
         "2026",
-        "ambitions",
-        "title",
-        "f1"
+        "no"
       ],
       "title": "Progress but no title battle - Williams on its F1 2026 ambitions",
       "timestamp": "2026-02-04T11:00:02"
     },
     {
       "tokens": [
-        "verstappen",
-        "go",
-        "max",
-        "wants",
         "russell",
-        "head",
-        "with",
-        "fight",
-        "2026",
-        "to",
+        "verstappen",
         "in",
+        "f1",
+        "with",
+        "wants",
         "title",
+        "to",
+        "go",
+        "fight",
         "george",
-        "f1"
+        "head",
+        "2026",
+        "max"
       ],
       "title": "George Russell wants to go \u201chead-to-head\" with Max Verstappen in 2026 F1 title fight",
       "timestamp": "2026-02-04T09:45:34"
     },
     {
       "tokens": [
-        "verstappen",
-        "for",
-        "max",
-        "hoping",
         "russell",
-        "head",
+        "verstappen",
+        "f1",
         "with",
-        "fight",
-        "2026",
-        "to",
         "title",
+        "to",
+        "hoping",
+        "fight",
         "george",
-        "f1"
+        "for",
+        "head",
+        "2026",
+        "max"
       ],
       "title": "George Russell hoping for \u201chead-to-head\" 2026 F1 title fight with Max Verstappen",
       "timestamp": "2026-02-04T09:45:34"
     },
     {
       "tokens": [
+        "car",
+        "livery",
+        "f1",
         "williams",
         "unveils",
-        "car",
-        "2026",
-        "livery",
-        "f1"
+        "2026"
       ],
       "title": "Williams unveils 2026 F1 car livery",
       "timestamp": "2026-02-03T14:05:25"
     },
     {
       "tokens": [
-        "signs",
-        "reserve",
-        "driver",
-        "former",
         "haas",
-        "as",
         "f1",
-        "racer"
+        "former",
+        "as",
+        "signs",
+        "racer",
+        "reserve",
+        "driver"
       ],
       "title": "Haas signs former F1 racer as reserve driver",
       "timestamp": "2026-02-03T10:00:22"
     },
     {
       "tokens": [
-        "favourite",
-        "mercedes",
-        "eyeing",
         "kimi",
-        "with",
-        "fight",
-        "2026",
-        "currently",
-        "title",
+        "favourite",
         "f1",
-        "antonelli"
+        "with",
+        "title",
+        "eyeing",
+        "mercedes",
+        "currently",
+        "fight",
+        "antonelli",
+        "2026"
       ],
       "title": "Kimi Antonelli eyeing F1 2026 title fight with Mercedes currently favourite",
       "timestamp": "2026-02-02T14:00:02"
     },
     {
       "tokens": [
+        "five",
         "challenge",
-        "on",
+        "in",
+        "f1",
+        "winning",
         "supercars",
+        "title",
+        "lap",
+        "bull",
         "take",
         "rb7",
         "drivers",
-        "bull",
-        "title",
-        "winning",
-        "in",
         "red",
-        "five",
-        "f1",
-        "lap"
+        "on"
       ],
       "title": "Red Bull Supercars drivers take on five-lap F1 challenge in title-winning RB7",
       "timestamp": "2026-01-31T19:51:53"
     },
     {
       "tokens": [
-        "and",
-        "contract",
-        "time",
+        "car",
+        "full",
         "f1",
         "medical",
-        "car",
         "confirms",
-        "full",
+        "contract",
+        "mercedes",
+        "time",
         "safety",
         "ly",
-        "mercedes"
+        "and"
       ],
       "title": "Mercedes officially confirms full-time F1 safety and medical car contract",
       "timestamp": "2026-01-30T13:15:58"
     },
     {
       "tokens": [
-        "martin",
-        "track",
-        "is",
-        "on",
-        "finally",
-        "aston",
         "car",
-        "flag",
-        "2026",
+        "finally",
+        "is",
         "causes",
-        "red",
+        "flag",
+        "f1",
         "s",
-        "f1"
+        "track",
+        "martin",
+        "aston",
+        "red",
+        "2026",
+        "on"
       ],
       "title": "Aston Martin's 2026 F1 car is finally on track, causes red flag",
       "timestamp": "2026-01-29T17:11:03"
     },
     {
       "tokens": [
-        "hospitality",
-        "unveils",
-        "superyacht",
-        "themed",
-        "miami",
         "enclosure",
+        "superyacht",
+        "unveils",
+        "miami",
         "2026",
+        "hospitality",
+        "gp",
         "for",
-        "gp"
+        "themed"
       ],
       "title": "Miami GP unveils superyacht-themed hospitality enclosure for 2026",
       "timestamp": "2026-01-29T16:48:56"
@@ -1423,416 +1445,416 @@
     {
       "tokens": [
         "verstappen",
-        "support",
-        "change",
-        "max",
         "2025",
-        "amid",
-        "fan",
-        "underdog",
-        "admits",
-        "fight",
-        "in",
-        "nice",
-        "title",
         "felt",
-        "f1"
+        "nice",
+        "in",
+        "underdog",
+        "f1",
+        "fan",
+        "title",
+        "admits",
+        "support",
+        "fight",
+        "amid",
+        "change",
+        "max"
       ],
       "title": "Max Verstappen admits underdog 2025 F1 title fight felt \"nice\" amid change in fan support",
       "timestamp": "2026-01-28T17:54:06"
     },
     {
       "tokens": [
-        "f1",
-        "can",
         "russell",
-        "drivers",
-        "the",
-        "why",
-        "2026",
-        "believes",
-        "title",
-        "george",
         "karun",
         "chandhok",
-        "win"
+        "win",
+        "f1",
+        "title",
+        "why",
+        "can",
+        "the",
+        "george",
+        "drivers",
+        "believes",
+        "2026"
       ],
       "title": "Why Karun Chandhok believes George Russell can win the 2026 F1 drivers' title",
       "timestamp": "2026-01-28T14:19:15"
     },
     {
       "tokens": [
-        "helmet",
+        "ayrton",
         "senna",
-        "drive",
-        "red",
+        "f1",
+        "isack",
         "reveals",
         "bull",
-        "2026",
+        "drive",
         "inspired",
         "hadjar",
         "for",
-        "f1",
-        "isack",
-        "ayrton"
+        "helmet",
+        "red",
+        "2026"
       ],
       "title": "Isack Hadjar reveals Ayrton Senna-inspired 2026 F1 helmet for Red Bull drive",
       "timestamp": "2026-01-26T18:04:45"
     },
     {
       "tokens": [
-        "audi",
+        "first",
+        "regional",
+        "as",
         "signs",
         "academy",
+        "audi",
+        "formula",
         "champion",
-        "regional",
-        "driver",
-        "first",
-        "as",
-        "formula"
+        "driver"
       ],
       "title": "Audi signs Formula Regional champion as first academy driver",
       "timestamp": "2026-01-26T10:10:42"
     },
     {
       "tokens": [
-        "barcelona",
-        "test",
-        "f1",
         "car",
-        "bull",
-        "reveals",
-        "2026",
+        "actual",
+        "f1",
         "as",
         "begins",
+        "reveals",
+        "bull",
+        "barcelona",
         "red",
-        "actual"
+        "2026",
+        "test"
       ],
       "title": "Red Bull reveals actual 2026 F1 car as Barcelona test begins",
       "timestamp": "2026-01-26T08:15:33"
     },
     {
       "tokens": [
-        "mclaren",
-        "renders",
-        "of",
         "car",
-        "mcl40",
-        "reveals",
+        "of",
+        "renders",
         "new",
-        "f1"
+        "f1",
+        "mclaren",
+        "reveals",
+        "mcl40"
       ],
       "title": "McLaren reveals renders of new MCL40 F1 car",
       "timestamp": "2026-01-26T08:05:00"
     },
     {
       "tokens": [
-        "car",
-        "reveals",
-        "2026",
         "livery",
-        "for",
+        "car",
         "f1",
-        "alpine"
+        "reveals",
+        "alpine",
+        "for",
+        "2026"
       ],
       "title": "Alpine reveals livery for 2026 F1 car",
       "timestamp": "2026-01-23T11:52:50"
     },
     {
       "tokens": [
-        "watch",
-        "2026",
-        "launches",
         "live",
-        "season",
         "f1",
-        "alpine"
+        "watch",
+        "alpine",
+        "launches",
+        "season",
+        "2026"
       ],
       "title": "Watch LIVE: Alpine launches 2026 F1 season",
       "timestamp": "2026-01-23T11:09:14"
     },
     {
       "tokens": [
-        "won",
-        "t",
-        "engine",
-        "resolved",
-        "be",
         "before",
-        "loophole",
-        "2026",
-        "gp",
         "f1",
-        "australian"
+        "t",
+        "australian",
+        "engine",
+        "be",
+        "resolved",
+        "won",
+        "loophole",
+        "gp",
+        "2026"
       ],
       "title": "F1 2026 engine loophole won't be resolved before Australian GP",
       "timestamp": "2026-01-23T10:56:30"
     },
     {
       "tokens": [
+        "car",
+        "of",
+        "f1",
         "fiorano",
         "unveils",
-        "ahead",
-        "of",
-        "car",
-        "ferrari",
-        "2026",
         "shakedown",
-        "f1"
+        "ferrari",
+        "ahead",
+        "2026"
       ],
       "title": "Ferrari unveils 2026 F1 car ahead of Fiorano shakedown",
       "timestamp": "2026-01-23T10:34:33"
     },
     {
       "tokens": [
-        "watch",
         "car",
-        "ferrari",
-        "reveals",
-        "2026",
         "live",
-        "f1"
+        "f1",
+        "watch",
+        "reveals",
+        "ferrari",
+        "2026"
       ],
       "title": "Watch LIVE: Ferrari reveals 2026 F1 car",
       "timestamp": "2026-01-23T10:10:31"
     },
     {
       "tokens": [
-        "mixed",
-        "w17",
-        "reaction",
-        "stripes",
-        "unveils",
+        "livery",
         "draw",
-        "ahead",
-        "f1",
         "of",
         "new",
-        "2026",
         "as",
-        "livery",
+        "f1",
+        "reaction",
+        "mercedes",
+        "w17",
+        "unveils",
+        "mixed",
+        "ahead",
         "season",
-        "mercedes"
+        "stripes",
+        "2026"
       ],
       "title": "Mercedes unveils W17 livery as new stripes draw mixed reaction ahead of 2026 F1 Season",
       "timestamp": "2026-01-22T22:36:30"
     },
     {
       "tokens": [
-        "mercedes",
         "car",
+        "new",
+        "f1",
         "look",
         "reveals",
-        "new",
-        "2026",
+        "mercedes",
         "for",
-        "f1"
+        "2026"
       ],
       "title": "Mercedes reveals new-look F1 car for 2026",
       "timestamp": "2026-01-22T09:11:19"
     },
     {
       "tokens": [
-        "mclaren",
-        "will",
+        "f1",
         "papaya",
-        "controversial",
-        "stay",
+        "will",
         "confirms",
-        "2026",
-        "rules",
+        "mclaren",
+        "stay",
+        "controversial",
         "for",
+        "rules",
         "season",
-        "f1"
+        "2026"
       ],
       "title": "McLaren confirms controversial papaya rules will stay for 2026 F1 season",
       "timestamp": "2026-01-21T23:56:00"
     },
     {
       "tokens": [
-        "audi",
-        "car",
-        "reveals",
-        "silver",
-        "2026",
-        "striking",
-        "livery",
         "debut",
+        "livery",
+        "car",
+        "f1",
+        "silver",
+        "striking",
+        "reveals",
+        "audi",
         "for",
-        "f1"
+        "2026"
       ],
       "title": "Audi reveals striking silver livery for 2026 debut F1 car",
       "timestamp": "2026-01-20T18:46:45"
     },
     {
       "tokens": [
-        "helmet",
-        "event",
-        "unveils",
-        "ahead",
         "of",
-        "leclerc",
-        "launch",
-        "ferrari",
         "charles",
-        "2026",
+        "f1",
+        "helmet",
+        "unveils",
+        "ferrari",
+        "launch",
+        "ahead",
         "season",
-        "f1"
+        "leclerc",
+        "event",
+        "2026"
       ],
       "title": "Charles Leclerc unveils 2026 F1 helmet ahead of Ferrari season launch event",
       "timestamp": "2026-01-20T11:17:30"
     },
     {
       "tokens": [
-        "martin",
         "partnership",
-        "aston",
-        "power",
-        "with",
         "honda",
-        "2026",
-        "launches",
-        "new",
         "in",
+        "power",
+        "f1",
+        "new",
+        "with",
         "unit",
-        "f1"
+        "launches",
+        "martin",
+        "aston",
+        "2026"
       ],
       "title": "Honda launches F1 2026 power unit in new partnership with Aston Martin",
       "timestamp": "2026-01-20T09:08:05"
     },
     {
       "tokens": [
-        "becomes",
-        "unveils",
         "car",
-        "toyota",
-        "sponsor",
-        "haas",
-        "2026",
-        "as",
         "livery",
+        "haas",
+        "f1",
+        "as",
+        "becomes",
         "title",
-        "f1"
+        "sponsor",
+        "toyota",
+        "unveils",
+        "2026"
       ],
       "title": "Haas unveils 2026 F1 car livery as Toyota becomes title sponsor",
       "timestamp": "2026-01-19T13:02:30"
     },
     {
       "tokens": [
-        "and",
+        "f1",
         "williams",
-        "reserve",
+        "reveals",
+        "academy",
         "line",
+        "reserve",
         "up",
         "driver",
-        "academy",
-        "reveals",
-        "2026",
-        "f1"
+        "and",
+        "2026"
       ],
       "title": "Williams reveals F1 2026 reserve driver and academy line-up",
       "timestamp": "2026-01-16T10:52:55"
     },
     {
       "tokens": [
-        "at",
-        "launch",
+        "livery",
+        "detroit",
+        "f1",
+        "reveals",
         "refreshed",
         "bull",
-        "reveals",
-        "2026",
-        "detroit",
-        "livery",
+        "launch",
+        "at",
         "red",
-        "f1"
+        "2026"
       ],
       "title": "Red Bull reveals refreshed 2026 F1 livery at Detroit launch",
       "timestamp": "2026-01-16T03:49:42"
     },
     {
       "tokens": [
-        "and",
+        "leonardo",
+        "fornaroli",
+        "as",
         "pato",
+        "f1",
         "mclaren",
+        "o",
         "signs",
         "reserve",
-        "f1",
-        "o",
+        "ward",
         "drivers",
-        "fornaroli",
-        "2026",
-        "as",
-        "leonardo",
-        "ward"
+        "and",
+        "2026"
       ],
       "title": "McLaren signs Leonardo Fornaroli and Pato O'Ward as 2026 F1 reserve drivers",
       "timestamp": "2026-01-15T14:47:16"
     },
     {
       "tokens": [
-        "mercedes",
+        "in",
         "kit",
+        "f1",
+        "as",
+        "fans",
         "weigh",
         "reveals",
+        "mercedes",
         "team",
-        "2026",
-        "fans",
-        "as",
-        "in",
-        "f1"
+        "2026"
       ],
       "title": "Mercedes F1 reveals 2026 team kit as fans weigh in",
       "timestamp": "2026-01-15T11:35:21"
     },
     {
       "tokens": [
-        "racing",
         "and",
-        "reveal",
-        "bulls",
-        "verdict",
         "kit",
-        "race",
-        "team",
-        "2026",
-        "fans",
         "as",
-        "deliver",
+        "f1",
+        "racing",
+        "verdict",
+        "fans",
+        "race",
         "suits",
-        "f1"
+        "reveal",
+        "deliver",
+        "bulls",
+        "team",
+        "2026"
       ],
       "title": "F1 fans deliver verdict as Racing Bulls reveal 2026 team kit and race suits",
       "timestamp": "2026-01-14T12:19:22"
     },
     {
       "tokens": [
-        "cadillac",
-        "stealthy",
         "first",
+        "stealthy",
+        "livery",
+        "f1",
+        "testing",
         "launches",
         "barcelona",
-        "testing",
-        "livery",
         "for",
-        "f1"
+        "cadillac"
       ],
       "title": "Cadillac launches stealthy first F1 livery for Barcelona testing",
       "timestamp": "2026-01-13T15:07:39"
     },
     {
       "tokens": [
-        "contract",
         "sign",
-        "role",
-        "yuki",
-        "ford",
-        "bull",
         "honda",
-        "2026",
-        "to",
+        "yuki",
         "tsunoda",
-        "red",
+        "ford",
+        "role",
+        "contract",
+        "to",
+        "bull",
         "amid",
+        "red",
+        "2026",
         "yet"
       ],
       "title": "Yuki Tsunoda yet to sign 2026 Honda contract amid Red Bull-Ford role",
