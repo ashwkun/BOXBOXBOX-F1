@@ -7,8 +7,8 @@
     "publishedAt": "2026-02-13T16:27:24Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "8821",
-    "likeCount": "449",
+    "viewCount": "8925",
+    "likeCount": "451",
     "durationSec": 935,
     "tags": [
       "ANALYSIS"
@@ -23,7 +23,7 @@
     "publishedAt": "2026-02-05T17:13:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "313017",
+    "viewCount": "313086",
     "likeCount": "6432",
     "durationSec": 571,
     "tags": [
@@ -56,7 +56,7 @@
     "publishedAt": "2026-01-31T18:56:58Z",
     "channelTitle": "Apex Racing Desk",
     "channelScore": 0.5,
-    "viewCount": "73488",
+    "viewCount": "73544",
     "likeCount": "441",
     "durationSec": 1099,
     "tags": [
@@ -88,7 +88,7 @@
     "publishedAt": "2026-01-30T20:11:29Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "689627",
+    "viewCount": "689671",
     "likeCount": "10821",
     "durationSec": 633,
     "tags": [
@@ -104,8 +104,8 @@
     "publishedAt": "2026-01-29T19:08:51Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "383459",
-    "likeCount": "6679",
+    "viewCount": "383481",
+    "likeCount": "6680",
     "durationSec": 521,
     "tags": [
       "GENERAL"
@@ -120,8 +120,8 @@
     "publishedAt": "2026-01-28T21:20:16Z",
     "channelTitle": "Mercedes-AMG Petronas Formula One Team",
     "channelScore": 0.5,
-    "viewCount": "129855",
-    "likeCount": "8333",
+    "viewCount": "130148",
+    "likeCount": "8344",
     "durationSec": 142,
     "tags": [
       "ANALYSIS"
@@ -136,7 +136,7 @@
     "publishedAt": "2026-01-27T19:19:51Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "360165",
+    "viewCount": "360171",
     "likeCount": "7170",
     "durationSec": 530,
     "tags": [
@@ -152,7 +152,7 @@
     "publishedAt": "2026-01-24T13:06:18Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "121755",
+    "viewCount": "121777",
     "likeCount": "3779",
     "durationSec": 1182,
     "tags": [
@@ -169,8 +169,8 @@
     "publishedAt": "2026-01-24T13:00:57Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "218685",
-    "likeCount": "6671",
+    "viewCount": "218792",
+    "likeCount": "6673",
     "durationSec": 825,
     "tags": [
       "ANALYSIS"
@@ -185,7 +185,7 @@
     "publishedAt": "2026-01-23T21:53:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "390587",
+    "viewCount": "390603",
     "likeCount": "8239",
     "durationSec": 570,
     "tags": [
@@ -218,7 +218,7 @@
     "publishedAt": "2026-01-22T21:21:11Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "788558",
+    "viewCount": "788572",
     "likeCount": "13488",
     "durationSec": 493,
     "tags": [
@@ -234,7 +234,7 @@
     "publishedAt": "2026-01-21T17:37:25Z",
     "channelTitle": "Sky Sports F1",
     "channelScore": 0.85,
-    "viewCount": "204169",
+    "viewCount": "204171",
     "likeCount": "3324",
     "durationSec": 3413,
     "tags": [
@@ -250,7 +250,7 @@
     "publishedAt": "2026-01-20T23:49:46Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "193527",
+    "viewCount": "193534",
     "likeCount": "4054",
     "durationSec": 617,
     "tags": [
@@ -282,7 +282,7 @@
     "publishedAt": "2026-01-16T06:56:56Z",
     "channelTitle": "KYLE.ENGINEERS",
     "channelScore": 0.5,
-    "viewCount": "109719",
+    "viewCount": "109726",
     "likeCount": "3994",
     "durationSec": 1393,
     "tags": [
@@ -299,29 +299,12 @@
     "publishedAt": "2026-01-16T05:23:32Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "571067",
+    "viewCount": "571093",
     "likeCount": "9909",
     "durationSec": 679,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=k2dyLBDmJSo"
-  },
-  {
-    "id": "rcOSoCsHVY8",
-    "title": "F1 2026 - Aero Analysis (Complex CFD Simulation)",
-    "description": "Let's take a closer look at the aerodynamics of a fully designed 2026 F1 car!\n\nThanks to Emil Qvist for the amazing design!\n\n https://www.linkedin.com/in/emil-qvist/\nhttps://x.com/Qvist_Designs\n\nThanks to AirShaper for the CFD simulation:\n\nExplore AirShaper data in Paraview: \nhttps://youtu.be/kczZPc4M-ms?si=7uMuOtFUisDvsK6W\n\nEmil Qvist F1 2026 public simulation: https://app.airshaper.com/simulations/sim_aXgKZmYqlPDRH6ZPl6z1ADGj\n\nAirShaper F1 design challenge:\nhttps://app.airshaper.com/simulation",
-    "thumbnail": "https://i.ytimg.com/vi/rcOSoCsHVY8/maxresdefault.jpg",
-    "publishedAt": "2026-01-02T17:01:35Z",
-    "channelTitle": "B Sport",
-    "channelScore": 0.5,
-    "viewCount": "36330",
-    "likeCount": "2241",
-    "durationSec": 447,
-    "tags": [
-      "ANALYSIS",
-      "TECH"
-    ],
-    "url": "https://www.youtube.com/watch?v=rcOSoCsHVY8"
   }
 ]
