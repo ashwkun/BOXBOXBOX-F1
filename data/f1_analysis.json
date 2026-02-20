@@ -7,8 +7,8 @@
     "publishedAt": "2026-02-19T22:37:42Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "407421",
-    "likeCount": "8931",
+    "viewCount": "438472",
+    "likeCount": "9273",
     "durationSec": 689,
     "tags": [
       "ANALYSIS",
@@ -24,8 +24,8 @@
     "publishedAt": "2026-02-16T12:33:06Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "506347",
-    "likeCount": "9382",
+    "viewCount": "507087",
+    "likeCount": "9389",
     "durationSec": 559,
     "tags": [
       "GENERAL"
@@ -40,8 +40,8 @@
     "publishedAt": "2026-02-14T13:18:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "556970",
-    "likeCount": "9436",
+    "viewCount": "557200",
+    "likeCount": "9438",
     "durationSec": 530,
     "tags": [
       "GENERAL"
@@ -56,8 +56,8 @@
     "publishedAt": "2026-02-14T10:43:44Z",
     "channelTitle": "Kym Illman",
     "channelScore": 0.5,
-    "viewCount": "64301",
-    "likeCount": "1012",
+    "viewCount": "64385",
+    "likeCount": "1014",
     "durationSec": 77,
     "tags": [
       "ANALYSIS"
@@ -72,7 +72,7 @@
     "publishedAt": "2026-02-13T16:27:24Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "9807",
+    "viewCount": "9809",
     "likeCount": "474",
     "durationSec": 935,
     "tags": [
@@ -88,13 +88,29 @@
     "publishedAt": "2026-02-12T01:01:02Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "29163",
+    "viewCount": "29181",
     "likeCount": "816",
     "durationSec": 475,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=LCzXGq4R58E"
+  },
+  {
+    "id": "a_ubiT8bgTk",
+    "title": "Bahrain F1 Pre-Season Testing Explained — What We Actually Learned",
+    "description": "Bahrain pre-season testing is over — but the lap times didn’t tell the real story.\n\nBehind the calm headlines and misleading timesheets, teams revealed far more than they wanted to. Confidence issues, hidden pace, early struggles, and subtle signs of who understands the new regulations… and who doesn’t.\n\nIn this video, we break down what actually mattered during Bahrain testing:\n• Which teams looked comfortable\n• Who might be hiding performance\n• Where the early cracks are appearing\n• And why th",
+    "thumbnail": "https://i.ytimg.com/vi/a_ubiT8bgTk/maxresdefault.jpg",
+    "publishedAt": "2026-02-08T13:00:03Z",
+    "channelTitle": "Formula Culture",
+    "channelScore": 0.5,
+    "viewCount": "15",
+    "likeCount": "2",
+    "durationSec": 185,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=a_ubiT8bgTk"
   },
   {
     "id": "LhBpxwF_IlY",
@@ -104,7 +120,7 @@
     "publishedAt": "2026-02-05T17:13:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "314273",
+    "viewCount": "314291",
     "likeCount": "6447",
     "durationSec": 571,
     "tags": [
@@ -120,7 +136,7 @@
     "publishedAt": "2026-01-31T18:56:58Z",
     "channelTitle": "Apex Racing Desk",
     "channelScore": 0.5,
-    "viewCount": "73826",
+    "viewCount": "73829",
     "likeCount": "441",
     "durationSec": 1099,
     "tags": [
@@ -152,7 +168,7 @@
     "publishedAt": "2026-01-30T20:11:29Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "690820",
+    "viewCount": "690852",
     "likeCount": "10824",
     "durationSec": 633,
     "tags": [
@@ -168,28 +184,12 @@
     "publishedAt": "2026-01-29T19:08:51Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "384165",
+    "viewCount": "384184",
     "likeCount": "6683",
     "durationSec": 521,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=jLrAYamIjLY"
-  },
-  {
-    "id": "1eKlHGIlvF0",
-    "title": "5 things you need to know about Barcelona Shakedown #MercedesF1 #Explained #F1",
-    "description": "",
-    "thumbnail": "https://i.ytimg.com/vi/1eKlHGIlvF0/maxresdefault.jpg",
-    "publishedAt": "2026-01-28T21:20:16Z",
-    "channelTitle": "Mercedes-AMG Petronas Formula One Team",
-    "channelScore": 0.5,
-    "viewCount": "134084",
-    "likeCount": "8493",
-    "durationSec": 142,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=1eKlHGIlvF0"
   }
 ]
