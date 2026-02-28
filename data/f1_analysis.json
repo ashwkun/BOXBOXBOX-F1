@@ -7,8 +7,8 @@
     "publishedAt": "2026-02-26T17:15:04Z",
     "channelTitle": "ZeroTo500k Global",
     "channelScore": 0.5,
-    "viewCount": "55",
-    "likeCount": "1",
+    "viewCount": "60",
+    "likeCount": "2",
     "durationSec": 412,
     "tags": [
       "ANALYSIS"
@@ -23,7 +23,7 @@
     "publishedAt": "2026-02-26T09:24:13Z",
     "channelTitle": "Orange Army Racing",
     "channelScore": 0.5,
-    "viewCount": "228",
+    "viewCount": "237",
     "likeCount": "2",
     "durationSec": 863,
     "tags": [
@@ -39,8 +39,8 @@
     "publishedAt": "2026-02-22T12:11:16Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "685698",
-    "likeCount": "10551",
+    "viewCount": "690094",
+    "likeCount": "10578",
     "durationSec": 605,
     "tags": [
       "GENERAL"
@@ -55,7 +55,7 @@
     "publishedAt": "2026-02-21T18:30:06Z",
     "channelTitle": "F1 Intel Lab",
     "channelScore": 0.5,
-    "viewCount": "5",
+    "viewCount": "7",
     "likeCount": "0",
     "durationSec": 738,
     "tags": [
@@ -71,8 +71,8 @@
     "publishedAt": "2026-02-21T13:00:55Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "415068",
-    "likeCount": "7029",
+    "viewCount": "415615",
+    "likeCount": "7035",
     "durationSec": 558,
     "tags": [
       "GENERAL"
@@ -87,8 +87,8 @@
     "publishedAt": "2026-02-19T22:37:42Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "633481",
-    "likeCount": "11234",
+    "viewCount": "634063",
+    "likeCount": "11236",
     "durationSec": 689,
     "tags": [
       "ANALYSIS",
@@ -104,7 +104,7 @@
     "publishedAt": "2026-02-16T12:33:06Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "521586",
+    "viewCount": "521734",
     "likeCount": "9529",
     "durationSec": 559,
     "tags": [
@@ -120,8 +120,8 @@
     "publishedAt": "2026-02-14T13:18:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "561727",
-    "likeCount": "9469",
+    "viewCount": "561803",
+    "likeCount": "9470",
     "durationSec": 530,
     "tags": [
       "GENERAL"
@@ -136,8 +136,8 @@
     "publishedAt": "2026-02-14T10:43:44Z",
     "channelTitle": "Kym Illman",
     "channelScore": 0.5,
-    "viewCount": "66068",
-    "likeCount": "1036",
+    "viewCount": "66091",
+    "likeCount": "1037",
     "durationSec": 77,
     "tags": [
       "ANALYSIS"
@@ -152,7 +152,7 @@
     "publishedAt": "2026-02-13T16:27:24Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "9934",
+    "viewCount": "9938",
     "likeCount": "475",
     "durationSec": 935,
     "tags": [
@@ -168,7 +168,7 @@
     "publishedAt": "2026-02-12T01:01:02Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "29501",
+    "viewCount": "29504",
     "likeCount": "824",
     "durationSec": 475,
     "tags": [
@@ -200,7 +200,7 @@
     "publishedAt": "2026-02-05T17:13:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "314985",
+    "viewCount": "315000",
     "likeCount": "6449",
     "durationSec": 571,
     "tags": [
@@ -216,7 +216,7 @@
     "publishedAt": "2026-01-31T18:56:58Z",
     "channelTitle": "Apex Racing Desk",
     "channelScore": 0.5,
-    "viewCount": "73918",
+    "viewCount": "73921",
     "likeCount": "440",
     "durationSec": 1099,
     "tags": [
@@ -239,5 +239,21 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=HbrK6FDSjIw"
+  },
+  {
+    "id": "Im_uT9u65Z4",
+    "title": "Adrian Newey’s extreme 2026 Aston Martin F1 car explained",
+    "description": "Get deeper analysis of how F1 2026 has started in The Race Members' Club. Get a 7-day free trial now: https://www.patreon.com/cw/TheRace/membership\n\nAdrian Newey’s first Aston Martin is the most eagerly-anticipated Formula 1 car of 2026. \n\nWe had to wait for it, too, as it only appeared on the fourth day of the test. But after its first two days of running, here's our analysis of it. \n\n00:00 Newey's first Aston Martin F1 car\n02:06 Taking a closer look \n03:59 Aggressive sidepods \n07:00 Is Honda r",
+    "thumbnail": "https://i.ytimg.com/vi/Im_uT9u65Z4/maxresdefault.jpg",
+    "publishedAt": "2026-01-30T20:11:29Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "691973",
+    "likeCount": "10826",
+    "durationSec": 633,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=Im_uT9u65Z4"
   }
 ]
