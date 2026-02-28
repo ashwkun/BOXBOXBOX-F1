@@ -23,7 +23,7 @@ object NewsCategorizer {
         "\\b(team.*withdraw|leaving f1|exits formula 1|new team|team entry|joins f1|entering formula 1|sold|bought|ownership|takeover)\\b|" +
         "\\b(cost cap|budget cap|breach|violation|exceeded|regulation change|rule change|technical directive|illegal|non-compliant|technical infringement|protest|appeal)\\b|" +
         // Driver Moves (All Teams)
-        "\\b(moves to|joins|signs for|promoted to|in at|switches to|signed by).*(red bull|ferrari|mercedes|mclaren|aston martin|alpine|williams|haas|sauber|audi|racing bulls|rb|alphatauri)\\b|" +
+        "\\b(moves to|joins|signs for|promoted to|in at|switches to|signed by).*(red bull|ferrari|mercedes|mclaren|aston martin|alpine|williams|haas|cadillac|audi|racing bulls|rb|alphatauri)\\b|" +
         "\\b(replaces|replacing).*(driver|seat)\\b|" +
         "\\b(contract).*(extension|extended|renewed|signed)\\b",
         Pattern.CASE_INSENSITIVE

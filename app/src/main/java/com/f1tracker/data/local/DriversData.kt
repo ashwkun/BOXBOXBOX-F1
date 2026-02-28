@@ -123,7 +123,7 @@ object F1DataProvider {
      * This needs to be updated when teams rebrand
      */
     private val teamSlugMap = mapOf(
-        // 2025 Teams
+        // 2026 Teams
         "red_bull" to "redbullracing",
         "rb" to "racingbulls",
         "ferrari" to "ferrari",
@@ -132,9 +132,11 @@ object F1DataProvider {
         "aston_martin" to "astonmartin",
         "alpine" to "alpine",
         "williams" to "williams",
-        "sauber" to "kicksauber",
+        "audi" to "audi",
+        "cadillac" to "cadillac",
         "haas" to "haasf1team",
         // Historical teams (for standings history)
+        "sauber" to "kicksauber",
         "alfa" to "alfaromeo",
         "alphatauri" to "alphatauri",
         "renault" to "renault",
@@ -199,7 +201,7 @@ object F1DataProvider {
     /**
      * Get driver headshot - tries JSON first, falls back to generated URL
      */
-    fun getDriverHeadshotWithFallback(driverId: String?, givenName: String, familyName: String, teamId: String, year: String = "2025"): String {
+    fun getDriverHeadshotWithFallback(driverId: String?, givenName: String, familyName: String, teamId: String, year: String = "2026"): String {
         // First try exact match from JSON
         val driver = driverId?.let { getDriverByApiId(it) }
         if (driver?.headshotF1 != null) return driver.headshotF1
@@ -215,7 +217,7 @@ object F1DataProvider {
     /**
      * Get team car image - tries JSON first, falls back to generated URL
      */
-    fun getCarImageWithFallback(teamId: String, year: String = "2025"): String {
+    fun getCarImageWithFallback(teamId: String, year: String = "2026"): String {
         val team = getTeamByApiId(teamId)
         if (team?.carImageUrl != null) return team.carImageUrl
         

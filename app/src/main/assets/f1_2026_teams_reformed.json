@@ -1,0 +1,131 @@
+{
+    "teams": {
+        "alpine": {
+            "id": "alpine",
+            "espnId": "106922",
+            "name": "Alpine F1 Team",
+            "displayName": "Alpine",
+            "abbreviation": "ALP",
+            "color": "FF87BC",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/alpine/2026alpinecarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/alpine/2026alpinelogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/alpine/2026alpinelogowhite.webp"
+        },
+        "aston_martin": {
+            "id": "aston_martin",
+            "espnId": "123986",
+            "name": "Aston Martin",
+            "displayName": "Aston Martin",
+            "abbreviation": "AMR",
+            "color": "229971",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/astonmartin/2026astonmartincarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/astonmartin/2026astonmartinlogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/astonmartin/2026astonmartinlogowhite.webp"
+        },
+        "audi": {
+            "id": "audi",
+            "espnId": "106925",
+            "name": "Audi F1 Team",
+            "displayName": "Audi",
+            "abbreviation": "AUD",
+            "color": "FF0000",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/audi/2026audicarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/audi/2026audilogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/audi/2026audilogowhite.webp"
+        },
+        "cadillac": {
+            "id": "cadillac",
+            "espnId": null,
+            "name": "Cadillac F1 Team",
+            "displayName": "Cadillac",
+            "abbreviation": "CAD",
+            "color": "1E3D2F",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/cadillac/2026cadillaccarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/cadillac/2026cadillaclogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/cadillac/2026cadillaclogowhite.webp"
+        },
+        "ferrari": {
+            "id": "ferrari",
+            "espnId": "106842",
+            "name": "Ferrari",
+            "displayName": "Ferrari",
+            "abbreviation": "FER",
+            "color": "E8002D",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/ferrari/2026ferraricarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/ferrari/2026ferrarilogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/ferrari/2026ferrarilogowhite.webp"
+        },
+        "haas": {
+            "id": "haas",
+            "espnId": "111427",
+            "name": "Haas F1 Team",
+            "displayName": "Haas F1 Team",
+            "abbreviation": "HAA",
+            "color": "B6BABD",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/haasf1team/2026haasf1teamcarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/haasf1team/2026haasf1teamlogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/haasf1team/2026haasf1teamlogowhite.webp"
+        },
+        "mclaren": {
+            "id": "mclaren",
+            "espnId": "106892",
+            "name": "McLaren",
+            "displayName": "McLaren",
+            "abbreviation": "MCL",
+            "color": "FF8000",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/mclaren/2026mclarencarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/mclaren/2026mclarenlogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/mclaren/2026mclarenlogowhite.webp"
+        },
+        "mercedes": {
+            "id": "mercedes",
+            "espnId": "106893",
+            "name": "Mercedes",
+            "displayName": "Mercedes",
+            "abbreviation": "MER",
+            "color": "27F4D2",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/mercedes/2026mercedescarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/mercedes/2026mercedeslogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/mercedes/2026mercedeslogowhite.webp"
+        },
+        "rb": {
+            "id": "rb",
+            "espnId": "123988",
+            "name": "Racing Bulls",
+            "displayName": "Racing Bulls",
+            "abbreviation": "VCARB",
+            "color": "6692FF",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/racingbulls/2026racingbullscarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/racingbulls/2026racingbullslogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/racingbulls/2026racingbullslogowhite.webp"
+        },
+        "red_bull": {
+            "id": "red_bull",
+            "espnId": "106921",
+            "name": "Red Bull Racing",
+            "displayName": "Red Bull Racing",
+            "abbreviation": "RBR",
+            "color": "3671C6",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/redbullracing/2026redbullracingcarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/redbullracing/2026redbullracinglogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/redbullracing/2026redbullracinglogowhite.webp"
+        },
+        "williams": {
+            "id": "williams",
+            "espnId": "106967",
+            "name": "Williams",
+            "displayName": "Williams",
+            "abbreviation": "WIL",
+            "color": "64C4FF",
+            "carImageUrl": "https://media.formula1.com/image/upload/c_lfill,h_224/q_auto/d_common:f1:2026:fallback:car:2026fallbackcarright.webp/v1740000000/common/f1/2026/williams/2026williamscarright.webp",
+            "symbolUrl": "https://media.formula1.com/image/upload/c_lfill,w_48/q_auto/v1740000000/common/f1/2026/williams/2026williamslogowhite.webp",
+            "fullLogoUrl": "https://media.formula1.com/image/upload/c_lfill,w_256/q_auto/v1740000000/common/f1/2026/williams/2026williamslogowhite.webp"
+        }
+    },
+    "metadata": {
+        "source": "Formula1.com + ESPN API",
+        "season": "2026",
+        "totalTeams": 11,
+        "lastUpdated": "2026-02-28"
+    }
+}

@@ -1,0 +1,125 @@
+{
+    "season": "2026",
+    "races": [
+        {
+            "round": 1,
+            "name": "Qatar Airways Australian Grand Prix",
+            "espnId": "600057427"
+        },
+        {
+            "round": 2,
+            "name": "Heineken Chinese Grand Prix",
+            "espnId": "600057428"
+        },
+        {
+            "round": 3,
+            "name": "Aramco Japanese Grand Prix",
+            "espnId": "600057429"
+        },
+        {
+            "round": 4,
+            "name": "Gulf Air Bahrain Grand Prix",
+            "espnId": "600057430"
+        },
+        {
+            "round": 5,
+            "name": "STC Saudi Arabian Grand Prix",
+            "espnId": "600057431"
+        },
+        {
+            "round": 6,
+            "name": "Crypto.com Miami Grand Prix",
+            "espnId": "600057432"
+        },
+        {
+            "round": 7,
+            "name": "Lenovo Canadian Grand Prix",
+            "espnId": "600057433"
+        },
+        {
+            "round": 8,
+            "name": "Monaco Grand Prix",
+            "espnId": "600057434"
+        },
+        {
+            "round": 9,
+            "name": "MSC Cruises Barcelona-Catalunya Grand Prix",
+            "espnId": "600057435"
+        },
+        {
+            "round": 10,
+            "name": "Lenovo Austrian Grand Prix",
+            "espnId": "600057436"
+        },
+        {
+            "round": 11,
+            "name": "Pirelli British Grand Prix",
+            "espnId": "600057437"
+        },
+        {
+            "round": 12,
+            "name": "Belgian Grand Prix",
+            "espnId": "600057439"
+        },
+        {
+            "round": 13,
+            "name": "AWS Hungarian Grand Prix",
+            "espnId": "600057440"
+        },
+        {
+            "round": 14,
+            "name": "Heineken Dutch Grand Prix",
+            "espnId": "600057441"
+        },
+        {
+            "round": 15,
+            "name": "Pirelli Italian Grand Prix",
+            "espnId": "600057442"
+        },
+        {
+            "round": 16,
+            "name": "Tag Heuer Spanish Grand Prix",
+            "espnId": "600057443"
+        },
+        {
+            "round": 17,
+            "name": "Qatar Airways Azerbaijan Grand Prix",
+            "espnId": "600057444"
+        },
+        {
+            "round": 18,
+            "name": "Singapore Airlines Singapore Grand Prix",
+            "espnId": "600057445"
+        },
+        {
+            "round": 19,
+            "name": "MSC Cruises United States Grand Prix",
+            "espnId": "600057446"
+        },
+        {
+            "round": 20,
+            "name": "Mexico City Grand Prix",
+            "espnId": "600057447"
+        },
+        {
+            "round": 21,
+            "name": "MSC Cruises São Paulo Grand Prix",
+            "espnId": "600057448"
+        },
+        {
+            "round": 22,
+            "name": "Heineken Las Vegas Grand Prix",
+            "espnId": "600057449"
+        },
+        {
+            "round": 23,
+            "name": "Qatar Airways Qatar Grand Prix",
+            "espnId": "600057450"
+        },
+        {
+            "round": 24,
+            "name": "Etihad Airways Abu Dhabi Grand Prix",
+            "espnId": "600057451"
+        }
+    ]
+}

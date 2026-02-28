@@ -53,7 +53,7 @@ UNIVERSAL_REJECT_PATTERNS = [
     r'\b(watch:|video:)\b',
     
     # Historical/Throwback (strict)
-    r'\b(202[0-4]|201\d)\b',  # Any year before 2025
+    r'\b(202[0-5]|201\d)\b',  # Any year before 2026
     r'\b(\d+)\s+years?\s+ago\b',
     r'\b(on\s+this\s+day|throwback|flashback)\b',
     
@@ -68,7 +68,7 @@ UNIVERSAL_REJECT_PATTERNS = [
 # --- Nuclear Disqualifiers (Demote to Major) ---
 NUCLEAR_DISQUALIFIERS = [
     # Questions/Analysis
-    r'\b(how|why|what)\s+(verstappen|hamilton|ferrari|red\s+bull)',
+    r'\b(how|why|what)\s+(verstappen|hamilton|norris|leclerc|ferrari|red\s+bull|cadillac|audi)',
     r'\b(explained|breakdown|analysis|deep\s+dive)\b',
     
     # Speculation
@@ -127,7 +127,7 @@ NUCLEAR_PATTERNS = [
     r'\b(disqualified|dsq)\b.*\b(race|grand\s+prix|gp)\b',
     
     # Major Team/Driver Changes (confirmed only)
-    r'\b(signs?|signed|confirms?|confirmed|announced?)\b.*\b(driver|contract|2026|2027)\b',
+    r'\b(signs?|signed|confirms?|confirmed|announced?)\b.*\b(driver|contract|2027|2028)\b',
     r'\b(retires?|retirement|retiring)\b.*\b(from\s+(racing|f1|formula))\b',
     r'\b(announces?\s+retirement)\b',
 ]
@@ -136,7 +136,7 @@ NUCLEAR_PATTERNS = [
 MAJOR_PATTERNS = [
     (110, r'\b(dominates?|dominated|dominating)\b.*\b(grand\s+prix|race|gp)\b'),
     (105, r'\b(championship|title)\b.*\b(lead|ahead|battle|fight|gap)\b'),
-    (115, r'\b(signs?|signed|confirms?|confirmed)\b.*\b(2025|2026|2027|2028|contract)\b'),
+    (115, r'\b(signs?|signed|confirms?|confirmed)\b.*\b(2026|2027|2028|2029|contract)\b'),
     (110, r'\b(official:)\b.*\b(driver|seat|signs?|joins?)\b'),
     (120, r'\b(team\s+principal|tp)\b.*\b(leaves?|joins?|appointed)\b'),
     (105, r'\b(grid\s+(drop|penalty)|grid-place\s+penalty)\b'),  # Boosted from 100
@@ -146,7 +146,7 @@ MAJOR_PATTERNS = [
     (100, r'\b(fastest|quickest|tops|leads)\b.*\b(qualifying|q[123]|shootout)\b'),
     (100, r'\b(sprint)\b.*\b(result|report|win|wins?|won)\b'),
     (100, r'\b(summoned|investigation|under\s+investigation)\b.*\b(stewards|fia)\b'),
-    (100, r'\b(reveals?|launche?s?|unveils?|wraps\s+off)\b.*\b(car|livery|challenger|2025|2026|2027)\b'),
+    (100, r'\b(reveals?|launche?s?|unveils?|wraps\s+off)\b.*\b(car|livery|challenger|2026|2027|2028)\b'),
     (100, r'\b(sick|ill|surgery|hospital|medical|appendicitis|operation)\b.*\b(miss|doubt|ruled\s+out|withdraws?)\b'),
     (100, r'\b(ruled\s+out|withdraws?|misses)\b.*\b(grand\s+prix|race|gp)\b'), # Added simpler ruled out pattern
 ]
@@ -159,7 +159,7 @@ MEDIUM_PATTERNS = [
     (70, r'\b(sprint\s+race)\b.*\b(report|result)\b'),
     (70, r'\b(upgrade|update)s?\b.*\b(car|package|floor|wing|aero)\b'),
     (65, r'\b(strategy|pit\s+stop|tyre|tire)\b.*\b(briefing|problem|issue)\b'),
-    (60, r'\b(verstappen|norris|hamilton|leclerc|piastri)\b.*\b(says|admits|reveals)\b'),
+    (60, r'\b(verstappen|norris|hamilton|leclerc|piastri|russell|hadjar|alonso)\b.*\b(says|admits|reveals)\b'),
 ]
 
 # --- Low Patterns (Refined) ---

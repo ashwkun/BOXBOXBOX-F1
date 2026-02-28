@@ -203,12 +203,12 @@ class MainActivity : ComponentActivity() {
     
     private fun loadF1Data() {
         try {
-            val driversJson = assets.open("f1_2025_drivers_reformed.json").bufferedReader().use { it.readText() }
-            val teamsJson = assets.open("f1_2025_teams_reformed.json").bufferedReader().use { it.readText() }
+            val driversJson = assets.open("f1_2026_drivers_reformed.json").bufferedReader().use { it.readText() }
+            val teamsJson = assets.open("f1_2026_teams_reformed.json").bufferedReader().use { it.readText() }
             F1DataProvider.loadData(driversJson, teamsJson)
             
             // Load ESPN race IDs
-            val raceIdsJson = assets.open("espn_2025_race_ids.json").bufferedReader().use { it.readText() }
+            val raceIdsJson = assets.open("espn_2026_race_ids.json").bufferedReader().use { it.readText() }
             com.f1tracker.data.local.ESPNRaceIdProvider.loadData(raceIdsJson)
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "Failed to load F1 data: ${e.message}")

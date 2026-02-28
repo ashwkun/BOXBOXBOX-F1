@@ -3,7 +3,10 @@ package com.f1tracker.ui.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.f1tracker.data.local.F1DataProvider
+import com.f1tracker.data.models.Constructor
 import com.f1tracker.data.models.ConstructorStanding
+import com.f1tracker.data.models.Driver
 import com.f1tracker.data.models.DriverStanding
 import com.f1tracker.data.repository.F1Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -59,21 +62,93 @@ class StandingsViewModel @Inject constructor(
             val driverResult = repository.getDriverStandings(season)
             val constructorResult = repository.getConstructorStandings(season)
             
+            var driverList: List<DriverStanding>? = null
+            var constructorList: List<ConstructorStanding>? = null
+            
             driverResult.onSuccess { standings ->
-                _driverStandings.value = standings
+                driverList = standings
             }.onFailure { e ->
                 Log.e("StandingsViewModel", "Failed to load driver standings", e)
-                _error.value = "Failed to load driver standings: ${e.message}"
             }
             
             constructorResult.onSuccess { standings ->
-                _constructorStandings.value = standings
+                constructorList = standings
             }.onFailure { e ->
                 Log.e("StandingsViewModel", "Failed to load constructor standings", e)
-                _error.value = "Failed to load constructor standings: ${e.message}"
+            }
+            
+            // Pre-season: if current year returns empty, generate grid from JSON data
+            val currentYear = java.time.Year.now().value.toString()
+            if (season == currentYear && driverList.isNullOrEmpty() && F1DataProvider.isDataLoaded()) {
+                Log.d("StandingsViewModel", "Generating pre-season driver standings from JSON data")
+                driverList = generatePreSeasonDriverStandings()
+            }
+            if (season == currentYear && constructorList.isNullOrEmpty() && F1DataProvider.isDataLoaded()) {
+                Log.d("StandingsViewModel", "Generating pre-season constructor standings from JSON data")
+                constructorList = generatePreSeasonConstructorStandings()
+            }
+            
+            _driverStandings.value = if (!driverList.isNullOrEmpty()) driverList else emptyList()
+            _constructorStandings.value = if (!constructorList.isNullOrEmpty()) constructorList else emptyList()
+            
+            // Show error only when data is truly empty and not current season
+            if (driverList.isNullOrEmpty() && constructorList.isNullOrEmpty() && season != currentYear) {
+                _error.value = "No standings available for $season season"
             }
             
             _isLoading.value = false
+        }
+    }
+    
+    /**
+     * Generate synthetic driver standings from local JSON data (pre-season)
+     * All drivers shown with 0 points, ordered alphabetically by family name
+     */
+    private fun generatePreSeasonDriverStandings(): List<DriverStanding> {
+        val allDrivers = F1DataProvider.getAllDrivers()
+        return allDrivers.sortedBy { it.familyName }.mapIndexed { index, driverInfo ->
+            val teamInfo = F1DataProvider.getTeamByApiId(driverInfo.team)
+            DriverStanding(
+                position = (index + 1).toString(),
+                positionText = (index + 1).toString(),
+                points = "0",
+                wins = "0",
+                driver = Driver(
+                    driverId = driverInfo.id,
+                    permanentNumber = driverInfo.permanentNumber,
+                    code = driverInfo.code,
+                    givenName = driverInfo.givenName,
+                    familyName = driverInfo.familyName
+                ),
+                constructors = listOf(
+                    Constructor(
+                        constructorId = driverInfo.team,
+                        name = teamInfo?.displayName ?: driverInfo.team,
+                        nationality = ""
+                    )
+                )
+            )
+        }
+    }
+    
+    /**
+     * Generate synthetic constructor standings from local JSON data (pre-season)
+     * All teams shown with 0 points, ordered alphabetically
+     */
+    private fun generatePreSeasonConstructorStandings(): List<ConstructorStanding> {
+        val allTeams = F1DataProvider.getAllTeams()
+        return allTeams.sortedBy { it.displayName }.mapIndexed { index, teamInfo ->
+            ConstructorStanding(
+                position = (index + 1).toString(),
+                positionText = (index + 1).toString(),
+                points = "0",
+                wins = "0",
+                constructor = Constructor(
+                    constructorId = teamInfo.id,
+                    name = teamInfo.displayName,
+                    nationality = ""
+                )
+            )
         }
     }
 

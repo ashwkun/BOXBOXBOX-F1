@@ -8,12 +8,12 @@ object SeasonConfig {
     /**
      * The current F1 season year as a string (for API calls)
      */
-    const val CURRENT_SEASON = "2025"
+    const val CURRENT_SEASON = "2026"
     
     /**
      * The current season year as an integer
      */
-    const val CURRENT_SEASON_INT = 2025
+    const val CURRENT_SEASON_INT = 2026
     
     /**
      * List of available years for historical data (newest first)
