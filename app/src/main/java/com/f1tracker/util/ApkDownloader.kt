@@ -23,7 +23,7 @@ class ApkDownloader(private val context: Context) {
 
     private val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
-    fun download(url: String, fileName: String = "BOXBOXBOX-F1-update.apk"): Flow<DownloadState> = flow {
+    fun download(url: String, fileName: String = "boxboxbox.apk"): Flow<DownloadState> = flow {
         emit(DownloadState.Downloading(0))
 
         // Delete existing file if present to avoid duplicates
