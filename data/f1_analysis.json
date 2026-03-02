@@ -39,8 +39,8 @@
     "publishedAt": "2026-02-23T12:27:07Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "566276",
-    "likeCount": "11850",
+    "viewCount": "567624",
+    "likeCount": "11888",
     "durationSec": 91,
     "tags": [
       "GENERAL"
@@ -55,8 +55,8 @@
     "publishedAt": "2026-02-22T12:11:16Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "732120",
-    "likeCount": "10812",
+    "viewCount": "733766",
+    "likeCount": "10826",
     "durationSec": 605,
     "tags": [
       "GENERAL"
@@ -71,8 +71,8 @@
     "publishedAt": "2026-02-21T13:00:55Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "420017",
-    "likeCount": "7077",
+    "viewCount": "420235",
+    "likeCount": "7078",
     "durationSec": 558,
     "tags": [
       "GENERAL"
@@ -87,7 +87,7 @@
     "publishedAt": "2026-02-20T17:45:00Z",
     "channelTitle": "MrPulse",
     "channelScore": 0.5,
-    "viewCount": "9226",
+    "viewCount": "9228",
     "likeCount": "224",
     "durationSec": 1160,
     "tags": [
@@ -103,8 +103,8 @@
     "publishedAt": "2026-02-19T22:37:42Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "639916",
-    "likeCount": "11263",
+    "viewCount": "640216",
+    "likeCount": "11264",
     "durationSec": 689,
     "tags": [
       "ANALYSIS",
@@ -120,7 +120,7 @@
     "publishedAt": "2026-02-19T10:00:49Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "7604",
+    "viewCount": "7611",
     "likeCount": "393",
     "durationSec": 1475,
     "tags": [
@@ -136,13 +136,29 @@
     "publishedAt": "2026-02-18T22:50:13Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "202938",
-    "likeCount": "4130",
+    "viewCount": "202977",
+    "likeCount": "4132",
     "durationSec": 533,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=yt-6ro5oq74"
+  },
+  {
+    "id": "bDxErWXMTqs",
+    "title": "F1's Engine Issues Explained Like You're 5",
+    "description": "I've dug deep into the rulebook and done some data analysis to figure try to simplify the complicated F1 2026 engines\n\nLinks: https://linktr.ee/alex_gillon",
+    "thumbnail": "https://i.ytimg.com/vi/bDxErWXMTqs/maxresdefault.jpg",
+    "publishedAt": "2026-02-16T19:03:54Z",
+    "channelTitle": "Alex Gillon",
+    "channelScore": 0.5,
+    "viewCount": "7157",
+    "likeCount": "304",
+    "durationSec": 1022,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=bDxErWXMTqs"
   },
   {
     "id": "lNxT13ITTIE",
@@ -152,8 +168,8 @@
     "publishedAt": "2026-02-16T12:33:06Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "522919",
-    "likeCount": "9540",
+    "viewCount": "523044",
+    "likeCount": "9542",
     "durationSec": 559,
     "tags": [
       "GENERAL"
@@ -168,7 +184,7 @@
     "publishedAt": "2026-02-14T13:18:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "562241",
+    "viewCount": "562268",
     "likeCount": "9471",
     "durationSec": 530,
     "tags": [
@@ -184,7 +200,7 @@
     "publishedAt": "2026-02-14T10:43:44Z",
     "channelTitle": "Kym Illman",
     "channelScore": 0.5,
-    "viewCount": "66176",
+    "viewCount": "66178",
     "likeCount": "1038",
     "durationSec": 77,
     "tags": [
@@ -200,8 +216,8 @@
     "publishedAt": "2026-02-13T21:30:13Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "479407",
-    "likeCount": "11947",
+    "viewCount": "479523",
+    "likeCount": "11948",
     "durationSec": 998,
     "tags": [
       "TECH"
@@ -232,7 +248,7 @@
     "publishedAt": "2026-02-12T01:01:02Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "29543",
+    "viewCount": "29544",
     "likeCount": "824",
     "durationSec": 475,
     "tags": [
