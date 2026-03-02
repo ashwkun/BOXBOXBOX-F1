@@ -39,8 +39,8 @@
     "publishedAt": "2026-02-23T12:27:07Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "569744",
-    "likeCount": "11938",
+    "viewCount": "570752",
+    "likeCount": "11955",
     "durationSec": 91,
     "tags": [
       "GENERAL"
@@ -55,8 +55,8 @@
     "publishedAt": "2026-02-22T12:11:16Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "738653",
-    "likeCount": "10864",
+    "viewCount": "741577",
+    "likeCount": "10888",
     "durationSec": 605,
     "tags": [
       "GENERAL"
@@ -71,8 +71,8 @@
     "publishedAt": "2026-02-21T13:00:55Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "420850",
-    "likeCount": "7083",
+    "viewCount": "421116",
+    "likeCount": "7085",
     "durationSec": 558,
     "tags": [
       "GENERAL"
@@ -103,8 +103,8 @@
     "publishedAt": "2026-02-19T22:37:42Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "640762",
-    "likeCount": "11266",
+    "viewCount": "641009",
+    "likeCount": "11267",
     "durationSec": 689,
     "tags": [
       "ANALYSIS",
@@ -120,8 +120,8 @@
     "publishedAt": "2026-02-19T10:00:49Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "7625",
-    "likeCount": "394",
+    "viewCount": "7630",
+    "likeCount": "395",
     "durationSec": 1475,
     "tags": [
       "ANALYSIS"
@@ -136,7 +136,7 @@
     "publishedAt": "2026-02-18T22:50:13Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "203030",
+    "viewCount": "203063",
     "likeCount": "4132",
     "durationSec": 533,
     "tags": [
@@ -168,8 +168,8 @@
     "publishedAt": "2026-02-16T12:33:06Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "523159",
-    "likeCount": "9544",
+    "viewCount": "523168",
+    "likeCount": "9545",
     "durationSec": 559,
     "tags": [
       "GENERAL"
@@ -184,7 +184,7 @@
     "publishedAt": "2026-02-14T13:18:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "562349",
+    "viewCount": "562382",
     "likeCount": "9471",
     "durationSec": 530,
     "tags": [
@@ -200,7 +200,7 @@
     "publishedAt": "2026-02-14T10:43:44Z",
     "channelTitle": "Kym Illman",
     "channelScore": 0.5,
-    "viewCount": "66186",
+    "viewCount": "66189",
     "likeCount": "1038",
     "durationSec": 77,
     "tags": [
@@ -216,8 +216,8 @@
     "publishedAt": "2026-02-13T21:30:13Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "479836",
-    "likeCount": "11954",
+    "viewCount": "480002",
+    "likeCount": "11955",
     "durationSec": 998,
     "tags": [
       "TECH"
@@ -232,28 +232,12 @@
     "publishedAt": "2026-02-13T16:27:24Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "9960",
+    "viewCount": "9961",
     "likeCount": "475",
     "durationSec": 935,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=16968rC9FAc"
-  },
-  {
-    "id": "LCzXGq4R58E",
-    "title": "F1 2026 Testing - What Did We Learn? (DATA ANALYSIS) + 2025 vs 2026 Cars Compared!",
-    "description": "F1 2026 is finally here! So what did we learn from the first test? Are Red Bull and Verstappen really the ones to beat? How does the telemetry of the 2026 cars compare to 2025? We'll investigate all that and more in this video! \n\n🔷Formula Insights Software Now Available in Early Access! 🔷\nhttps://formula-insights.com/\n\n🟣Bite-sized insights on Instagram! https://www.instagram.com/formula_insights_/ \n\n🔷Join The Conversation On Discord! https://discord.gg/Y8XnTe22fu 🔷\n\n0:00 - Intro \n0:26 - Sti",
-    "thumbnail": "https://i.ytimg.com/vi/LCzXGq4R58E/maxresdefault.jpg",
-    "publishedAt": "2026-02-12T01:01:02Z",
-    "channelTitle": "Formula Insights",
-    "channelScore": 0.5,
-    "viewCount": "29547",
-    "likeCount": "824",
-    "durationSec": 475,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=LCzXGq4R58E"
   }
 ]
