@@ -39,8 +39,8 @@
     "publishedAt": "2026-02-23T12:27:07Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "564200",
-    "likeCount": "11783",
+    "viewCount": "565211",
+    "likeCount": "11815",
     "durationSec": 91,
     "tags": [
       "GENERAL"
@@ -55,8 +55,8 @@
     "publishedAt": "2026-02-22T12:11:16Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "729124",
-    "likeCount": "10796",
+    "viewCount": "730636",
+    "likeCount": "10804",
     "durationSec": 605,
     "tags": [
       "GENERAL"
@@ -71,8 +71,8 @@
     "publishedAt": "2026-02-21T13:00:55Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "419702",
-    "likeCount": "7074",
+    "viewCount": "419847",
+    "likeCount": "7076",
     "durationSec": 558,
     "tags": [
       "GENERAL"
@@ -87,7 +87,7 @@
     "publishedAt": "2026-02-20T17:45:00Z",
     "channelTitle": "MrPulse",
     "channelScore": 0.5,
-    "viewCount": "9222",
+    "viewCount": "9225",
     "likeCount": "224",
     "durationSec": 1160,
     "tags": [
@@ -103,7 +103,7 @@
     "publishedAt": "2026-02-19T22:37:42Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "639474",
+    "viewCount": "639695",
     "likeCount": "11263",
     "durationSec": 689,
     "tags": [
@@ -168,8 +168,8 @@
     "publishedAt": "2026-02-14T13:18:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "562196",
-    "likeCount": "9472",
+    "viewCount": "562236",
+    "likeCount": "9471",
     "durationSec": 530,
     "tags": [
       "GENERAL"
@@ -200,8 +200,8 @@
     "publishedAt": "2026-02-13T21:30:13Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "479227",
-    "likeCount": "11947",
+    "viewCount": "479342",
+    "likeCount": "11948",
     "durationSec": 998,
     "tags": [
       "TECH"
@@ -223,5 +223,21 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=16968rC9FAc"
+  },
+  {
+    "id": "LCzXGq4R58E",
+    "title": "F1 2026 Testing - What Did We Learn? (DATA ANALYSIS) + 2025 vs 2026 Cars Compared!",
+    "description": "F1 2026 is finally here! So what did we learn from the first test? Are Red Bull and Verstappen really the ones to beat? How does the telemetry of the 2026 cars compare to 2025? We'll investigate all that and more in this video! \n\n🔷Formula Insights Software Now Available in Early Access! 🔷\nhttps://formula-insights.com/\n\n🟣Bite-sized insights on Instagram! https://www.instagram.com/formula_insights_/ \n\n🔷Join The Conversation On Discord! https://discord.gg/Y8XnTe22fu 🔷\n\n0:00 - Intro \n0:26 - Sti",
+    "thumbnail": "https://i.ytimg.com/vi/LCzXGq4R58E/maxresdefault.jpg",
+    "publishedAt": "2026-02-12T01:01:02Z",
+    "channelTitle": "Formula Insights",
+    "channelScore": 0.5,
+    "viewCount": "29543",
+    "likeCount": "824",
+    "durationSec": 475,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=LCzXGq4R58E"
   }
 ]
