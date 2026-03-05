@@ -23,8 +23,8 @@
     "publishedAt": "2026-02-23T12:27:07Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "588202",
-    "likeCount": "12342",
+    "viewCount": "588911",
+    "likeCount": "12353",
     "durationSec": 91,
     "tags": [
       "GENERAL"
@@ -39,8 +39,8 @@
     "publishedAt": "2026-02-22T12:11:16Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "790105",
-    "likeCount": "11148",
+    "viewCount": "793088",
+    "likeCount": "11163",
     "durationSec": 605,
     "tags": [
       "GENERAL"
@@ -55,7 +55,7 @@
     "publishedAt": "2026-02-21T13:00:55Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "428182",
+    "viewCount": "428442",
     "likeCount": "7111",
     "durationSec": 558,
     "tags": [
@@ -71,7 +71,7 @@
     "publishedAt": "2026-02-20T17:45:00Z",
     "channelTitle": "MrPulse",
     "channelScore": 0.5,
-    "viewCount": "9268",
+    "viewCount": "9269",
     "likeCount": "225",
     "durationSec": 1160,
     "tags": [
@@ -87,7 +87,7 @@
     "publishedAt": "2026-02-19T22:37:42Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "645799",
+    "viewCount": "645976",
     "likeCount": "11309",
     "durationSec": 689,
     "tags": [
@@ -104,7 +104,7 @@
     "publishedAt": "2026-02-19T10:00:49Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "7744",
+    "viewCount": "7752",
     "likeCount": "404",
     "durationSec": 1475,
     "tags": [
@@ -129,6 +129,22 @@
     "url": "https://www.youtube.com/watch?v=yt-6ro5oq74"
   },
   {
+    "id": "bDxErWXMTqs",
+    "title": "F1's Engine Issues Explained Like You're 5",
+    "description": "I've dug deep into the rulebook and done some data analysis to figure try to simplify the complicated F1 2026 engines\n\nLinks: https://linktr.ee/alex_gillon",
+    "thumbnail": "https://i.ytimg.com/vi/bDxErWXMTqs/maxresdefault.jpg",
+    "publishedAt": "2026-02-16T19:03:54Z",
+    "channelTitle": "Alex Gillon",
+    "channelScore": 0.5,
+    "viewCount": "7194",
+    "likeCount": "306",
+    "durationSec": 1022,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=bDxErWXMTqs"
+  },
+  {
     "id": "lNxT13ITTIE",
     "title": "Why F1's 2026 cars are so weird",
     "description": "Want more in-depth analysis of F1 2026? There's tonnes of exclusive bonus content over on The Race Members' Club, check it out now with a free 7-day trial: https://www.patreon.com/cw/TheRace/membership\n\nF1’s new 2026 cars have certainly divided opinion across their early running and some elements to them are just plain weird. \n\n00:00 F1’s weird new start procedures\n02:20 Super clipping explained\n03:55 First gear is essential (for most)\n04:56 ‘The chef can drive the car’\n06:13 Overtaking accident",
@@ -136,8 +152,8 @@
     "publishedAt": "2026-02-16T12:33:06Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "524924",
-    "likeCount": "9560",
+    "viewCount": "525013",
+    "likeCount": "9561",
     "durationSec": 559,
     "tags": [
       "GENERAL"
@@ -152,13 +168,29 @@
     "publishedAt": "2026-02-14T13:18:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "562827",
+    "viewCount": "562851",
     "likeCount": "9476",
     "durationSec": 530,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=5xTKSR_V2fo"
+  },
+  {
+    "id": "SN7VXtFZwlg",
+    "title": "2026 F1 Car ENERGY Explained!",
+    "description": "The new regulations have completely changed how F1 cars operate, so how does the 2026 F1 car generate and deploy energy during an on-track session, and how does this impact the quali and race?\n\n#f1 #formula1 #f1testing",
+    "thumbnail": "https://i.ytimg.com/vi/SN7VXtFZwlg/maxresdefault.jpg",
+    "publishedAt": "2026-02-14T10:43:44Z",
+    "channelTitle": "Kym Illman",
+    "channelScore": 0.5,
+    "viewCount": "66293",
+    "likeCount": "1039",
+    "durationSec": 77,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=SN7VXtFZwlg"
   },
   {
     "id": "16968rC9FAc",
@@ -184,28 +216,12 @@
     "publishedAt": "2026-02-12T01:01:02Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "29596",
+    "viewCount": "29598",
     "likeCount": "824",
     "durationSec": 475,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=LCzXGq4R58E"
-  },
-  {
-    "id": "bLT-OUkSirY",
-    "title": "What we learned from day one of F1’s Bahrain test",
-    "description": "Get all of our reporting (and some foolishness, too) from the Bahrain F1 test and the season ahead as part of The Race Members' Club. Claim your seven-day free trial now: https://www.patreon.com/cw/TheRace/membership\n\nDoes Formula 1 suddenly have a new title favourite in 2026?\n\nMercedes has made a remarkable claim about the straightline performance of the new Red Bull-Ford engine - and long run data from F1's first 'public' test of 2026 gives it some credibility.\n\nBut are paddock politics at pla",
-    "thumbnail": "https://i.ytimg.com/vi/bLT-OUkSirY/maxresdefault.jpg",
-    "publishedAt": "2026-02-11T22:25:01Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "378356",
-    "likeCount": "7201",
-    "durationSec": 568,
-    "tags": [
-      "GENERAL"
-    ],
-    "url": "https://www.youtube.com/watch?v=bLT-OUkSirY"
   }
 ]
