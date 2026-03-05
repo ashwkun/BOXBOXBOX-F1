@@ -7,7 +7,7 @@
     "publishedAt": "2026-03-03T00:16:14Z",
     "channelTitle": "Global Formula Apex",
     "channelScore": 0.5,
-    "viewCount": "79",
+    "viewCount": "80",
     "likeCount": "1",
     "durationSec": 252,
     "tags": [
@@ -39,8 +39,8 @@
     "publishedAt": "2026-02-23T12:27:07Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "593196",
-    "likeCount": "12445",
+    "viewCount": "594143",
+    "likeCount": "12469",
     "durationSec": 91,
     "tags": [
       "GENERAL"
@@ -55,8 +55,8 @@
     "publishedAt": "2026-02-22T12:11:16Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "807152",
-    "likeCount": "11252",
+    "viewCount": "810499",
+    "likeCount": "11270",
     "durationSec": 605,
     "tags": [
       "GENERAL"
@@ -71,8 +71,8 @@
     "publishedAt": "2026-02-21T13:00:55Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "430078",
-    "likeCount": "7119",
+    "viewCount": "430372",
+    "likeCount": "7122",
     "durationSec": 558,
     "tags": [
       "GENERAL"
@@ -87,7 +87,7 @@
     "publishedAt": "2026-02-20T17:45:00Z",
     "channelTitle": "MrPulse",
     "channelScore": 0.5,
-    "viewCount": "9270",
+    "viewCount": "9272",
     "likeCount": "225",
     "durationSec": 1160,
     "tags": [
@@ -103,8 +103,8 @@
     "publishedAt": "2026-02-19T22:37:42Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "647042",
-    "likeCount": "11314",
+    "viewCount": "647287",
+    "likeCount": "11316",
     "durationSec": 689,
     "tags": [
       "ANALYSIS",
@@ -120,7 +120,7 @@
     "publishedAt": "2026-02-19T10:00:49Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "7783",
+    "viewCount": "7796",
     "likeCount": "407",
     "durationSec": 1475,
     "tags": [
@@ -136,7 +136,7 @@
     "publishedAt": "2026-02-18T22:50:13Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "203523",
+    "viewCount": "203546",
     "likeCount": "4138",
     "durationSec": 533,
     "tags": [
@@ -152,7 +152,7 @@
     "publishedAt": "2026-02-16T19:03:54Z",
     "channelTitle": "Alex Gillon",
     "channelScore": 0.5,
-    "viewCount": "7204",
+    "viewCount": "7211",
     "likeCount": "307",
     "durationSec": 1022,
     "tags": [
@@ -168,12 +168,60 @@
     "publishedAt": "2026-02-16T12:33:06Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "525543",
-    "likeCount": "9567",
+    "viewCount": "525617",
+    "likeCount": "9569",
     "durationSec": 559,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=lNxT13ITTIE"
+  },
+  {
+    "id": "5xTKSR_V2fo",
+    "title": "Everything we learned from F1’s Bahrain test",
+    "description": "Want more in-depth analysis from the Bahrain test? There's tonnes of exclusive bonus content over on The Race Members' Club, check it out now with a free 7-day trial: https://www.patreon.com/cw/TheRace/membership\n\nFrom big pecking order clues to political games, 2026 rule problems to a clear team in trouble, Formula 1’s first official week of testing properly delivered in terms of big storylines. \n\nHere's everything we learned from the first Bahrain test.\n\n00:00 Three days of big storylines\n00:1",
+    "thumbnail": "https://i.ytimg.com/vi/5xTKSR_V2fo/maxresdefault.jpg",
+    "publishedAt": "2026-02-14T13:18:04Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "562975",
+    "likeCount": "9477",
+    "durationSec": 530,
+    "tags": [
+      "GENERAL"
+    ],
+    "url": "https://www.youtube.com/watch?v=5xTKSR_V2fo"
+  },
+  {
+    "id": "SN7VXtFZwlg",
+    "title": "2026 F1 Car ENERGY Explained!",
+    "description": "The new regulations have completely changed how F1 cars operate, so how does the 2026 F1 car generate and deploy energy during an on-track session, and how does this impact the quali and race?\n\n#f1 #formula1 #f1testing",
+    "thumbnail": "https://i.ytimg.com/vi/SN7VXtFZwlg/maxresdefault.jpg",
+    "publishedAt": "2026-02-14T10:43:44Z",
+    "channelTitle": "Kym Illman",
+    "channelScore": 0.5,
+    "viewCount": "66348",
+    "likeCount": "1041",
+    "durationSec": 77,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=SN7VXtFZwlg"
+  },
+  {
+    "id": "16968rC9FAc",
+    "title": "2026 F1 Testing Bahrain Day 3 Analysis - Driver Coach Martin Villari",
+    "description": "Day 3 of 2026 Formula 1 pre-season testing in Bahrain is done — and there’s already a lot to unpack. In this video, I break down what actually matters from a driver’s perspective, cutting through lap times and headlines to focus on:\nEarly car behaviour & balance trends\n2026 power unit deployment and energy usage clues\nAero platform stability under braking & mid-corner\nWhat drivers are really learning on Day 1 vs what’s still hidden\n\nThis analysis is based on driving fundamentals, car phase behav",
+    "thumbnail": "https://i.ytimg.com/vi/16968rC9FAc/maxresdefault.jpg",
+    "publishedAt": "2026-02-13T16:27:24Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "9970",
+    "likeCount": "475",
+    "durationSec": 935,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=16968rC9FAc"
   }
 ]
