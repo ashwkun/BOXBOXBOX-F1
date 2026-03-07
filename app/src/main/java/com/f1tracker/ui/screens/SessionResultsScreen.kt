@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +51,7 @@ fun SessionResultsScreen(
     sessionResult: SessionResult,
     raceName: String = "",
     onBackClick: () -> Unit,
+    onVideoClick: (String) -> Unit = {},
     viewModel: RaceViewModel = hiltViewModel()
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
@@ -104,46 +106,7 @@ fun SessionResultsScreen(
         }
     }
     
-    // YouTube Player Dialog
-    if (selectedVideoId != null) {
-        LaunchedEffect(selectedVideoId) {
-            activity?.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
-        DisposableEffect(selectedVideoId) {
-            onDispose {
-                activity?.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            }
-        }
-        Dialog(
-            onDismissRequest = { selectedVideoId = null },
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false,
-                decorFitsSystemWindows = false
-            )
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black)
-            ) {
-                YouTubePlayerScreen(videoId = selectedVideoId!!)
-                IconButton(
-                    onClick = { selectedVideoId = null },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(16.dp)
-                        .size(40.dp)
-                        .background(Color.Black.copy(alpha = 0.6f), CircleShape)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close",
-                        tint = Color.White
-                    )
-                }
-            }
-        }
-    }
+    // Video playback routed to MainAppScreen
     
     Column(
         modifier = Modifier
@@ -209,7 +172,7 @@ fun SessionResultsScreen(
                     SessionHighlightCard(
                         highlight = sessionHighlight,
                         michromaFont = michromaFont,
-                        onClick = { selectedVideoId = sessionHighlight.id },
+                        onClick = { onVideoClick(sessionHighlight.id) },
                         modifier = Modifier.fillMaxWidth()
                     )
                 }

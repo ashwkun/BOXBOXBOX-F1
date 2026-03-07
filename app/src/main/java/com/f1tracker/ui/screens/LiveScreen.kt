@@ -9,6 +9,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.compose.ui.platform.LocalLifecycleOwner
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -29,12 +32,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.f1tracker.R
 import com.f1tracker.data.live.SignalRLiveTimingClient
-import com.f1tracker.data.local.F1DataProvider
 import com.f1tracker.data.live.LiveDriver
+import com.f1tracker.data.live.ConnectionStatus
 
 @Composable
 fun LiveScreen(
-    raceViewModel: com.f1tracker.ui.viewmodels.RaceViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+    raceViewModel: com.f1tracker.ui.viewmodels.RaceViewModel = androidx.hilt.navigation.compose.hiltViewModel(),
+    onStreamClick: () -> Unit = {}
 ) {
     val brigendsFont = FontFamily(Font(R.font.brigends_expanded, FontWeight.Normal))
     val michromaFont = FontFamily(Font(R.font.michroma, FontWeight.Normal))
@@ -44,8 +48,23 @@ fun LiveScreen(
     val sessionName by liveClient.sessionName.collectAsState()
     val isConnected by liveClient.isConnected.collectAsState()
     val connectionError by liveClient.connectionError.collectAsState()
+    val connectionStatus by liveClient.connectionStatus.collectAsState()
     val currentLap by liveClient.currentLap.collectAsState()
     val totalLaps by liveClient.totalLaps.collectAsState()
+    
+    // Lifecycle observer — reconnect when app resumes from background
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                liveClient.ensureConnected()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
     
     // Race weekend state for session detection
     val raceWeekendState by raceViewModel.raceWeekendState.collectAsState()
@@ -91,6 +110,11 @@ fun LiveScreen(
         }
     }
     
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -186,6 +210,62 @@ fun LiveScreen(
                         fontWeight = FontWeight.Bold
                     )
                 }
+            }
+        }
+        
+        // Debounced connection status bar — only show after 2s of being non-connected
+        var showStatusBar by remember { mutableStateOf(false) }
+        LaunchedEffect(connectionStatus) {
+            if (connectionStatus != ConnectionStatus.CONNECTED) {
+                kotlinx.coroutines.delay(2000) // Wait 2 seconds before showing
+                showStatusBar = true
+            } else {
+                showStatusBar = false
+            }
+        }
+        
+        if (shouldConnect && liveDrivers.isNotEmpty() && showStatusBar && connectionStatus != ConnectionStatus.CONNECTED) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        when (connectionStatus) {
+                            ConnectionStatus.RECONNECTING, ConnectionStatus.CONNECTING -> Color(0xFFFF8800).copy(alpha = 0.2f)
+                            ConnectionStatus.DISCONNECTED -> Color(0xFFFF0040).copy(alpha = 0.2f)
+                            else -> Color.Transparent
+                        }
+                    )
+                    .clickable {
+                        liveClient.ensureConnected()
+                    }
+                    .padding(horizontal = 12.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                if (connectionStatus == ConnectionStatus.RECONNECTING || connectionStatus == ConnectionStatus.CONNECTING) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(10.dp),
+                        color = Color(0xFFFF8800),
+                        strokeWidth = 1.5.dp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Text(
+                    text = when (connectionStatus) {
+                        ConnectionStatus.RECONNECTING -> "RECONNECTING..."
+                        ConnectionStatus.CONNECTING -> "CONNECTING..."
+                        ConnectionStatus.DISCONNECTED -> "⚠ DISCONNECTED — TAP TO RETRY"
+                        else -> ""
+                    },
+                    fontFamily = michromaFont,
+                    fontSize = 7.sp,
+                    color = when (connectionStatus) {
+                        ConnectionStatus.RECONNECTING, ConnectionStatus.CONNECTING -> Color(0xFFFF8800)
+                        ConnectionStatus.DISCONNECTED -> Color(0xFFFF0040)
+                        else -> Color.Transparent
+                    },
+                    letterSpacing = 1.sp
+                )
             }
         }
         
@@ -490,9 +570,47 @@ fun LiveScreen(
                                     )
                                 }
                                 SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> {
+                                    // Determine current Q session from active (non-eliminated) driver count
+                                    val activeDrivers = liveDrivers.count { !it.knockedOut }
+                                    val currentQSession = when {
+                                        activeDrivers > 16 -> 1  // Q1: 22 drivers, bottom 6 at risk (P17-P22)
+                                        activeDrivers > 10 -> 2  // Q2: 16 drivers, bottom 6 at risk (P11-P16)
+                                        else -> 3                // Q3: top 10 fighting for pole
+                                    }
+                                    
+                                    // Danger zone cutoff position (1-indexed) for current session
+                                    val dangerCutoff = when (currentQSession) {
+                                        1 -> 16  // P17+ in danger during Q1
+                                        2 -> 10  // P11+ in danger during Q2
+                                        else -> -1  // No danger zone in Q3
+                                    }
+                                    
+                                    val posNum = driver.positionDisplay?.toIntOrNull() ?: 999
+                                    val inDangerZone = !driver.knockedOut && dangerCutoff > 0 && posNum > dangerCutoff
+                                    
+                                    // Danger zone separator
+                                    if (inDangerZone && index > 0) {
+                                        val prevPos = liveDrivers[index - 1].positionDisplay?.toIntOrNull() ?: 0
+                                        val prevKO = liveDrivers[index - 1].knockedOut
+                                        if (prevPos <= dangerCutoff && !prevKO) {
+                                            KnockoutZoneSeparator(
+                                                michromaFont = michromaFont,
+                                                label = "Q${currentQSession} DANGER ZONE"
+                                            )
+                                        }
+                                    }
+                                    
+                                    // Eliminated separator (between active and knocked-out drivers)
+                                    if (driver.knockedOut && index > 0 && !liveDrivers[index - 1].knockedOut) {
+                                        KnockoutZoneSeparator(
+                                            michromaFont = michromaFont,
+                                            label = "ELIMINATED"
+                                        )
+                                    }
+                                    
                                     QualiDriverRow(
                                         driver = driver,
-                                        isKnockoutZone = index >= 15, // Positions 16-20
+                                        inDangerZone = inDangerZone,
                                         michromaFont = michromaFont
                                     )
                                 }
@@ -516,6 +634,42 @@ fun LiveScreen(
             }
         }
     }
+    
+    // Floating "Watch Stream" button - always accessible
+    Box(
+        modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(end = 16.dp, bottom = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                Brush.horizontalGradient(
+                    listOf(Color(0xFFE6007E), Color(0xFFFF0040))
+                )
+            )
+            .clickable { onStreamClick() }
+            .padding(horizontal = 16.dp, vertical = 10.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = "Watch Stream",
+                tint = Color.White,
+                modifier = Modifier.size(16.dp)
+            )
+            Text(
+                text = "WATCH STREAM",
+                fontFamily = FontFamily(Font(R.font.michroma, FontWeight.Normal)),
+                fontSize = 8.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.sp
+            )
+        }
+    }
+    } // Close outer Box
 }
 
 // Session Type Enum
@@ -609,51 +763,31 @@ private fun SessionHeader(
                 )
             }
             SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> {
-                // Sectors S1, S2, S3
+                // Qualifying: P | DVR | LIVE SECTORS | BEST | GAP
                 Text(
-                    text = "S1",
+                    text = "LIVE",
                     fontFamily = michromaFont,
                     fontSize = 9.sp,
                     color = Color.White.copy(alpha = 0.6f),
-                    modifier = Modifier.width(36.dp),
+                    modifier = Modifier.weight(1f),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     fontWeight = FontWeight.Bold
                 )
-                Text(
-                    text = "S2",
-                    fontFamily = michromaFont,
-                    fontSize = 9.sp,
-                    color = Color.White.copy(alpha = 0.6f),
-                    modifier = Modifier.width(36.dp),
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "S3",
-                    fontFamily = michromaFont,
-                    fontSize = 9.sp,
-                    color = Color.White.copy(alpha = 0.6f),
-                    modifier = Modifier.width(36.dp),
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                    fontWeight = FontWeight.Bold
-                )
-                // Best Lap
                 Text(
                     text = "BEST",
                     fontFamily = michromaFont,
                     fontSize = 9.sp,
                     color = Color.White.copy(alpha = 0.6f),
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.width(72.dp),
                     textAlign = androidx.compose.ui.text.style.TextAlign.End,
                     fontWeight = FontWeight.Bold
                 )
-                // Gap
                 Text(
                     text = "GAP",
                     fontFamily = michromaFont,
                     fontSize = 9.sp,
                     color = Color.White.copy(alpha = 0.6f),
-                    modifier = Modifier.width(48.dp),
+                    modifier = Modifier.width(56.dp),
                     textAlign = androidx.compose.ui.text.style.TextAlign.End,
                     fontWeight = FontWeight.Bold
                 )
@@ -696,11 +830,18 @@ private fun getTyreColor(compound: String?): Color {
     }
 }
 
-// Get team color for a driver - reads from JSON via F1DataProvider
-private fun getTeamColor(teamName: String?): Color {
+// Get team color - prefers API hex color, falls back to local data
+private fun getTeamColor(teamName: String?, teamColour: String? = null): Color {
+    // First try the API-provided hex color
+    if (teamColour != null) {
+        try {
+            return Color(android.graphics.Color.parseColor("#$teamColour"))
+        } catch (_: Exception) { }
+    }
+    
     if (teamName == null) return Color(0xFF888888)
     
-    // Try to get color from F1DataProvider
+    // Fallback to local JSON data
     val colorHex = com.f1tracker.data.local.F1DataProvider.getTeamColorByName(teamName)
     return if (colorHex != null) {
         try {
@@ -709,7 +850,27 @@ private fun getTeamColor(teamName: String?): Color {
             Color(0xFF888888)
         }
     } else {
-        Color(0xFF888888) // Fallback gray
+        Color(0xFF888888)
+    }
+}
+
+// Get short 3-letter team abbreviation for broadcast style
+private fun getShortTeamName(teamName: String?): String {
+    if (teamName == null) return "---"
+    val lower = teamName.lowercase()
+    return when {
+        "mercedes" in lower -> "MER"
+        "ferrari" in lower -> "FER"
+        "mclaren" in lower -> "MCL"
+        "red bull" in lower -> "RBR"
+        "aston martin" in lower -> "AMR"
+        "alpine" in lower -> "ALP"
+        "williams" in lower -> "WIL"
+        "racing bulls" in lower || lower == "rb" -> "RB"
+        "haas" in lower -> "HAA"
+        "audi" in lower || "sauber" in lower -> "AUD"
+        "cadillac" in lower -> "CAD"
+        else -> teamName.take(3).uppercase()
     }
 }
 
@@ -721,8 +882,8 @@ private fun RaceDriverRow(
     drivers: List<LiveDriver>,
     michromaFont: FontFamily
 ) {
-    val driverCode = generateDriverCode(driver.firstName, driver.lastName)
-    val teamColor = getTeamColor(driver.externalTeam)
+    val driverCode = driver.tla ?: generateDriverCode(driver.firstName, driver.lastName)
+    val teamColor = getTeamColor(driver.externalTeam, driver.teamColour)
     val tyreColor = getTyreColor(driver.tyreCompound)
     val gapToAhead = calculateGapToCarAhead(drivers, index)
     
@@ -924,154 +1085,356 @@ private fun RaceDriverRow(
     }
 }
 
-// QUALIFYING / SPRINT QUALIFYING Driver Row
+// Knockout Zone Separator
 @Composable
-private fun QualiDriverRow(
-    driver: LiveDriver,
-    isKnockoutZone: Boolean,
-    michromaFont: FontFamily
+private fun KnockoutZoneSeparator(
+    michromaFont: FontFamily,
+    label: String = "KNOCKOUT ZONE"
 ) {
-    val driverCode = generateDriverCode(driver.firstName, driver.lastName)
-    val teamColor = getTeamColor(driver.externalTeam)
-    
-    // Position accent colors
-    val positionColor = when (driver.positionDisplay?.toIntOrNull()) {
-        1 -> Color(0xFFFFD700)  // Gold
-        2 -> Color(0xFFC0C0C0)  // Silver
-        3 -> Color(0xFFCD7F32)  // Bronze
-        else -> Color(0xFFE6007E) // Hot Pink
-    }
-    
-    // Sector colors: 0=white, 1=green (personal), 2=purple (overall)
-    val sectorColors = driver.sectorColors.map { colorCode ->
-        when (colorCode) {
-            2 -> Color(0xFFAA00FF)  // Purple - overall fastest
-            1 -> Color(0xFF00FF00)  // Green - personal best
-            else -> Color.White.copy(alpha = 0.8f)  // White - normal
-        }
-    }
-    
-    // Background color for knockout zone
-    val bgColor = if (isKnockoutZone) Color(0xFFFF0040).copy(alpha = 0.1f) else Color(0xFF161616)
-    
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(bgColor, Color(0xFF121212))
-                ),
-                RoundedCornerShape(6.dp)
-            )
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(1.dp)
+                .background(
+                    Brush.horizontalGradient(
+                        listOf(Color.Transparent, Color(0xFFFF0040).copy(alpha = 0.5f))
+                    )
+                )
+        )
+        Text(
+            text = "  ✕ $label  ",
+            fontFamily = michromaFont,
+            fontSize = 7.sp,
+            color = Color(0xFFFF0040).copy(alpha = 0.8f),
+            letterSpacing = 1.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(1.dp)
+                .background(
+                    Brush.horizontalGradient(
+                        listOf(Color(0xFFFF0040).copy(alpha = 0.5f), Color.Transparent)
+                    )
+                )
+        )
+    }
+}
+
+// QUALIFYING / SPRINT QUALIFYING Driver Row - Two-Line Premium Card
+@Composable
+private fun QualiDriverRow(
+    driver: LiveDriver,
+    inDangerZone: Boolean = false,
+    michromaFont: FontFamily
+) {
+    val driverCode = driver.tla ?: generateDriverCode(driver.firstName, driver.lastName)
+    val teamColor = getTeamColor(driver.externalTeam, driver.teamColour)
+    val tyreColor = getTyreColor(driver.tyreCompound)
+    val isKnockedOut = driver.knockedOut
+    
+    // Position accent
+    val positionColor = when {
+        driver.positionDisplay?.toIntOrNull() == 1 -> Color(0xFFFFD700)  // Gold
+        driver.positionDisplay?.toIntOrNull() == 2 -> Color(0xFFC0C0C0)  // Silver
+        driver.positionDisplay?.toIntOrNull() == 3 -> Color(0xFFCD7F32)  // Bronze
+        isKnockedOut -> Color(0xFFFF0040)  // Red - eliminated
+        inDangerZone -> Color(0xFFFF6600)  // Orange - danger zone
+        else -> Color.White.copy(alpha = 0.5f)
+    }
+    
+    // Background based on state
+    val bgBrush = when {
+        isKnockedOut -> Brush.horizontalGradient(
+            listOf(Color(0xFFFF0040).copy(alpha = 0.08f), Color(0xFF0D0D0D))
+        )
+        inDangerZone -> Brush.horizontalGradient(
+            listOf(Color(0xFFFF6600).copy(alpha = 0.06f), Color(0xFF0D0D0D))
+        )
+        driver.inPit -> Brush.horizontalGradient(
+            listOf(Color(0xFFFFAA00).copy(alpha = 0.08f), Color(0xFF0D0D0D))
+        )
+        driver.pitOut -> Brush.horizontalGradient(
+            listOf(Color(0xFF00CC66).copy(alpha = 0.08f), Color(0xFF0D0D0D))
+        )
+        else -> Brush.horizontalGradient(
+            listOf(Color(0xFF141414), Color(0xFF0D0D0D))
+        )
+    }
+    
+    // Check if driver has active mini-sector progress (on a hot lap)
+    val hasActiveSectors = driver.miniSectors.any { sectorSegs ->
+        sectorSegs.any { it > 0 }
+    }
+    
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(bgBrush, RoundedCornerShape(8.dp))
             .border(
                 width = 1.dp,
                 brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        if (isKnockoutZone) Color(0xFFFF0040).copy(alpha = 0.3f) else teamColor.copy(alpha = 0.3f),
-                        Color.White.copy(alpha = 0.05f)
+                    listOf(
+                        teamColor.copy(alpha = if (isKnockedOut) 0.15f else 0.35f),
+                        Color.White.copy(alpha = 0.03f)
                     )
                 ),
-                shape = RoundedCornerShape(6.dp)
+                shape = RoundedCornerShape(8.dp)
             )
-            .padding(horizontal = 6.dp, vertical = 6.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(start = 0.dp, end = 8.dp, top = 6.dp, bottom = 6.dp)
     ) {
-        // Position
+        // === LINE 1: Position | Team bar | TLA | Mini-sectors | Best Lap ===
         Row(
-            modifier = Modifier.width(24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .width(2.dp)
-                    .height(14.dp)
-                    .background(positionColor.copy(alpha = 0.8f), RoundedCornerShape(1.dp))
-            )
-            Spacer(modifier = Modifier.width(3.dp))
-            Text(
-                text = driver.positionDisplay ?: "-",
-                fontFamily = michromaFont,
-                fontSize = 11.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        
-        // Driver code with team color
-        Row(
-            modifier = Modifier.width(44.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+            // Position with accent bar
             Box(
                 modifier = Modifier
                     .width(3.dp)
-                    .height(20.dp)
-                    .background(teamColor, RoundedCornerShape(1.5.dp))
+                    .height(28.dp)
+                    .background(positionColor, RoundedCornerShape(1.5.dp))
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            
+            // Position number
+            Text(
+                text = driver.positionDisplay ?: "-",
+                fontFamily = michromaFont,
+                fontSize = 13.sp,
+                color = if (isKnockedOut) Color.White.copy(alpha = 0.4f) else Color.White,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.width(26.dp),
+                maxLines = 1
+            )
+            
+            Spacer(modifier = Modifier.width(6.dp))
+            
+            // Team color dot + Driver TLA
+            Box(
+                modifier = Modifier
+                    .size(4.dp)
+                    .background(teamColor, CircleShape)
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = driverCode,
                 fontFamily = michromaFont,
                 fontSize = 11.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold
+                color = if (isKnockedOut) Color.White.copy(alpha = 0.4f) else Color.White,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.width(48.dp),
+                maxLines = 1
+            )
+            
+            Spacer(modifier = Modifier.width(8.dp))
+            
+            // Mini-sector progress visualization (fills remaining space)
+            if (hasActiveSectors && !isKnockedOut) {
+                MiniSectorBar(
+                    miniSectors = driver.miniSectors,
+                    modifier = Modifier.weight(1f)
+                )
+            } else {
+                // Status text when not on a hot lap
+                Text(
+                    text = when {
+                        isKnockedOut -> "ELIMINATED"
+                        driver.inPit -> "IN PIT"
+                        driver.pitOut -> "OUT LAP"
+                        else -> ""
+                    },
+                    fontFamily = michromaFont,
+                    fontSize = 8.sp,
+                    color = when {
+                        isKnockedOut -> Color(0xFFFF0040).copy(alpha = 0.7f)
+                        driver.inPit -> Color(0xFFFFAA00).copy(alpha = 0.7f)
+                        driver.pitOut -> Color(0xFF00CC66).copy(alpha = 0.7f)
+                        else -> Color.Transparent
+                    },
+                    letterSpacing = 1.sp,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            
+            Spacer(modifier = Modifier.width(6.dp))
+            
+            // Best lap time
+            Text(
+                text = driver.raceTime ?: "-",
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = if (isKnockedOut) Color.White.copy(alpha = 0.35f) else Color.White,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.width(72.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.End
+            )
+            
+            Spacer(modifier = Modifier.width(6.dp))
+            
+            // Gap to P1
+            Text(
+                text = when {
+                    driver.positionDisplay == "1" -> "LEADER"
+                    driver.gap.isNullOrEmpty() || driver.gap == "" -> "-"
+                    else -> driver.gap!!
+                },
+                fontFamily = michromaFont,
+                fontSize = if (driver.positionDisplay == "1") 7.sp else 10.sp,
+                color = when {
+                    driver.positionDisplay == "1" -> Color(0xFFFFD700).copy(alpha = 0.7f)
+                    isKnockedOut -> Color(0xFFFF0040).copy(alpha = 0.5f)
+                    else -> Color.White.copy(alpha = 0.6f)
+                },
+                modifier = Modifier.width(56.dp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                letterSpacing = if (driver.positionDisplay == "1") 0.5.sp else 0.sp
             )
         }
         
-        // Sector 1
-        Text(
-            text = driver.sectors.getOrNull(0) ?: "-",
-            fontFamily = michromaFont,
-            fontSize = 9.sp,
-            color = sectorColors.getOrNull(0) ?: Color.White.copy(alpha = 0.7f),
-            modifier = Modifier.width(36.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            fontWeight = if ((driver.sectorColors.getOrNull(0) ?: 0) > 0) FontWeight.Bold else FontWeight.Normal
-        )
+        Spacer(modifier = Modifier.height(3.dp))
         
-        // Sector 2
-        Text(
-            text = driver.sectors.getOrNull(1) ?: "-",
-            fontFamily = michromaFont,
-            fontSize = 9.sp,
-            color = sectorColors.getOrNull(1) ?: Color.White.copy(alpha = 0.7f),
-            modifier = Modifier.width(36.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            fontWeight = if ((driver.sectorColors.getOrNull(1) ?: 0) > 0) FontWeight.Bold else FontWeight.Normal
-        )
-        
-        // Sector 3
-        Text(
-            text = driver.sectors.getOrNull(2) ?: "-",
-            fontFamily = michromaFont,
-            fontSize = 9.sp,
-            color = sectorColors.getOrNull(2) ?: Color.White.copy(alpha = 0.7f),
-            modifier = Modifier.width(36.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            fontWeight = if ((driver.sectorColors.getOrNull(2) ?: 0) > 0) FontWeight.Bold else FontWeight.Normal
-        )
-        
-        // Best lap time
-        Text(
-            text = driver.raceTime ?: "-",
-            fontFamily = michromaFont,
-            fontSize = 10.sp,
-            color = Color.White,
-            modifier = Modifier.weight(1f),
-            textAlign = androidx.compose.ui.text.style.TextAlign.End,
-            fontWeight = FontWeight.Bold
-        )
-        
-        // Gap to P1
-        Text(
-            text = driver.gap ?: "-",
-            fontFamily = michromaFont,
-            fontSize = 9.sp,
-            color = if (driver.gap == null || driver.gap == "-") Color(0xFFFFD700) else Color.White.copy(alpha = 0.7f),
-            modifier = Modifier.width(48.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.End
-        )
+        // === LINE 2: Team | Tyre | Laps | Sector times (when available) ===
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 17.dp), // Aligned after position bar
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Team name (short)
+            Text(
+                text = getShortTeamName(driver.externalTeam),
+                fontFamily = michromaFont,
+                fontSize = 7.sp,
+                color = teamColor.copy(alpha = 0.6f),
+                letterSpacing = 0.5.sp,
+                modifier = Modifier.width(32.dp),
+                maxLines = 1
+            )
+            
+            // Tyre compound dot
+            if (driver.tyreCompound != null) {
+                Box(
+                    modifier = Modifier
+                        .size(6.dp)
+                        .background(tyreColor, CircleShape)
+                )
+                Spacer(modifier = Modifier.width(3.dp))
+                Text(
+                    text = driver.tyreCompound?.take(1)?.uppercase() ?: "",
+                    fontFamily = michromaFont,
+                    fontSize = 7.sp,
+                    color = tyreColor.copy(alpha = 0.8f),
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+            }
+            
+            // Laps count
+            if (driver.laps != null) {
+                Text(
+                    text = "${driver.laps}L",
+                    fontFamily = michromaFont,
+                    fontSize = 7.sp,
+                    color = Color.White.copy(alpha = 0.35f)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+            
+            // Sector times (S1 | S2 | S3) with colors — transient, show when available
+            val sectorTimeAlpha = if (isKnockedOut) 0.3f else 0.7f
+            for (i in 0..2) {
+                val sectorTime = driver.sectors.getOrNull(i) ?: ""
+                val sectorColorCode = driver.sectorColors.getOrNull(i) ?: 0
+                val sectorColor = when (sectorColorCode) {
+                    2 -> Color(0xFFAA00FF) // Purple - overall fastest
+                    1 -> Color(0xFF00FF00) // Green - personal best
+                    else -> Color.White.copy(alpha = sectorTimeAlpha)
+                }
+                if (sectorTime.isNotEmpty()) {
+                    Text(
+                        text = sectorTime,
+                        fontFamily = michromaFont,
+                        fontSize = 8.sp,
+                        color = sectorColor.copy(alpha = sectorTimeAlpha),
+                        fontWeight = if (sectorColorCode > 0) FontWeight.Bold else FontWeight.Normal,
+                        modifier = Modifier.width(42.dp),
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                        maxLines = 1
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.weight(1f))
+            
+            // Interval to car ahead
+            if (!driver.interval.isNullOrEmpty() && driver.positionDisplay != "1") {
+                Text(
+                    text = "Δ${driver.interval}",
+                    fontFamily = michromaFont,
+                    fontSize = 7.sp,
+                    color = Color.White.copy(alpha = 0.3f),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.End
+                )
+            }
+        }
+    }
+}
+
+// Mini-sector progress bar visualization
+@Composable
+private fun MiniSectorBar(
+    miniSectors: List<List<Int>>,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.height(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(3.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        miniSectors.forEachIndexed { sectorIdx, segments ->
+            if (segments.isNotEmpty()) {
+                // Each sector's segments as tiny colored blocks
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(1.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    segments.forEach { status ->
+                        val segColor = when {
+                            status == 2064 || status == 2049 -> Color(0xFFAA00FF) // Purple - overall fastest
+                            status == 2051 -> Color(0xFF00FF00) // Green - personal best
+                            status >= 2048 -> Color(0xFFFFCC00) // Yellow - completed
+                            else -> Color.White.copy(alpha = 0.1f) // Not reached
+                        }
+                        Box(
+                            modifier = Modifier
+                                .width(3.dp)
+                                .height(if (status >= 2048) 10.dp else 4.dp)
+                                .background(segColor, RoundedCornerShape(0.5.dp))
+                        )
+                    }
+                }
+                
+                // Separator between sectors (except after last)
+                if (sectorIdx < miniSectors.size - 1) {
+                    Box(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .height(6.dp)
+                            .background(Color.White.copy(alpha = 0.15f))
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -1083,8 +1446,8 @@ private fun PracticeDriverRow(
     drivers: List<LiveDriver>,
     michromaFont: FontFamily
 ) {
-    val driverCode = generateDriverCode(driver.firstName, driver.lastName)
-    val teamColor = getTeamColor(driver.externalTeam)
+    val driverCode = driver.tla ?: generateDriverCode(driver.firstName, driver.lastName)
+    val teamColor = getTeamColor(driver.externalTeam, driver.teamColour)
     
     // Position accent colors
     val positionColor = when (driver.positionDisplay?.toIntOrNull()) {

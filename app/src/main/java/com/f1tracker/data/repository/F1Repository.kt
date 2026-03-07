@@ -322,9 +322,9 @@ class F1RepositoryImpl @Inject constructor(
             
             android.util.Log.d("F1Repository", "Found event: ${raceEvent.name} (${raceEvent.id})")
             
-            // Process completed sessions
+            // Process completed sessions (or in-progress sessions that have results)
             val sessionResults = raceEvent.competitions
-                .filter { it.status.type.completed }
+                .filter { it.status.type.completed || (!it.competitors.isNullOrEmpty() && it.status.type.name != "STATUS_SCHEDULED") }
                 .mapNotNull { competition ->
                     val sessionType = mapESPNSessionType(competition.type.abbreviation) ?: return@mapNotNull null
                     val competitors = competition.competitors ?: return@mapNotNull null

@@ -63,7 +63,8 @@ import androidx.compose.ui.window.DialogProperties
 fun RaceDetailScreen(
     race: Race,
     viewModel: RaceViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onVideoClick: (String) -> Unit = {}
 ) {
     LaunchedEffect(race) {
         viewModel.selectRace(race)
@@ -146,52 +147,7 @@ fun RaceDetailScreen(
     var selectedVideoId by remember { mutableStateOf<String?>(null) }
     val activity = context as? android.app.Activity
     
-    // In-app YouTube Player Dialog
-    if (selectedVideoId != null) {
-        // Force landscape orientation when opening video
-        LaunchedEffect(selectedVideoId) {
-            activity?.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
-        
-        // Restore portrait when dialog closes
-        DisposableEffect(selectedVideoId) {
-            onDispose {
-                activity?.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            }
-        }
-        
-        Dialog(
-            onDismissRequest = { selectedVideoId = null },
-            properties = DialogProperties(
-                usePlatformDefaultWidth = false,
-                decorFitsSystemWindows = false
-            )
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black)
-            ) {
-                YouTubePlayerScreen(videoId = selectedVideoId!!)
-                
-                // Close button
-                IconButton(
-                    onClick = { selectedVideoId = null },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(16.dp)
-                        .size(40.dp)
-                        .background(Color.Black.copy(alpha = 0.6f), CircleShape)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Close",
-                        tint = Color.White
-                    )
-                }
-            }
-        }
-    }
+    // Route video clicks to MainAppScreen's full-screen player
 
     Column(
         modifier = Modifier
@@ -247,8 +203,7 @@ fun RaceDetailScreen(
                         brigendsFont = brigendsFont,
                         onHighlightClick = { highlight ->
                             // Extract video ID from URL
-                            val videoId = highlight.id
-                            selectedVideoId = videoId
+                            onVideoClick(highlight.id)
                         }
                     )
                 }

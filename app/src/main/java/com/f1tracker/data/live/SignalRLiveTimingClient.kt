@@ -17,12 +17,22 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 // --- Public Data Models (UI) ---
+
+enum class ConnectionStatus {
+    DISCONNECTED,
+    CONNECTING,
+    CONNECTED,
+    RECONNECTING
+}
+
 data class LiveDriver(
     val position: String? = null,
     val positionDisplay: String? = null,
     val firstName: String? = null,
     val lastName: String? = null,
+    val tla: String? = null, // 3-letter code from API (e.g., "VER", "HAM")
     val externalTeam: String? = null,
+    val teamColour: String? = null, // Hex color from API (e.g., "4781D7")
     val raceTime: String? = null,
     val gap: String? = null,
     val interval: String? = null,
@@ -30,10 +40,16 @@ data class LiveDriver(
     val pits: String? = null,
     val sectors: List<String> = emptyList(),
     val sectorColors: List<Int> = emptyList(),
+    val miniSectors: List<List<Int>> = emptyList(), // Per-sector segment statuses for live progress [S1[segs], S2[segs], S3[segs]]
     val status: Int = 0,
+    val inPit: Boolean = false,
+    val pitOut: Boolean = false,
     val tyreCompound: String? = null, // SOFT, MEDIUM, HARD, INTERMEDIATE, WET
     val tyreAge: Int? = null,
-    val gridPos: String? = null
+    val gridPos: String? = null,
+    val knockedOut: Boolean = false, // Qualifying: eliminated
+    val cutoff: Boolean = false, // At cutoff line
+    val bestLapTimes: List<String> = emptyList() // Per Q-session best laps [Q1, Q2, Q3]
 )
 
 // --- Internal F1 Data Models (JSON Parsing) ---
@@ -62,23 +78,29 @@ data class F1HubMessage(
     @SerializedName("A") val args: List<JsonElement>  // Changed from JsonObject to JsonElement to handle primitives
 )
 
-// --- Driver Database (reads from F1DataProvider which loads from JSON) ---
+// --- Driver Database (reads from F1DataProvider, falls back to API DriverList) ---
 object DriverDatabase {
-    data class DriverInfo(val firstName: String, val lastName: String, val team: String)
+    data class DriverInfo(val firstName: String, val lastName: String, val team: String, val tla: String? = null, val teamColour: String? = null)
+
+    // API DriverList data - populated at runtime from live timing feed
+    // Key: racing number, Value: driver info from API
+    val apiDriverInfo = mutableMapOf<String, DriverInfo>()
 
     /**
-     * Get driver by racing number. Data comes from f1_2025_drivers_reformed.json
-     * via F1DataProvider - no more hardcoded driver lists!
+     * Get driver by racing number. 
+     * Priority: 1) API DriverList (always current) 2) Local JSON (may be outdated)
      */
     fun getDriver(number: String): DriverInfo {
+        // First try API data (most current, includes mid-season changes)
+        apiDriverInfo[number]?.let { return it }
+        
+        // Fallback to local JSON
         val driver = com.f1tracker.data.local.F1DataProvider.getDriverByRacingNumber(number)
         return if (driver != null) {
-            // Map team ID to display name for live timing
             val teamDisplayName = com.f1tracker.data.local.F1DataProvider.getTeamByApiId(driver.team)?.displayName 
                 ?: driver.team.replace("_", " ").replaceFirstChar { it.uppercase() }
-            DriverInfo(driver.givenName, driver.familyName, teamDisplayName)
+            DriverInfo(driver.givenName, driver.familyName, teamDisplayName, driver.code)
         } else {
-            // Fallback for unknown drivers (shouldn't happen if JSON is up to date)
             DriverInfo("Driver", "#$number", "Unknown Team")
         }
     }
@@ -104,6 +126,9 @@ class SignalRLiveTimingClient {
     private val _isConnected = MutableStateFlow(false)
     val isConnected: StateFlow<Boolean> = _isConnected
 
+    private val _connectionStatus = MutableStateFlow(ConnectionStatus.DISCONNECTED)
+    val connectionStatus: StateFlow<ConnectionStatus> = _connectionStatus
+
     private val _connectionError = MutableStateFlow<String?>(null)
     val connectionError: StateFlow<String?> = _connectionError
 
@@ -118,12 +143,19 @@ class SignalRLiveTimingClient {
     
     // Map to track drivers by racing number for incremental updates
     private val driverMap = mutableMapOf<String, LiveDriver>()
+    
+    // Reconnection state
+    private var reconnectAttempts = 0
+    private val maxReconnectAttempts = 10
+    private var isReconnecting = false
+    private var lastMessageTime = System.currentTimeMillis()
 
     fun connect() {
         scope.launch {
             try {
                 Log.d(TAG, "🔌 Starting negotiation with F1 SignalR...")
                 _isConnected.value = false
+                _connectionStatus.value = if (isReconnecting) ConnectionStatus.RECONNECTING else ConnectionStatus.CONNECTING
                 _connectionError.value = null
 
                 // 1. Negotiate
@@ -163,33 +195,100 @@ class SignalRLiveTimingClient {
                     override fun onOpen(webSocket: WebSocket, response: Response) {
                         Log.d(TAG, "✅ WebSocket opened")
                         _isConnected.value = true
+                        _connectionStatus.value = ConnectionStatus.CONNECTED
+                        reconnectAttempts = 0
+                        isReconnecting = false
+                        lastMessageTime = System.currentTimeMillis()
                         
-                        // 3. Subscribe - include DriverList for position data, TimingAppData for tyres
+                        // 3. Subscribe
                         val subscribeCmd = """{"H":"Streaming","M":"Subscribe","A":[["Heartbeat","TimingData","TimingAppData","DriverList","CarData.z","Position.z","SessionInfo","TrackStatus","LapCount","ExtrapolatedClock"]],"I":1}"""
                         webSocket.send(subscribeCmd)
                         Log.d(TAG, "📡 Sent Subscribe command")
                     }
 
                     override fun onMessage(webSocket: WebSocket, text: String) {
+                        lastMessageTime = System.currentTimeMillis()
                         handleMessage(text)
                     }
 
                     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
                         Log.d(TAG, "WebSocket closing: $code - $reason")
                         _isConnected.value = false
+                        _connectionStatus.value = ConnectionStatus.DISCONNECTED
+                        scheduleReconnect()
                     }
 
                     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
                         Log.e(TAG, "WebSocket error: ${t.message}", t)
                         _isConnected.value = false
+                        _connectionStatus.value = ConnectionStatus.DISCONNECTED
                         _connectionError.value = t.message
+                        scheduleReconnect()
                     }
                 })
 
             } catch (e: Exception) {
                 Log.e(TAG, "Connection failed: ${e.message}", e)
                 _connectionError.value = e.message
+                _connectionStatus.value = ConnectionStatus.DISCONNECTED
+                scheduleReconnect()
             }
+        }
+    }
+    
+    private fun scheduleReconnect() {
+        if (isReconnecting) {
+            Log.d(TAG, "🔄 Already reconnecting, skipping duplicate scheduleReconnect")
+            return
+        }
+        if (reconnectAttempts >= maxReconnectAttempts) {
+            Log.w(TAG, "Max reconnect attempts reached ($maxReconnectAttempts)")
+            _connectionError.value = "Connection lost. Tap to retry."
+            isReconnecting = false
+            return
+        }
+        
+        reconnectAttempts++
+        isReconnecting = true
+        val delayMs = minOf(2000L * (1L shl (reconnectAttempts - 1)), 30000L) // 2s, 4s, 8s, 16s, 30s max
+        Log.d(TAG, "🔄 Reconnect attempt $reconnectAttempts in ${delayMs}ms")
+        _connectionStatus.value = ConnectionStatus.RECONNECTING
+        _connectionError.value = "Reconnecting... (attempt $reconnectAttempts)"
+        
+        scope.launch {
+            kotlinx.coroutines.delay(delayMs)
+            // Close old socket cleanly
+            try { webSocket?.close(1000, "Reconnecting") } catch (_: Exception) {}
+            webSocket = null
+            connect()
+        }
+    }
+    
+    // Called when app resumes from background — checks if connection is stale
+    private var lastEnsureConnectedTime = 0L
+    
+    fun ensureConnected() {
+        val now = System.currentTimeMillis()
+        
+        // Cooldown: don't re-enter within 10 seconds
+        if (now - lastEnsureConnectedTime < 10_000) return
+        // Don't interfere if already reconnecting
+        if (isReconnecting) return
+        // Don't interfere if currently connecting
+        if (_connectionStatus.value == ConnectionStatus.CONNECTING || _connectionStatus.value == ConnectionStatus.RECONNECTING) return
+        
+        lastEnsureConnectedTime = now
+        
+        val timeSinceLastMessage = now - lastMessageTime
+        val isStale = timeSinceLastMessage > 60_000 // No messages for 60 seconds = stale
+        
+        if (!_isConnected.value || isStale) {
+            Log.d(TAG, "🔄 ensureConnected: connected=${_isConnected.value}, stale=$isStale (${timeSinceLastMessage}ms since last msg)")
+            reconnectAttempts = 0 // Reset attempts for manual/lifecycle reconnect
+            isReconnecting = true
+            try { webSocket?.close(1000, "Reconnecting") } catch (_: Exception) {}
+            webSocket = null
+            connect()
         }
     }
 
@@ -233,7 +332,9 @@ class SignalRLiveTimingClient {
                                 processTimingData(data)
                             }
                             "SessionInfo" -> {
-                                val sessionName = data.getAsJsonObject("Meeting")?.get("Name")?.asString
+                                // Use SessionInfo.Name for session type (e.g., "Practice 1", "Qualifying", "Race")
+                                // NOT Meeting.Name which is the GP name (e.g., "Australian Grand Prix")
+                                val sessionName = data.get("Name")?.asString
                                 if (sessionName != null) {
                                     Log.d(TAG, "📋 Session name: $sessionName")
                                     _sessionName.value = sessionName
@@ -298,11 +399,12 @@ class SignalRLiveTimingClient {
                 }
             }
             
-            // Process SessionInfo
+            // Process SessionInfo - use Name for session type (e.g., "Practice 1", "Qualifying", "Race")
+            // NOT Meeting.Name which is the GP name (e.g., "Australian Grand Prix")
             response.get("SessionInfo")?.let { sessionElement ->
                 if (sessionElement.isJsonObject) {
                     val sessionName = sessionElement.asJsonObject
-                        .getAsJsonObject("Meeting")?.get("Name")?.asString
+                        .get("Name")?.asString
                     if (sessionName != null) {
                         Log.d(TAG, "📦 Session: $sessionName")
                         _sessionName.value = sessionName
@@ -352,7 +454,9 @@ class SignalRLiveTimingClient {
                 val existing = driverMap[number] ?: LiveDriver(
                     firstName = driverInfo.firstName,
                     lastName = driverInfo.lastName,
-                    externalTeam = driverInfo.team
+                    tla = driverInfo.tla,
+                    externalTeam = driverInfo.team,
+                    teamColour = driverInfo.teamColour
                 )
                 
                 // Extract fields - only update if present in this delta
@@ -362,32 +466,109 @@ class SignalRLiveTimingClient {
                 val position = positionFromData ?: existing.position
                 val positionDisplay = position ?: existing.positionDisplay
                 
-                // Gaps
-                val gapToLeader = lineData.get("Stats")?.asJsonObject?.get("TimeDiffToFastest")?.asString 
-                    ?: lineData.get("GapToLeader")?.asString
-                    ?: existing.gap
+                // Gaps - handle both object format (race) and array format (qualifying)
+                // In qualifying, Stats is an array: [{Q1 stats}, {Q2 stats}, {Q3 stats}]
+                // In race, Stats is an object: {TimeDiffToFastest: ..., TimeDifftoPositionAhead: ...}
+                var gapToLeader = existing.gap
+                var intervalToAhead = existing.interval
                 
-                val intervalToAhead = lineData.get("Stats")?.asJsonObject?.get("TimeDifftoPositionAhead")?.asString
-                    ?: lineData.get("IntervalToPositionAhead")?.asJsonObject?.get("Value")?.asString
-                    ?: existing.interval
+                val statsElement = lineData.get("Stats")
+                if (statsElement != null) {
+                    if (statsElement.isJsonObject) {
+                        // Race format
+                        gapToLeader = statsElement.asJsonObject.get("TimeDiffToFastest")?.asString ?: gapToLeader
+                        intervalToAhead = statsElement.asJsonObject.get("TimeDifftoPositionAhead")?.asString ?: intervalToAhead
+                    } else if (statsElement.isJsonArray) {
+                        // Qualifying format - use the last non-empty Q session
+                        val statsArray = statsElement.asJsonArray
+                        for (i in statsArray.size() - 1 downTo 0) {
+                            val qStats = statsArray[i]
+                            if (qStats.isJsonObject) {
+                                val gap = qStats.asJsonObject.get("TimeDiffToFastest")?.asString
+                                val int = qStats.asJsonObject.get("TimeDifftoPositionAhead")?.asString
+                                if (!gap.isNullOrEmpty()) {
+                                    gapToLeader = gap
+                                    intervalToAhead = int ?: intervalToAhead
+                                    break
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // Direct field access (delta updates)
+                    lineData.get("GapToLeader")?.asString?.let { gapToLeader = it }
+                    lineData.get("IntervalToPositionAhead")?.let { intElement ->
+                        if (intElement.isJsonObject) {
+                            intElement.asJsonObject.get("Value")?.asString?.let { intervalToAhead = it }
+                        }
+                    }
+                }
 
-                // Laps
-                val bestLap = lineData.get("BestLapTime")?.asJsonObject?.get("Value")?.asString
+                // Best lap time - handle both object and array format
+                var bestLap: String? = null
+                var bestLapTimes = existing.bestLapTimes.toMutableList()
+                val bestLapTimeElement = lineData.get("BestLapTime")
+                if (bestLapTimeElement != null && bestLapTimeElement.isJsonObject) {
+                    bestLap = bestLapTimeElement.asJsonObject.get("Value")?.asString
+                }
+                // BestLapTimes array (qualifying: per Q session)
+                val bestLapTimesElement = lineData.get("BestLapTimes")
+                if (bestLapTimesElement != null && bestLapTimesElement.isJsonArray) {
+                    bestLapTimes = mutableListOf()
+                    bestLapTimesElement.asJsonArray.forEach { elem ->
+                        if (elem.isJsonObject) {
+                            bestLapTimes.add(elem.asJsonObject.get("Value")?.asString ?: "")
+                        } else {
+                            bestLapTimes.add("")
+                        }
+                    }
+                    // Use the best time from the latest Q session as display
+                    if (bestLap == null) {
+                        bestLap = bestLapTimes.lastOrNull { it.isNotEmpty() }
+                    }
+                }
+                
                 val lastLap = lineData.get("LastLapTime")?.asJsonObject?.get("Value")?.asString
-                val timeDisplay = bestLap ?: lastLap ?: existing.raceTime
+                // Priority: BestLapTime > existing time > LastLapTime (only if no time set yet)
+                // This prevents out-lap times (e.g. "10:23.163") from overwriting valid best laps
+                val timeDisplay = if (!bestLap.isNullOrEmpty()) {
+                    bestLap
+                } else if (existing.raceTime != null) {
+                    existing.raceTime
+                } else if (!lastLap.isNullOrEmpty() && !lastLap.contains(":") || (lastLap?.substringBefore(":")?.toIntOrNull() ?: 99) < 3) {
+                    // Only use LastLapTime if it looks like a valid lap (under 3 minutes)
+                    lastLap
+                } else {
+                    null
+                }
                 
-                val laps = lineData.get("NumberOfLaps")?.asString ?: existing.laps
-                val pits = lineData.get("NumberOfPitStops")?.asString ?: existing.pits
+                val laps = lineData.get("NumberOfLaps")?.let { 
+                    if (it.isJsonPrimitive) it.asString else null 
+                } ?: existing.laps
+                val pits = lineData.get("NumberOfPitStops")?.let {
+                    if (it.isJsonPrimitive) it.asString else null
+                } ?: existing.pits
                 
-                // Sectors - F1 API returns this as an object with keys "0", "1", "2" etc.
+                // KnockedOut/Cutoff flags (qualifying)
+                val knockedOut = lineData.get("KnockedOut")?.asBoolean ?: existing.knockedOut
+                val cutoff = lineData.get("Cutoff")?.asBoolean ?: existing.cutoff
+                
+                // Pit status
+                val driverInPit = lineData.get("InPit")?.asBoolean ?: existing.inPit
+                val driverPitOut = lineData.get("PitOut")?.asBoolean ?: existing.pitOut
+                
+                // Sectors - handle both object (delta) and array (initial state) format
                 var sectorsList = existing.sectors.toMutableList()
                 var sectorColorsList = existing.sectorColors.toMutableList()
+                var miniSectorsList = existing.miniSectors.toMutableList()
                 
                 val sectorsElement = lineData.get("Sectors")
                 if (sectorsElement != null) {
                     val sectorEntries = if (sectorsElement.isJsonObject) {
+                        // Delta update format: {"0": {...}, "1": {...}}
                         sectorsElement.asJsonObject.entrySet().sortedBy { it.key.toIntOrNull() ?: 0 }
                     } else if (sectorsElement.isJsonArray) {
+                        // Initial state format: [{...}, {...}, {...}]
                         sectorsElement.asJsonArray.mapIndexed { index, elem -> 
                             java.util.AbstractMap.SimpleEntry(index.toString(), elem) 
                         }
@@ -395,33 +576,66 @@ class SignalRLiveTimingClient {
                     
                     sectorEntries?.forEach { sectorEntry ->
                         val sectorIndex = sectorEntry.key.toIntOrNull() ?: return@forEach
+                        if (!sectorEntry.value.isJsonObject) return@forEach
                         val sectorObj = sectorEntry.value.asJsonObject
+                        
+                        // Get sector time value
                         val value = sectorObj.get("Value")?.asString ?: ""
                         
-                        // Ensure list is large enough
+                        // Ensure lists are large enough
                         while (sectorsList.size <= sectorIndex) {
                             sectorsList.add("")
                             sectorColorsList.add(0)
+                            miniSectorsList.add(emptyList())
                         }
                         
-                        sectorsList[sectorIndex] = value
+                        // Only update sector time if we have a non-empty value
+                        if (value.isNotEmpty()) {
+                            sectorsList[sectorIndex] = value
+                        }
                         
+                        // Sector color
                         var color = 0
                         if (sectorObj.get("OverallFastest")?.asBoolean == true) color = 2
                         else if (sectorObj.get("PersonalFastest")?.asBoolean == true) color = 1
                         sectorColorsList[sectorIndex] = color
+                        
+                        // Extract mini-sector Segments for live progress visualization
+                        val segmentsElement = sectorObj.get("Segments")
+                        if (segmentsElement != null) {
+                            val segments = mutableListOf<Int>()
+                            if (segmentsElement.isJsonArray) {
+                                segmentsElement.asJsonArray.forEach { seg ->
+                                    if (seg.isJsonObject) {
+                                        segments.add(seg.asJsonObject.get("Status")?.asInt ?: 0)
+                                    }
+                                }
+                            } else if (segmentsElement.isJsonObject) {
+                                // Delta update: {"3": {"Status": 2048}}
+                                val existingSegs = miniSectorsList.getOrNull(sectorIndex)?.toMutableList() ?: mutableListOf()
+                                segmentsElement.asJsonObject.entrySet().forEach { segEntry ->
+                                    val segIdx = segEntry.key.toIntOrNull() ?: return@forEach
+                                    val segStatus = segEntry.value.asJsonObject?.get("Status")?.asInt ?: 0
+                                    while (existingSegs.size <= segIdx) existingSegs.add(0)
+                                    existingSegs[segIdx] = segStatus
+                                }
+                                segments.addAll(existingSegs)
+                            }
+                            if (segments.isNotEmpty()) {
+                                miniSectorsList[sectorIndex] = segments
+                            }
+                        }
                     }
                 }
                 
-                // Status
-                val inPit = lineData.get("InPit")?.asBoolean ?: (existing.status == 1)
+                // Status (for race/general)
                 val retired = lineData.get("Retired")?.asBoolean ?: (existing.status == 2)
                 val stopped = lineData.get("Stopped")?.asBoolean ?: (existing.status == 3)
                 
                 var status = existing.status
                 if (retired) status = 2
                 else if (stopped) status = 3
-                else if (inPit) status = 1
+                else if (driverInPit) status = 1
                 else if (lineData.has("InPit") || lineData.has("Retired") || lineData.has("Stopped")) status = 0
 
                 // Tyres (Stints)
@@ -436,19 +650,22 @@ class SignalRLiveTimingClient {
                     } else null
                     
                     stintEntries?.firstOrNull()?.let { lastEntry ->
-                        val lastStint = lastEntry.value.asJsonObject
-                        compound = lastStint.get("Compound")?.asString ?: compound
-                        age = lastStint.get("TotalLaps")?.asInt ?: lastStint.get("Laps")?.asInt ?: age
+                        if (lastEntry.value.isJsonObject) {
+                            val lastStint = lastEntry.value.asJsonObject
+                            compound = lastStint.get("Compound")?.asString ?: compound
+                            age = lastStint.get("TotalLaps")?.asInt ?: lastStint.get("Laps")?.asInt ?: age
+                        }
                     }
                 }
 
-                // Update driver in map
                 val updatedDriver = LiveDriver(
                     position = position,
                     positionDisplay = positionDisplay,
                     firstName = driverInfo.firstName,
                     lastName = driverInfo.lastName,
+                    tla = driverInfo.tla ?: existing.tla,
                     externalTeam = driverInfo.team,
+                    teamColour = driverInfo.teamColour ?: existing.teamColour,
                     raceTime = timeDisplay,
                     gap = gapToLeader,
                     interval = intervalToAhead,
@@ -456,9 +673,15 @@ class SignalRLiveTimingClient {
                     pits = pits,
                     sectors = sectorsList,
                     sectorColors = sectorColorsList,
+                    miniSectors = miniSectorsList,
                     status = status,
+                    inPit = driverInPit,
+                    pitOut = driverPitOut,
                     tyreCompound = compound,
-                    tyreAge = age
+                    tyreAge = age,
+                    knockedOut = knockedOut,
+                    cutoff = cutoff,
+                    bestLapTimes = bestLapTimes
                 )
                 
                 driverMap[number] = updatedDriver
@@ -476,7 +699,7 @@ class SignalRLiveTimingClient {
             }
             
         } catch (e: Exception) {
-            Log.e(TAG, "Error processing timing data: ${e.message}")
+            Log.e(TAG, "Error processing timing data: ${e.message}", e)
         }
     }
     
@@ -484,37 +707,64 @@ class SignalRLiveTimingClient {
         try {
             var updated = false
             
-            // DriverList contains driver number -> {Line: position} mappings
+            // DriverList contains driver number -> {Line: position, Tla, BroadcastName, TeamName, TeamColour, ...}
             data.entrySet().forEach { entry ->
                 val number = entry.key
                 val driverData = entry.value
                 
                 if (driverData.isJsonObject) {
-                    val lineValue = driverData.asJsonObject.get("Line")?.asString
+                    val driverObj = driverData.asJsonObject
+                    
+                    // Extract API driver info and store it for lookups
+                    val tla = driverObj.get("Tla")?.asString
+                    val firstName = driverObj.get("FirstName")?.asString
+                    val lastName = driverObj.get("LastName")?.asString
+                    val teamName = driverObj.get("TeamName")?.asString
+                    val teamColour = driverObj.get("TeamColour")?.asString
+                    
+                    // Store in DriverDatabase for fallback lookups
+                    if (firstName != null && lastName != null && teamName != null) {
+                        DriverDatabase.apiDriverInfo[number] = DriverDatabase.DriverInfo(
+                            firstName = firstName,
+                            lastName = lastName,
+                            team = teamName,
+                            tla = tla,
+                            teamColour = teamColour
+                        )
+                        Log.d(TAG, "📋 API Driver #$number: $tla ($firstName $lastName) - $teamName")
+                    }
+                    
+                    val lineValue = driverObj.get("Line")?.let {
+                        if (it.isJsonPrimitive) it.asString else null
+                    }
                     if (lineValue != null) {
                         val existing = driverMap[number]
+                        val driverInfo = DriverDatabase.getDriver(number)
                         if (existing != null) {
-                            // Update position if changed
-                            if (existing.position != lineValue) {
-                                driverMap[number] = existing.copy(
-                                    position = lineValue,
-                                    positionDisplay = lineValue
-                                )
-                                updated = true
-                                Log.d(TAG, "📍 Position update: Driver $number -> P$lineValue")
-                            }
+                            // Update position and any new API info
+                            driverMap[number] = existing.copy(
+                                position = lineValue,
+                                positionDisplay = lineValue,
+                                firstName = driverInfo.firstName,
+                                lastName = driverInfo.lastName,
+                                tla = driverInfo.tla ?: existing.tla,
+                                externalTeam = driverInfo.team,
+                                teamColour = driverInfo.teamColour ?: existing.teamColour
+                            )
+                            updated = true
                         } else {
-                            // Create new driver with position
-                            val driverInfo = DriverDatabase.getDriver(number)
+                            // Create new driver with position and API info
                             driverMap[number] = LiveDriver(
                                 position = lineValue,
                                 positionDisplay = lineValue,
                                 firstName = driverInfo.firstName,
                                 lastName = driverInfo.lastName,
-                                externalTeam = driverInfo.team
+                                tla = driverInfo.tla,
+                                externalTeam = driverInfo.team,
+                                teamColour = driverInfo.teamColour
                             )
                             updated = true
-                            Log.d(TAG, "📍 New driver: $number (${driverInfo.lastName}) -> P$lineValue")
+                            Log.d(TAG, "📍 New driver: $number (${driverInfo.tla ?: driverInfo.lastName}) -> P$lineValue")
                         }
                     }
                 }

@@ -452,11 +452,12 @@ class RaceViewModel @Inject constructor(
 
     private fun getSessionDuration(sessionType: SessionType): Duration {
         return when (sessionType) {
-            SessionType.FP1, SessionType.FP2, SessionType.FP3 -> Duration.ofMinutes(75) // 1hr 15mins
-            SessionType.QUALIFYING -> Duration.ofMinutes(75) // 1hr 15mins
-            SessionType.SPRINT_QUALIFYING -> Duration.ofHours(1) // 1hr
-            SessionType.SPRINT -> Duration.ofMinutes(40) // 40mins
-            SessionType.RACE -> Duration.ofHours(2) // 2hrs
+            // 2026 session durations (22 drivers / 11 teams)
+            SessionType.FP1, SessionType.FP2, SessionType.FP3 -> Duration.ofMinutes(75) // 60min + 15min buffer
+            SessionType.QUALIFYING -> Duration.ofMinutes(80) // Q1:18 + Q2:15 + Q3:13 + breaks ≈ 66min + buffer
+            SessionType.SPRINT_QUALIFYING -> Duration.ofMinutes(65) // SQ1:12 + SQ2:10 + SQ3:8 + breaks ≈ 44min + buffer
+            SessionType.SPRINT -> Duration.ofMinutes(45) // ~30min race + buffer (22 cars)
+            SessionType.RACE -> Duration.ofHours(2) // 2hrs max
         }
     }
 

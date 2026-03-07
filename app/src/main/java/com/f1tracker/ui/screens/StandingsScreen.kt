@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -294,6 +295,20 @@ private fun PodiumDriverCard(
                 .fillMaxSize()
                 .background(teamColor.copy(alpha = 0.2f))
         )
+        
+        // Driver number background image (between bg and headshot)
+        if (driverInfo?.headshotNumberUrl != null) {
+            AsyncImage(
+                model = driverInfo.headshotNumberUrl,
+                contentDescription = "Driver number",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .scale(1.6f)
+                    .alpha(0.3f),
+                contentScale = ContentScale.Fit,
+                alignment = Alignment.Center
+            )
+        }
         
         // Driver Image (Cropped/Scaled like LastRaceCard)
         if (driverInfo?.headshotF1 != null) {

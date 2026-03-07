@@ -185,7 +185,7 @@ private fun DriverStandingColumn(
                     modifier = Modifier
                         .fillMaxWidth()
                         .scale(2f) // 2x zoom maintained
-                        .offset(y = 36.dp), // Adjusted to 36dp
+                        .offset(y = 40.dp), // Adjusted down slightly to avoid hair clipping
                     contentScale = ContentScale.FillWidth,
                     alignment = Alignment.TopCenter // Top edge aligned, no top clipping
                 )

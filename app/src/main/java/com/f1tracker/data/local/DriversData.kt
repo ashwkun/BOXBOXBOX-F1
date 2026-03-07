@@ -35,17 +35,32 @@ object F1DataProvider {
     }
     
     fun getDriverByESPNId(espnId: String): DriverInfo? {
-        return espnIdMap[espnId]
+        val result = espnIdMap[espnId]
+        if (result == null) {
+            android.util.Log.w("F1DataProvider", "ESPN ID not found: '$espnId' (available: ${espnIdMap.keys.take(5)}...)")
+        }
+        return result
+    }
+    
+    // Normalize accented characters: Pérez → Perez, Hülkenberg → Hulkenberg
+    private fun normalizeAccents(text: String): String {
+        val normalized = java.text.Normalizer.normalize(text, java.text.Normalizer.Form.NFD)
+        return normalized.replace(Regex("[\\p{InCombiningDiacriticalMarks}]"), "")
     }
     
     fun getDriverByName(name: String): DriverInfo? {
-        // Try exact match on full name, or contains match
+        val normalizedName = normalizeAccents(name)
+        // Try exact match on full name, or contains match (accent-insensitive)
         return driversMap.values.find { 
-            it.fullName.equals(name, ignoreCase = true) || 
-            it.familyName.equals(name, ignoreCase = true) ||
-            it.givenName.equals(name, ignoreCase = true) ||
-            // Handle "Max Verstappen" vs "Verstappen"
-            name.contains(it.familyName, ignoreCase = true)
+            val normalizedFullName = normalizeAccents(it.fullName)
+            val normalizedFamilyName = normalizeAccents(it.familyName)
+            val normalizedGivenName = normalizeAccents(it.givenName)
+            
+            normalizedFullName.equals(normalizedName, ignoreCase = true) || 
+            normalizedFamilyName.equals(normalizedName, ignoreCase = true) ||
+            normalizedGivenName.equals(normalizedName, ignoreCase = true) ||
+            // Handle "Max Verstappen" vs "Verstappen", or "S. Pérez" vs "Perez"
+            normalizedName.contains(normalizedFamilyName, ignoreCase = true)
         }
     }
     
@@ -170,7 +185,7 @@ object F1DataProvider {
     fun generateDriverHeadshotUrl(year: String, teamId: String, givenName: String, familyName: String): String {
         val teamSlug = getTeamSlug(teamId)
         val driverCode = generateDriverCode(givenName, familyName)
-        return "$F1_CDN_BASE/c_lfill,w_440/q_auto/v1740000000/common/f1/$year/$teamSlug/$driverCode/$year$teamSlug${driverCode}right.webp"
+        return "$F1_CDN_BASE/c_fill,w_720/q_auto/v1740000000/common/f1/$year/$teamSlug/$driverCode/$year$teamSlug${driverCode}right.webp"
     }
     
     /**

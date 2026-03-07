@@ -105,6 +105,7 @@ fun MainAppScreen(
     var currentPosition by remember { mutableStateOf(0L) }
     var duration by remember { mutableStateOf(0L) }
     var showFullScreenPlayer by remember { mutableStateOf(false) }
+    var showLiveStream by remember { mutableStateOf(false) }
     
     // Update audio position
     LaunchedEffect(isPlaying) {
@@ -129,6 +130,7 @@ fun MainAppScreen(
     // Handle system back button
     BackHandler {
         when {
+            showLiveStream -> showLiveStream = false
             showFullScreenPlayer -> showFullScreenPlayer = false
             selectedVideoId != null -> selectedVideoId = null
             selectedSessionResult != null -> selectedSessionResult = null
@@ -170,6 +172,10 @@ fun MainAppScreen(
             onClose = {
                 showFullScreenPlayer = false
             }
+        )
+    } else if (showLiveStream) {
+        com.f1tracker.ui.components.LiveStreamWebView(
+            onClose = { showLiveStream = false }
         )
     } else if (selectedVideoId != null) {
         // Show YouTube Player if video is selected
@@ -264,7 +270,9 @@ fun MainAppScreen(
                         onTabChange = { tab -> scheduleSelectedTab = tab },
                         onRaceClick = { race -> selectedRace = race }
                     )
-                    NavDestination.LIVE -> LiveScreen()
+                    NavDestination.LIVE -> LiveScreen(
+                        onStreamClick = { showLiveStream = true }
+                    )
                     NavDestination.STANDINGS -> StandingsScreen(
                         selectedTab = standingsSelectedTab,
                         onTabChange = { standingsSelectedTab = it }
@@ -305,7 +313,8 @@ fun MainAppScreen(
             if (selectedRace != null) {
                 RaceDetailScreen(
                     race = selectedRace!!,
-                    onBackClick = { selectedRace = null }
+                    onBackClick = { selectedRace = null },
+                    onVideoClick = { videoId -> selectedVideoId = videoId }
                 )
             }
             
@@ -314,7 +323,8 @@ fun MainAppScreen(
                 SessionResultsScreen(
                     sessionResult = selectedSessionResult!!,
                     raceName = selectedSessionRaceName,
-                    onBackClick = { selectedSessionResult = null }
+                    onBackClick = { selectedSessionResult = null },
+                    onVideoClick = { videoId -> selectedVideoId = videoId }
                 )
             }
         }
