@@ -501,10 +501,12 @@ def send_fcm_notification(title, body, data, priority="high", channel_id="f1_maj
     
     try:
         android_config = messaging.AndroidConfig(priority=priority)
+        fcm_options = messaging.FCMOptions(analytics_label="f1_news_auto")
         message = messaging.Message(
             data=data,
             topic=FCM_TOPIC,
-            android=android_config
+            android=android_config,
+            fcm_options=fcm_options
         )
         response = messaging.send(message)
         print(f"  [SUCCESS] Message sent: {response}")
