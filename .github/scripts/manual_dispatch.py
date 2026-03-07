@@ -44,6 +44,9 @@ def send_notification(args):
         android=messaging.AndroidConfig(
             priority=args.priority,
             ttl=3600
+        ),
+        fcm_options=messaging.FCMOptions(
+            analytics_label="manual_dispatch"
         )
     )
     

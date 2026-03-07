@@ -34,6 +34,9 @@ class MainActivity : ComponentActivity() {
     
     // State to hold intent data (url, target_tab)
     private val intentData = mutableStateOf<Pair<String, String>?>(null)
+    
+    // Firebase Analytics
+    private lateinit var firebaseAnalytics: com.google.firebase.analytics.FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +61,9 @@ class MainActivity : ComponentActivity() {
                     android.util.Log.d("MainActivity", "Subscribed to topic: all_users")
                 }
             }
+            
+        // Initialize Firebase Analytics
+        firebaseAnalytics = com.google.firebase.analytics.FirebaseAnalytics.getInstance(this)
 
         // Load F1 driver and team data from JSON files
         loadF1Data()
