@@ -22,12 +22,13 @@ jobs:
           
       - name: Install dependencies
         run: |
-          pip install requests firebase-admin beautifulsoup4
+          pip install requests firebase-admin beautifulsoup4 python-dotenv
           
       - name: Run notification script
         env:
           FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
-          # Assuming FCM_DEVICE_TOKEN is not needed if sending to topic, but keeping if script uses it
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
         run: python .github/scripts/score_and_notify.py
         
       - name: Commit and push state
