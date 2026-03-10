@@ -7,8 +7,8 @@
     "publishedAt": "2026-03-08T15:15:54Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "637733",
-    "likeCount": "11296",
+    "viewCount": "639356",
+    "likeCount": "11312",
     "durationSec": 528,
     "tags": [
       "GENERAL"
@@ -23,8 +23,8 @@
     "publishedAt": "2026-03-08T07:57:40Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "12036",
-    "likeCount": "513",
+    "viewCount": "12086",
+    "likeCount": "515",
     "durationSec": 2013,
     "tags": [
       "ANALYSIS"
@@ -55,8 +55,8 @@
     "publishedAt": "2026-02-26T18:57:29Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "443480",
-    "likeCount": "10374",
+    "viewCount": "443839",
+    "likeCount": "10382",
     "durationSec": 685,
     "tags": [
       "GENERAL"
@@ -87,8 +87,8 @@
     "publishedAt": "2026-02-23T12:27:07Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "618422",
-    "likeCount": "12954",
+    "viewCount": "618707",
+    "likeCount": "12964",
     "durationSec": 91,
     "tags": [
       "GENERAL"
@@ -103,8 +103,8 @@
     "publishedAt": "2026-02-22T12:11:16Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "845728",
-    "likeCount": "11466",
+    "viewCount": "845808",
+    "likeCount": "11467",
     "durationSec": 605,
     "tags": [
       "GENERAL"
@@ -119,7 +119,7 @@
     "publishedAt": "2026-02-21T13:00:55Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "436718",
+    "viewCount": "436753",
     "likeCount": "7137",
     "durationSec": 558,
     "tags": [
@@ -135,8 +135,8 @@
     "publishedAt": "2026-02-20T21:41:10Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "464560",
-    "likeCount": "7730",
+    "viewCount": "464605",
+    "likeCount": "7731",
     "durationSec": 1894,
     "tags": [
       "GENERAL"
@@ -167,7 +167,7 @@
     "publishedAt": "2026-02-19T22:37:42Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "653895",
+    "viewCount": "653974",
     "likeCount": "11342",
     "durationSec": 689,
     "tags": [
@@ -184,7 +184,7 @@
     "publishedAt": "2026-02-19T10:00:49Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "8542",
+    "viewCount": "8554",
     "likeCount": "424",
     "durationSec": 1475,
     "tags": [
@@ -200,13 +200,29 @@
     "publishedAt": "2026-02-18T22:50:13Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "204517",
-    "likeCount": "4145",
+    "viewCount": "204522",
+    "likeCount": "4146",
     "durationSec": 533,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=yt-6ro5oq74"
+  },
+  {
+    "id": "bDxErWXMTqs",
+    "title": "F1's Engine Issues Explained Like You're 5",
+    "description": "I've dug deep into the rulebook and done some data analysis to figure try to simplify the complicated F1 2026 engines\n\nLinks: https://linktr.ee/alex_gillon",
+    "thumbnail": "https://i.ytimg.com/vi/bDxErWXMTqs/maxresdefault.jpg",
+    "publishedAt": "2026-02-16T19:03:54Z",
+    "channelTitle": "Alex Gillon",
+    "channelScore": 0.5,
+    "viewCount": "7476",
+    "likeCount": "309",
+    "durationSec": 1022,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=bDxErWXMTqs"
   },
   {
     "id": "lNxT13ITTIE",
@@ -216,7 +232,7 @@
     "publishedAt": "2026-02-16T12:33:06Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "531654",
+    "viewCount": "531731",
     "likeCount": "9607",
     "durationSec": 559,
     "tags": [
@@ -232,7 +248,7 @@
     "publishedAt": "2026-02-14T13:18:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "563700",
+    "viewCount": "563711",
     "likeCount": "9479",
     "durationSec": 530,
     "tags": [
@@ -248,7 +264,7 @@
     "publishedAt": "2026-02-14T10:43:44Z",
     "channelTitle": "Kym Illman",
     "channelScore": 0.5,
-    "viewCount": "68437",
+    "viewCount": "68451",
     "likeCount": "1062",
     "durationSec": 77,
     "tags": [
@@ -264,44 +280,12 @@
     "publishedAt": "2026-02-13T16:27:24Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "9982",
+    "viewCount": "9983",
     "likeCount": "475",
     "durationSec": 935,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=16968rC9FAc"
-  },
-  {
-    "id": "LCzXGq4R58E",
-    "title": "F1 2026 Testing - What Did We Learn? (DATA ANALYSIS) + 2025 vs 2026 Cars Compared!",
-    "description": "F1 2026 is finally here! So what did we learn from the first test? Are Red Bull and Verstappen really the ones to beat? How does the telemetry of the 2026 cars compare to 2025? We'll investigate all that and more in this video! \n\n🔷Formula Insights Software Now Available in Early Access! 🔷\nhttps://formula-insights.com/\n\n🟣Bite-sized insights on Instagram! https://www.instagram.com/formula_insights_/ \n\n🔷Join The Conversation On Discord! https://discord.gg/Y8XnTe22fu 🔷\n\n0:00 - Intro \n0:26 - Sti",
-    "thumbnail": "https://i.ytimg.com/vi/LCzXGq4R58E/maxresdefault.jpg",
-    "publishedAt": "2026-02-12T01:01:02Z",
-    "channelTitle": "Formula Insights",
-    "channelScore": 0.5,
-    "viewCount": "29827",
-    "likeCount": "825",
-    "durationSec": 475,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=LCzXGq4R58E"
-  },
-  {
-    "id": "bLT-OUkSirY",
-    "title": "What we learned from day one of F1’s Bahrain test",
-    "description": "Get all of our reporting (and some foolishness, too) from the Bahrain F1 test and the season ahead as part of The Race Members' Club. Claim your seven-day free trial now: https://www.patreon.com/cw/TheRace/membership\n\nDoes Formula 1 suddenly have a new title favourite in 2026?\n\nMercedes has made a remarkable claim about the straightline performance of the new Red Bull-Ford engine - and long run data from F1's first 'public' test of 2026 gives it some credibility.\n\nBut are paddock politics at pla",
-    "thumbnail": "https://i.ytimg.com/vi/bLT-OUkSirY/maxresdefault.jpg",
-    "publishedAt": "2026-02-11T22:25:01Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "378718",
-    "likeCount": "7201",
-    "durationSec": 568,
-    "tags": [
-      "GENERAL"
-    ],
-    "url": "https://www.youtube.com/watch?v=bLT-OUkSirY"
   }
 ]
