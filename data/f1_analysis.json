@@ -7,8 +7,8 @@
     "publishedAt": "2026-03-10T02:38:44Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "5680",
-    "likeCount": "257",
+    "viewCount": "5754",
+    "likeCount": "258",
     "durationSec": 1370,
     "tags": [
       "ANALYSIS"
@@ -23,8 +23,8 @@
     "publishedAt": "2026-03-08T07:57:40Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "12371",
-    "likeCount": "525",
+    "viewCount": "12396",
+    "likeCount": "526",
     "durationSec": 2013,
     "tags": [
       "ANALYSIS"
@@ -39,8 +39,8 @@
     "publishedAt": "2026-03-07T15:58:20Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "658495",
-    "likeCount": "10184",
+    "viewCount": "658711",
+    "likeCount": "10182",
     "durationSec": 497,
     "tags": [
       "QUALI"
@@ -55,8 +55,8 @@
     "publishedAt": "2026-03-07T07:50:07Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "8842",
-    "likeCount": "348",
+    "viewCount": "8849",
+    "likeCount": "349",
     "durationSec": 2667,
     "tags": [
       "QUALI",
@@ -72,7 +72,7 @@
     "publishedAt": "2026-03-06T19:04:17Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "30385",
+    "viewCount": "30415",
     "likeCount": "770",
     "durationSec": 847,
     "tags": [
@@ -104,13 +104,45 @@
     "publishedAt": "2026-03-05T16:30:14Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "86381",
-    "likeCount": "2710",
+    "viewCount": "86572",
+    "likeCount": "2714",
     "durationSec": 688,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=C6VyAYMwG58"
+  },
+  {
+    "id": "yVyjFpjE68I",
+    "title": "Explaining F1’s big 2026 changes",
+    "description": "Explaining F1’s big 2026 changes #f1 #formula1",
+    "thumbnail": "https://i.ytimg.com/vi/yVyjFpjE68I/maxresdefault.jpg",
+    "publishedAt": "2026-03-05T15:45:14Z",
+    "channelTitle": "Formula Bone",
+    "channelScore": 0.5,
+    "viewCount": "29559",
+    "likeCount": "2683",
+    "durationSec": 112,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=yVyjFpjE68I"
+  },
+  {
+    "id": "e3svW5Bm1Iw",
+    "title": "New F1 fans get LOST watching races... this guide explains EVERYTHING in 60 seconds",
+    "description": "New to F1? This will save you on race day 🏁\n\nIf you’re a new Formula One fan, race broadcasts can look overwhelming. So many numbers. So many abbreviations. So much happening at once.\n\nRelax. It’s way simpler than it looks.\n\nAt the very top, you’ll see the total number of laps and how many have been completed. That tells you how far into the race you are.\n\nOn the left side of the screen is the leaderboard. Each driver’s current position is shown next to their name. If someone overtakes, you’ll ",
+    "thumbnail": "https://i.ytimg.com/vi/e3svW5Bm1Iw/maxresdefault.jpg",
+    "publishedAt": "2026-03-05T15:42:32Z",
+    "channelTitle": "Drift Labs",
+    "channelScore": 0.5,
+    "viewCount": "208459",
+    "likeCount": "12415",
+    "durationSec": 101,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=e3svW5Bm1Iw"
   },
   {
     "id": "VybzXU1dYk4",
@@ -120,13 +152,29 @@
     "publishedAt": "2026-03-03T17:30:14Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "577902",
-    "likeCount": "25124",
+    "viewCount": "579521",
+    "likeCount": "25175",
     "durationSec": 369,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=VybzXU1dYk4"
+  },
+  {
+    "id": "5UDP5nbaoWM",
+    "title": "F1 2026 line-ups RANKED worst to best 📊",
+    "description": "Ranking the 2026 F1 driver pairings from worst to best\n\n#f1 #formula1 #formulaone #grandprix #f12026 #therace #ranking #ranked",
+    "thumbnail": "https://i.ytimg.com/vi/5UDP5nbaoWM/maxresdefault.jpg",
+    "publishedAt": "2026-03-03T08:00:12Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "148716",
+    "likeCount": "2991",
+    "durationSec": 71,
+    "tags": [
+      "GENERAL"
+    ],
+    "url": "https://www.youtube.com/watch?v=5UDP5nbaoWM"
   },
   {
     "id": "FC-sLnkcu_4",
@@ -136,8 +184,8 @@
     "publishedAt": "2026-02-26T18:57:29Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "446824",
-    "likeCount": "10423",
+    "viewCount": "447129",
+    "likeCount": "10428",
     "durationSec": 685,
     "tags": [
       "GENERAL"
@@ -161,6 +209,22 @@
     "url": "https://www.youtube.com/watch?v=fPL8YFl1edI"
   },
   {
+    "id": "mTIFuKTHgyc",
+    "title": "📈 2026 F1 teams RANKED after testing",
+    "description": "Every 2026 F1 team ranked from worst to best after pre-season testing. \n\n#f1 #formula1 #formulaone #grandprix #f12026 #therace #f1testing #mercedes #redbull #ferrari #mclaren #astonmartin #alpine #haas #williams #racingbulls #cadillac #audi",
+    "thumbnail": "https://i.ytimg.com/vi/mTIFuKTHgyc/maxresdefault.jpg",
+    "publishedAt": "2026-02-23T12:27:07Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "621669",
+    "likeCount": "13041",
+    "durationSec": 91,
+    "tags": [
+      "GENERAL"
+    ],
+    "url": "https://www.youtube.com/watch?v=mTIFuKTHgyc"
+  },
+  {
     "id": "TWwfDBRi0E4",
     "title": "Ranking the 2026 F1 teams after pre-season testing",
     "description": "Want more in-depth analysis of F1 2026? There's tonnes of exclusive bonus content over on The Race Members' Club, check it out now with a free 7-day trial: https://www.patreon.com/cw/TheRace/membership\n\nF1 2026 will soon begin and everyone’s desperate to know who will flop and who’ll be on top.\n\nWe’ve spent hours watching trackside, speaking to team insiders and drivers, trading information in the paddock and analysing data to try to bring you those answers. \n\nThis is not a prediction for the se",
@@ -168,7 +232,7 @@
     "publishedAt": "2026-02-22T12:11:16Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "846283",
+    "viewCount": "846360",
     "likeCount": "11470",
     "durationSec": 605,
     "tags": [
@@ -184,7 +248,7 @@
     "publishedAt": "2026-02-21T13:00:55Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "437121",
+    "viewCount": "437176",
     "likeCount": "7138",
     "durationSec": 558,
     "tags": [
@@ -200,7 +264,7 @@
     "publishedAt": "2026-02-20T21:41:10Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "464886",
+    "viewCount": "464887",
     "likeCount": "7734",
     "durationSec": 1894,
     "tags": [
@@ -232,7 +296,7 @@
     "publishedAt": "2026-02-19T22:37:42Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "654682",
+    "viewCount": "654905",
     "likeCount": "11345",
     "durationSec": 689,
     "tags": [
@@ -249,7 +313,7 @@
     "publishedAt": "2026-02-19T10:00:49Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "8633",
+    "viewCount": "8641",
     "likeCount": "424",
     "durationSec": 1475,
     "tags": [
@@ -265,44 +329,12 @@
     "publishedAt": "2026-02-18T22:50:13Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "204609",
+    "viewCount": "204615",
     "likeCount": "4148",
     "durationSec": 533,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=yt-6ro5oq74"
-  },
-  {
-    "id": "bDxErWXMTqs",
-    "title": "F1's Engine Issues Explained Like You're 5",
-    "description": "I've dug deep into the rulebook and done some data analysis to figure try to simplify the complicated F1 2026 engines\n\nLinks: https://linktr.ee/alex_gillon",
-    "thumbnail": "https://i.ytimg.com/vi/bDxErWXMTqs/maxresdefault.jpg",
-    "publishedAt": "2026-02-16T19:03:54Z",
-    "channelTitle": "Alex Gillon",
-    "channelScore": 0.5,
-    "viewCount": "7501",
-    "likeCount": "309",
-    "durationSec": 1022,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=bDxErWXMTqs"
-  },
-  {
-    "id": "lNxT13ITTIE",
-    "title": "Why F1's 2026 cars are so weird",
-    "description": "Want more in-depth analysis of F1 2026? There's tonnes of exclusive bonus content over on The Race Members' Club, check it out now with a free 7-day trial: https://www.patreon.com/cw/TheRace/membership\n\nF1’s new 2026 cars have certainly divided opinion across their early running and some elements to them are just plain weird. \n\n00:00 F1’s weird new start procedures\n02:20 Super clipping explained\n03:55 First gear is essential (for most)\n04:56 ‘The chef can drive the car’\n06:13 Overtaking accident",
-    "thumbnail": "https://i.ytimg.com/vi/lNxT13ITTIE/maxresdefault.jpg",
-    "publishedAt": "2026-02-16T12:33:06Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "532434",
-    "likeCount": "9608",
-    "durationSec": 559,
-    "tags": [
-      "GENERAL"
-    ],
-    "url": "https://www.youtube.com/watch?v=lNxT13ITTIE"
   }
 ]
