@@ -19,15 +19,16 @@ FCM_TOPIC = "all_users"
 DRY_RUN = os.environ.get('NOTIFICATION_DRY_RUN', 'false').lower() == 'true'
 
 # --- State Schema Version ---
-STATE_SCHEMA_VERSION = 2
+STATE_SCHEMA_VERSION = 3
 
 # --- Scoring Constants ---
 NUCLEAR_SCORE = 999
 NUCLEAR_THRESHOLD = NUCLEAR_SCORE
-MAJOR_THRESHOLD = 95  # Tightened from 85
-DIGEST_THRESHOLD = 40
-DIGEST_COMBINED_THRESHOLD = 150
-MINIMUM_SCORE = 20  # Auto-ignore below this
+MAJOR_THRESHOLD = 60   # Lowered from 95 for broader matching
+DIGEST_THRESHOLD = 25  # Lowered from 40 for broader matching
+DIGEST_COMBINED_THRESHOLD = 100  # Lowered from 150
+MINIMUM_SCORE = 15  # Auto-ignore below this
+GEMINI_MAX_DAILY_CALLS = 5  # Conservative cap for free tier (20 RPD)
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
@@ -73,25 +74,22 @@ DIGEST_END_HOUR, DIGEST_END_MIN = 3, 30
 # --- Universal Pre-Filters (Hard Reject Patterns) ---
 UNIVERSAL_REJECT_PATTERNS = [
     # Listicles & Rankings
-    r'\b(top\s+(5|10|five|ten)|best\s+of|worst\s+of|ranked|ranking)\b',
+    r'\b(top\s+(5|10|five|ten)|best\s+of|worst\s+of)\b',
     r'\b\d+\s+(things|takeaways|moments|lessons)\s+(we\s+learned|from)\b',
     
     # Interactive/Engagement Bait
     r'\b(rate\s+the\s+race|vote\s+for|caption\s+(this|competition)|poll:)\b',
-    r'\b(your\s+verdict|what\s+do\s+you\s+think)\b',
     
     # Photo/Video Galleries
     r'\b(in\s+pictures|photo\s+gallery|images\s+only|gallery:)\b',
-    r'\b(watch:|video:)\b',
     
-    # Historical/Throwback (strict)
-    r'\b(202[0-5]|201\d)\b',  # Any year before 2026
+    # Historical/Throwback
+    r'^.*\b(201\d)\b.*$',  # Only reject 2010s decade, not 2020s
     r'\b(\d+)\s+years?\s+ago\b',
     r'\b(on\s+this\s+day|throwback|flashback)\b',
     
     # Fan/Social Content
     r'\b(fans?\s+react|social\s+media|twitter\s+explodes|x\s+reacts)\b',
-    r'\b(fan\s+verdict|twitter\s+roundup)\b',
     
     # Reviews
     r'\b(review:|(book|game|documentary|podcast)\s+review)\b',
@@ -99,119 +97,118 @@ UNIVERSAL_REJECT_PATTERNS = [
 
 # --- Nuclear Disqualifiers (Demote to Major) ---
 NUCLEAR_DISQUALIFIERS = [
-    # Questions/Analysis
     r'\b(how|why|what)\s+(verstappen|hamilton|norris|leclerc|ferrari|red\s+bull|cadillac|audi)',
     r'\b(explained|breakdown|analysis|deep\s+dive)\b',
-    
-    # Speculation
     r'\b(could|might|may|possible|potential|likely)\b',
-    
-    # Previews
     r'\b(preview|talking\s+points|what\s+to\s+watch|looking\s+ahead)\b',
-    
-    # Reactions (not the event itself)
     r'\b(reacts?\s+to|responds?\s+to|addresses|comments\s+on)\b',
-]
-
-# --- Major Disqualifiers (Demote to Digest) ---
-MAJOR_DISQUALIFIERS = [
-    # Opinion markers
-    r'\b(believes?|thinks?|expects?|hopes?)\b',
-    
-    # Soft news
-    r'\b(admits?|reveals?|insists?|denies?|clarifies?)\b',
-    
-    # Analysis heavy
-    r'\b(key\s+moments|turning\s+points|what\s+happened)\b',
-    
-    # Driver ratings (always digest at best)
-    r'\b(driver\s+ratings?|ratings:)\b',
 ]
 
 # --- Digest Disqualifiers (Ignore Entirely) ---
 DIGEST_DISQUALIFIERS = [
-    # Fluff/Clickbait
     r'\b(priceless|hilarious|bizarre|funny|amazing)\s+(reaction|moment)\b',
     r'\b(most\s+exciting\s+part|best\s+bit)\b',
-    
-    # Generic soundbites
-    r'\b(says|comments)\b(?!.*(crash|disqualified|championship))',  # Generic quotes unless about something serious
 ]
 
 # --- Refined Nuclear Patterns (Stricter) ---
 NUCLEAR_PATTERNS = [
-    # Safety/Critical (must be specific)
     r'\b(crash|accident).*\b(injured|hospitalized|medical|red\s+flag)\b',
     r'\b(red\s+flag|red-flagged)\b',
     r'\b(cancelled|postponed)\b.*\b(race|grand\s+prix|session)\b',
-    
-    # Race Results (will be age-gated)
     r'\b(wins?|won|victory|victorious)\b.*\b(grand\s+prix|race|gp)\b',
-    r'\b(grand\s+prix|race|gp)\b.*\b(wins?|won|victory|victorious)\b',  # Reverse order support
+    r'\b(grand\s+prix|race|gp)\b.*\b(wins?|won|victory|victorious)\b',
     r'\b(pole\s+position|takes\s+pole|claims\s+pole|grabs\s+pole)\b',
     r'\b(sprint)\b.*\b(win|wins?|won|victory)\b',
-    
-    # Championships (decisive only)
     r'\b(clinches?|secures?|wins?|seals?|claims?|takes?|grabs?)\b.*\b(championship|title|wdc|wcc)\b',
     r'\b(mathematically|officially)\b.*\b(eliminated|out\s+of\s+contention)\b',
-    
-    # Disqualifications
     r'\b(disqualified|dsq)\b.*\b(race|grand\s+prix|gp)\b',
-    
-    # Major Team/Driver Changes (confirmed only)
     r'\b(signs?|signed|confirms?|confirmed|announced?)\b.*\b(driver|contract|2027|2028)\b',
     r'\b(retires?|retirement|retiring)\b.*\b(from\s+(racing|f1|formula))\b',
     r'\b(announces?\s+retirement)\b',
 ]
 
-# --- Major Patterns (Refined) ---
+# --- Major Patterns (pair-based, high confidence) ---
 MAJOR_PATTERNS = [
-    (110, r'\b(dominates?|dominated|dominating)\b.*\b(grand\s+prix|race|gp)\b'),
-    (105, r'\b(championship|title)\b.*\b(lead|ahead|battle|fight|gap)\b'),
-    (115, r'\b(signs?|signed|confirms?|confirmed)\b.*\b(2026|2027|2028|2029|contract)\b'),
-    (110, r'\b(official:)\b.*\b(driver|seat|signs?|joins?)\b'),
-    (120, r'\b(team\s+principal|tp)\b.*\b(leaves?|joins?|appointed)\b'),
-    (105, r'\b(grid\s+(drop|penalty)|grid-place\s+penalty)\b'),  # Boosted from 100
-    (105, r'\b(penalty|penali[sz]ed)\b.*\b(grid|race|time|points|seconds)\b'), # Boosted from 90
-    (100, r'\b(protest|appeal)\b.*\b(upheld|dismissed|successful)\b'), # Boosted from 90
-    # New Broadened Major Categories
-    (100, r'\b(fastest|quickest|tops|leads)\b.*\b(qualifying|q[123]|shootout)\b'),
-    (100, r'\b(sprint)\b.*\b(result|report|win|wins?|won)\b'),
-    (100, r'\b(summoned|investigation|under\s+investigation)\b.*\b(stewards|fia)\b'),
-    (100, r'\b(reveals?|launche?s?|unveils?|wraps\s+off)\b.*\b(car|livery|challenger|2026|2027|2028)\b'),
-    (100, r'\b(sick|ill|surgery|hospital|medical|appendicitis|operation)\b.*\b(miss|doubt|ruled\s+out|withdraws?)\b'),
-    (100, r'\b(ruled\s+out|withdraws?|misses)\b.*\b(grand\s+prix|race|gp)\b'), # Added simpler ruled out pattern
+    (70, r'\b(dominates?|dominated|dominating)\b.*\b(grand\s+prix|race|gp)\b'),
+    (65, r'\b(championship|title)\b.*\b(lead|ahead|battle|fight|gap)\b'),
+    (75, r'\b(signs?|signed|confirms?|confirmed)\b.*\b(2026|2027|2028|2029|contract)\b'),
+    (70, r'\b(official:)\b.*\b(driver|seat|signs?|joins?)\b'),
+    (80, r'\b(team\s+principal|tp)\b.*\b(leaves?|joins?|appointed)\b'),
+    (65, r'\b(grid\s+(drop|penalty)|grid-place\s+penalty)\b'),
+    (65, r'\b(penalty|penali[sz]ed)\b.*\b(grid|race|time|points|seconds)\b'),
+    (65, r'\b(protest|appeal)\b.*\b(upheld|dismissed|successful)\b'),
+    (65, r'\b(fastest|quickest|tops|leads)\b.*\b(qualifying|q[123]|shootout)\b'),
+    (65, r'\b(sprint)\b.*\b(result|report|win|wins?|won)\b'),
+    (65, r'\b(summoned|investigation|under\s+investigation)\b.*\b(stewards|fia)\b'),
+    (65, r'\b(reveals?|launche?s?|unveils?|wraps\s+off)\b.*\b(car|livery|challenger|2026|2027|2028)\b'),
+    (65, r'\b(sick|ill|surgery|hospital|medical)\b.*\b(miss|doubt|ruled\s+out|withdraws?)\b'),
+    (65, r'\b(ruled\s+out|withdraws?|misses)\b.*\b(grand\s+prix|race|gp)\b'),
 ]
 
-# --- Medium Patterns (Refined) ---
+# --- Medium Patterns (pair-based) ---
 MEDIUM_PATTERNS = [
-    (75, r'\b(qualifying)\b.*\b(report|result)\b'),
-    (70, r'\b(fastest|quickest|tops|leads)\b.*\b(qualifying|q[123])\b'),
-    (75, r'\b(team\s+orders)\b'),
-    (70, r'\b(sprint\s+race)\b.*\b(report|result)\b'),
-    (70, r'\b(upgrade|update)s?\b.*\b(car|package|floor|wing|aero)\b'),
-    (65, r'\b(strategy|pit\s+stop|tyre|tire)\b.*\b(briefing|problem|issue)\b'),
-    (60, r'\b(verstappen|norris|hamilton|leclerc|piastri|russell|hadjar|alonso)\b.*\b(says|admits|reveals)\b'),
+    (50, r'\b(qualifying)\b.*\b(report|result|recap)\b'),
+    (45, r'\b(fastest|quickest|tops|leads)\b.*\b(qualifying|q[123])\b'),
+    (50, r'\b(team\s+orders)\b'),
+    (45, r'\b(sprint\s+race)\b.*\b(report|result|recap)\b'),
+    (45, r'\b(upgrade|update)s?\b.*\b(car|package|floor|wing|aero)\b'),
+    (40, r'\b(strategy|pit\s+stop|tyre|tire)\b.*\b(briefing|problem|issue|gamble|mistake|error)\b'),
+    (35, r'\b(verstappen|norris|hamilton|leclerc|piastri|russell|hadjar|alonso|bearman|antonelli|colapinto)\b.*\b(says|admits|reveals|warns|slams|fumes|blasts)\b'),
 ]
 
-# --- Low Patterns (Refined) ---
-LOW_PATTERNS = [
-    (40, r'\b(practice|fp[123])\b'),
-    (35, r'\b(interview|speaks|comments)\b'),
-    (30, r'\b(believes?|expects?|hopes?|predicts?|thinks?)\b'),
-    (40, r'\b(strategy\s+briefing|race\s+preview)\b'),
-    (35, r'\b(data|stats|statistics)\b'),
+# --- NEW: Broad Single-Keyword Patterns ---
+BROAD_PATTERNS = [
+    # Race weekend activity
+    (30, r'\b(qualifying|quali)\b'),
+    (25, r'\b(practice|fp[123])\b'),
+    (35, r'\b(race\s+report|race\s+recap|race\s+review)\b'),
+    (25, r'\b(sprint)\b'),
+    
+    # Team/driver performance
+    (30, r'\b(pace|performance|gap|deficit|advantage)\b'),
+    (25, r'\b(strategy|pit\s+stop|undercut|overcut|tyre|tire)\b'),
+    (30, r'\b(upgrade|update|development|floor|wing|aero|sidepod)\b'),
+    
+    # Significant events
+    (40, r'\b(crash|accident|collision|contact|incident|damage)\b'),
+    (35, r'\b(penalty|penalised|penalized|stewards)\b'),
+    (35, r'\b(investigation|protest|appeal)\b'),
+    (40, r'\b(banned|suspended|disqualified)\b'),
+    (35, r'\b(injury|injured|hospital|medical)\b'),
+    
+    # Driver market / team changes
+    (40, r'\b(contract|extension|deal|signs?|signed|departure|exit|sacked|fired)\b'),
+    (35, r'\b(replacement|reserve|stand-in|substitute)\b'),
+    (30, r'\b(rumou?r|linked|target|interest)\b'),
+    
+    # Official/breaking markers
+    (35, r'\b(official|confirmed|breaking|exclusive|just\s+in)\b'),
+    (30, r'\b(announces?|announced|announcement)\b'),
+    
+    # Strong tone words
+    (25, r'\b(slams?|fumes|blasts?|warns?|hits\s+out|fires\s+back|rips)\b'),
+    (25, r'\b(stunned|shocked|surprised|dramatic|chaos|chaotic|controversial)\b'),
+    (20, r'\b(praises?|hails?|impressed|brilliant|fantastic|incredible|dominant)\b'),
+    (20, r'\b(admits?|reveals?|insists?|reckons?|confident|positive|optimistic)\b'),
+    (20, r'\b(concerned|worried|frustrated|disappointed|struggles?|difficult|tough)\b'),
+    (20, r'\b(debut|milestone|record|historic|first\s+time|maiden)\b'),
+    
+    # F1-specific context boosters
+    (15, r'\b(grand\s+prix|gp)\b'),
+    (10, r'\b(formula\s+1|f1)\b'),
+    (15, r'\b(paddock|grid|pit\s+lane|cockpit)\b'),
 ]
 
-# --- Negative Patterns (Enhanced) ---
+# --- Negative Patterns (Softened) ---
 NEGATIVE_PATTERNS = [
-    (-50, r'\b(caption\s+competition|round-?up)\b'),
-    (-40, r'\b(pictures?\s+only|photos?\s+only|gallery)\b'),
-    (-35, r'\b(top\s+\d+|ranked|ranking)\b'),
-    (-30, r'\b(as\s+it\s+happened|years?\s+ago)\b'),
-    (-25, r'\b(rumou?rs?|speculation|could|might|may)\b'),
-    (-30, r'\b(rate\s+the|poll:?|vote\s+for)\b'),
-    (-25, r'\b(indycar|formula\s+[234e]|motogp)\b'),
+    (-30, r'\b(caption\s+competition|round-?up)\b'),
+    (-25, r'\b(pictures?\s+only|photos?\s+only|gallery)\b'),
+    (-20, r'\b(top\s+\d+|ranked|ranking)\b'),
+    (-15, r'\b(as\s+it\s+happened|years?\s+ago)\b'),
+    (-10, r'\b(could|might|may)\b'),
+    (-15, r'\b(rumou?rs?|speculation)\b'),
+    (-20, r'\b(rate\s+the|poll:?|vote\s+for)\b'),
+    (-15, r'\b(indycar|formula\s+[234e]|motogp)\b'),
 ]
 
 # --- Age Decay Curves ---
@@ -243,6 +240,11 @@ def load_state():
     if state.get('schema_version', 1) == 1:
         print("[INFO] Migrating state from v1 to v2...")
         state = migrate_v1_to_v2(state)
+    
+    # Migrate to v3 if needed (scoring overhaul)
+    if state.get('schema_version', 1) == 2:
+        print("[INFO] Migrating state from v2 to v3 (scoring overhaul)...")
+        state = migrate_v2_to_v3(state)
     
     return state
 
@@ -285,6 +287,27 @@ def migrate_v1_to_v2(state):
     # Ensure nuclear_queue exists
     if 'nuclear_queue' not in state:
         state['nuclear_queue'] = []
+    
+    return state
+
+def migrate_v2_to_v3(state):
+    """Migrate v2 state to v3 (scoring overhaul with broad patterns)"""
+    # Clear ignored_items — they were scored with the old broken patterns
+    # and need to be re-evaluated with the new broad keyword matching
+    old_ignored_count = len(state.get('ignored_items', []))
+    state['ignored_items'] = []
+    
+    # Clear digest_items — old scores are no longer valid
+    old_digest_count = len(state.get('digest_items', []))
+    state['digest_items'] = []
+    state['digest_sent'] = False
+    
+    # Reset daily slots so we can test immediately
+    state['slot1_remaining'] = 1
+    state['slot2_remaining'] = 2
+    
+    state['schema_version'] = 3
+    print(f"[INFO] v2→v3 migration: cleared {old_ignored_count} ignored items, {old_digest_count} digest items")
     
     return state
 
@@ -405,7 +428,7 @@ def score_headline(title):
                 # No disqualifier matched, keep as nuclear
                 return NUCLEAR_SCORE, "nuclear"
     
-    # Major/Medium/Low scoring
+    # Major/Medium/Broad scoring
     score = 0
     
     for points, pattern in MAJOR_PATTERNS:
@@ -418,9 +441,9 @@ def score_headline(title):
             print(f"    [MATCH] Medium pattern ({points} pts): '{pattern}'")
             score += points
     
-    for points, pattern in LOW_PATTERNS:
+    for points, pattern in BROAD_PATTERNS:
         if re.search(pattern, title, re.IGNORECASE):
-            print(f"    [MATCH] Low pattern ({points} pts): '{pattern}'")
+            print(f"    [MATCH] Broad pattern ({points} pts): '{pattern}'")
             score += points
     
     # Negative patterns
@@ -470,14 +493,7 @@ def score_with_age(title, pub_date):
     else:
         final_category = "hard_ignore"  # Below minimum, don't even track
     
-    # Apply tier-specific disqualifiers
-    if final_category == "major":
-        for disq_pattern in MAJOR_DISQUALIFIERS:
-            if re.search(disq_pattern, title, re.IGNORECASE):
-                print(f"    [DEMOTE] Major disqualified by: '{disq_pattern}' → Digest")
-                final_category = "digest" if final_score >= DIGEST_THRESHOLD else "ignore"
-                break
-    
+    # Apply digest disqualifiers
     if final_category == "digest":
         for disq_pattern in DIGEST_DISQUALIFIERS:
             if re.search(disq_pattern, title, re.IGNORECASE):
