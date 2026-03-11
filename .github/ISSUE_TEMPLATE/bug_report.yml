@@ -1,0 +1,72 @@
+name: 🐛 Bug Report
+description: Something isn't working as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the details below so we can fix it quickly.
+
+  - type: input
+    id: app-version
+    attributes:
+      label: App Version
+      description: "Which version of BOXBOXBOX are you running? (Check Settings or About)"
+      placeholder: "e.g. v1.21"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device & Android Version
+      description: "Your phone model and Android version"
+      placeholder: "e.g. OnePlus 12, Android 15"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which area is affected?
+      options:
+        - Live Timing
+        - Live Stream Player
+        - Standings / Results
+        - News & Notifications
+        - Schedule / Calendar
+        - Hotlap Game
+        - Podcasts / Media
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: "Describe the bug clearly. What did you expect vs what actually happened?"
+      placeholder: "When I open the Live Stream during a session, the video loads but there's no audio..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: "How can we trigger this bug?"
+      placeholder: |
+        1. Open the app
+        2. Go to Live Stream
+        3. Select SKY F1
+        4. ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Screen Recording
+      description: "If applicable, add screenshots or a screen recording"
+    validations:
+      required: false

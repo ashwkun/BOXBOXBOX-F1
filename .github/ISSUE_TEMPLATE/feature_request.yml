@@ -1,0 +1,51 @@
+name: 💡 Feature Request
+description: Suggest a new feature or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Got an idea to make BOXBOXBOX even better? We'd love to hear it! 🏎️
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which area does this relate to?
+      options:
+        - Live Timing
+        - Live Stream Player
+        - Standings / Results
+        - News & Notifications
+        - Schedule / Calendar
+        - Hotlap Game
+        - Podcasts / Media
+        - UI / Design
+        - New Feature
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the feature
+      description: "What would you like to see? Be as detailed as possible."
+      placeholder: "It would be great if the app could show tire strategy data during live sessions..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why is this useful?
+      description: "How would this improve your F1 watching experience?"
+    validations:
+      required: false
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups / References
+      description: "Any screenshots, sketches, or links to similar features in other apps?"
+    validations:
+      required: false

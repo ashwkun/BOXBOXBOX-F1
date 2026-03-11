@@ -1,0 +1,52 @@
+name: 📺 Stream Issue
+description: Report a broken or problematic live stream
+labels: ["stream", "urgent"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚡ Stream issues are treated as **urgent** since they usually affect race weekends!
+
+  - type: dropdown
+    id: channel
+    attributes:
+      label: Which channel is affected?
+      options:
+        - SKY F1
+        - F1 TV
+        - OTHER
+        - All channels
+    validations:
+      required: true
+
+  - type: dropdown
+    id: problem-type
+    attributes:
+      label: What's the problem?
+      options:
+        - Stream won't load at all
+        - No audio / muted
+        - Buffering / freezing
+        - Ads / pop-ups blocking the video
+        - Wrong content playing
+        - Stream is behind (not live)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: session
+    attributes:
+      label: Which session?
+      description: "e.g. Australian GP FP1, Monaco Qualifying"
+      placeholder: "e.g. Monaco GP - Qualifying"
+    validations:
+      required: false
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Additional details
+      description: "Anything else that might help us fix this?"
+    validations:
+      required: false
