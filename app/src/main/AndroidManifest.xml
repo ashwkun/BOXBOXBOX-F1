@@ -6,6 +6,18 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
+    <!-- Required on Android 11+ to detect Ace Stream Engine installation -->
+    <queries>
+        <package android:name="org.acestream.node" />
+        <package android:name="org.acestream.media" />
+        <package android:name="org.acestream.engine" />
+        <package android:name="org.acestream.core" />
+        <package android:name="org.acestream.media.atv" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="acestream" />
+        </intent>
+    </queries>
     <application
         android:name=".F1Application"
         android:allowBackup="true"

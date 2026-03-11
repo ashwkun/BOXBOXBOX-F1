@@ -36,12 +36,14 @@ import com.f1tracker.R
 import kotlinx.coroutines.delay
 
 data class StreamProvider(
-    val name: String,
-    val url: String,
-    val label: String
+    val name: String = "",
+    val url: String = "",
+    val label: String = "",
+    val customJs: String? = null,
+    val customCss: String? = null
 )
 
-private val STREAM_PROVIDERS = listOf(
+private val DEFAULT_STREAM_PROVIDERS = listOf(
     StreamProvider("sky", "https://php.adffdafdsafds.sbs/channel/SkySportsF1%5BUK%5D", "SKY F1"),
     StreamProvider("f1tv", "https://hakunamatata5.org/hakunamatata5.html", "F1 TV"),
     StreamProvider("other", "https://embedsports.top/embed/admin/ppv-australian-grand-prix-practice-3/1", "OTHER")
@@ -168,7 +170,40 @@ private val UNMUTE_AND_CLEANUP_JS = """
     });
     setInterval(forceUnmuteAndClean, 3000); // Check sync and keep clean every 3s
 })();
-""".trimIndent()
+"""
+
+// Helper to inject provider specific overrides on top of the generic one
+private fun getCombinedInjectJs(provider: StreamProvider): String {
+    val dynamicCss = provider.customCss ?: ""
+    val dynamicJs = provider.customJs ?: ""
+    
+    // We append the custom CSS into the style tag created by the core JS, 
+    // and run the custom JS afterward.
+    return """
+        $UNMUTE_AND_CLEANUP_JS
+
+        // DYNAMIC PROVIDER INJECTIONS
+        (function() {
+            try {
+                if (`$dynamicCss`.trim() !== "") {
+                    var style = document.getElementById('boxboxbox-dynamic-css');
+                    if (!style) {
+                        style = document.createElement('style');
+                        style.id = 'boxboxbox-dynamic-css';
+                        document.head.appendChild(style);
+                    }
+                    style.textContent = `$dynamicCss`;
+                }
+                
+                if (`$dynamicJs`.trim() !== "") {
+                    $dynamicJs
+                }
+            } catch(e) {
+                console.log("BoxBoxBox: Error running custom stream injections: " + e);
+            }
+        })();
+    """.trimIndent()
+}
 
 @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
 @Composable
@@ -181,9 +216,40 @@ fun LiveStreamWebView(
     val activity = context as? android.app.Activity
     
     var isLoading by remember { mutableStateOf(true) }
-    var selectedProvider by remember { mutableStateOf(STREAM_PROVIDERS[0]) }
+    var streamProviders by remember { mutableStateOf(DEFAULT_STREAM_PROVIDERS) }
+    var selectedProvider by remember { mutableStateOf(DEFAULT_STREAM_PROVIDERS[0]) }
     var webView by remember { mutableStateOf<WebView?>(null) }
     var showControls by remember { mutableStateOf(true) }
+    
+    // Fetch live stream configs from Firebase RTDB
+    LaunchedEffect(Unit) {
+        val database = com.google.firebase.database.FirebaseDatabase.getInstance()
+        val streamsRef = database.getReference("live_config/streams")
+        
+        streamsRef.addListenerForSingleValueEvent(object : com.google.firebase.database.ValueEventListener {
+            override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
+                if (snapshot.exists()) {
+                    val remoteStreams = mutableListOf<StreamProvider>()
+                    snapshot.children.forEach { child ->
+                        child.getValue(StreamProvider::class.java)?.let { remoteStreams.add(it) }
+                    }
+                    
+                    if (remoteStreams.isNotEmpty()) {
+                        android.util.Log.d("LiveStream", "Loaded ${remoteStreams.size} dynamic streams from Firebase")
+                        streamProviders = remoteStreams
+                        // Ensure selected provider is still valid, reset if not
+                        val currentlySelectedExists = remoteStreams.any { it.name == selectedProvider.name }
+                        if (!currentlySelectedExists) {
+                            selectedProvider = remoteStreams[0]
+                        }
+                    }
+                }
+            }
+            override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
+                android.util.Log.e("LiveStream", "Failed to load dynamic streams, using local fallback", error.toException())
+            }
+        })
+    }
     
     // Force landscape + immersive on mount
     DisposableEffect(Unit) {
@@ -285,10 +351,11 @@ fun LiveStreamWebView(
                         }
                         
                         override fun onPageFinished(view: WebView?, url: String?) {
-                            super.onPageFinished(view, url)
-                            isLoading = false
-                            view?.evaluateJavascript(UNMUTE_AND_CLEANUP_JS, null)
-                        }
+                        super.onPageFinished(view, url)
+                        isLoading = false
+                        // Inject our combined JS (Generic Fixes + Custom Dynamic Fixes)
+                        view?.evaluateJavascript(getCombinedInjectJs(selectedProvider), null)
+                    }
                         
                         override fun shouldInterceptRequest(
                             view: WebView?, request: WebResourceRequest?
@@ -427,40 +494,46 @@ fun LiveStreamWebView(
                     }
                 }
                 
-                // Bottom: Channel switcher pill
+                          // Custom Channel Switcher (Floating horizontally, centered)
+            AnimatedVisibility(
+                visible = showControls,
+                enter = fadeIn() + slideInVertically(initialOffsetY = { 50 }),
+                exit = fadeOut() + slideOutVertically(targetOffsetY = { 50 }),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 16.dp)
+            ) {
                 Row(
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 20.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color.Black.copy(alpha = 0.7f))
-                        .padding(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        .background(Color.Black.copy(alpha = 0.7f), RoundedCornerShape(24.dp))
+                        .padding(horizontal = 8.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    STREAM_PROVIDERS.forEach { provider ->
-                        val isSelected = selectedProvider == provider
+                    streamProviders.forEach { provider ->
                         Box(
                             modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
+                                .clip(RoundedCornerShape(16.dp))
                                 .background(
-                                    if (isSelected) Color(0xFFE6007E) else Color.Transparent
+                                    if (selectedProvider.name == provider.name) 
+                                        Color(0xFFE10600) // F1 Red
+                                    else 
+                                        Color.Transparent
                                 )
                                 .clickable {
-                                    if (!isSelected) {
+                                    if (selectedProvider.name != provider.name) {
                                         selectedProvider = provider
-                                        webView?.loadUrl(provider.url)
                                         isLoading = true
+                                        webView?.loadUrl(provider.url)
                                     }
                                 }
                                 .padding(horizontal = 16.dp, vertical = 8.dp)
                         ) {
                             Text(
                                 text = provider.label,
+                                color = if (selectedProvider.name == provider.name) Color.White else Color.LightGray,
                                 fontFamily = michromaFont,
-                                fontSize = 8.sp,
-                                color = if (isSelected) Color.White else Color.White.copy(alpha = 0.5f),
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                letterSpacing = 0.5.sp
+                                fontSize = 12.sp,
+                                fontWeight = if (selectedProvider.name == provider.name) FontWeight.Bold else FontWeight.Normal
                             )
                         }
                     }
@@ -469,6 +542,7 @@ fun LiveStreamWebView(
         }
     }
 }
+} // ADDED MISSING BRACE HERE
 
 private fun isAdUrl(url: String): Boolean {
     val lowerUrl = url.lowercase()
