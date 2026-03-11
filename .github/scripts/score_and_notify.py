@@ -8,6 +8,9 @@ import xml.etree.ElementTree as ET
 import firebase_admin
 from firebase_admin import credentials, messaging
 from difflib import SequenceMatcher
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # --- Configuration ---
 RSS_URL = "https://www.motorsport.com/rss/f1/news/"
@@ -20,10 +23,39 @@ STATE_SCHEMA_VERSION = 2
 
 # --- Scoring Constants ---
 NUCLEAR_SCORE = 999
+NUCLEAR_THRESHOLD = NUCLEAR_SCORE
 MAJOR_THRESHOLD = 95  # Tightened from 85
 DIGEST_THRESHOLD = 40
 DIGEST_COMBINED_THRESHOLD = 150
 MINIMUM_SCORE = 20  # Auto-ignore below this
+
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-1.5-flash")
+GEMINI_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+
+SPECULATIVE_MARKERS = [
+    "rumored",
+    "rumour",
+    "rumor",
+    "could",
+    "might",
+    "may",
+    "suggests",
+    "reportedly",
+    "reports claim",
+    "linked with",
+    "set to",
+]
+
+F1_ENTITY_PATTERN = re.compile(
+    r"\b("
+    r"fia|formula\s?1|f1|"
+    r"red\s+bull|ferrari|mercedes|mclaren|aston\s+martin|alpine|williams|rb|racing\s+bulls|sauber|haas|"
+    r"verstappen|perez|hamilton|leclerc|sainz|norris|piastri|russell|alonso|stroll|gasly|ocon|albon|tsunoda|"
+    r"hulkenberg|magnussen|zhou|bottas|lawson|bearman|antonelli"
+    r")\b",
+    re.IGNORECASE,
+)
 
 # --- Retention Periods (days) ---
 SENT_RETENTION_DAYS = 30  # nuclear + major
@@ -455,6 +487,139 @@ def score_with_age(title, pub_date):
     
     return final_score, final_category
 
+
+
+def contains_specific_f1_entity(text):
+    """Check whether text references a specific F1 entity."""
+    return bool(F1_ENTITY_PATTERN.search(text or ""))
+
+
+def has_speculative_language(text):
+    """Detect speculative language in text."""
+    lower_text = (text or "").lower()
+    return any(marker in lower_text for marker in SPECULATIVE_MARKERS)
+
+
+def is_state_change_event(text):
+    """Detect high-impact state-change events from title/summary."""
+    state_change_pattern = re.compile(
+        r'\b('
+        r'signs?|signed|contract|extends?|renews?|joins?|appointed|sacked|leaves?|exit|departs?|retires?|retirement|'
+        r'disqualified|dsq|penalty|banned|suspended|withdraws?|ruled\s+out|wins?\s+appeal|appeal\s+upheld|'
+        r'fia\s+decision|officially\s+confirmed|announces?' 
+        r')\b',
+        re.IGNORECASE
+    )
+    return bool(state_change_pattern.search(text or ""))
+
+
+def validate_nuclear_event(title, summary):
+    """Validate if a potential nuclear headline is confirmed and high-impact.
+
+    Returns:
+        dict: {
+            "confirmed": bool,
+            "impact": "high"|"medium"|"low",
+            "reason": str,
+            "demote_to": "major"|"digest"|None
+        }
+    """
+    combined = f"{title or ''}\n{summary or ''}".strip()
+
+    # Fast deterministic guardrails before API call
+    if not contains_specific_f1_entity(combined):
+        return {
+            "confirmed": False,
+            "impact": "low",
+            "reason": "No specific F1 entity detected",
+            "demote_to": "digest",
+        }
+
+    if has_speculative_language(combined):
+        return {
+            "confirmed": False,
+            "impact": "low",
+            "reason": "Speculative language detected",
+            "demote_to": "major",
+        }
+
+    if not is_state_change_event(combined):
+        return {
+            "confirmed": False,
+            "impact": "medium",
+            "reason": "No clear state-change event",
+            "demote_to": "major",
+        }
+
+    # Option B: Gemini API validation
+    if not GEMINI_API_KEY:
+        return {
+            "confirmed": True,
+            "impact": "high",
+            "reason": "Gemini key missing; deterministic checks passed",
+            "demote_to": None,
+        }
+
+    prompt = f"""
+You are validating Formula 1 breaking-news headlines for urgent alerts.
+Decide if this item is confirmed and high-impact enough for an immediate top-priority alert.
+
+Headline: {title}
+Summary: {summary}
+
+Rules:
+1) Must include a specific F1 entity (driver/team/FIA).
+2) Reject speculative or uncertain phrasing (e.g., could, might, rumored, suggests, reports claim).
+3) Must be a state-change event (signing, retirement, penalty, disqualification, official appointment/removal, confirmed withdrawal).
+
+Return STRICT JSON only with keys:
+- confirmed (boolean)
+- impact ("high"|"medium"|"low")
+- reason (short string)
+""".strip()
+
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "temperature": 0,
+            "maxOutputTokens": 180,
+            "responseMimeType": "application/json",
+        },
+    }
+
+    response = requests.post(
+        GEMINI_API_URL,
+        params={"key": GEMINI_API_KEY},
+        json=payload,
+        timeout=8,
+    )
+    response.raise_for_status()
+    data = response.json()
+
+    text_response = (
+        data.get("candidates", [{}])[0]
+        .get("content", {})
+        .get("parts", [{}])[0]
+        .get("text", "")
+        .strip()
+    )
+    parsed = json.loads(text_response)
+
+    confirmed = bool(parsed.get("confirmed", False))
+    impact = parsed.get("impact", "low")
+    reason = parsed.get("reason", "Gemini validation")
+
+    demote_to = None
+    if not confirmed:
+        demote_to = "major" if impact in {"high", "medium"} else "digest"
+
+    return {
+        "confirmed": confirmed,
+        "impact": impact,
+        "reason": reason,
+        "demote_to": demote_to,
+    }
+
 # ============================================================================
 # FIREBASE & NOTIFICATIONS
 # ============================================================================
@@ -660,6 +825,8 @@ def main():
         title = item.find('title').text
         link = item.find('link').text
         pub_date_str = item.find('pubDate').text
+        summary_node = item.find('description')
+        summary = summary_node.text if summary_node is not None else ""
         
         # Extract image
         image_url = None
@@ -717,6 +884,22 @@ def main():
         # === SCORING ===
         
         score, category = score_with_age(title, pub_date)
+
+        if score >= NUCLEAR_THRESHOLD and category == "nuclear":
+            try:
+                validation = validate_nuclear_event(title, summary)
+                if not validation.get("confirmed", False):
+                    demote_to = validation.get("demote_to") or "major"
+                    category = "major" if demote_to == "major" else "digest"
+                    if category == "major":
+                        score = max(MAJOR_THRESHOLD, min(score, NUCLEAR_THRESHOLD - 1))
+                    else:
+                        score = max(DIGEST_THRESHOLD, min(score, MAJOR_THRESHOLD - 1))
+                    print(f"  [AI DEMOTE] Nuclear candidate demoted to {category}: {validation.get('reason', 'validation failed')}")
+                else:
+                    print(f"  [AI PASS] Nuclear validation passed: {validation.get('reason', 'confirmed state-change')}" )
+            except Exception as e:
+                print(f"  [AI FALLBACK] Nuclear validation unavailable, keeping regex score: {e}")
         
         item_data = {
             "id": headline_id,
