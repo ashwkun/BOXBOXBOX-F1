@@ -497,7 +497,7 @@ private fun formatTimeIST(dateString: String, timeString: String): String {
         val dateTimeString = "${dateString}T${timeString}"
         val utcDateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_DATE_TIME)
         val istDateTime = utcDateTime.atZone(ZoneId.of("UTC"))
-            .withZoneSameInstant(ZoneId.of("Asia/Kolkata"))
+            .withZoneSameInstant(ZoneId.systemDefault())
 
         val hour = istDateTime.hour
         val minute = istDateTime.minute

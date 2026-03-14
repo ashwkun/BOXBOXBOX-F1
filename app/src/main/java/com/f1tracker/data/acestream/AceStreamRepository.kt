@@ -121,6 +121,13 @@ class AceStreamRepository {
             
             return false
         }
+
+        /**
+         * Check if a channel is Sky Sports Main Event (reliable English F1 broadcaster).
+         */
+        fun isSkyMainEvent(channel: AceStreamChannel): Boolean {
+            return Regex("""sky\s*sports?\s*main\s*event""", RegexOption.IGNORE_CASE).containsMatchIn(channel.name)
+        }
     }
 
     private val gson = Gson()
@@ -203,6 +210,20 @@ class AceStreamRepository {
             false
         }
     }
+    
+    suspend fun isEngineRunningFast(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val response = httpGet("$ENGINE_BASE_URL$VERSION_ENDPOINT", customTimeoutMs = 1500)
+            if (response != null) {
+                val versionResponse = gson.fromJson(response, AceStreamVersionResponse::class.java)
+                versionResponse.result != null
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
 
     /**
      * Search for F1 channels using the Ace Stream Engine's built-in search API.
@@ -243,13 +264,15 @@ class AceStreamRepository {
         }
 
         // Sort by:
+        // 0. Sky Sports Main Event pinned to top (reliable English F1 channel)
         // 1. Is it definitely English?
         // 2. Is it DEFINITELY NOT a foreign broadcaster?
         // 3. Higher quality
         // 4. Available status
         // 5. Higher availability
         allChannels.values.toList().sortedWith(
-            compareByDescending<AceStreamChannel> { isEnglish(it) }
+            compareByDescending<AceStreamChannel> { isSkyMainEvent(it) }
+                .thenByDescending { isEnglish(it) }
                 .thenBy { FOREIGN_BROADCASTER_REGEX.containsMatchIn(it.name) } // False (not foreign) comes before True
                 .thenByDescending {
                     when (getQualityLabel(it.name)) {
@@ -285,12 +308,28 @@ class AceStreamRepository {
     }
 
     /**
-     * Start the Ace Stream Engine app (brings it to foreground/starts service).
+     * Start the Ace Stream Engine service silently in the background.
+     * If Android blocks the service start, it optionally falls back to launching the Ace Stream app UI explicitly.
      */
-    fun startEngine(context: Context) {
-        val intent = buildLaunchEngineIntent(context)
-        if (intent != null) {
-            context.startActivity(intent)
+    fun startEngine(context: Context, fallbackToUi: Boolean = true) {
+        val pkg = getInstalledPackage(context) ?: return
+        try {
+            val serviceIntent = Intent("org.acestream.engine.service.v0.IAceStreamEngine").apply {
+                setPackage(pkg)
+            }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                context.startForegroundService(serviceIntent)
+            } else {
+                context.startService(serviceIntent)
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to start engine service in background, fallbackToUi=$fallbackToUi", e)
+            if (fallbackToUi) {
+                val launchIntent = context.packageManager.getLaunchIntentForPackage(pkg)
+                if (launchIntent != null) {
+                    context.startActivity(launchIntent)
+                }
+            }
         }
     }
 
@@ -304,14 +343,25 @@ class AceStreamRepository {
         }
     }
 
-    private fun httpGet(urlString: String): String? {
+    /**
+     * Get the local HTTP playback URL for an infohash from the engine.
+     * This bypasses the Ace Stream app UI and allows in-app playback via ExoPlayer.
+     */
+    fun getPlaybackUrl(infohash: String): String {
+        val encodedInfohash = URLEncoder.encode(infohash, "UTF-8")
+        // The Ace Stream engine acts as a local HTTP proxy for P2P torrents.
+        // We must use ?infohash= (not ?id= which is strictly for Ace Stream Content IDs).
+        return "$ENGINE_BASE_URL/ace/getstream?infohash=$encodedInfohash"
+    }
+
+    private fun httpGet(urlString: String, customTimeoutMs: Int? = null): String? {
         var connection: HttpURLConnection? = null
         return try {
             val url = URL(urlString)
             connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
-            connection.connectTimeout = CONNECT_TIMEOUT_MS
-            connection.readTimeout = READ_TIMEOUT_MS
+            connection.connectTimeout = customTimeoutMs ?: CONNECT_TIMEOUT_MS
+            connection.readTimeout = customTimeoutMs ?: READ_TIMEOUT_MS
 
             if (connection.responseCode == HttpURLConnection.HTTP_OK) {
                 connection.inputStream.bufferedReader().use { it.readText() }

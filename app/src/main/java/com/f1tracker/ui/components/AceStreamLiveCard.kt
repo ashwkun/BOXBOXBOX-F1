@@ -2,6 +2,12 @@ package com.f1tracker.ui.components
 
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.net.Uri
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.ui.PlayerView
+import androidx.compose.ui.viewinterop.AndroidView
 import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -11,6 +17,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -39,6 +46,7 @@ import com.f1tracker.R
 import com.f1tracker.data.acestream.AceStreamChannel
 import com.f1tracker.data.acestream.AceStreamRepository
 import com.f1tracker.ui.viewmodels.AceStreamState
+import com.f1tracker.ui.viewmodels.RaceViewModel
 
 // Brand Colors
 private val AceStreamOrange = Color(0xFFFF6B00)
@@ -47,7 +55,7 @@ private val BrandGradient = Brush.horizontalGradient(listOf(AceStreamOrange, Ace
 
 @Composable
 fun AceStreamLiveCard(
-    state: AceStreamState,
+    raceViewModel: RaceViewModel,
     michromaFont: FontFamily,
     onInstallRequested: () -> Unit,
     onStartEngineRequested: () -> Unit,
@@ -55,17 +63,20 @@ fun AceStreamLiveCard(
 ) {
     val context = LocalContext.current
     val repository = remember { AceStreamRepository.getInstance() }
+    val targetState by raceViewModel.aceStreamState.collectAsState()
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = when (state) {
+                color = when (targetState) {
                     is AceStreamState.NotInstalled -> AceStreamBlue.copy(alpha = 0.3f)
                     is AceStreamState.InstalledEngineOff -> AceStreamOrange.copy(alpha = 0.3f)
                     is AceStreamState.Searching -> AceStreamBlue.copy(alpha = 0.3f)
                     is AceStreamState.StreamsReady -> AceStreamOrange.copy(alpha = 0.5f)
+                    is AceStreamState.PreviewingStream -> AceStreamOrange.copy(alpha = 0.8f)
+                    is AceStreamState.PreviewError -> Color.Red.copy(alpha = 0.5f)
                     is AceStreamState.Error -> Color.Red.copy(alpha = 0.3f)
                 },
                 shape = RoundedCornerShape(16.dp)
@@ -99,11 +110,11 @@ fun AceStreamLiveCard(
                     modifier = Modifier
                         .size(32.dp)
                         .background(BrandGradient, RoundedCornerShape(8.dp))
-                        .graphicsLayer(alpha = if (state is AceStreamState.NotInstalled || state is AceStreamState.InstalledEngineOff) 1f else alpha),
+                        .graphicsLayer(alpha = if (targetState is AceStreamState.NotInstalled || targetState is AceStreamState.InstalledEngineOff) 1f else alpha),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = if (state is AceStreamState.NotInstalled) Icons.Default.Settings else Icons.Default.PlayArrow,
+                        imageVector = if (targetState is AceStreamState.NotInstalled) Icons.Default.Settings else Icons.Default.PlayArrow,
                         contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(20.dp)
@@ -112,11 +123,13 @@ fun AceStreamLiveCard(
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = when (state) {
+                        text = when (targetState) {
                             is AceStreamState.NotInstalled -> "STREAM SETUP REQUIRED"
                             is AceStreamState.InstalledEngineOff -> "START BROADCAST NETWORK"
                             is AceStreamState.Searching -> "SCANNING P2P NETWORK"
-                            is AceStreamState.StreamsReady -> "LIVE STREAMS READY"
+                            is AceStreamState.StreamsReady -> "AVAILABLE STREAMS"
+                            is AceStreamState.PreviewingStream -> "STREAM PREVIEW"
+                            is AceStreamState.PreviewError -> "LOAD TIMEOUT (CAN STILL LAUNCH)"
                             is AceStreamState.Error -> "STREAM FETCH FAILED"
                         },
                         fontFamily = michromaFont,
@@ -135,7 +148,7 @@ fun AceStreamLiveCard(
                 }
                 
                 // Refresh Action
-                if (state is AceStreamState.StreamsReady || state is AceStreamState.Error) {
+                if (targetState is AceStreamState.StreamsReady || targetState is AceStreamState.Error || targetState is AceStreamState.PreviewingStream) {
                     IconButton(
                         onClick = onManualRefreshRequested,
                         modifier = Modifier.size(24.dp)
@@ -152,7 +165,7 @@ fun AceStreamLiveCard(
 
             // Body Content based on State
             AnimatedContent(
-                targetState = state,
+                targetState = targetState,
                 transitionSpec = {
                     fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
                 }, label = "AceStreamStateContent"
@@ -260,7 +273,7 @@ fun AceStreamLiveCard(
                                     strokeWidth = 2.dp
                                 )
                                 Text(
-                                    text = "Finding highest quality English streams...",
+                                    text = "Loading streams...",
                                     fontFamily = michromaFont,
                                     fontSize = 8.sp,
                                     color = Color.White.copy(alpha = 0.6f)
@@ -305,33 +318,266 @@ fun AceStreamLiveCard(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = "Swipe to view English streams. Tap to cast.",
+                                text = "Select a channel to preview stream health & quality",
                                 fontFamily = michromaFont,
                                 fontSize = 8.sp,
+                                lineHeight = 12.sp,
                                 color = Color.White.copy(alpha = 0.5f),
                                 modifier = Modifier.padding(bottom = 4.dp)
                             )
                             
-                            Row(
+                            Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .horizontalScroll(rememberScrollState()),
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                    .heightIn(max = 240.dp)
+                                    .verticalScroll(rememberScrollState()),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                targetState.channels.take(12).forEach { channel ->
+                                targetState.channels.forEach { channel ->
                                     AceStreamChannelItem(
                                         channel = channel,
                                         michromaFont = michromaFont,
                                         onClick = {
-                                            try {
-                                                val intent = repository.buildStreamIntent(channel.infohash)
-                                                context.startActivity(intent)
-                                            } catch (e: ActivityNotFoundException) {
-                                                Toast.makeText(context, "Could not open Ace Stream", Toast.LENGTH_SHORT).show()
-                                            }
+                                            raceViewModel.previewStream(channel)
                                         }
                                     )
                                 }
+                            }
+                        }
+                    }
+
+                    is AceStreamState.PreviewingStream -> {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            // Back button at the top — always visible
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Color.White.copy(alpha = 0.08f))
+                                    .clickable { raceViewModel.stopPreviewing() }
+                                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = "Back",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(
+                                    text = "BACK TO CHANNELS",
+                                    fontFamily = michromaFont,
+                                    fontSize = 9.sp,
+                                    color = Color.White.copy(alpha = 0.8f)
+                                )
+                            }
+
+                            Text(
+                                text = "Previewing: ${targetState.channel.name}",
+                                fontFamily = michromaFont,
+                                fontSize = 10.sp,
+                                color = Color.White
+                            )
+                            
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .aspectRatio(16f / 9f)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Color.Black)
+                            ) {
+                                val loadControl = remember {
+                                    DefaultLoadControl.Builder()
+                                        .setBufferDurationsMs(
+                                            15_000,  // minBufferMs — wait 15s before giving up
+                                            30_000,  // maxBufferMs
+                                            5_000,   // bufferForPlaybackMs
+                                            10_000   // bufferForPlaybackAfterRebufferMs
+                                        )
+                                        .build()
+                                }
+                                val exoPlayer = remember {
+                                    ExoPlayer.Builder(context)
+                                        .setLoadControl(loadControl)
+                                        .build().apply {
+                                        addListener(object : androidx.media3.common.Player.Listener {
+                                            override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                                                raceViewModel.setPreviewError(targetState.channel, "Ace Stream proxy failed to load content. The stream might be offline.")
+                                            }
+                                        })
+                                    }
+                                }
+
+                                DisposableEffect(targetState.playbackUrl) {
+                                    exoPlayer.setMediaItem(MediaItem.fromUri(Uri.parse(targetState.playbackUrl)))
+                                    exoPlayer.prepare()
+                                    exoPlayer.playWhenReady = true
+                                    
+                                    onDispose {
+                                        exoPlayer.stop()
+                                        exoPlayer.release()
+                                    }
+                                }
+                                
+                                AndroidView(
+                                    factory = { ctx ->
+                                        PlayerView(ctx).apply {
+                                            player = exoPlayer
+                                            useController = false
+                                            setShowBuffering(PlayerView.SHOW_BUFFERING_ALWAYS)
+                                        }
+                                    },
+                                    modifier = Modifier.matchParentSize(),
+                                    onRelease = { view ->
+                                        view.player = null
+                                    }
+                                )
+                            }
+                            
+                            Text(
+                                text = "Preview to verify stream language & quality without triggering the 30s Ace Player ad. Avoid pausing in Ace Player to prevent further ads.",
+                                fontFamily = michromaFont,
+                                fontSize = 8.sp,
+                                lineHeight = 12.sp,
+                                color = Color.White.copy(alpha = 0.5f),
+                                modifier = Modifier.padding(vertical = 2.dp)
+                            )
+                            
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(BrandGradient)
+                                    .clickable {
+                                        try {
+                                            val intent = repository.buildStreamIntent(targetState.channel.infohash)
+                                            context.startActivity(intent)
+                                        } catch (e: ActivityNotFoundException) {
+                                            Toast.makeText(context, "Could not open Ace Stream", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                    .padding(vertical = 12.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "LAUNCH IN ACE PLAYER",
+                                    fontFamily = michromaFont,
+                                    fontSize = 10.sp,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 1.sp
+                                )
+                            }
+                        }
+                    }
+
+                    is AceStreamState.PreviewError -> {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            // Back button at the top — always visible
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Color.White.copy(alpha = 0.08f))
+                                    .clickable { raceViewModel.stopPreviewing() }
+                                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = "Back",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(
+                                    text = "BACK TO CHANNELS",
+                                    fontFamily = michromaFont,
+                                    fontSize = 9.sp,
+                                    color = Color.White.copy(alpha = 0.8f)
+                                )
+                            }
+
+                            Text(
+                                text = "Failed: ${targetState.channel.name}",
+                                fontFamily = michromaFont,
+                                fontSize = 10.sp,
+                                color = Color.White
+                            )
+                            
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .aspectRatio(16f / 9f)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Color.Black),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Warning,
+                                        contentDescription = "Error",
+                                        tint = Color.Red,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                    Text(
+                                        text = targetState.message,
+                                        fontFamily = michromaFont,
+                                        fontSize = 10.sp,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.padding(horizontal = 16.dp)
+                                    )
+                                }
+                            }
+                            
+                            Text(
+                                text = "Preview failed but the stream may still work in Ace Player. Try launching directly below.",
+                                fontFamily = michromaFont,
+                                fontSize = 8.sp,
+                                lineHeight = 12.sp,
+                                color = Color.White.copy(alpha = 0.5f),
+                                modifier = Modifier.padding(vertical = 2.dp)
+                            )
+                            
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(BrandGradient)
+                                    .clickable {
+                                        try {
+                                            val intent = repository.buildStreamIntent(targetState.channel.infohash)
+                                            context.startActivity(intent)
+                                        } catch (e: ActivityNotFoundException) {
+                                            Toast.makeText(context, "Could not open Ace Stream", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                    .padding(vertical = 12.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "LAUNCH IN ACE PLAYER",
+                                    fontFamily = michromaFont,
+                                    fontSize = 10.sp,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 1.sp
+                                )
                             }
                         }
                     }
@@ -349,7 +595,7 @@ private fun AceStreamChannelItem(
 ) {
     Row(
         modifier = Modifier
-            .width(260.dp)
+            .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(Color.White.copy(alpha = 0.05f))
             .clickable(onClick = onClick)
@@ -435,6 +681,26 @@ private fun AceStreamChannelItem(
                         color = Color(0xFF00FF88),
                         fontWeight = FontWeight.Bold
                     )
+                }
+                
+                // Reliable badge for Sky Sports Main Event
+                if (AceStreamRepository.isSkyMainEvent(channel)) {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                Color(0xFF00FF88).copy(alpha = 0.15f),
+                                RoundedCornerShape(3.dp)
+                            )
+                            .padding(horizontal = 4.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = "RELIABLE",
+                            fontFamily = michromaFont,
+                            fontSize = 6.sp,
+                            color = Color(0xFF00FF88),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
                 
                 // Connection Health

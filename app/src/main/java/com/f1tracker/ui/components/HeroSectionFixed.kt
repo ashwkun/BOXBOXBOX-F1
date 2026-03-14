@@ -1194,7 +1194,7 @@ private fun ErrorHeroFixed(message: String, brigendsFont: FontFamily) {
 private fun parseISTDateTimeFixed(date: String, time: String): LocalDateTime {
     val dateTimeString = "${date}T${time}"
     val utcDateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_DATE_TIME)
-    return utcDateTime.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDateTime()
+    return utcDateTime.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime()
 }
 
 private fun formatISTTimeFixed(dateTime: LocalDateTime): String {

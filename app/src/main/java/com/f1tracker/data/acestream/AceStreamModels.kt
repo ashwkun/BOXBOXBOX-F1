@@ -54,3 +54,13 @@ data class AceStreamVersion(
     @SerializedName("code") val code: Int,
     @SerializedName("platform") val platform: String
 )
+
+data class AceStreamPlaybackResponse(
+    @SerializedName("response") val response: AceStreamPlaybackResult?,
+    @SerializedName("error") val error: String?
+)
+
+data class AceStreamPlaybackResult(
+    @SerializedName("stat_url") val statUrl: String?,
+    @SerializedName("playback_url") val playbackUrl: String?
+)

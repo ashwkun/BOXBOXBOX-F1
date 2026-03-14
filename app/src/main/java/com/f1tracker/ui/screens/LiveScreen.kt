@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -68,7 +70,10 @@ fun LiveScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 liveClient.ensureConnected()
-                raceViewModel.checkAceStreamStatus()
+                
+                // Proactively wake up the Ace Stream service and rapidly poll its HTTP port until it responds.
+                // This prevents the engine from appearing "Off" if Android suspended its network proxy.
+                raceViewModel.wakeEngineAndCheckStatus(context)
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -324,14 +329,7 @@ fun LiveScreen(
                         }
                     },
                     onStartAceStreamEngineRequested = {
-                        coroutineScope.launch {
-                            if (!aceStreamRepo.isEngineRunning()) {
-                                aceStreamRepo.startEngine(context)
-                                Toast.makeText(context, "Starting Ace Stream Engine...", Toast.LENGTH_SHORT).show()
-                                kotlinx.coroutines.delay(2000)
-                                raceViewModel.checkAceStreamStatus()
-                            }
-                        }
+                        raceViewModel.wakeEngineAndCheckStatus(context, allowUiFallback = true)
                     },
                     onManualStreamRefreshRequested = {
                         raceViewModel.fetchAceStreams()
@@ -605,117 +603,162 @@ fun LiveScreen(
                 }
             }
             
-            // Show live data
+            // Show live data — tabbed interface: Timing | Stream
             else -> {
+                var selectedTab by remember { mutableIntStateOf(0) }
+                val tabTitles = listOf("TIMING", "STREAM")
+                
                 Column {
-                    // Inject Ace Stream Premium Card at the top of the race view
-                    Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)) {
-                        com.f1tracker.ui.components.AceStreamLiveCard(
-                            state = aceStreamState,
-                            michromaFont = michromaFont,
-                            onInstallRequested = {
-                                try {
-                                    context.startActivity(aceStreamRepo.buildInstallIntent())
-                                } catch (e: Exception) {
-                                    Toast.makeText(context, "Install Ace Stream from Play Store", Toast.LENGTH_LONG).show()
-                                }
-                            },
-                            onStartEngineRequested = {
-                                coroutineScope.launch {
-                                    if (!aceStreamRepo.isEngineRunning()) {
-                                        aceStreamRepo.startEngine(context)
-                                        Toast.makeText(context, "Starting Ace Stream Engine...", Toast.LENGTH_SHORT).show()
-                                        // Give it a moment, then recheck
-                                        kotlinx.coroutines.delay(2000)
-                                        raceViewModel.checkAceStreamStatus()
-                                    }
-                                }
-                            },
-                            onManualRefreshRequested = {
-                                raceViewModel.fetchAceStreams()
-                            }
-                        )
-                    }
-
-                    // Session-specific column headers
-                    SessionHeader(sessionType = sessionType, michromaFont = michromaFont)
-                    
-                    // Driver List with session-specific rows
-                    LazyColumn(
+                    // Tab row
+                    Row(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 8.dp, vertical = 4.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                            .fillMaxWidth()
+                            .background(Color(0xFF111111))
+                            .padding(horizontal = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(0.dp)
                     ) {
-                        itemsIndexed(liveDrivers) { index, driver ->
-                            when (sessionType) {
-                                SessionType.RACE, SessionType.SPRINT -> {
-                                    RaceDriverRow(
-                                        driver = driver,
-                                        index = index,
-                                        drivers = liveDrivers,
-                                        michromaFont = michromaFont
+                        tabTitles.forEachIndexed { index, title ->
+                            val isSelected = selectedTab == index
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clickable { selectedTab = index }
+                                    .padding(vertical = 10.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = title,
+                                        fontFamily = michromaFont,
+                                        fontSize = 10.sp,
+                                        color = if (isSelected) Color.White else Color.White.copy(alpha = 0.4f),
+                                        fontWeight = FontWeight.Bold,
+                                        letterSpacing = 1.sp
                                     )
-                                }
-                                SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> {
-                                    // Determine current Q session from active (non-eliminated) driver count
-                                    val activeDrivers = liveDrivers.count { !it.knockedOut }
-                                    val currentQSession = when {
-                                        activeDrivers > 16 -> 1  // Q1: 22 drivers, bottom 6 at risk (P17-P22)
-                                        activeDrivers > 10 -> 2  // Q2: 16 drivers, bottom 6 at risk (P11-P16)
-                                        else -> 3                // Q3: top 10 fighting for pole
-                                    }
-                                    
-                                    // Danger zone cutoff position (1-indexed) for current session
-                                    val dangerCutoff = when (currentQSession) {
-                                        1 -> 16  // P17+ in danger during Q1
-                                        2 -> 10  // P11+ in danger during Q2
-                                        else -> -1  // No danger zone in Q3
-                                    }
-                                    
-                                    val posNum = driver.positionDisplay?.toIntOrNull() ?: 999
-                                    val inDangerZone = !driver.knockedOut && dangerCutoff > 0 && posNum > dangerCutoff
-                                    
-                                    // Danger zone separator
-                                    if (inDangerZone && index > 0) {
-                                        val prevPos = liveDrivers[index - 1].positionDisplay?.toIntOrNull() ?: 0
-                                        val prevKO = liveDrivers[index - 1].knockedOut
-                                        if (prevPos <= dangerCutoff && !prevKO) {
-                                            KnockoutZoneSeparator(
-                                                michromaFont = michromaFont,
-                                                label = "Q${currentQSession} DANGER ZONE"
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth(0.6f)
+                                            .height(2.dp)
+                                            .background(
+                                                if (isSelected)
+                                                    Brush.horizontalGradient(listOf(Color(0xFFE6007E), Color(0xFFFF0080)))
+                                                else
+                                                    Brush.horizontalGradient(listOf(Color.Transparent, Color.Transparent)),
+                                                RoundedCornerShape(1.dp)
                                             )
-                                        }
-                                    }
-                                    
-                                    // Eliminated separator (between active and knocked-out drivers)
-                                    if (driver.knockedOut && index > 0 && !liveDrivers[index - 1].knockedOut) {
-                                        KnockoutZoneSeparator(
-                                            michromaFont = michromaFont,
-                                            label = "ELIMINATED"
-                                        )
-                                    }
-                                    
-                                    QualiDriverRow(
-                                        driver = driver,
-                                        inDangerZone = inDangerZone,
-                                        michromaFont = michromaFont
-                                    )
-                                }
-                                SessionType.PRACTICE -> {
-                                    PracticeDriverRow(
-                                        driver = driver,
-                                        index = index,
-                                        drivers = liveDrivers,
-                                        michromaFont = michromaFont
                                     )
                                 }
                             }
                         }
-                        
-                        // Bottom spacer
-                        item {
-                            Spacer(modifier = Modifier.height(80.dp))
+                    }
+                    
+                    when (selectedTab) {
+                        0 -> {
+                            // TIMING tab — Session header + Driver list
+                            SessionHeader(sessionType = sessionType, michromaFont = michromaFont)
+                            
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                itemsIndexed(liveDrivers) { index, driver ->
+                                    when (sessionType) {
+                                        SessionType.RACE, SessionType.SPRINT -> {
+                                            RaceDriverRow(
+                                                driver = driver,
+                                                index = index,
+                                                drivers = liveDrivers,
+                                                michromaFont = michromaFont
+                                            )
+                                        }
+                                        SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> {
+                                            val activeDrivers = liveDrivers.count { !it.knockedOut }
+                                            val currentQSession = when {
+                                                activeDrivers > 16 -> 1
+                                                activeDrivers > 10 -> 2
+                                                else -> 3
+                                            }
+                                            
+                                            val dangerCutoff = when (currentQSession) {
+                                                1 -> 16
+                                                2 -> 10
+                                                else -> -1
+                                            }
+                                            
+                                            val posNum = driver.positionDisplay?.toIntOrNull() ?: 999
+                                            val inDangerZone = !driver.knockedOut && dangerCutoff > 0 && posNum > dangerCutoff
+                                            
+                                            if (inDangerZone && index > 0) {
+                                                val prevPos = liveDrivers[index - 1].positionDisplay?.toIntOrNull() ?: 0
+                                                val prevKO = liveDrivers[index - 1].knockedOut
+                                                if (prevPos <= dangerCutoff && !prevKO) {
+                                                    KnockoutZoneSeparator(
+                                                        michromaFont = michromaFont,
+                                                        label = "Q${currentQSession} DANGER ZONE"
+                                                    )
+                                                }
+                                            }
+                                            
+                                            if (driver.knockedOut && index > 0 && !liveDrivers[index - 1].knockedOut) {
+                                                KnockoutZoneSeparator(
+                                                    michromaFont = michromaFont,
+                                                    label = "ELIMINATED"
+                                                )
+                                            }
+                                            
+                                            QualiDriverRow(
+                                                driver = driver,
+                                                inDangerZone = inDangerZone,
+                                                michromaFont = michromaFont
+                                            )
+                                        }
+                                        SessionType.PRACTICE -> {
+                                            PracticeDriverRow(
+                                                driver = driver,
+                                                index = index,
+                                                drivers = liveDrivers,
+                                                michromaFont = michromaFont
+                                            )
+                                        }
+                                    }
+                                }
+                                
+                                item {
+                                    Spacer(modifier = Modifier.height(80.dp))
+                                }
+                            }
+                        }
+                        1 -> {
+                            // STREAM tab — Ace Stream card
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState())
+                                    .padding(horizontal = 8.dp, vertical = 8.dp)
+                            ) {
+                                com.f1tracker.ui.components.AceStreamLiveCard(
+                                    raceViewModel = raceViewModel,
+                                    michromaFont = michromaFont,
+                                    onInstallRequested = {
+                                        try {
+                                            context.startActivity(aceStreamRepo.buildInstallIntent())
+                                        } catch (e: Exception) {
+                                            Toast.makeText(context, "Install Ace Stream from Play Store", Toast.LENGTH_LONG).show()
+                                        }
+                                    },
+                                    onStartEngineRequested = {
+                                        raceViewModel.wakeEngineAndCheckStatus(context, allowUiFallback = true)
+                                    },
+                                    onManualRefreshRequested = {
+                                        raceViewModel.fetchAceStreams()
+                                    }
+                                )
+                            }
                         }
                     }
                 }
@@ -1863,6 +1906,7 @@ private fun NoSessionActiveScreen(
                     }
                     
                     CountdownDisplay(
+                        raceViewModel = raceViewModel,
                         title = "NEXT SESSION",
                         sessionName = nextSession.sessionType.displayName(),
                         countdown = countdown,
@@ -1901,6 +1945,7 @@ private fun NoSessionActiveScreen(
                     }
                     
                     CountdownDisplay(
+                        raceViewModel = raceViewModel,
                         title = "NEXT SESSION",
                         sessionName = firstSession.sessionType.displayName(),
                         countdown = countdown,
@@ -1926,6 +1971,7 @@ private fun NoSessionActiveScreen(
                     }
                     
                     CountdownDisplay(
+                        raceViewModel = raceViewModel,
                         title = "NEXT SESSION",
                         sessionName = state.nextMainEventType.displayName(),
                         countdown = countdown,
@@ -2078,6 +2124,7 @@ private fun NoSessionActiveScreen(
 
 @Composable
 private fun CountdownDisplay(
+    raceViewModel: com.f1tracker.ui.viewmodels.RaceViewModel,
     title: String,
     sessionName: String,
     countdown: String,
@@ -2132,7 +2179,7 @@ private fun CountdownDisplay(
         
         // Native Embedded Ace Stream Card
         com.f1tracker.ui.components.AceStreamLiveCard(
-            state = aceStreamState,
+            raceViewModel = raceViewModel,
             michromaFont = michromaFont,
             onInstallRequested = onInstallAceStreamRequested,
             onStartEngineRequested = onStartAceStreamEngineRequested,
@@ -2241,9 +2288,9 @@ private fun parseSessionDateTime(sessionInfo: com.f1tracker.data.models.SessionI
         }
         
         // Convert to Asia/Kolkata (IST)
-        instant.atZone(java.time.ZoneId.of("Asia/Kolkata")).toLocalDateTime()
+        instant.atZone(java.time.ZoneId.systemDefault()).toLocalDateTime()
     } catch (e: Exception) {
-        java.time.LocalDateTime.now(java.time.ZoneId.of("Asia/Kolkata"))
+        java.time.LocalDateTime.now(java.time.ZoneId.systemDefault())
     }
 }
 

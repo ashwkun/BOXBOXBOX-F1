@@ -17,6 +17,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import android.app.Application
+import android.content.Context
 import com.f1tracker.data.acestream.AceStreamChannel
 import com.f1tracker.data.acestream.AceStreamRepository
 
@@ -25,6 +26,8 @@ sealed class AceStreamState {
     object InstalledEngineOff : AceStreamState()
     object Searching : AceStreamState()
     data class StreamsReady(val channels: List<AceStreamChannel>) : AceStreamState()
+    data class PreviewingStream(val channel: AceStreamChannel, val playbackUrl: String) : AceStreamState()
+    data class PreviewError(val channel: AceStreamChannel, val message: String) : AceStreamState()
     data class Error(val message: String) : AceStreamState()
 }
 
@@ -56,7 +59,7 @@ class RaceViewModel @Inject constructor(
     val lastYearRaceResults: StateFlow<Race?> = _lastYearRaceResults.asStateFlow()
     
     // Ace Stream State
-    private val _aceStreamState = MutableStateFlow<AceStreamState>(AceStreamState.InstalledEngineOff)
+    private val _aceStreamState = MutableStateFlow<AceStreamState>(AceStreamState.Searching)
     val aceStreamState: StateFlow<AceStreamState> = _aceStreamState.asStateFlow()
 
     private var allRacesCache: List<Race> = emptyList()
@@ -71,6 +74,46 @@ class RaceViewModel @Inject constructor(
         checkAceStreamStatus()
     }
     
+    /**
+     * Wakes the Ace Stream Engine in the background and polls until it's ready.
+     * This is useful on app resume when the Android OS might have suspended the engine's network port.
+     */
+    fun wakeEngineAndCheckStatus(context: Context, allowUiFallback: Boolean = false) {
+        viewModelScope.launch {
+            val aceStreamRepo = AceStreamRepository.getInstance()
+            val isInstalled = aceStreamRepo.isEngineInstalled(context)
+            if (!isInstalled) {
+                _aceStreamState.value = AceStreamState.NotInstalled
+                return@launch
+            }
+            
+            // Check if it's already alive and responding fast
+            if (aceStreamRepo.isEngineRunningFast()) {
+                checkAceStreamStatus()
+                return@launch
+            }
+            
+            // It's installed but port 6878 isn't immediately responding.
+            // Tell UI we are searching (acts as a loading spinner)
+            _aceStreamState.value = AceStreamState.Searching
+            
+            // Emit silent wake intent (or UI intent if explicitly allowed)
+            aceStreamRepo.startEngine(context, fallbackToUi = allowUiFallback)
+            
+            // Poll for up to 5 seconds waiting for the port to open
+            for (i in 0..4) {
+                delay(1000)
+                if (aceStreamRepo.isEngineRunningFast()) {
+                    checkAceStreamStatus() // Port is open, proceed to fetch streams
+                    return@launch
+                }
+            }
+            
+            // Exhausted polling, it didn't wake up in the background
+            _aceStreamState.value = AceStreamState.InstalledEngineOff
+        }
+    }
+
     fun checkAceStreamStatus() {
         viewModelScope.launch {
             val aceStreamRepo = AceStreamRepository.getInstance()
@@ -427,6 +470,28 @@ class RaceViewModel @Inject constructor(
         }
     }
 
+    fun previewStream(channel: AceStreamChannel) {
+        viewModelScope.launch {
+            _aceStreamState.value = AceStreamState.Searching // Reuse searching state as briefly loading
+            delay(500) // Brief loading indication
+            val url = AceStreamRepository.getInstance().getPlaybackUrl(channel.infohash)
+            // Error handling for dead streams is delegated to ExoPlayer via Player.Listener
+            _aceStreamState.value = AceStreamState.PreviewingStream(channel, url)
+        }
+    }
+    
+    fun setPreviewError(channel: AceStreamChannel, message: String) {
+        viewModelScope.launch {
+            _aceStreamState.value = AceStreamState.PreviewError(channel, message)
+            // Removed automatic reset to channel list, allowing the user to click
+            // "LAUNCH IN ACE PLAYER" manually even if the preview fails.
+        }
+    }
+
+    fun stopPreviewing() {
+        checkAceStreamStatus()
+    }
+
     private fun updateFilteredRaces(races: List<Race>) {
         val now = LocalDateTime.now(ZoneId.of("UTC"))
         
@@ -456,7 +521,7 @@ class RaceViewModel @Inject constructor(
     }
 
     private suspend fun updateRaceWeekendState() {
-        val now = LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
+        val now = LocalDateTime.now(ZoneId.systemDefault())
         val currentOrNextRace = findCurrentOrNextRace(now)
 
         if (currentOrNextRace == null) {
@@ -652,7 +717,7 @@ class RaceViewModel @Inject constructor(
 
         // Convert IST session time back to UTC for comparison
         val sessionDateTimeUTC = sessionDateTime
-            .atZone(ZoneId.of("Asia/Kolkata"))
+            .atZone(ZoneId.systemDefault())
             .withZoneSameInstant(ZoneId.of("UTC"))
             .toLocalDateTime()
 
@@ -709,7 +774,7 @@ class RaceViewModel @Inject constructor(
     ): List<UpcomingEvent> {
         val latitude = race.circuit.location.lat.toDouble()
         val longitude = race.circuit.location.long.toDouble()
-        val now = LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
+        val now = LocalDateTime.now(ZoneId.systemDefault())
         
         return events.map { (type, session) ->
             val sessionDateTime = parseDateTime(session.date, session.time)
@@ -751,15 +816,15 @@ class RaceViewModel @Inject constructor(
                 java.time.Instant.parse("${dateTimeString}Z")
             }
             // Convert UTC to IST (Asia/Kolkata = UTC+5:30)
-            instant.atZone(ZoneId.of("Asia/Kolkata")).toLocalDateTime()
+            instant.atZone(ZoneId.systemDefault()).toLocalDateTime()
         } catch (e: Exception) {
             Log.e("RaceViewModel", "Error parsing Zulu time: $dateTimeString", e)
-            LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
+            LocalDateTime.now(ZoneId.systemDefault())
         }
     }
     
     fun getCountdownTo(targetDateTime: LocalDateTime): String {
-        val now = LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
+        val now = LocalDateTime.now(ZoneId.systemDefault())
         val duration = Duration.between(now, targetDateTime)
         
         if (duration.isNegative) return "00d 00h 00m 00s"

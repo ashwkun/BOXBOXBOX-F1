@@ -924,7 +924,7 @@ private fun formatTimeDetail(timeString: String): String {
         val utcTime = java.time.LocalTime.parse(timeString.substringBefore("Z"))
         val istTime = utcTime.atDate(java.time.LocalDate.now())
             .atZone(java.time.ZoneId.of("UTC"))
-            .withZoneSameInstant(java.time.ZoneId.of("Asia/Kolkata"))
+            .withZoneSameInstant(java.time.ZoneId.systemDefault())
             .toLocalTime()
         
         val formatter = DateTimeFormatter.ofPattern("hh:mm a")
