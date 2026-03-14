@@ -45,11 +45,12 @@ class AceStreamRepository {
         // F1-related search queries — cast a wide net
         val F1_SEARCH_QUERIES = listOf(
             "Sky Sports F1",
-            "Sky F1",
+            "Sky Sports", // F1 races often broadcast on Main Event or Arena if F1 specific doesn't exist
+            "ESPN",
             "F1",
             "Formula 1",
+            "SuperSport",
             "F1 TV",
-            "ESPN F1",
             "DAZN F1",
             "Star Sports",
             "Sport TV",
@@ -214,8 +215,8 @@ class AceStreamRepository {
         for (query in F1_SEARCH_QUERIES) {
             try {
                 val encodedQuery = URLEncoder.encode(query, "UTF-8")
-                // Add category=sport to narrow results
-                val url = "$ENGINE_BASE_URL$SEARCH_ENDPOINT?query=$encodedQuery&category=sport"
+                // Cast a wider net by skipping category restrictions
+                val url = "$ENGINE_BASE_URL$SEARCH_ENDPOINT?query=$encodedQuery"
                 val response = httpGet(url)
 
                 if (response != null) {
