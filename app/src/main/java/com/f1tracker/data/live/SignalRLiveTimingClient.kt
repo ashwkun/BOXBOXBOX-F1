@@ -146,7 +146,6 @@ class SignalRLiveTimingClient {
     
     // Reconnection state
     private var reconnectAttempts = 0
-    private val maxReconnectAttempts = 10
     private var isReconnecting = false
     private var lastMessageTime = System.currentTimeMillis()
 
@@ -246,16 +245,11 @@ class SignalRLiveTimingClient {
             Log.d(TAG, "🔄 Already reconnecting, skipping duplicate scheduleReconnect")
             return
         }
-        if (reconnectAttempts >= maxReconnectAttempts) {
-            Log.w(TAG, "Max reconnect attempts reached ($maxReconnectAttempts)")
-            _connectionError.value = "Connection lost. Tap to retry."
-            isReconnecting = false
-            return
-        }
         
         reconnectAttempts++
         isReconnecting = true
-        val delayMs = minOf(2000L * (1L shl (reconnectAttempts - 1)), 30000L) // 2s, 4s, 8s, 16s, 30s max
+        // Exponential backoff capped at 30s — never give up, always auto-retry
+        val delayMs = minOf(2000L * (1L shl (minOf(reconnectAttempts - 1, 4))), 30000L) // 2s, 4s, 8s, 16s, 30s max
         Log.d(TAG, "🔄 Reconnect attempt $reconnectAttempts in ${delayMs}ms")
         // Only show reconnecting status if we have no data
         if (driverMap.isEmpty()) {
