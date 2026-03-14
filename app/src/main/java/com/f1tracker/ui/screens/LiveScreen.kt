@@ -18,6 +18,10 @@ import kotlinx.coroutines.launch
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -59,6 +63,7 @@ fun LiveScreen(
     
     // Lifecycle observer — reconnect when app resumes from background
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
@@ -69,6 +74,29 @@ fun LiveScreen(
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+    
+    // Broadcast receiver for app installation
+    DisposableEffect(context) {
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(ctx: Context, intent: Intent) {
+                if (intent.action == Intent.ACTION_PACKAGE_ADDED) {
+                    val packageName = intent.data?.schemeSpecificPart
+                    if (packageName != null && AceStreamRepository.ACE_STREAM_PACKAGES.contains(packageName)) {
+                        raceViewModel.checkAceStreamStatus()
+                    }
+                }
+            }
+        }
+        val filter = IntentFilter(Intent.ACTION_PACKAGE_ADDED).apply {
+            addDataScheme("package")
+        }
+        // Use RECEIVER_EXPORTED if running on Tiramisu+ for standard system broadcasts (not strictly required for PACKAGE_ADDED, but good practice if lint complains, though we can just use registerReceiver for now since it's a system broadcast and exempt)
+        context.registerReceiver(receiver, filter)
+        
+        onDispose {
+            context.unregisterReceiver(receiver)
         }
     }
     
@@ -116,7 +144,6 @@ fun LiveScreen(
         }
     }
     
-    val context = LocalContext.current
     val aceStreamRepo = remember { AceStreamRepository.getInstance() }
     val aceStreamState by raceViewModel.aceStreamState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
