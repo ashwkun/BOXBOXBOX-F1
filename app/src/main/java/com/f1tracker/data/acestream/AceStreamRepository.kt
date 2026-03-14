@@ -60,12 +60,17 @@ class AceStreamRepository {
 
         // Broad regex to match any F1-relevant channel
         val F1_CHANNEL_REGEX = Regex(
-            """(?i)(f1|formula\s*1|sky\s*sports?\s*f1|espn|dazn|star\s*sports|sport\s*tv|canal\s*\+?|viaplay|movistar|rtbf|servus|sky\s*sport)"""
+            """(?i)(f1|formula\s*1|sky\s*sports?\s*f1|espn|dazn|star\s*sports|sport\s*tv|canal\s*\+?|viaplay|movistar|rtbf|servus|sky\s*sport|tsn|ssc)"""
         )
 
         // Regex to reject clearly non-F1 channels that slip through
         val NON_F1_REJECT_REGEX = Regex(
-            """(?i)(cricket|football|soccer|baseball|basketball|nba|nfl|tennis|golf|boxing|ufc|mma|wrestling|hockey|rugby|volleyball|handball|cycling|swimming)"""
+            """(?i)(cricket|football|soccer|baseball|basketball|nba|nfl|tennis|golf|boxing|ufc|mma|wrestling|hockey|rugby|volleyball|handball|cycling|swimming|darts)"""
+        )
+
+        // Regex for known foreign language primary broadcasters to de-prioritize
+        val FOREIGN_BROADCASTER_REGEX = Regex(
+            """(?i)(sky\s*sport\s*(de|it)|servus|orf|rtbf|canal\s*\+?\s*(fr)?|movistar|dazn\s*(es|de|it)|ziggo)"""
         )
 
         // Quality detection from channel names
@@ -101,10 +106,18 @@ class AceStreamRepository {
          * Check if a channel is likely English-language.
          */
         fun isEnglish(channel: AceStreamChannel): Boolean {
-            // Check language metadata
+            // Check language metadata strictly
             if (channel.languages?.any { it.lowercase() in ENGLISH_LANG_CODES } == true) return true
-            // Check name for English channel indicators
-            if (Regex("""(?i)(sky|espn|star\s*sports|bt\s*sport|tsn|fox\s*sports)""").containsMatchIn(channel.name)) return true
+            
+            val name = channel.name.lowercase()
+            
+            // If the name explicitly claims to be Spanish, German, Italian, etc., it's not English
+            if (Regex("""\b(de|ita?|esp?|fra?|nld?|pol?|ru|ger|spa|cze)\b""").containsMatchIn(name)) return false
+            if (FOREIGN_BROADCASTER_REGEX.containsMatchIn(name)) return false
+
+            // Check name for pure English channel indicators
+            if (Regex("""\b(sky\s*sports?\s*(f1|uk|main\s*event)|espn|star\s*sports|bt\s*sport|tsn|fox\s*sports|supersport|ssc)\b""").containsMatchIn(name)) return true
+            
             return false
         }
     }
@@ -228,9 +241,15 @@ class AceStreamRepository {
             }
         }
 
-        // Sort by: English first → higher quality → available status → higher availability
+        // Sort by:
+        // 1. Is it definitely English?
+        // 2. Is it DEFINITELY NOT a foreign broadcaster?
+        // 3. Higher quality
+        // 4. Available status
+        // 5. Higher availability
         allChannels.values.toList().sortedWith(
             compareByDescending<AceStreamChannel> { isEnglish(it) }
+                .thenBy { FOREIGN_BROADCASTER_REGEX.containsMatchIn(it.name) } // False (not foreign) comes before True
                 .thenByDescending {
                     when (getQualityLabel(it.name)) {
                         "4K" -> 4; "FHD" -> 3; "HD" -> 2; else -> 1
