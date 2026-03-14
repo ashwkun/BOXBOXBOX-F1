@@ -243,10 +243,12 @@ class AceStreamRepository {
 
     /**
      * Build an Intent to launch an Ace Stream by its infohash.
+     * Note: "acestream://" followed directly by a hash is interpreted as a Content ID (CID).
+     * Since we have an infohash, we must explicitly pass it as a query parameter.
      */
     fun buildStreamIntent(infohash: String): Intent {
         return Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("acestream://$infohash")
+            data = Uri.parse("acestream:?infohash=$infohash")
         }
     }
 
