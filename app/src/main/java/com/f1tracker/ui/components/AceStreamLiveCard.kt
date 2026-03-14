@@ -392,27 +392,31 @@ fun AceStreamLiveCard(
                                     .clip(RoundedCornerShape(8.dp))
                                     .background(Color.Black)
                             ) {
+                                // ExoPlayer with retry policy — retries 500 errors silently while showing buffering spinner.
+                                // We do NOT pre-poll with OkHttp because the proxy is single-client:
+                                // any GET that reads data consumes the stream start, so ExoPlayer gets mid-stream garbage.
                                 val httpDataSourceFactory = remember {
                                     androidx.media3.datasource.DefaultHttpDataSource.Factory()
                                         .setConnectTimeoutMs(15_000)
                                         .setReadTimeoutMs(15_000)
                                         .setAllowCrossProtocolRedirects(true)
                                 }
-                                // Custom retry policy: retry HTTP errors silently for up to ~30s
-                                // ExoPlayer keeps showing its buffering spinner during retries — no UI flicker
                                 val retryPolicy = remember {
                                     object : androidx.media3.exoplayer.upstream.DefaultLoadErrorHandlingPolicy() {
+                                        // Ace Stream's HTTP API requires Premium — free users always get 500.
+                                        // Keep retries low (5 = ~15s) since waiting longer won't help.
+                                        override fun getMinimumLoadableRetryCount(dataType: Int): Int = 5
+                                        
                                         override fun getRetryDelayMsFor(loadErrorInfo: androidx.media3.exoplayer.upstream.LoadErrorHandlingPolicy.LoadErrorInfo): Long {
                                             val error = loadErrorInfo.exception
                                             val isHttpError = error is androidx.media3.datasource.HttpDataSource.InvalidResponseCodeException
                                             val isIOError = error is java.io.IOException
-                                            // Retry HTTP 500/501/503 and IO errors up to 10 times (3s each = ~30s total)
-                                            return if ((isHttpError || isIOError) && loadErrorInfo.errorCount <= 10) {
-                                                android.util.Log.d("AcePreview", "Retry ${loadErrorInfo.errorCount}/10 after ${error.javaClass.simpleName}: ${error.message}")
+                                            return if ((isHttpError || isIOError) && loadErrorInfo.errorCount <= 5) {
+                                                android.util.Log.d("AcePreview", "Retry ${loadErrorInfo.errorCount}/5 after ${error.javaClass.simpleName}: ${error.message}")
                                                 3_000L // 3 second retry delay
                                             } else {
                                                 android.util.Log.e("AcePreview", "Giving up after ${loadErrorInfo.errorCount} retries: ${error.message}")
-                                                androidx.media3.common.C.TIME_UNSET // Give up — trigger onPlayerError
+                                                androidx.media3.common.C.TIME_UNSET
                                             }
                                         }
                                     }
@@ -424,16 +428,11 @@ fun AceStreamLiveCard(
                                 val exoPlayer = remember {
                                     ExoPlayer.Builder(context)
                                         .setMediaSourceFactory(mediaSourceFactory)
-                                        .setLoadControl(
-                                            androidx.media3.exoplayer.DefaultLoadControl.Builder()
-                                                .setBufferDurationsMs(5_000, 30_000, 2_500, 5_000)
-                                                .build()
-                                        )
                                         .build().apply {
                                         addListener(object : androidx.media3.common.Player.Listener {
                                             override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
                                                 android.util.Log.e("AcePreview", "ExoPlayer final error: code=${error.errorCode}, msg=${error.message}", error.cause)
-                                                raceViewModel.setPreviewError(targetState.channel, "Preview couldn't connect — this is normal for P2P streams.")
+                                                raceViewModel.setPreviewError(targetState.channel, "Preview requires Ace Stream Premium. Use the Launch button to watch with the free Ace Player app.")
                                             }
                                         })
                                     }
@@ -466,7 +465,7 @@ fun AceStreamLiveCard(
                             }
                             
                             Text(
-                                text = "Preview to verify stream language & quality without triggering the 30s Ace Player ad. Avoid pausing in Ace Player to prevent further ads.",
+                                text = "In-app preview requires Ace Stream Premium. Free users can use the Launch button to watch via Ace Player (with a 30s ad).",
                                 fontFamily = michromaFont,
                                 fontSize = 8.sp,
                                 lineHeight = 12.sp,
