@@ -392,25 +392,38 @@ fun AceStreamLiveCard(
                                     .clip(RoundedCornerShape(8.dp))
                                     .background(Color.Black)
                             ) {
-                                val loadControl = remember {
-                                    DefaultLoadControl.Builder()
-                                        .setBufferDurationsMs(
-                                            15_000,  // minBufferMs — wait 15s before giving up
-                                            30_000,  // maxBufferMs
-                                            5_000,   // bufferForPlaybackMs
-                                            10_000   // bufferForPlaybackAfterRebufferMs
-                                        )
-                                        .build()
+                                val httpDataSourceFactory = remember {
+                                    androidx.media3.datasource.DefaultHttpDataSource.Factory()
+                                        .setConnectTimeoutMs(15_000)
+                                        .setReadTimeoutMs(15_000)
+                                        .setAllowCrossProtocolRedirects(true)
                                 }
+                                val mediaSourceFactory = remember {
+                                    androidx.media3.exoplayer.source.DefaultMediaSourceFactory(httpDataSourceFactory)
+                                }
+                                var errorCount by remember { mutableIntStateOf(0) }
+                                val maxRetries = 3
                                 val exoPlayer = remember {
                                     ExoPlayer.Builder(context)
-                                        .setLoadControl(loadControl)
+                                        .setMediaSourceFactory(mediaSourceFactory)
                                         .build().apply {
                                         addListener(object : androidx.media3.common.Player.Listener {
                                             override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
-                                                raceViewModel.setPreviewError(targetState.channel, "Ace Stream proxy failed to load content. The stream might be offline.")
+                                                errorCount++
                                             }
                                         })
+                                    }
+                                }
+
+                                // Retry logic: when errorCount changes, wait 3s and retry
+                                LaunchedEffect(errorCount) {
+                                    if (errorCount in 1..maxRetries) {
+                                        kotlinx.coroutines.delay(3000L)
+                                        exoPlayer.setMediaItem(MediaItem.fromUri(Uri.parse(targetState.playbackUrl)))
+                                        exoPlayer.prepare()
+                                        exoPlayer.playWhenReady = true
+                                    } else if (errorCount > maxRetries) {
+                                        raceViewModel.setPreviewError(targetState.channel, "Preview couldn't connect — this is normal for P2P streams.")
                                     }
                                 }
 
@@ -510,7 +523,7 @@ fun AceStreamLiveCard(
                             }
 
                             Text(
-                                text = "Failed: ${targetState.channel.name}",
+                                text = "Preview unavailable",
                                 fontFamily = michromaFont,
                                 fontSize = 10.sp,
                                 color = Color.White
@@ -529,16 +542,16 @@ fun AceStreamLiveCard(
                                     verticalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.Warning,
-                                        contentDescription = "Error",
-                                        tint = Color.Red,
+                                        imageVector = Icons.Outlined.Info,
+                                        contentDescription = "Info",
+                                        tint = Color(0xFFFFB74D),
                                         modifier = Modifier.size(32.dp)
                                     )
                                     Text(
-                                        text = targetState.message,
+                                        text = "The in-app preview couldn't load this stream. This is common with P2P streams and doesn't mean the stream is broken.",
                                         fontFamily = michromaFont,
-                                        fontSize = 10.sp,
-                                        color = Color.White,
+                                        fontSize = 9.sp,
+                                        color = Color.White.copy(alpha = 0.7f),
                                         textAlign = TextAlign.Center,
                                         modifier = Modifier.padding(horizontal = 16.dp)
                                     )
@@ -546,7 +559,7 @@ fun AceStreamLiveCard(
                             }
                             
                             Text(
-                                text = "Preview failed but the stream may still work in Ace Player. Try launching directly below.",
+                                text = "Ace Player handles P2P connections more reliably. The stream will most likely work when launched directly.",
                                 fontFamily = michromaFont,
                                 fontSize = 8.sp,
                                 lineHeight = 12.sp,
