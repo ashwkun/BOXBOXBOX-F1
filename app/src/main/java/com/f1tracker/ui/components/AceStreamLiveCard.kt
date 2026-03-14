@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -90,22 +91,28 @@ fun AceStreamLiveCard(
                 Box(
                     modifier = Modifier
                         .size(32.dp)
-                        .background(BrandGradient, RoundedCornerShape(8.dp))
+                        .then(
+                            if (state is AceStreamState.NotInstalled) {
+                                Modifier.background(Color.Transparent)
+                            } else {
+                                Modifier.background(BrandGradient, RoundedCornerShape(8.dp))
+                            }
+                        )
                         .graphicsLayer(alpha = if (state is AceStreamState.NotInstalled || state is AceStreamState.InstalledEngineOff) 1f else alpha),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.PlayArrow,
+                        imageVector = if (state is AceStreamState.NotInstalled) Icons.Outlined.Info else Icons.Default.PlayArrow,
                         contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(20.dp)
+                        tint = if (state is AceStreamState.NotInstalled) Color.White.copy(alpha = 0.5f) else Color.White,
+                        modifier = Modifier.size(if (state is AceStreamState.NotInstalled) 24.dp else 20.dp)
                     )
                 }
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = when (state) {
-                            is AceStreamState.NotInstalled -> "P2P STREAM INTEGRATION"
+                            is AceStreamState.NotInstalled -> "BROADCAST INTEGRATION"
                             is AceStreamState.InstalledEngineOff -> "LIVE BROADCASTS DETECTED"
                             is AceStreamState.Searching -> "SCANNING P2P NETWORK"
                             is AceStreamState.StreamsReady -> "LIVE STREAMS READY"
@@ -153,7 +160,7 @@ fun AceStreamLiveCard(
                     is AceStreamState.NotInstalled -> {
                         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Text(
-                                text = "F1 Tracker uses peer-to-peer technology to provide reliable, high-definition live broadcasts. Install the Ace Stream Engine to enable this feature.",
+                                text = "Missing required streaming engine. Install the official Ace Stream app from the Play Store to discover and watch live sessions.",
                                 fontFamily = michromaFont,
                                 fontSize = 10.sp,
                                 color = Color.White.copy(alpha = 0.8f),
