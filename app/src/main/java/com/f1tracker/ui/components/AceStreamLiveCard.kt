@@ -159,13 +159,40 @@ fun AceStreamLiveCard(
                     is AceStreamState.NotInstalled -> {
                         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                             Text(
-                                text = "Live race broadcasts require a dedicated peer-to-peer video engine. Install the Ace Stream service to enable this feature. Open the app once to allow notification permissions, then come back here to watch live sessions.",
+                                text = "Live race streams require a dedicated P2P video engine. Follow these steps to enable the feature:",
                                 fontFamily = michromaFont,
                                 fontSize = 10.sp,
                                 color = Color.White.copy(alpha = 0.8f),
                                 lineHeight = 16.sp,
                                 modifier = Modifier.padding(bottom = 4.dp)
                             )
+                            
+                            val steps = listOf(
+                                "Install the Ace Stream app from the Play Store",
+                                "Open the app once to grant necessary permissions",
+                                "Come back to BOXBOXBOX to watch live sessions"
+                            )
+                            
+                            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                steps.forEachIndexed { index, step ->
+                                    Row(verticalAlignment = Alignment.Top) {
+                                        Text(
+                                            text = "${index + 1}.",
+                                            fontFamily = michromaFont,
+                                            fontSize = 11.sp,
+                                            color = Color(0xFF00BFFF),
+                                            modifier = Modifier.padding(end = 8.dp)
+                                        )
+                                        Text(
+                                            text = step,
+                                            fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif,
+                                            fontSize = 12.sp,
+                                            color = Color.White.copy(alpha = 0.9f),
+                                            lineHeight = 16.sp
+                                        )
+                                    }
+                                }
+                            }
                             
                             Box(
                                 modifier = Modifier
