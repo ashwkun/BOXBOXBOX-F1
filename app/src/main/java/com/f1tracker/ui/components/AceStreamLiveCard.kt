@@ -433,6 +433,7 @@ fun AceStreamLiveCard(
                                             override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
                                                 android.util.Log.e("AcePreview", "ExoPlayer final error: code=${error.errorCode}, msg=${error.message}", error.cause)
                                                 raceViewModel.setPreviewError(targetState.channel, "Preview requires Ace Stream Premium. Use the Launch button to watch with the free Ace Player app.")
+                                                com.f1tracker.util.AnalyticsLogger.streamPreviewFailed(targetState.channel.name, error.message ?: "unknown")
                                             }
                                         })
                                     }
@@ -481,6 +482,7 @@ fun AceStreamLiveCard(
                                     .clickable {
                                         try {
                                             val intent = repository.buildStreamIntent(targetState.channel.infohash)
+                                            com.f1tracker.util.AnalyticsLogger.streamLaunched(targetState.channel.name, "ace_player")
                                             context.startActivity(intent)
                                         } catch (e: ActivityNotFoundException) {
                                             Toast.makeText(context, "Could not open Ace Stream", Toast.LENGTH_SHORT).show()
@@ -586,6 +588,7 @@ fun AceStreamLiveCard(
                                     .clickable {
                                         try {
                                             val intent = repository.buildStreamIntent(targetState.channel.infohash)
+                                            com.f1tracker.util.AnalyticsLogger.streamLaunched(targetState.channel.name, "ace_player")
                                             context.startActivity(intent)
                                         } catch (e: ActivityNotFoundException) {
                                             Toast.makeText(context, "Could not open Ace Stream", Toast.LENGTH_SHORT).show()

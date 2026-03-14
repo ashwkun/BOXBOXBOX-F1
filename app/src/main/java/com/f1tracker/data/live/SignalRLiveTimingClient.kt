@@ -203,6 +203,7 @@ class SignalRLiveTimingClient {
                         reconnectAttempts = 0
                         isReconnecting = false
                         lastMessageTime = System.currentTimeMillis()
+                        com.f1tracker.util.AnalyticsLogger.liveTimingConnected()
                         
                         // 3. Subscribe
                         val subscribeCmd = """{"H":"Streaming","M":"Subscribe","A":[["Heartbeat","TimingData","TimingAppData","DriverList","CarData.z","Position.z","SessionInfo","TrackStatus","LapCount","ExtrapolatedClock"]],"I":1}"""
@@ -227,6 +228,7 @@ class SignalRLiveTimingClient {
                         _isConnected.value = false
                         _connectionStatus.value = ConnectionStatus.DISCONNECTED
                         _connectionError.value = t.message
+                        com.f1tracker.util.AnalyticsLogger.liveTimingDisconnected(t.message ?: "unknown")
                         scheduleReconnect()
                     }
                 })

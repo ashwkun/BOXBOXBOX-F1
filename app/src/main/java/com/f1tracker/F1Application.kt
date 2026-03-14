@@ -17,6 +17,7 @@ class F1Application : Application(), ImageLoaderFactory {
         // Initialize Core Services
         RetrofitClient.initialize(this) // Initialize HTTP Cache
         ExoPlayerPool.initialize(this)
+        com.f1tracker.util.AnalyticsLogger.init(this)
     }
     
     override fun newImageLoader(): ImageLoader {

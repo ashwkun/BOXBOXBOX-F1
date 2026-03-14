@@ -34,9 +34,6 @@ class MainActivity : ComponentActivity() {
     
     // State to hold intent data (url, target_tab)
     private val intentData = mutableStateOf<Pair<String, String>?>(null)
-    
-    // Firebase Analytics
-    private lateinit var firebaseAnalytics: com.google.firebase.analytics.FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,9 +58,6 @@ class MainActivity : ComponentActivity() {
                     android.util.Log.d("MainActivity", "Subscribed to topic: all_users")
                 }
             }
-            
-        // Initialize Firebase Analytics
-        firebaseAnalytics = com.google.firebase.analytics.FirebaseAnalytics.getInstance(this)
 
         // Load F1 driver and team data from JSON files
         loadF1Data()
@@ -129,6 +123,7 @@ class MainActivity : ComponentActivity() {
                     if (status is UpdateStatus.UpdateAvailable) {
                         updateStatus = status
                         if (status.shouldShowDialog) {
+                            com.f1tracker.util.AnalyticsLogger.appUpdateShown(status.release.tagName)
                             showUpdateDialog = true
                         }
                     }
@@ -151,6 +146,7 @@ class MainActivity : ComponentActivity() {
                         release = status.release,
                         onUpdateClick = {
                             showUpdateDialog = false
+                            com.f1tracker.util.AnalyticsLogger.appUpdateStarted(status.release.tagName)
                             // Start download
                             val downloader = ApkDownloader(this@MainActivity)
                             lifecycleScope.launch {

@@ -38,6 +38,11 @@ fun MainAppScreen(
     standingsViewModel: com.f1tracker.ui.viewmodels.StandingsViewModel = androidx.hilt.navigation.compose.hiltViewModel()
 ) {
     var currentDestination by remember { mutableStateOf(NavDestination.HOME) }
+    
+    // Track screen views on navigation
+    LaunchedEffect(currentDestination) {
+        com.f1tracker.util.AnalyticsLogger.screenView(currentDestination.name.lowercase())
+    }
     var webViewUrl by remember { mutableStateOf<String?>(null) }
     var selectedRace by remember { mutableStateOf<com.f1tracker.data.models.Race?>(null) }
     var selectedVideoId by remember { mutableStateOf<String?>(null) }
@@ -71,6 +76,7 @@ fun MainAppScreen(
     // Handle Intent Data (Deep Links / Notifications)
     LaunchedEffect(intentData) {
         intentData?.let { (url, targetTab) ->
+            com.f1tracker.util.AnalyticsLogger.deepLinkOpened(url, targetTab)
             // 1. Set up the background state (where to go when back is pressed)
             if (targetTab == "news") {
                 currentDestination = NavDestination.FEED
@@ -226,9 +232,16 @@ fun MainAppScreen(
                                     feedStartPermalink = permalink
                                     currentDestination = NavDestination.FEED
                                 },
-                                onRaceClick = { race -> selectedRace = race },
-                                onVideoClick = { videoId -> selectedVideoId = videoId },
+                                onRaceClick = { race ->
+                                    com.f1tracker.util.AnalyticsLogger.raceViewed(race.raceName, race.round)
+                                    selectedRace = race
+                                },
+                                onVideoClick = { videoId ->
+                                    com.f1tracker.util.AnalyticsLogger.videoOpened(videoId)
+                                    selectedVideoId = videoId
+                                },
                                 onEpisodeClick = { episode ->
+                                    com.f1tracker.util.AnalyticsLogger.podcastPlayed(episode.title)
                                     currentEpisode = episode
                                     audioPlayerManager.playEpisode(episode.audioUrl)
                                 },
@@ -250,6 +263,7 @@ fun MainAppScreen(
                                     currentDestination = NavDestination.STANDINGS
                                 },
                                 onViewResults = { result, raceName ->
+                                    com.f1tracker.util.AnalyticsLogger.sessionResultViewed(result.sessionName, raceName)
                                     selectedSessionResult = result
                                     selectedSessionRaceName = raceName
                                 },
@@ -274,8 +288,14 @@ fun MainAppScreen(
                         onTabChange = { standingsSelectedTab = it }
                     )
                     NavDestination.FEED -> FeedScreen(
-                        onNewsClick = { url -> webViewUrl = url },
-                        onVideoClick = { videoId -> selectedVideoId = videoId },
+                        onNewsClick = { url ->
+                            com.f1tracker.util.AnalyticsLogger.articleOpened(url)
+                            webViewUrl = url
+                        },
+                        onVideoClick = { videoId ->
+                            com.f1tracker.util.AnalyticsLogger.videoOpened(videoId)
+                            selectedVideoId = videoId
+                        },
                         onNavigateToReels = { permalink ->
                             reelsStartPermalink = permalink
                             currentDestination = NavDestination.REELS
