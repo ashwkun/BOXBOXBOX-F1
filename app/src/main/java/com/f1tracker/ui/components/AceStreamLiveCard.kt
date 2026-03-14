@@ -5,6 +5,8 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,12 +25,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.sp
+import com.f1tracker.R
 import com.f1tracker.data.acestream.AceStreamChannel
 import com.f1tracker.data.acestream.AceStreamRepository
 import com.f1tracker.ui.viewmodels.AceStreamState
@@ -91,28 +96,22 @@ fun AceStreamLiveCard(
                 Box(
                     modifier = Modifier
                         .size(32.dp)
-                        .then(
-                            if (state is AceStreamState.NotInstalled) {
-                                Modifier.background(Color.Transparent)
-                            } else {
-                                Modifier.background(BrandGradient, RoundedCornerShape(8.dp))
-                            }
-                        )
+                        .background(BrandGradient, RoundedCornerShape(8.dp))
                         .graphicsLayer(alpha = if (state is AceStreamState.NotInstalled || state is AceStreamState.InstalledEngineOff) 1f else alpha),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = if (state is AceStreamState.NotInstalled) Icons.Outlined.Info else Icons.Default.PlayArrow,
+                        imageVector = if (state is AceStreamState.NotInstalled) Icons.Default.Settings else Icons.Default.PlayArrow,
                         contentDescription = null,
-                        tint = if (state is AceStreamState.NotInstalled) Color.White.copy(alpha = 0.5f) else Color.White,
-                        modifier = Modifier.size(if (state is AceStreamState.NotInstalled) 24.dp else 20.dp)
+                        tint = Color.White,
+                        modifier = Modifier.size(20.dp)
                     )
                 }
 
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = when (state) {
-                            is AceStreamState.NotInstalled -> "BROADCAST INTEGRATION"
+                            is AceStreamState.NotInstalled -> "STREAM SETUP REQUIRED"
                             is AceStreamState.InstalledEngineOff -> "LIVE BROADCASTS DETECTED"
                             is AceStreamState.Searching -> "SCANNING P2P NETWORK"
                             is AceStreamState.StreamsReady -> "LIVE STREAMS READY"
@@ -158,9 +157,9 @@ fun AceStreamLiveCard(
             ) { targetState ->
                 when (targetState) {
                     is AceStreamState.NotInstalled -> {
-                        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                             Text(
-                                text = "Missing required streaming engine. Install the official Ace Stream app from the Play Store to discover and watch live sessions.",
+                                text = "Live race broadcasts require a dedicated peer-to-peer video engine. Install the Ace Stream service to enable this feature.",
                                 fontFamily = michromaFont,
                                 fontSize = 10.sp,
                                 color = Color.White.copy(alpha = 0.8f),
@@ -168,40 +167,17 @@ fun AceStreamLiveCard(
                                 modifier = Modifier.padding(bottom = 4.dp)
                             )
                             
-                            Row(
+                            Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(Color(0xFF222222))
-                                    .border(1.dp, Color.White.copy(alpha = 0.15f), RoundedCornerShape(8.dp))
-                                    .clickable { onInstallRequested() }
-                                    .padding(vertical = 10.dp),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
+                                    .clickable { onInstallRequested() },
+                                contentAlignment = Alignment.Center
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.PlayArrow,
-                                    contentDescription = "Google Play Store",
-                                    tint = Color(0xFF00E676), // Android/Google Play green
-                                    modifier = Modifier.size(28.dp)
+                                Image(
+                                    painter = painterResource(id = R.drawable.google_play_badge),
+                                    contentDescription = "Get it on Google Play",
+                                    modifier = Modifier.height(48.dp)
                                 )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Column(verticalArrangement = Arrangement.Center) {
-                                    Text(
-                                        text = "GET IT ON",
-                                        fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif,
-                                        fontSize = 8.sp,
-                                        color = Color.White.copy(alpha = 0.7f),
-                                        letterSpacing = 0.5.sp
-                                    )
-                                    Text(
-                                        text = "Google Play",
-                                        fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif,
-                                        fontSize = 14.sp,
-                                        color = Color.White,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
                             }
                         }
                     }
