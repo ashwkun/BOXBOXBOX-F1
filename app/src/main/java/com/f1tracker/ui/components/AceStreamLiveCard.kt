@@ -398,32 +398,44 @@ fun AceStreamLiveCard(
                                         .setReadTimeoutMs(15_000)
                                         .setAllowCrossProtocolRedirects(true)
                                 }
+                                // Custom retry policy: retry HTTP errors silently for up to ~30s
+                                // ExoPlayer keeps showing its buffering spinner during retries — no UI flicker
+                                val retryPolicy = remember {
+                                    object : androidx.media3.exoplayer.upstream.DefaultLoadErrorHandlingPolicy() {
+                                        override fun getRetryDelayMsFor(loadErrorInfo: androidx.media3.exoplayer.upstream.LoadErrorHandlingPolicy.LoadErrorInfo): Long {
+                                            val error = loadErrorInfo.exception
+                                            val isHttpError = error is androidx.media3.datasource.HttpDataSource.InvalidResponseCodeException
+                                            val isIOError = error is java.io.IOException
+                                            // Retry HTTP 500/501/503 and IO errors up to 10 times (3s each = ~30s total)
+                                            return if ((isHttpError || isIOError) && loadErrorInfo.errorCount <= 10) {
+                                                android.util.Log.d("AcePreview", "Retry ${loadErrorInfo.errorCount}/10 after ${error.javaClass.simpleName}: ${error.message}")
+                                                3_000L // 3 second retry delay
+                                            } else {
+                                                android.util.Log.e("AcePreview", "Giving up after ${loadErrorInfo.errorCount} retries: ${error.message}")
+                                                androidx.media3.common.C.TIME_UNSET // Give up — trigger onPlayerError
+                                            }
+                                        }
+                                    }
+                                }
                                 val mediaSourceFactory = remember {
                                     androidx.media3.exoplayer.source.DefaultMediaSourceFactory(httpDataSourceFactory)
+                                        .setLoadErrorHandlingPolicy(retryPolicy)
                                 }
-                                var errorCount by remember { mutableIntStateOf(0) }
-                                val maxRetries = 3
                                 val exoPlayer = remember {
                                     ExoPlayer.Builder(context)
                                         .setMediaSourceFactory(mediaSourceFactory)
+                                        .setLoadControl(
+                                            androidx.media3.exoplayer.DefaultLoadControl.Builder()
+                                                .setBufferDurationsMs(5_000, 30_000, 2_500, 5_000)
+                                                .build()
+                                        )
                                         .build().apply {
                                         addListener(object : androidx.media3.common.Player.Listener {
                                             override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
-                                                errorCount++
+                                                android.util.Log.e("AcePreview", "ExoPlayer final error: code=${error.errorCode}, msg=${error.message}", error.cause)
+                                                raceViewModel.setPreviewError(targetState.channel, "Preview couldn't connect — this is normal for P2P streams.")
                                             }
                                         })
-                                    }
-                                }
-
-                                // Retry logic: when errorCount changes, wait 3s and retry
-                                LaunchedEffect(errorCount) {
-                                    if (errorCount in 1..maxRetries) {
-                                        kotlinx.coroutines.delay(3000L)
-                                        exoPlayer.setMediaItem(MediaItem.fromUri(Uri.parse(targetState.playbackUrl)))
-                                        exoPlayer.prepare()
-                                        exoPlayer.playWhenReady = true
-                                    } else if (errorCount > maxRetries) {
-                                        raceViewModel.setPreviewError(targetState.channel, "Preview couldn't connect — this is normal for P2P streams.")
                                     }
                                 }
 
@@ -437,7 +449,7 @@ fun AceStreamLiveCard(
                                         exoPlayer.release()
                                     }
                                 }
-                                
+
                                 AndroidView(
                                     factory = { ctx ->
                                         PlayerView(ctx).apply {

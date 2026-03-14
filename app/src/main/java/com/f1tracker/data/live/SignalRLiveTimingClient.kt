@@ -154,8 +154,13 @@ class SignalRLiveTimingClient {
         scope.launch {
             try {
                 Log.d(TAG, "🔌 Starting negotiation with F1 SignalR...")
-                _isConnected.value = false
-                _connectionStatus.value = if (isReconnecting) ConnectionStatus.RECONNECTING else ConnectionStatus.CONNECTING
+                // Only show connecting UI if we don't have data yet
+                // If we have data, reconnect silently in background
+                val hasData = driverMap.isNotEmpty()
+                if (!hasData) {
+                    _isConnected.value = false
+                    _connectionStatus.value = if (isReconnecting) ConnectionStatus.RECONNECTING else ConnectionStatus.CONNECTING
+                }
                 _connectionError.value = null
 
                 // 1. Negotiate
@@ -252,8 +257,11 @@ class SignalRLiveTimingClient {
         isReconnecting = true
         val delayMs = minOf(2000L * (1L shl (reconnectAttempts - 1)), 30000L) // 2s, 4s, 8s, 16s, 30s max
         Log.d(TAG, "🔄 Reconnect attempt $reconnectAttempts in ${delayMs}ms")
-        _connectionStatus.value = ConnectionStatus.RECONNECTING
-        _connectionError.value = "Reconnecting... (attempt $reconnectAttempts)"
+        // Only show reconnecting status if we have no data
+        if (driverMap.isEmpty()) {
+            _connectionStatus.value = ConnectionStatus.RECONNECTING
+            _connectionError.value = "Reconnecting... (attempt $reconnectAttempts)"
+        }
         
         scope.launch {
             kotlinx.coroutines.delay(delayMs)
@@ -266,12 +274,13 @@ class SignalRLiveTimingClient {
     
     // Called when app resumes from background — checks if connection is stale
     private var lastEnsureConnectedTime = 0L
+    private var heartbeatJob: kotlinx.coroutines.Job? = null
     
     fun ensureConnected() {
         val now = System.currentTimeMillis()
         
-        // Cooldown: don't re-enter within 10 seconds
-        if (now - lastEnsureConnectedTime < 10_000) return
+        // Cooldown: don't re-enter within 5 seconds
+        if (now - lastEnsureConnectedTime < 5_000) return
         // Don't interfere if already reconnecting
         if (isReconnecting) return
         // Don't interfere if currently connecting
@@ -280,7 +289,7 @@ class SignalRLiveTimingClient {
         lastEnsureConnectedTime = now
         
         val timeSinceLastMessage = now - lastMessageTime
-        val isStale = timeSinceLastMessage > 60_000 // No messages for 60 seconds = stale
+        val isStale = timeSinceLastMessage > 30_000 // No messages for 30 seconds = stale
         
         if (!_isConnected.value || isStale) {
             Log.d(TAG, "🔄 ensureConnected: connected=${_isConnected.value}, stale=$isStale (${timeSinceLastMessage}ms since last msg)")
@@ -289,6 +298,27 @@ class SignalRLiveTimingClient {
             try { webSocket?.close(1000, "Reconnecting") } catch (_: Exception) {}
             webSocket = null
             connect()
+        }
+        
+        // Start a periodic heartbeat check if not already running
+        startHeartbeat()
+    }
+    
+    private fun startHeartbeat() {
+        if (heartbeatJob?.isActive == true) return
+        heartbeatJob = scope.launch {
+            while (true) {
+                kotlinx.coroutines.delay(15_000) // Check every 15 seconds
+                val timeSinceLastMessage = System.currentTimeMillis() - lastMessageTime
+                if (timeSinceLastMessage > 30_000 && _isConnected.value && !isReconnecting) {
+                    Log.d(TAG, "💓 Heartbeat: stale connection detected (${timeSinceLastMessage}ms). Reconnecting...")
+                    reconnectAttempts = 0
+                    isReconnecting = true
+                    try { webSocket?.close(1000, "Stale") } catch (_: Exception) {}
+                    webSocket = null
+                    connect()
+                }
+            }
         }
     }
 

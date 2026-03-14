@@ -735,10 +735,10 @@ fun LiveScreen(
                         }
                         1 -> {
                             // STREAM tab — Ace Stream card
-                            Column(
+                            // Do NOT add verticalScroll here — AceStreamLiveCard handles its own scrolling internally
+                            Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .verticalScroll(rememberScrollState())
                                     .padding(horizontal = 8.dp, vertical = 8.dp)
                             ) {
                                 com.f1tracker.ui.components.AceStreamLiveCard(
