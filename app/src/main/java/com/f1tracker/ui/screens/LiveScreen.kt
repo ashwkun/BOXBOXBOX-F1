@@ -63,6 +63,7 @@ fun LiveScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 liveClient.ensureConnected()
+                raceViewModel.checkAceStreamStatus()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
