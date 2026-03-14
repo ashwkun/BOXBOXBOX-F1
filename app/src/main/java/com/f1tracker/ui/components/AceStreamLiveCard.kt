@@ -54,7 +54,7 @@ fun AceStreamLiveCard(
             .border(
                 width = 1.dp,
                 color = when (state) {
-                    is AceStreamState.NotInstalled -> Color.White.copy(alpha = 0.1f)
+                    is AceStreamState.NotInstalled -> AceStreamBlue.copy(alpha = 0.3f)
                     is AceStreamState.InstalledEngineOff -> AceStreamOrange.copy(alpha = 0.3f)
                     is AceStreamState.Searching -> AceStreamBlue.copy(alpha = 0.3f)
                     is AceStreamState.StreamsReady -> AceStreamOrange.copy(alpha = 0.5f)
@@ -90,13 +90,7 @@ fun AceStreamLiveCard(
                 Box(
                     modifier = Modifier
                         .size(32.dp)
-                        .then(
-                            if (state is AceStreamState.NotInstalled) {
-                                Modifier.background(Color.Gray.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
-                            } else {
-                                Modifier.background(BrandGradient, RoundedCornerShape(8.dp))
-                            }
-                        )
+                        .background(BrandGradient, RoundedCornerShape(8.dp))
                         .graphicsLayer(alpha = if (state is AceStreamState.NotInstalled || state is AceStreamState.InstalledEngineOff) 1f else alpha),
                     contentAlignment = Alignment.Center
                 ) {
@@ -111,7 +105,7 @@ fun AceStreamLiveCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = when (state) {
-                            is AceStreamState.NotInstalled -> "FREE PREMIUM STREAMS"
+                            is AceStreamState.NotInstalled -> "P2P STREAM INTEGRATION"
                             is AceStreamState.InstalledEngineOff -> "LIVE BROADCASTS DETECTED"
                             is AceStreamState.Searching -> "SCANNING P2P NETWORK"
                             is AceStreamState.StreamsReady -> "LIVE STREAMS READY"
@@ -159,31 +153,48 @@ fun AceStreamLiveCard(
                     is AceStreamState.NotInstalled -> {
                         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Text(
-                                text = "To watch live F1 broadcasts in crystal clear quality for free, you need to install the Ace Stream Engine. This is required to decode P2P traffic.",
+                                text = "F1 Tracker uses peer-to-peer technology to provide reliable, high-definition live broadcasts. Install the Ace Stream Engine to enable this feature.",
                                 fontFamily = michromaFont,
                                 fontSize = 10.sp,
-                                color = Color.White.copy(alpha = 0.7f),
+                                color = Color.White.copy(alpha = 0.8f),
                                 lineHeight = 16.sp,
                                 modifier = Modifier.padding(bottom = 4.dp)
                             )
                             
-                            Box(
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clip(RoundedCornerShape(8.dp))
-                                    .background(Color.White.copy(alpha = 0.1f))
+                                    .background(Color(0xFF222222))
+                                    .border(1.dp, Color.White.copy(alpha = 0.15f), RoundedCornerShape(8.dp))
                                     .clickable { onInstallRequested() }
-                                    .padding(vertical = 12.dp),
-                                contentAlignment = Alignment.Center
+                                    .padding(vertical = 10.dp),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    text = "INSTALL ACE STREAM",
-                                    fontFamily = michromaFont,
-                                    fontSize = 10.sp,
-                                    color = Color.White,
-                                    fontWeight = FontWeight.Bold,
-                                    letterSpacing = 1.sp
+                                Icon(
+                                    imageVector = Icons.Default.PlayArrow,
+                                    contentDescription = "Google Play Store",
+                                    tint = Color(0xFF00E676), // Android/Google Play green
+                                    modifier = Modifier.size(28.dp)
                                 )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Column(verticalArrangement = Arrangement.Center) {
+                                    Text(
+                                        text = "GET IT ON",
+                                        fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif,
+                                        fontSize = 8.sp,
+                                        color = Color.White.copy(alpha = 0.7f),
+                                        letterSpacing = 0.5.sp
+                                    )
+                                    Text(
+                                        text = "Google Play",
+                                        fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif,
+                                        fontSize = 14.sp,
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
                             }
                         }
                     }
