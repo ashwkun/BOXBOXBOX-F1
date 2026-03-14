@@ -159,7 +159,7 @@ fun AceStreamLiveCard(
                     is AceStreamState.NotInstalled -> {
                         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                             Text(
-                                text = "Live race broadcasts require a dedicated peer-to-peer video engine. Install the Ace Stream service to enable this feature.",
+                                text = "Install the Ace Stream app, open it once to allow notification permissions, then come back here to watch live sessions.",
                                 fontFamily = michromaFont,
                                 fontSize = 10.sp,
                                 color = Color.White.copy(alpha = 0.8f),
