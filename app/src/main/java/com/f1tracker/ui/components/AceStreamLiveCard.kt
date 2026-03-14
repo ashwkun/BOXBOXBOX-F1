@@ -10,7 +10,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -112,7 +114,7 @@ fun AceStreamLiveCard(
                     Text(
                         text = when (state) {
                             is AceStreamState.NotInstalled -> "STREAM SETUP REQUIRED"
-                            is AceStreamState.InstalledEngineOff -> "LIVE BROADCASTS DETECTED"
+                            is AceStreamState.InstalledEngineOff -> "START BROADCAST NETWORK"
                             is AceStreamState.Searching -> "SCANNING P2P NETWORK"
                             is AceStreamState.StreamsReady -> "LIVE STREAMS READY"
                             is AceStreamState.Error -> "STREAM FETCH FAILED"
@@ -185,10 +187,10 @@ fun AceStreamLiveCard(
                                         )
                                         Text(
                                             text = step,
-                                            fontFamily = androidx.compose.ui.text.font.FontFamily.SansSerif,
-                                            fontSize = 12.sp,
+                                            fontFamily = michromaFont,
+                                            fontSize = 9.sp,
                                             color = Color.White.copy(alpha = 0.9f),
-                                            lineHeight = 16.sp
+                                            lineHeight = 14.sp
                                         )
                                     }
                                 }
@@ -212,7 +214,7 @@ fun AceStreamLiveCard(
                     is AceStreamState.InstalledEngineOff -> {
                         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Text(
-                                text = "Ace Stream is installed but sleeping. Start the engine to search for Sky Sports and ESPN feeds.",
+                                text = "Your stream engine is currently offline. Launch the Ace Stream app to connect, then head back to BOXBOXBOX to view live feeds.",
                                 fontFamily = michromaFont,
                                 fontSize = 10.sp,
                                 color = AceStreamOrange.copy(alpha = 0.9f),
@@ -230,7 +232,7 @@ fun AceStreamLiveCard(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "START ENGINE",
+                                    text = "LAUNCH ACE STREAM",
                                     fontFamily = michromaFont,
                                     fontSize = 10.sp,
                                     color = Color.White,
@@ -303,26 +305,33 @@ fun AceStreamLiveCard(
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Text(
-                                text = "Tap a channel to open securely in Ace Player",
+                                text = "Swipe to view English streams. Tap to cast.",
                                 fontFamily = michromaFont,
                                 fontSize = 8.sp,
                                 color = Color.White.copy(alpha = 0.5f),
                                 modifier = Modifier.padding(bottom = 4.dp)
                             )
                             
-                            targetState.channels.take(8).forEach { channel ->
-                                AceStreamChannelItem(
-                                    channel = channel,
-                                    michromaFont = michromaFont,
-                                    onClick = {
-                                        try {
-                                            val intent = repository.buildStreamIntent(channel.infohash)
-                                            context.startActivity(intent)
-                                        } catch (e: ActivityNotFoundException) {
-                                            Toast.makeText(context, "Could not open Ace Stream", Toast.LENGTH_SHORT).show()
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                targetState.channels.take(12).forEach { channel ->
+                                    AceStreamChannelItem(
+                                        channel = channel,
+                                        michromaFont = michromaFont,
+                                        onClick = {
+                                            try {
+                                                val intent = repository.buildStreamIntent(channel.infohash)
+                                                context.startActivity(intent)
+                                            } catch (e: ActivityNotFoundException) {
+                                                Toast.makeText(context, "Could not open Ace Stream", Toast.LENGTH_SHORT).show()
+                                            }
                                         }
-                                    }
-                                )
+                                    )
+                                }
                             }
                         }
                     }
@@ -340,7 +349,7 @@ private fun AceStreamChannelItem(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
+            .width(260.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(Color.White.copy(alpha = 0.05f))
             .clickable(onClick = onClick)
