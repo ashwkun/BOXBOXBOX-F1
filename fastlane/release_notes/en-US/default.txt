@@ -1,0 +1,26 @@
+# v1.20.1 - Dynamic Configs & Tracking Update
+
+*This minor release retains the massive improvements from v1.20.0 while adding crucial tracking and stream stability fixes.*
+
+## What's New in v1.20.1
+*   **Dynamic Stream Configuration System:** The Live Stream channels (Sky Sports, F1TV) and anti-adblock scripts are now synced directly to Firebase Realtime Database. This means **we no longer need app updates to fix broken streams**! Broken domains or new pop-up ad banners can now be patched and pushed to users instantly from the Firebase Console.
+*   **Firebase Analytics Integration:** Added deep, app-wide engagement metrics powered by Firebase Analytics.
+*   **Automated Tracking Reliability:** Added analytics tracking payloads to the automated GitHub Actions pipeline so daily automated F1 News pushes show up properly in the Firebase Engagement metrics.
+
+---
+### Previous Changes (Included from v1.20.0)
+
+*   **Integrated Premium Stream Player:**
+    *   Fully integrated native-feeling Live Stream Player.
+    *   Persistent immersive fullscreen playback regardless of app state.
+*   **Stream Fixes:**
+    *   Massive improvements to ad blocking and tap-to-unmute behaviors.
+    *   F1 TV and Sky Sports sync bug fixes.
+*   **UI Quality-of-Life:**
+    *   Live timing pulse animations and UI polish.
+
+**Update Instructions:**
+If you encounter an `"App not installed as package conflicts with an existing package"` error during the update:
+1. Uninstall the existing BOXBOXBOX F1 app from your device.
+2. Download and install the new `boxboxbox.apk` below.
+*(This is a one-time process caused by a recent security certificate upgrade).*

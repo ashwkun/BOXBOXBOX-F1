@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -37,7 +38,7 @@ import com.f1tracker.data.live.SignalRLiveTimingClient
 import com.f1tracker.data.live.LiveDriver
 import com.f1tracker.data.live.ConnectionStatus
 import com.f1tracker.data.acestream.AceStreamRepository
-import com.f1tracker.ui.components.AceStreamBottomSheet
+import com.f1tracker.ui.components.FullScreenAudioPlayer
 
 @Composable
 fun LiveScreen(
@@ -116,7 +117,8 @@ fun LiveScreen(
     
     val context = LocalContext.current
     val aceStreamRepo = remember { AceStreamRepository.getInstance() }
-    var showAceStreamSheet by remember { mutableStateOf(false) }
+    val aceStreamState by raceViewModel.aceStreamState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
     
     Box(
         modifier = Modifier
@@ -285,17 +287,26 @@ fun LiveScreen(
                     raceViewModel = raceViewModel,
                     brigendsFont = brigendsFont,
                     michromaFont = michromaFont,
-                    onWatchStreamClick = onStreamClick,
-                    onAceStreamClick = {
-                        if (aceStreamRepo.isEngineInstalled(context)) {
-                            showAceStreamSheet = true
-                        } else {
-                            try {
-                                context.startActivity(aceStreamRepo.buildInstallIntent())
-                            } catch (e: Exception) {
-                                Toast.makeText(context, "Install Ace Stream from Play Store", Toast.LENGTH_LONG).show()
+                    aceStreamState = aceStreamState,
+                    onInstallAceStreamRequested = {
+                        try {
+                            context.startActivity(aceStreamRepo.buildInstallIntent())
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "Install Ace Stream from Play Store", Toast.LENGTH_LONG).show()
+                        }
+                    },
+                    onStartAceStreamEngineRequested = {
+                        coroutineScope.launch {
+                            if (!aceStreamRepo.isEngineRunning()) {
+                                aceStreamRepo.startEngine(context)
+                                Toast.makeText(context, "Starting Ace Stream Engine...", Toast.LENGTH_SHORT).show()
+                                kotlinx.coroutines.delay(2000)
+                                raceViewModel.checkAceStreamStatus()
                             }
                         }
+                    },
+                    onManualStreamRefreshRequested = {
+                        raceViewModel.fetchAceStreams()
                     }
                 )
             }
@@ -569,6 +580,35 @@ fun LiveScreen(
             // Show live data
             else -> {
                 Column {
+                    // Inject Ace Stream Premium Card at the top of the race view
+                    Box(modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)) {
+                        com.f1tracker.ui.components.AceStreamLiveCard(
+                            state = aceStreamState,
+                            michromaFont = michromaFont,
+                            onInstallRequested = {
+                                try {
+                                    context.startActivity(aceStreamRepo.buildInstallIntent())
+                                } catch (e: Exception) {
+                                    Toast.makeText(context, "Install Ace Stream from Play Store", Toast.LENGTH_LONG).show()
+                                }
+                            },
+                            onStartEngineRequested = {
+                                coroutineScope.launch {
+                                    if (!aceStreamRepo.isEngineRunning()) {
+                                        aceStreamRepo.startEngine(context)
+                                        Toast.makeText(context, "Starting Ace Stream Engine...", Toast.LENGTH_SHORT).show()
+                                        // Give it a moment, then recheck
+                                        kotlinx.coroutines.delay(2000)
+                                        raceViewModel.checkAceStreamStatus()
+                                    }
+                                }
+                            },
+                            onManualRefreshRequested = {
+                                raceViewModel.fetchAceStreams()
+                            }
+                        )
+                    }
+
                     // Session-specific column headers
                     SessionHeader(sessionType = sessionType, michromaFont = michromaFont)
                     
@@ -655,99 +695,6 @@ fun LiveScreen(
         }
     }
     
-    // Floating stream buttons - only show when active session running
-    if (shouldConnect && liveDrivers.isNotEmpty()) {
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.End
-        ) {
-            // Ace Stream button
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .background(
-                    Brush.horizontalGradient(
-                        listOf(Color(0xFFFF6B00), Color(0xFF0088FF))
-                    )
-                )
-                .clickable {
-                    if (aceStreamRepo.isEngineInstalled(context)) {
-                        showAceStreamSheet = true
-                    } else {
-                        // Prompt to install
-                        try {
-                            context.startActivity(aceStreamRepo.buildInstallIntent())
-                        } catch (e: Exception) {
-                            Toast.makeText(context, "Install Ace Stream from Play Store", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-                .padding(horizontal = 16.dp, vertical = 10.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "Ace Stream",
-                    tint = Color.White,
-                    modifier = Modifier.size(16.dp)
-                )
-                Text(
-                    text = "ACE STREAM",
-                    fontFamily = FontFamily(Font(R.font.michroma, FontWeight.Normal)),
-                    fontSize = 8.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp
-                )
-            }
-        }
-
-        // Watch Stream button (existing)
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .background(
-                    Brush.horizontalGradient(
-                        listOf(Color(0xFFE6007E), Color(0xFFFF0040))
-                    )
-                )
-                .clickable { onStreamClick() }
-                .padding(horizontal = 16.dp, vertical = 10.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.PlayArrow,
-                    contentDescription = "Watch Stream",
-                    tint = Color.White,
-                    modifier = Modifier.size(16.dp)
-                )
-                Text(
-                    text = "WATCH STREAM",
-                    fontFamily = FontFamily(Font(R.font.michroma, FontWeight.Normal)),
-                    fontSize = 8.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp
-                )
-            }
-        }
-        }
-    }
-
-    // Ace Stream Bottom Sheet
-    AceStreamBottomSheet(
-        showSheet = showAceStreamSheet,
-        onDismiss = { showAceStreamSheet = false }
-    )
     } // Close outer Box
 }
 
@@ -1842,8 +1789,10 @@ private fun NoSessionActiveScreen(
     raceViewModel: com.f1tracker.ui.viewmodels.RaceViewModel,
     brigendsFont: FontFamily,
     michromaFont: FontFamily,
-    onWatchStreamClick: () -> Unit,
-    onAceStreamClick: () -> Unit
+    aceStreamState: com.f1tracker.ui.viewmodels.AceStreamState,
+    onInstallAceStreamRequested: () -> Unit,
+    onStartAceStreamEngineRequested: () -> Unit,
+    onManualStreamRefreshRequested: () -> Unit
 ) {
     val accentColor = Color(0xFFFF0080)
     
@@ -1893,8 +1842,10 @@ private fun NoSessionActiveScreen(
                         brigendsFont = brigendsFont,
                         michromaFont = michromaFont,
                         accentColor = accentColor,
-                        onWatchStreamClick = onWatchStreamClick,
-                        onAceStreamClick = onAceStreamClick
+                        aceStreamState = aceStreamState,
+                        onInstallAceStreamRequested = onInstallAceStreamRequested,
+                        onStartAceStreamEngineRequested = onStartAceStreamEngineRequested,
+                        onManualStreamRefreshRequested = onManualStreamRefreshRequested
                     )
                 } else {
                     NoUpcomingSessionsDisplay(brigendsFont, michromaFont)
@@ -1929,8 +1880,10 @@ private fun NoSessionActiveScreen(
                         brigendsFont = brigendsFont,
                         michromaFont = michromaFont,
                         accentColor = accentColor,
-                        onWatchStreamClick = onWatchStreamClick,
-                        onAceStreamClick = onAceStreamClick
+                        aceStreamState = aceStreamState,
+                        onInstallAceStreamRequested = onInstallAceStreamRequested,
+                        onStartAceStreamEngineRequested = onStartAceStreamEngineRequested,
+                        onManualStreamRefreshRequested = onManualStreamRefreshRequested
                     )
                 } else {
                     // Fallback to main event if upcomingEvents is empty
@@ -1952,8 +1905,10 @@ private fun NoSessionActiveScreen(
                         brigendsFont = brigendsFont,
                         michromaFont = michromaFont,
                         accentColor = accentColor,
-                        onWatchStreamClick = onWatchStreamClick,
-                        onAceStreamClick = onAceStreamClick
+                        aceStreamState = aceStreamState,
+                        onInstallAceStreamRequested = onInstallAceStreamRequested,
+                        onStartAceStreamEngineRequested = onStartAceStreamEngineRequested,
+                        onManualStreamRefreshRequested = onManualStreamRefreshRequested
                     )
                 }
             }
@@ -2102,8 +2057,10 @@ private fun CountdownDisplay(
     brigendsFont: FontFamily,
     michromaFont: FontFamily,
     accentColor: Color,
-    onWatchStreamClick: () -> Unit,
-    onAceStreamClick: () -> Unit
+    aceStreamState: com.f1tracker.ui.viewmodels.AceStreamState,
+    onInstallAceStreamRequested: () -> Unit,
+    onStartAceStreamEngineRequested: () -> Unit,
+    onManualStreamRefreshRequested: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -2145,137 +2102,14 @@ private fun CountdownDisplay(
         
         Spacer(modifier = Modifier.height(16.dp))
         
-        // WATCH OPTIONS CARD
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    width = 1.dp,
-                    color = Color.White.copy(alpha = 0.1f),
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .background(Color(0xFF111111), RoundedCornerShape(16.dp))
-                .padding(16.dp)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.PlayCircle,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        text = "WATCH F1",
-                        fontFamily = michromaFont,
-                        fontSize = 12.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
-                    )
-                }
-
-                // Ace Stream Option
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Brush.horizontalGradient(listOf(Color(0xFFFF6B00), Color(0xFF0088FF))))
-                            .clickable { onAceStreamClick() }
-                            .padding(horizontal = 12.dp, vertical = 10.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "Ace Stream",
-                                tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Text(
-                                text = "ACE STREAM (P2P)",
-                                fontFamily = michromaFont,
-                                fontSize = 10.sp,
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                    
-                    Column(
-                        modifier = Modifier.padding(start = 28.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text("• High quality P2P streaming (FHD)", fontFamily = michromaFont, fontSize = 8.sp, color = Color.White.copy(alpha = 0.6f))
-                        Text("• Needs Ace Stream app installed from Play Store and running in background", fontFamily = michromaFont, fontSize = 8.sp, color = Color.White.copy(alpha = 0.6f))
-                        Text("• Some channels are live 24/7", fontFamily = michromaFont, fontSize = 8.sp, color = Color.White.copy(alpha = 0.6f))
-                    }
-                }
-                
-                // Divider
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(Color.White.copy(alpha = 0.1f))
-                )
-
-                // In-App Web Stream Option
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Brush.horizontalGradient(listOf(Color(0xFFE6007E), Color(0xFFFF0040))))
-                            .clickable { onWatchStreamClick() }
-                            .padding(horizontal = 12.dp, vertical = 10.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "Web Stream",
-                                tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Text(
-                                text = "IN-APP STREAM",
-                                fontFamily = michromaFont,
-                                fontSize = 10.sp,
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                    
-                    Column(
-                        modifier = Modifier.padding(start = 28.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Text("• Instant access, no setup required", fontFamily = michromaFont, fontSize = 8.sp, color = Color.White.copy(alpha = 0.6f))
-                        Text("• Multiple broadcast languages", fontFamily = michromaFont, fontSize = 8.sp, color = Color.White.copy(alpha = 0.6f))
-                        Text("• May buffer depending on server load", fontFamily = michromaFont, fontSize = 8.sp, color = Color.White.copy(alpha = 0.6f))
-                    }
-                }
-            }
-        }
+        // Native Embedded Ace Stream Card
+        com.f1tracker.ui.components.AceStreamLiveCard(
+            state = aceStreamState,
+            michromaFont = michromaFont,
+            onInstallRequested = onInstallAceStreamRequested,
+            onStartEngineRequested = onStartAceStreamEngineRequested,
+            onManualRefreshRequested = onManualStreamRefreshRequested
+        )
     }
 }
 

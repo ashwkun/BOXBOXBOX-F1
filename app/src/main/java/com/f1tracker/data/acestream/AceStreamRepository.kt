@@ -285,6 +285,16 @@ class AceStreamRepository {
     }
 
     /**
+     * Start the Ace Stream Engine app (brings it to foreground/starts service).
+     */
+    fun startEngine(context: Context) {
+        val intent = buildLaunchEngineIntent(context)
+        if (intent != null) {
+            context.startActivity(intent)
+        }
+    }
+
+    /**
      * Build an Intent to install Ace Stream from the Play Store.
      */
     fun buildInstallIntent(): Intent {

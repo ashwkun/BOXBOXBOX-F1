@@ -105,7 +105,6 @@ fun MainAppScreen(
     var currentPosition by remember { mutableStateOf(0L) }
     var duration by remember { mutableStateOf(0L) }
     var showFullScreenPlayer by remember { mutableStateOf(false) }
-    var showLiveStream by remember { mutableStateOf(false) }
     
     // Update audio position
     LaunchedEffect(isPlaying) {
@@ -130,7 +129,6 @@ fun MainAppScreen(
     // Handle system back button
     BackHandler {
         when {
-            showLiveStream -> showLiveStream = false
             showFullScreenPlayer -> showFullScreenPlayer = false
             selectedVideoId != null -> selectedVideoId = null
             selectedSessionResult != null -> selectedSessionResult = null
@@ -172,10 +170,6 @@ fun MainAppScreen(
             onClose = {
                 showFullScreenPlayer = false
             }
-        )
-    } else if (showLiveStream) {
-        com.f1tracker.ui.components.LiveStreamWebView(
-            onClose = { showLiveStream = false }
         )
     } else if (selectedVideoId != null) {
         // Show YouTube Player if video is selected
@@ -270,9 +264,11 @@ fun MainAppScreen(
                         onTabChange = { tab -> scheduleSelectedTab = tab },
                         onRaceClick = { race -> selectedRace = race }
                     )
-                    NavDestination.LIVE -> LiveScreen(
-                        onStreamClick = { showLiveStream = true }
-                    )
+                    NavDestination.LIVE -> {
+                        LiveScreen(
+                            raceViewModel = raceViewModel
+                        )
+                    }
                     NavDestination.STANDINGS -> StandingsScreen(
                         selectedTab = standingsSelectedTab,
                         onTabChange = { standingsSelectedTab = it }

@@ -16,10 +16,22 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import android.app.Application
+import com.f1tracker.data.acestream.AceStreamChannel
+import com.f1tracker.data.acestream.AceStreamRepository
+
+sealed class AceStreamState {
+    object NotInstalled : AceStreamState()
+    object InstalledEngineOff : AceStreamState()
+    object Searching : AceStreamState()
+    data class StreamsReady(val channels: List<AceStreamChannel>) : AceStreamState()
+    data class Error(val message: String) : AceStreamState()
+}
 
 @HiltViewModel
 class RaceViewModel @Inject constructor(
-    private val repository: F1Repository
+    private val repository: F1Repository,
+    private val application: Application
 ) : ViewModel() {
 
     private val _raceWeekendState = MutableStateFlow<RaceWeekendState>(RaceWeekendState.Loading)
@@ -42,6 +54,10 @@ class RaceViewModel @Inject constructor(
 
     private val _lastYearRaceResults = MutableStateFlow<Race?>(null)
     val lastYearRaceResults: StateFlow<Race?> = _lastYearRaceResults.asStateFlow()
+    
+    // Ace Stream State
+    private val _aceStreamState = MutableStateFlow<AceStreamState>(AceStreamState.InstalledEngineOff)
+    val aceStreamState: StateFlow<AceStreamState> = _aceStreamState.asStateFlow()
 
     private var allRacesCache: List<Race> = emptyList()
     private var cachedRaceState: RaceWeekendState? = null
@@ -52,6 +68,53 @@ class RaceViewModel @Inject constructor(
         loadRaceWeekendState()
         loadLastRaceResult()
         startPeriodicUpdate()
+        checkAceStreamStatus()
+    }
+    
+    fun checkAceStreamStatus() {
+        viewModelScope.launch {
+            val aceStreamRepo = AceStreamRepository.getInstance()
+            
+            // 1. Check if installed
+            if (!aceStreamRepo.isEngineInstalled(application)) {
+                _aceStreamState.value = AceStreamState.NotInstalled
+                return@launch
+            }
+            
+            // 2. Check if engine is running
+            if (!aceStreamRepo.isEngineRunning()) {
+                _aceStreamState.value = AceStreamState.InstalledEngineOff
+                return@launch
+            }
+            
+            // 3. Engine is running, let's pre-fetch streams!
+            fetchAceStreams()
+        }
+    }
+    
+    fun fetchAceStreams() {
+        viewModelScope.launch {
+            val aceStreamRepo = AceStreamRepository.getInstance()
+            
+            _aceStreamState.value = AceStreamState.Searching
+            
+            try {
+                // Ensure engine is truly running before searching
+                if (!aceStreamRepo.isEngineRunning()) {
+                    _aceStreamState.value = AceStreamState.InstalledEngineOff
+                    return@launch
+                }
+                
+                val channels = aceStreamRepo.searchF1Channels()
+                if (channels.isEmpty()) {
+                    _aceStreamState.value = AceStreamState.Error("No English F1 streams found on P2P network.")
+                } else {
+                    _aceStreamState.value = AceStreamState.StreamsReady(channels)
+                }
+            } catch (e: Exception) {
+                _aceStreamState.value = AceStreamState.Error("Failed to connect to Ace Stream Engine.")
+            }
+        }
     }
 
     private fun startPeriodicUpdate() {
