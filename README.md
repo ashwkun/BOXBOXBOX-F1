@@ -9,6 +9,7 @@
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-7F52FF.svg)](https://kotlinlang.org/)
 [![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4.svg)](https://developer.android.com/jetpack/compose)
 [![Reddit](https://img.shields.io/badge/Connect%20on-Reddit-FF4500.svg?logo=reddit&logoColor=white)](https://www.reddit.com/user/Altruistic_Plenty696)
+[![Hypercommit](https://img.shields.io/badge/Hypercommit-DB2475)](https://hypercommit.com/boxboxbox-f1)
 
 *Because antigravity is free and I love F1* 🏁
 
