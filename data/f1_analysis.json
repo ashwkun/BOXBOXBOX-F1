@@ -1,21 +1,5 @@
 [
   {
-    "id": "IhM-CvQUcUI",
-    "title": "Confusion Matrix Explained | Accuracy, Precision, Recall & F1 Score (With Examples)",
-    "description": "Learn how to evaluate classification models using the Confusion Matrix in Machine Learning. In this video, we break down key metrics including Accuracy, Precision, Recall, and F1 Score with simple explanations and real-world examples.\n\n🔍 Topics Covered:\n- What is a Confusion Matrix?\n- True Positive, True Negative, False Positive, False Negative\n- Accuracy and its limitations\n- Precision vs Recall (When to use each?)\n- F1 Score explained\n- Real-world examples (Fraud Detection, Medical Diagnosis,",
-    "thumbnail": "https://i.ytimg.com/vi/IhM-CvQUcUI/maxresdefault.jpg",
-    "publishedAt": "2026-03-19T08:46:23Z",
-    "channelTitle": "Learn With Dr. Hakeem-Ur-Rehman",
-    "channelScore": 0.5,
-    "viewCount": "29",
-    "likeCount": "1",
-    "durationSec": 1530,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=IhM-CvQUcUI"
-  },
-  {
     "id": "PMJcOnSv4uE",
     "title": "Breaking Down The Battle Between Mercedes & Ferrari | Jolyon Palmer’s F1 TV Analysis",
     "description": "Jolyon Palmer takes a close look at how the battle between Mercedes and Ferrari unfolded in China. \n\nFor more F1® videos, visit: https://www.Formula1.com\n\nVisit our store: https://f1store.formula1.com/\n\nFollow F1®:\nhttps://www.instagram.com/F1\nhttps://www.facebook.com/Formula1/\nhttps://www.twitter.com/F1\nhttps://www.twitch.tv/formula1\nhttps://www.tiktok.com/@f1\n\n#F1 #ChineseGP",
@@ -23,8 +7,8 @@
     "publishedAt": "2026-03-17T19:00:24Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "282635",
-    "likeCount": "5751",
+    "viewCount": "283264",
+    "likeCount": "5761",
     "durationSec": 710,
     "tags": [
       "ANALYSIS",
@@ -40,8 +24,8 @@
     "publishedAt": "2026-03-17T17:26:21Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "313654",
-    "likeCount": "5454",
+    "viewCount": "314148",
+    "likeCount": "5458",
     "durationSec": 554,
     "tags": [
       "ANALYSIS"
@@ -56,7 +40,7 @@
     "publishedAt": "2026-03-16T17:30:02Z",
     "channelTitle": "RacingNews365com",
     "channelScore": 0.5,
-    "viewCount": "17880",
+    "viewCount": "17899",
     "likeCount": "201",
     "durationSec": 543,
     "tags": [
@@ -72,8 +56,8 @@
     "publishedAt": "2026-03-15T16:38:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "326939",
-    "likeCount": "7328",
+    "viewCount": "327013",
+    "likeCount": "7329",
     "durationSec": 536,
     "tags": [
       "ANALYSIS"
@@ -88,7 +72,7 @@
     "publishedAt": "2026-03-15T14:55:00Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "81682",
+    "viewCount": "81702",
     "likeCount": "2853",
     "durationSec": 991,
     "tags": [
@@ -104,7 +88,7 @@
     "publishedAt": "2026-03-15T11:30:39Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "8130",
+    "viewCount": "8134",
     "likeCount": "420",
     "durationSec": 1722,
     "tags": [
@@ -136,7 +120,7 @@
     "publishedAt": "2026-03-13T15:24:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "253268",
+    "viewCount": "253284",
     "likeCount": "4843",
     "durationSec": 612,
     "tags": [
@@ -146,6 +130,22 @@
     "url": "https://www.youtube.com/watch?v=g-4S0YucqW8"
   },
   {
+    "id": "Oa1aIOBODTU",
+    "title": "EXPLAINED: How Oscar Piastri's Crash Unfolded - 2026 F1 Australian GP Melbourne",
+    "description": "EXPLAINED: How Oscar Piastri's Crash Unfolded - 2026 F1 Australian GP Melbourne.\n\nOscar Piastri’s crash during the reconnaissance laps at the 2026 Australian Grand Prix caught a lot of attention — but incidents like this reveal far more than just a mistake.\n\nIn this video, I break down what likely happened in the moments leading up to the crash at Albert Park Circuit from both a technical driving perspective and the mental side of an F1 driver preparing for a race session.\n\nRecon laps are not ju",
+    "thumbnail": "https://i.ytimg.com/vi/Oa1aIOBODTU/maxresdefault.jpg",
+    "publishedAt": "2026-03-10T02:38:44Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "6831",
+    "likeCount": "286",
+    "durationSec": 1370,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=Oa1aIOBODTU"
+  },
+  {
     "id": "1k8pbFG3AdY",
     "title": "F1's plan to change troubled 2026 rules",
     "description": "Claim your paddock pass for F1 2026! Join The Race Members' Club - get 90% off your first month here: https://www.patreon.com/cw/TheRace/membership\n\nF1's first race weekend with brand new cars and engines was a massive learning curve for everyone - and it could all change very quickly following the Australia season opener.\n\nThe divisive 2026 rules might be adjusted after just two races, with a meeting planned to discuss the biggest issues with this troubled regulation set after this weekend's Ch",
@@ -153,7 +153,7 @@
     "publishedAt": "2026-03-09T18:29:50Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "843083",
+    "viewCount": "843121",
     "likeCount": "13135",
     "durationSec": 530,
     "tags": [
@@ -169,8 +169,8 @@
     "publishedAt": "2026-03-09T12:50:26Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "221867",
-    "likeCount": "5280",
+    "viewCount": "221876",
+    "likeCount": "5279",
     "durationSec": 61,
     "tags": [
       "GENERAL"
@@ -185,7 +185,7 @@
     "publishedAt": "2026-03-08T20:27:40Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "63300",
+    "viewCount": "63303",
     "likeCount": "2761",
     "durationSec": 1024,
     "tags": [
@@ -201,29 +201,13 @@
     "publishedAt": "2026-03-08T15:15:54Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "655816",
+    "viewCount": "655836",
     "likeCount": "11491",
     "durationSec": 528,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=C8tPaXPvOS8"
-  },
-  {
-    "id": "aGAoTikvRYU",
-    "title": "2026 F1 Australian GP race analysis by Peter Windsor",
-    "description": "The factory Mercedes team - George Russell heading Kimi Antonelli - duly finished one-two in Melbourne on Sunday, exhibiting more power, more downforce, more grip and more balance than all of their opposition - and capped all of that with perfect strategy calls. Ferrari pushed them hardest, with Charles Leclerc taking the lead into T1 and exchanging early-lap power surges with George Russell, but weird strategies quickly knocked them back to P3-P4, with Charles Leclerc crossing the line 0.6sec a",
-    "thumbnail": "https://i.ytimg.com/vi/aGAoTikvRYU/maxresdefault.jpg",
-    "publishedAt": "2026-03-08T14:16:25Z",
-    "channelTitle": "Peter Windsor",
-    "channelScore": 0.5,
-    "viewCount": "126181",
-    "likeCount": "4455",
-    "durationSec": 1234,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=aGAoTikvRYU"
   },
   {
     "id": "5Uf3-h0AsoU",
@@ -249,12 +233,61 @@
     "publishedAt": "2026-03-08T07:57:40Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "12708",
+    "viewCount": "12710",
     "likeCount": "531",
     "durationSec": 2013,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=dBMfVVqjhos"
+  },
+  {
+    "id": "HFNdX2hAb7Y",
+    "title": "What we learned from F1 2026’s first qualifying at Australian GP",
+    "description": "Claim your paddock pass for F1 2026! Join The Race Members' Club - get 90% off your first month here: https://www.patreon.com/cw/TheRace/membership\n\nThe fuel came out, the sandbags came off – and here’s what we learned from F1’s first qualifying session of the year at the Australian Grand Prix. \n\n00:00 First qualifying of 2026\n00:08 Mercedes' actual advantage is massive \n00:58 But Mercedes' customers are struggling\n01:55 Verstappen's frustration is spilling over\n02:53 The FIA almost made it even",
+    "thumbnail": "https://i.ytimg.com/vi/HFNdX2hAb7Y/maxresdefault.jpg",
+    "publishedAt": "2026-03-07T15:58:20Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "661941",
+    "likeCount": "10213",
+    "durationSec": 497,
+    "tags": [
+      "QUALI"
+    ],
+    "url": "https://www.youtube.com/watch?v=HFNdX2hAb7Y"
+  },
+  {
+    "id": "2Eu1tk0MI7c",
+    "title": "2026 F1 Australian GP QUALIFYING Analysis - Melbourne",
+    "description": "2026 F1 Australian GP QUALIFYING Analysis - Melbourne. Qualifying at the Australian Grand Prix delivered a huge result, with George Russell putting his Mercedes on pole position at Albert Park after a tightly contested session.\n\nRussell nailed the lap when it mattered most in Q3, finding the limit through the fast middle sector and extracting everything from the car under the 2026 regulations. With the new cars producing less downforce than previous seasons, precision and commitment in high-spee",
+    "thumbnail": "https://i.ytimg.com/vi/2Eu1tk0MI7c/maxresdefault.jpg",
+    "publishedAt": "2026-03-07T07:50:07Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "9024",
+    "likeCount": "350",
+    "durationSec": 2667,
+    "tags": [
+      "QUALI",
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=2Eu1tk0MI7c"
+  },
+  {
+    "id": "s0fJcRWFJl0",
+    "title": "F1 Australian GP DATA ANALYSIS: Who Has RACE PACE?",
+    "description": "F1 2026 is finally here! So what did we learn from practice at the Australian Grand Prix? How do Red Bull compare to Ferrari, McLaren and Mercedes? Just how good are Ferrari after topping FP1, and are Mercedes still the team to beat? Is Verstappen hiding pace? All this and more in this video!\n\n🔷ALL NEW Formula Insights Software Now Available! 🔷\nhttps://formula-insights.com/\n\n🟣Bite-sized insights on Instagram! https://www.instagram.com/formula_insights_/ \n\n🔷Join The Conversation On Discord! h",
+    "thumbnail": "https://i.ytimg.com/vi/s0fJcRWFJl0/maxresdefault.jpg",
+    "publishedAt": "2026-03-06T19:04:17Z",
+    "channelTitle": "Formula Insights",
+    "channelScore": 0.5,
+    "viewCount": "30849",
+    "likeCount": "772",
+    "durationSec": 847,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=s0fJcRWFJl0"
   }
 ]
