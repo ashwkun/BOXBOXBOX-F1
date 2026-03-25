@@ -23,8 +23,8 @@
     "publishedAt": "2026-03-17T19:00:24Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "283487",
-    "likeCount": "5762",
+    "viewCount": "283703",
+    "likeCount": "5768",
     "durationSec": 710,
     "tags": [
       "ANALYSIS",
@@ -40,8 +40,8 @@
     "publishedAt": "2026-03-17T17:26:21Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "314369",
-    "likeCount": "5460",
+    "viewCount": "314574",
+    "likeCount": "5463",
     "durationSec": 554,
     "tags": [
       "ANALYSIS"
@@ -72,7 +72,7 @@
     "publishedAt": "2026-03-15T16:38:10Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "327052",
+    "viewCount": "327080",
     "likeCount": "7329",
     "durationSec": 536,
     "tags": [
@@ -88,7 +88,7 @@
     "publishedAt": "2026-03-15T14:55:00Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "81706",
+    "viewCount": "81708",
     "likeCount": "2855",
     "durationSec": 991,
     "tags": [
@@ -104,7 +104,7 @@
     "publishedAt": "2026-03-15T11:30:39Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "8134",
+    "viewCount": "8135",
     "likeCount": "420",
     "durationSec": 1722,
     "tags": [
@@ -136,7 +136,7 @@
     "publishedAt": "2026-03-13T15:24:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "253288",
+    "viewCount": "253293",
     "likeCount": "4843",
     "durationSec": 612,
     "tags": [
@@ -153,7 +153,7 @@
     "publishedAt": "2026-03-09T18:29:50Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "843129",
+    "viewCount": "843147",
     "likeCount": "13136",
     "durationSec": 530,
     "tags": [
@@ -169,7 +169,7 @@
     "publishedAt": "2026-03-09T12:50:26Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "221884",
+    "viewCount": "221890",
     "likeCount": "5279",
     "durationSec": 61,
     "tags": [
@@ -185,7 +185,7 @@
     "publishedAt": "2026-03-08T20:27:40Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "63303",
+    "viewCount": "63304",
     "likeCount": "2761",
     "durationSec": 1024,
     "tags": [
@@ -201,7 +201,7 @@
     "publishedAt": "2026-03-08T15:15:54Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "655841",
+    "viewCount": "655844",
     "likeCount": "11491",
     "durationSec": 528,
     "tags": [
@@ -217,12 +217,44 @@
     "publishedAt": "2026-03-08T14:16:25Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "126183",
+    "viewCount": "126187",
     "likeCount": "4455",
     "durationSec": 1234,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=aGAoTikvRYU"
+  },
+  {
+    "id": "5Uf3-h0AsoU",
+    "title": "Australian grand prix Review | Day 10 of learning #F1 #drivetosurvive  #f1explained",
+    "description": "Ferrari… we have the car, we have the drivers… but strategy?”\n\nWhat a crazy season opener at the Australian Grand Prix 🏁\nGeorge Russell wins the race, leading a Mercedes 1-2 with Kimi Antonelli, while Ferrari finishes P3 and P4 with Leclerc and Hamilton despite strong pace.\n\nMeanwhile Max Verstappen climbed from P20 to P6, one of the drives of the race.\n\nThe 2026 F1 season has started with drama already.\n\nSubscribe for daily F1 race analysis, strategy breakdowns, and Formula 1 explained.\n\nKeywo",
+    "thumbnail": "https://i.ytimg.com/vi/5Uf3-h0AsoU/maxresdefault.jpg",
+    "publishedAt": "2026-03-08T12:46:16Z",
+    "channelTitle": "F1withSantoshh",
+    "channelScore": 0.5,
+    "viewCount": "7695",
+    "likeCount": "436",
+    "durationSec": 75,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=5Uf3-h0AsoU"
+  },
+  {
+    "id": "dBMfVVqjhos",
+    "title": "2026 F1 Australian GP RACE Analysis - Melbourne",
+    "description": "2026 F1 Australian GP RACE Analysis in Melbourne! \n\nWhat a race in Melbourne. The 2026 season explodes into life at the Australian Grand Prix with a huge result for Mercedes-AMG Petronas Formula One Team.\n\nGeorge Russell delivers a flawless drive to take victory around Albert Park, controlling the race from the front and managing the new-era F1 machinery perfectly. But the real headline might be the incredible performance from rookie sensation Kimi Antonelli, bringing the car home in P2 to secur",
+    "thumbnail": "https://i.ytimg.com/vi/dBMfVVqjhos/maxresdefault.jpg",
+    "publishedAt": "2026-03-08T07:57:40Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "12710",
+    "likeCount": "531",
+    "durationSec": 2013,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=dBMfVVqjhos"
   }
 ]
