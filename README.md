@@ -4,13 +4,16 @@
 
 ### *The Ultimate F1 Companion App For Android*
 
+*Live timing, streams, news, podcasts, standings & more — all in one app.*
+*Download the APK below and start watching!*
+
+[![Download APK](https://img.shields.io/badge/⬇_DOWNLOAD_APK-Latest_Release-E10600?style=for-the-badge&logo=android&logoColor=white&labelColor=1a1a2e)](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest/download/boxboxbox.apk)
+
 [![GPL v3 License](https://img.shields.io/badge/License-GPLv3-ff0080.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Android](https://img.shields.io/badge/Platform-Android-3DDC84.svg)](https://www.android.com/)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-7F52FF.svg)](https://kotlinlang.org/)
 [![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4.svg)](https://developer.android.com/jetpack/compose)
 [![Reddit](https://img.shields.io/badge/Connect%20on-Reddit-FF4500.svg?logo=reddit&logoColor=white)](https://www.reddit.com/user/Altruistic_Plenty696)
-
-[![Download APK](https://img.shields.io/badge/⬇_Download_APK-Latest_Release-E10600?style=for-the-badge&logo=android&logoColor=white)](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest/download/boxboxbox.apk)
 
 *Because antigravity is free and I love F1* 🏁
 
