@@ -7,7 +7,7 @@
 *Live timing, streams, news, podcasts, standings & more — all in one app.*
 *Download the APK below and start watching!*
 
-[![Download APK](https://img.shields.io/badge/⬇_DOWNLOAD_APK-Latest_Release-E10600?style=for-the-badge&logo=android&logoColor=white&labelColor=1a1a2e)](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest/download/boxboxbox.apk)
+[![Download APK](https://img.shields.io/badge/⬇_DOWNLOAD_APK-Latest_Release-00C853?style=for-the-badge&logo=android&logoColor=white&labelColor=1a1a2e)](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest/download/boxboxbox.apk)
 
 [![GPL v3 License](https://img.shields.io/badge/License-GPLv3-ff0080.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Android](https://img.shields.io/badge/Platform-Android-3DDC84.svg)](https://www.android.com/)
