@@ -10,6 +10,8 @@
 [![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4.svg)](https://developer.android.com/jetpack/compose)
 [![Reddit](https://img.shields.io/badge/Connect%20on-Reddit-FF4500.svg?logo=reddit&logoColor=white)](https://www.reddit.com/user/Altruistic_Plenty696)
 
+[![Download APK](https://img.shields.io/badge/⬇_Download_APK-Latest_Release-E10600?style=for-the-badge&logo=android&logoColor=white)](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest/download/boxboxbox.apk)
+
 *Because antigravity is free and I love F1* 🏁
 
 ---
@@ -26,7 +28,7 @@
 
 ---
 
-[Download APK](boxboxbox.apk) • [Features](#-features) • [Screenshots](#-screenshots) • [Tech Stack](#-tech-stack)
+[⬇ Download APK](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest/download/boxboxbox.apk) • [Features](#-features) • [Screenshots](#-screenshots) • [Tech Stack](#-tech-stack)
 
 </div>
 
@@ -295,7 +297,7 @@ This app aggregates data from multiple public sources to provide a unified F1 ex
 
 ### **Download & Install**
 
-1. Download the latest APK from [Releases](../../releases) or [direct link](boxboxbox.apk)
+1. Download the latest APK from [Releases](../../releases) or click the **Download APK** badge above
 2. Enable "Install from Unknown Sources" in Android settings
 3. Install and enjoy! 🏎️
 
