@@ -26,8 +26,6 @@ sealed class AceStreamState {
     object InstalledEngineOff : AceStreamState()
     object Searching : AceStreamState()
     data class StreamsReady(val channels: List<AceStreamChannel>) : AceStreamState()
-    data class PreviewingStream(val channel: AceStreamChannel, val playbackUrl: String) : AceStreamState()
-    data class PreviewError(val channel: AceStreamChannel, val message: String) : AceStreamState()
     data class Error(val message: String) : AceStreamState()
 }
 
@@ -470,27 +468,7 @@ class RaceViewModel @Inject constructor(
         }
     }
 
-    fun previewStream(channel: AceStreamChannel) {
-        viewModelScope.launch {
-            _aceStreamState.value = AceStreamState.Searching // Reuse searching state as briefly loading
-            delay(500) // Brief loading indication
-            val url = AceStreamRepository.getInstance().getPlaybackUrl(channel.infohash)
-            // Error handling for dead streams is delegated to ExoPlayer via Player.Listener
-            _aceStreamState.value = AceStreamState.PreviewingStream(channel, url)
-        }
-    }
-    
-    fun setPreviewError(channel: AceStreamChannel, message: String) {
-        viewModelScope.launch {
-            _aceStreamState.value = AceStreamState.PreviewError(channel, message)
-            // Removed automatic reset to channel list, allowing the user to click
-            // "LAUNCH IN ACE PLAYER" manually even if the preview fails.
-        }
-    }
 
-    fun stopPreviewing() {
-        checkAceStreamStatus()
-    }
 
     private fun updateFilteredRaces(races: List<Race>) {
         val now = LocalDateTime.now(ZoneId.of("UTC"))
