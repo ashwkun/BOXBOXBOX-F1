@@ -2,14 +2,6 @@
   "date": "2026-03-29",
   "nuclear_sent": [
     {
-      "id": "8bb74a26b3fdbd26b8026dda4ddbaa97",
-      "title": "Max Verstappen admits Red Bull won't be fighting for Australian GP win",
-      "url": "https://www.motorsport.com/f1/news/max-verstappen-i-dont-think-were-in-contention-for-the-win/10800714/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 999,
-      "timestamp": "2026-02-27T10:18:15",
-      "image": "https://cdn-7.motorsport.com/images/amp/0kZAooo6/s6/max-verstappen-red-bull-racing-2.jpg"
-    },
-    {
       "id": "aca505408c1e21005c6d45e6864fb3ea",
       "title": "McLaren Racing signs multi-year Etihad Airways partnership ahead of 2026 F1 season",
       "url": "https://www.motorsport.com/f1/news/mclaren-racing-signs-multi-year-etihad-airways-partnership-ahead-of-2026-f1-season/10800828/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
@@ -313,12 +305,28 @@
   "slot2_remaining": 2,
   "digest_items": [
     {
+      "id": "5b34682b4c43c6a67269563aaeaaebf6",
+      "title": "Oscar Piastri's deadpan \"Mario Kart\" joke wins the Japanese Grand Prix cooldown room",
+      "url": "https://www.motorsport.com/f1/news/oscar-piastris-deadpan-mario-kart-joke-wins-the-japanese-grand-prix-cooldown-room/10809465/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 998,
+      "timestamp": "2026-03-29T10:17:45",
+      "image": "https://cdn-4.motorsport.com/images/amp/YpbP7lW0/s6/oscar-piastri-mclaren.jpg"
+    },
+    {
       "id": "0bbdecb306567879d4979d862f1bd051",
       "title": "George Russell frustrated by bad luck after losing F1 championship lead",
       "url": "https://www.motorsport.com/f1/news/george-russell-frustrated-by-bad-luck-after-losing-f1-championship-lead/10809417/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 95,
       "timestamp": "2026-03-29T09:23:33",
-      "image": "https://cdn-8.motorsport.com/images/amp/YMX3R4n2/s6/george-russell-mercedes-2.jpg"
+      "image": "https://cdn-2.motorsport.com/images/amp/YMX3R4n2/s6/george-russell-mercedes-2.jpg"
+    },
+    {
+      "id": "2fe79f6d1cb2ac7d2bca5bd848e878aa",
+      "title": "FIA responds to dramatic Oliver Bearman crash in F1 Japanese GP",
+      "url": "https://www.motorsport.com/f1/news/fia-responds-to-dramatic-bearman-crash-in-f1-japanese-gp/10809475/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 90,
+      "timestamp": "2026-03-29T10:25:26",
+      "image": "https://cdn-7.motorsport.com/images/amp/6lmdpgD0/s6/oliver-bearman-haas-f1-team-ca.jpg"
     },
     {
       "id": "1326986a45c37719b5ddd41c48dd823a",
@@ -326,7 +334,7 @@
       "url": "https://www.motorsport.com/f1/news/ollie-bearman-limps-away-from-violent-crash-at-f1-japanese-grand-prix/10809294/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 90,
       "timestamp": "2026-03-29T06:12:16",
-      "image": "https://cdn-1.motorsport.com/images/amp/YvKQeJZ6/s6/oliver-bearman-haas-f1-team-2.jpg"
+      "image": "https://cdn-4.motorsport.com/images/amp/YvKQeJZ6/s6/oliver-bearman-haas-f1-team-2.jpg"
     },
     {
       "id": "29cbb8bd8f2bae84b45a74ce1da44097",
@@ -334,7 +342,7 @@
       "url": "https://www.motorsport.com/f1/news/franco-colapinto-concerned-by-f1-closing-speeds-after-oliver-bearmans-50g-crash/10809353/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 70,
       "timestamp": "2026-03-29T07:59:27",
-      "image": "https://cdn-1.motorsport.com/images/amp/YpbP75N0/s6/franco-colapinto-alpine-oliver.jpg"
+      "image": "https://cdn-2.motorsport.com/images/amp/YpbP75N0/s6/franco-colapinto-alpine-oliver.jpg"
     },
     {
       "id": "04918ae7a2f72cc36d147d9bbe1bae10",
@@ -342,7 +350,7 @@
       "url": "https://www.motorsport.com/f1/news/arvid-lindblad-earns-major-fan-praise-after-standout-japanese-gp-qualifying/10809002/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 65,
       "timestamp": "2026-03-28T16:07:39",
-      "image": "https://cdn-8.motorsport.com/images/amp/2jEDOjM0/s6/arvid-lindblad-racing-bulls.jpg"
+      "image": "https://cdn-5.motorsport.com/images/amp/2jEDOjM0/s6/arvid-lindblad-racing-bulls.jpg"
     },
     {
       "id": "9facbc0b656f4a9297f3d7c208184b96",
@@ -350,7 +358,7 @@
       "url": "https://www.motorsport.com/f1/news/jos-verstappen-fires-warning-over-new-f1-era-creating-chaos-but-nothing-to-do-with-racing/10809202/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 60,
       "timestamp": "2026-03-28T21:58:00",
-      "image": "https://cdn-3.motorsport.com/images/amp/YKE7J9z0/s6/jos-verstappen.jpg"
+      "image": "https://cdn-7.motorsport.com/images/amp/YKE7J9z0/s6/jos-verstappen.jpg"
     },
     {
       "id": "e8615ef9d0585119ab48d3e97491325c",
@@ -358,7 +366,7 @@
       "url": "https://www.motorsport.com/f1/news/red-bull-keen-to-clear-the-air-after-max-verstappen-incident-with-f1-journalist/10808974/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 50,
       "timestamp": "2026-03-28T11:19:46",
-      "image": "https://cdn-4.motorsport.com/images/amp/6x7ZedRY/s6/max-verstappen-red-bull-racing.jpg"
+      "image": "https://cdn-3.motorsport.com/images/amp/6x7ZedRY/s6/max-verstappen-red-bull-racing.jpg"
     },
     {
       "id": "a1b5eaae5d479257caef43b5f906c271",
@@ -366,7 +374,7 @@
       "url": "https://www.motorsport.com/f1/news/max-verstappens-gt3-outings-will-not-solve-f1-frustration-says-jenson-button/10809193/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 45,
       "timestamp": "2026-03-28T21:42:47",
-      "image": "https://cdn-5.motorsport.com/images/amp/0arKG4p2/s6/max-verstappen-red-bull-racing.jpg"
+      "image": "https://cdn-6.motorsport.com/images/amp/0arKG4p2/s6/max-verstappen-red-bull-racing.jpg"
     },
     {
       "id": "4d32d4876da599fa49ce639552f41a13",
@@ -377,20 +385,12 @@
       "image": "https://cdn-6.motorsport.com/images/amp/YK13zOB0/s6/valtteri-bottas-cadillac-racin.jpg"
     },
     {
-      "id": "e11f0d5619a3524d5e67f8cca168fc5e",
-      "title": "Lando Norris in \"catch-up\" mode at F1 Japanese GP as struggles continue",
-      "url": "https://www.motorsport.com/f1/news/lando-norris-in-catch-up-mode-at-f1-japanese-gp-as-struggles-continue/10808949/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 45,
-      "timestamp": "2026-03-28T10:00:02",
-      "image": "https://cdn-4.motorsport.com/images/amp/YvKQeo76/s6/lando-norris-mclaren-3.jpg"
-    },
-    {
       "id": "ab3cdd9011e918933d8321bfff21ccc7",
       "title": "Five quick takeaways from F1 Japanese GP qualifying",
       "url": "https://www.motorsport.com/f1/news/five-quick-takeaways-from-f1-japanese-gp-qualifying/10808832/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 44,
       "timestamp": "2026-03-28T07:26:18",
-      "image": "https://cdn-9.motorsport.com/images/amp/6lmdp180/s6/max-verstappen-red-bull-racing.jpg"
+      "image": "https://cdn-7.motorsport.com/images/amp/6lmdp180/s6/max-verstappen-red-bull-racing.jpg"
     },
     {
       "id": "cd7d4a1e6221e0b793df7590f26ad43c",
@@ -398,7 +398,7 @@
       "url": "https://www.motorsport.com/f1/news/f1-2026-qualifying-head-to-head-japanese-gp/10808811/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 44,
       "timestamp": "2026-03-28T07:08:44",
-      "image": "https://cdn-4.motorsport.com/images/amp/YMX38mL2/s6/lance-stroll-aston-martin-raci.jpg"
+      "image": "https://cdn-6.motorsport.com/images/amp/YMX38mL2/s6/lance-stroll-aston-martin-raci.jpg"
     },
     {
       "id": "68f23b647568ab7ae0f424f67d8f7418",
@@ -406,7 +406,7 @@
       "url": "https://www.motorsport.com/f1/news/f1-japanese-gp-qualifying-weather-forecast-schedule-and-how-to-watch/10808644/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 44,
       "timestamp": "2026-03-27T16:10:40",
-      "image": "https://cdn-2.motorsport.com/images/amp/6DGqOXOY/s6/liam-lawson-racing-bulls.jpg"
+      "image": "https://cdn-7.motorsport.com/images/amp/6DGqOXOY/s6/liam-lawson-racing-bulls.jpg"
     },
     {
       "id": "34641dc313acdbf8d8e45485543ebbaf",
@@ -438,7 +438,15 @@
       "url": "https://www.motorsport.com/f1/news/mercedes-takes-1-2-as-antonelli-fastest-in-japan-f1-fp3/10808795/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 40,
       "timestamp": "2026-03-28T03:57:15",
-      "image": "https://cdn-7.motorsport.com/images/amp/6DGqOWOY/s6/andrea-kimi-antonelli-mercedes.jpg"
+      "image": "https://cdn-9.motorsport.com/images/amp/6DGqOWOY/s6/andrea-kimi-antonelli-mercedes.jpg"
+    },
+    {
+      "id": "e11f0d5619a3524d5e67f8cca168fc5e",
+      "title": "Lando Norris in \"catch-up\" mode at F1 Japanese GP as struggles continue",
+      "url": "https://www.motorsport.com/f1/news/lando-norris-in-catch-up-mode-at-f1-japanese-gp-as-struggles-continue/10808949/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 36,
+      "timestamp": "2026-03-28T10:00:02",
+      "image": "https://cdn-7.motorsport.com/images/amp/YvKQeo76/s6/lando-norris-mclaren-3.jpg"
     },
     {
       "id": "f9e8797486d11773e1e314a431eccdbc",
@@ -446,7 +454,7 @@
       "url": "https://www.motorsport.com/f1/news/the-starting-grid-for-the-2026-japanese-f1-grand-prix/10808871/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 32,
       "timestamp": "2026-03-28T08:06:14",
-      "image": "https://cdn-4.motorsport.com/images/amp/6Al7MyvY/s6/oscar-piastri-mclaren-george-r-2.jpg"
+      "image": "https://cdn-2.motorsport.com/images/amp/6Al7MyvY/s6/oscar-piastri-mclaren-george-r-2.jpg"
     }
   ],
   "digest_sent": false,
@@ -733,58 +741,57 @@
   ],
   "schema_version": 3,
   "sent_urls": [
-    "https://www.motorsport.com/f1/news/lewis-hamiltons-chinese-gp-podium-proves-he-is-not-finished-in-f1-says-david-coulthard/10806550/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-australian-gp-qualifying-report/10802868/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mclaren-racing-signs-multi-year-etihad-airways-partnership-ahead-of-2026-f1-season/10800828/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/david-croft-issues-kimi-antonelli-title-warning-after-chinese-grand-prix-win/10807261/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/toto-wolff-overwhelmed-emotional-chinese-grand-prix-podium-kimi-antonelli-maiden-f1-win/10805461/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/the-starting-grid-for-the-sprint-race-at-the-2026-chinese-f1-grand-prix/10804631/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/haas-godzilla-livery-f1-japanese-gp/10807718/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/very-scary-moment-cost-charles-leclerc-chance-of-f1-chinese-gp-sprint-win/10804963/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/kimi-antonelli-nfa-f1-chinese-gp-sprint-quali-after-lando-norris-incident/10804621/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-chinese-gp-russell-ferrari-sprint-win/10804939/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/charles-leclerc-fumes-in-ferrari-radio-outburst-after-japanese-gp-qualifying/10808941/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/mercedes-f1-unveils-new-adidas-2026-silver-arrows-collection/10800940/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/martin-brundle-george-russell-has-what-it-takes-to-handle-2026-f1-title-pressure/10800835/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/cadillac-ceo-dan-towriss-reveals-how-colton-herta-nearly-signed-a-red-bull-f1-deal/10804432/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/ferrari-reckons-f1-australian-gp-race-showed-its-true-form-after-tough-quali/10803795/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/five-quick-takeaways-from-f1-china-grand-prix-qualifying-and-sprint/10805050/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/why-ferrari-ditched-its-rotisserie-rear-wing-after-fp1-at-f1-chinese-gp/10804737/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/max-verstappen-downbeat-after-japan-f1-car-issues-no-easy-fix/10808474/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-japanese-gp-race-report/10809270/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/max-verstappen-crashes-into-barriers-in-australian-gp-qualifying-causing-red-flag/10802879/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-chinese-gp-kimi-antonelli-takes-maiden-win-as-lewis-hamilton-scores-first-ferrari-podium/10805427/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/fia-reveals-tweaks-to-f1-2026-driver-guidelines-after-qatar-meeting/10802618/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/charles-leclerc-fumes-in-ferrari-radio-outburst-after-japanese-gp-qualifying/10808941/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/kimi-antonelli-apology-to-isack-hadjar-after-chinese-gp-sprint-contact-rejected-in-awkward-video/10805302/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/lewis-hamilton-promising-to-not-retire-until-africa-returns-to-f1/10802182/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/kimi-antonelli-summoned-for-impeding-lando-norris-during-f1-chinese-gp-sprint-quali/10804621/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/kimi-antonelli-nfa-f1-chinese-gp-sprint-quali-after-lando-norris-incident/10804621/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/f1-returnee-valtteri-bottas-loses-grid-drop-after-all/10802066/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/toto-wolff-explains-mercedes-f1-china-sprint-qualifying-gap-to-field/10804693/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/haas-godzilla-livery-f1-japanese-gp/10807718/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/max-verstappen-downbeat-after-japan-f1-car-issues-no-easy-fix/10808474/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/lewis-hamiltons-chinese-gp-podium-proves-he-is-not-finished-in-f1-says-david-coulthard/10806550/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/kimi-antonelli-apology-to-isack-hadjar-after-chinese-gp-sprint-contact-rejected-in-awkward-video/10805302/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/cadillac-ceo-dan-towriss-reveals-how-colton-herta-nearly-signed-a-red-bull-f1-deal/10804432/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/formula-1-paddock-reacts-as-kimi-antonelli-claims-first-grand-prix-victory-in-china/10806145/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/sky-sports-f1-confirms-2026-broadcast-team-as-danica-patrick-drops-off-line-up/10802009/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/george-russell-reveals-bizarre-reason-for-black-eye-ahead-of-chinese-grand-prix/10805404/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/jolyon-palmer-dismisses-lewis-hamilton-regret-claims-after-kimi-antonellis-chinese-gp-win/10806648/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-australian-gp-race-report/10803241/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/fernando-alonso-reveals-when-aston-martin-should-retire-from-f1-australian-gp/10802911/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/toto-wolff-overwhelmed-emotional-chinese-grand-prix-podium-kimi-antonelli-maiden-f1-win/10805461/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-chinese-gp-kimi-antonelli-takes-maiden-win-as-lewis-hamilton-scores-first-ferrari-podium/10805427/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/five-quick-takeaways-from-f1-china-grand-prix-qualifying-and-sprint/10805050/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/ferrari-reckons-f1-australian-gp-race-showed-its-true-form-after-tough-quali/10803795/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-japanese-gp-race-report/10809270/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/why-valtteri-bottas-grid-penalty-australian-gp-already/10801809/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/max-verstappen-i-dont-think-were-in-contention-for-the-win/10800714/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/toto-wolff-explains-mercedes-f1-china-sprint-qualifying-gap-to-field/10804693/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-australian-gp-race-report/10803241/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/the-starting-grid-for-the-sprint-race-at-the-2026-chinese-f1-grand-prix/10804631/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/very-scary-moment-cost-charles-leclerc-chance-of-f1-chinese-gp-sprint-win/10804963/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mclaren-racing-signs-multi-year-etihad-airways-partnership-ahead-of-2026-f1-season/10800828/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/fia-reveals-tweaks-to-f1-2026-driver-guidelines-after-qatar-meeting/10802618/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/why-ferrari-ditched-its-rotisserie-rear-wing-after-fp1-at-f1-chinese-gp/10804737/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-australian-gp-qualifying-report/10802868/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/max-verstappen-crashes-into-barriers-in-australian-gp-qualifying-causing-red-flag/10802879/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/how-charles-leclercs-chinese-gp-sprint-qualifying-issue-highlights-how-complex-the-power-units-are/10804832/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/f1-chinese-gp-fp-report/10804526/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/formula-1-paddock-reacts-as-kimi-antonelli-claims-first-grand-prix-victory-in-china/10806145/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-chinese-gp-russell-ferrari-sprint-win/10804939/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/fernando-alonso-reveals-when-aston-martin-should-retire-from-f1-australian-gp/10802911/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/david-croft-issues-kimi-antonelli-title-warning-after-chinese-grand-prix-win/10807261/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/kimi-antonelli-summoned-for-impeding-lando-norris-during-f1-chinese-gp-sprint-quali/10804621/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/george-russell-reveals-bizarre-reason-for-black-eye-ahead-of-chinese-grand-prix/10805404/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/lewis-hamilton-promising-to-not-retire-until-africa-returns-to-f1/10802182/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/jolyon-palmer-dismisses-lewis-hamilton-regret-claims-after-kimi-antonellis-chinese-gp-win/10806648/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/guenther-steiner-rules-out-kimi-antonelli-in-2026-f1-title-fight-despite-china-win/10806758/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
   ],
   "title_fingerprints": [
     {
       "tokens": [
-        "helps",
         "car",
-        "to",
-        "gp",
-        "victory",
-        "f1",
-        "safety",
-        "japanese",
         "antonelli",
-        "kimi"
+        "f1",
+        "victory",
+        "safety",
+        "kimi",
+        "to",
+        "japanese",
+        "gp",
+        "helps"
       ],
       "title": "F1 Japanese GP: Safety car helps Kimi Antonelli to victory",
       "timestamp": "2026-03-29T06:47:34"
@@ -792,16 +799,16 @@
     {
       "tokens": [
         "in",
-        "ferrari",
-        "leclerc",
-        "qualifying",
-        "after",
-        "gp",
-        "japanese",
-        "charles",
         "radio",
+        "charles",
+        "after",
+        "fumes",
+        "leclerc",
         "outburst",
-        "fumes"
+        "ferrari",
+        "japanese",
+        "gp",
+        "qualifying"
       ],
       "title": "Charles Leclerc fumes in Ferrari radio outburst after Japanese GP qualifying",
       "timestamp": "2026-03-28T09:42:04"
@@ -809,18 +816,18 @@
     {
       "tokens": [
         "max",
-        "no",
-        "s",
-        "issues",
         "car",
+        "no",
+        "at",
+        "f1",
+        "verstappen",
+        "issues",
+        "red",
         "easy",
         "warns",
-        "f1",
-        "red",
-        "verstappen",
-        "bull",
+        "s",
         "fix",
-        "at",
+        "bull",
         "are",
         "suzuka"
       ],
@@ -829,14 +836,14 @@
     },
     {
       "tokens": [
-        "bold",
-        "launches",
-        "gp",
-        "f1",
-        "japanese",
-        "for",
         "godzilla",
+        "for",
+        "bold",
+        "f1",
         "livery",
+        "japanese",
+        "gp",
+        "launches",
         "haas"
       ],
       "title": "Haas launches bold Godzilla livery for F1 Japanese GP",
@@ -845,311 +852,311 @@
     {
       "tokens": [
         "prix",
-        "david",
-        "croft",
-        "issues",
-        "title",
-        "warning",
-        "after",
-        "chinese",
         "win",
         "antonelli",
-        "grand",
-        "kimi"
+        "after",
+        "chinese",
+        "issues",
+        "kimi",
+        "warning",
+        "croft",
+        "david",
+        "title",
+        "grand"
       ],
       "title": "David Croft issues Kimi Antonelli title warning after Chinese Grand Prix win",
       "timestamp": "2026-03-22T14:28:04"
     },
     {
       "tokens": [
-        "guenther",
-        "in",
-        "fight",
-        "out",
-        "despite",
-        "title",
-        "win",
-        "f1",
-        "antonelli",
+        "steiner",
+        "rules",
         "2026",
         "china",
-        "steiner",
+        "antonelli",
+        "in",
+        "f1",
+        "despite",
         "kimi",
-        "rules"
+        "guenther",
+        "out",
+        "title",
+        "fight",
+        "win"
       ],
       "title": "Guenther Steiner rules out Kimi Antonelli in 2026 F1 title fight despite China win",
       "timestamp": "2026-03-20T19:24:39"
     },
     {
       "tokens": [
-        "kimi",
-        "dismisses",
-        "lewis",
         "hamilton",
+        "jolyon",
         "claims",
-        "s",
+        "antonelli",
+        "regret",
         "after",
         "chinese",
+        "dismisses",
+        "lewis",
+        "palmer",
+        "kimi",
+        "s",
         "gp",
-        "win",
-        "jolyon",
-        "regret",
-        "antonelli",
-        "palmer"
+        "win"
       ],
       "title": "Jolyon Palmer dismisses Lewis Hamilton regret claims after Kimi Antonelli's Chinese GP win",
       "timestamp": "2026-03-20T11:31:51"
     },
     {
       "tokens": [
-        "says",
+        "is",
+        "hamilton",
         "in",
+        "chinese",
+        "podium",
+        "he",
         "finished",
         "lewis",
-        "david",
-        "he",
-        "hamilton",
-        "is",
-        "s",
-        "chinese",
-        "gp",
-        "not",
+        "proves",
         "f1",
         "coulthard",
-        "proves",
-        "podium"
+        "s",
+        "david",
+        "gp",
+        "not",
+        "says"
       ],
       "title": "Lewis Hamilton\u2019s Chinese GP podium proves he is not finished in F1, says David Coulthard",
       "timestamp": "2026-03-19T23:00:55"
     },
     {
       "tokens": [
-        "prix",
-        "in",
-        "reacts",
-        "as",
-        "formula",
-        "1",
-        "claims",
-        "victory",
         "first",
-        "grand",
-        "antonelli",
+        "prix",
         "china",
+        "formula",
+        "antonelli",
+        "claims",
+        "in",
+        "1",
+        "victory",
+        "as",
+        "kimi",
         "paddock",
-        "kimi"
+        "grand",
+        "reacts"
       ],
       "title": "Formula 1 paddock reacts as Kimi Antonelli claims first grand prix victory in China",
       "timestamp": "2026-03-17T22:10:01"
     },
     {
       "tokens": [
-        "wolff",
-        "as",
-        "toto",
-        "emotional",
+        "win",
+        "antonelli",
         "chinese",
         "podium",
-        "gp",
-        "win",
+        "emotional",
+        "by",
         "maiden",
         "f1",
-        "secured",
-        "antonelli",
+        "wolff",
+        "as",
+        "kimi",
+        "gp",
         "overwhelmed",
-        "by",
-        "kimi"
+        "secured",
+        "toto"
       ],
       "title": "Toto Wolff \"overwhelmed\" by emotional Chinese GP podium as Kimi Antonelli secured maiden F1 win",
       "timestamp": "2026-03-15T09:48:42"
     },
     {
       "tokens": [
-        "scores",
-        "ferrari",
-        "lewis",
-        "takes",
-        "as",
-        "hamilton",
-        "chinese",
-        "gp",
-        "win",
-        "f1",
         "first",
+        "takes",
+        "hamilton",
         "antonelli",
+        "scores",
+        "chinese",
+        "f1",
         "maiden",
         "podium",
-        "kimi"
+        "lewis",
+        "as",
+        "kimi",
+        "ferrari",
+        "gp",
+        "win"
       ],
       "title": "F1 Chinese GP: Kimi Antonelli takes maiden win as Lewis Hamilton scores first Ferrari podium",
       "timestamp": "2026-03-15T09:00:18"
     },
     {
       "tokens": [
-        "reveals",
-        "russell",
         "prix",
-        "bizarre",
-        "george",
-        "chinese",
-        "eye",
         "reason",
-        "ahead",
+        "george",
         "for",
-        "of",
+        "bizarre",
+        "eye",
         "black",
-        "grand"
+        "of",
+        "chinese",
+        "ahead",
+        "russell",
+        "grand",
+        "reveals"
       ],
       "title": "George Russell reveals bizarre reason for black eye ahead of Chinese Grand Prix",
       "timestamp": "2026-03-15T08:25:06"
     },
     {
       "tokens": [
-        "sprint",
+        "hadjar",
+        "antonelli",
         "in",
-        "apology",
-        "awkward",
-        "to",
         "after",
         "chinese",
-        "gp",
-        "isack",
-        "hadjar",
+        "awkward",
         "rejected",
-        "video",
-        "antonelli",
+        "isack",
+        "gp",
+        "kimi",
+        "sprint",
+        "to",
         "contact",
-        "kimi"
+        "video",
+        "apology"
       ],
       "title": "Kimi Antonelli apology to Isack Hadjar after Chinese GP sprint contact rejected in awkward video",
       "timestamp": "2026-03-14T20:14:12"
     },
     {
       "tokens": [
-        "takeaways",
-        "sprint",
-        "from",
-        "qualifying",
-        "s",
+        "quick",
+        "f1",
         "chinese",
         "five",
+        "takeaways",
+        "qualifying",
+        "and",
+        "sprint",
+        "s",
         "gp",
-        "f1",
-        "quick",
-        "and"
+        "from"
       ],
       "title": "Five quick takeaways from F1's Chinese GP sprint and qualifying",
       "timestamp": "2026-03-14T08:29:43"
     },
     {
       "tokens": [
-        "cost",
+        "very",
+        "charles",
+        "of",
+        "f1",
+        "chinese",
+        "leclerc",
         "chance",
         "sprint",
-        "leclerc",
-        "moment",
-        "very",
-        "chinese",
+        "cost",
         "scary",
+        "moment",
         "gp",
-        "f1",
-        "win",
-        "charles",
-        "of"
+        "win"
       ],
       "title": "\u201cVery scary moment\u201d cost Charles Leclerc chance of F1 Chinese GP sprint win",
       "timestamp": "2026-03-14T04:51:42"
     },
     {
       "tokens": [
-        "way",
-        "sprint",
-        "russell",
-        "ferrari",
-        "drivers",
+        "on",
         "george",
         "chinese",
-        "to",
-        "gp",
-        "outduels",
         "f1",
-        "win",
-        "on"
+        "drivers",
+        "to",
+        "sprint",
+        "ferrari",
+        "outduels",
+        "way",
+        "gp",
+        "russell",
+        "win"
       ],
       "title": "F1 Chinese GP: George Russell outduels Ferrari drivers on way to sprint win",
       "timestamp": "2026-03-14T04:01:53"
     },
     {
       "tokens": [
-        "sprint",
-        "highlights",
-        "the",
-        "leclerc",
-        "qualifying",
-        "s",
-        "chinese",
-        "units",
-        "gp",
-        "power",
         "how",
-        "charles",
         "issue",
+        "charles",
+        "chinese",
+        "leclerc",
+        "power",
+        "the",
+        "units",
+        "sprint",
+        "s",
+        "highlights",
+        "gp",
         "are",
-        "complex"
+        "complex",
+        "qualifying"
       ],
       "title": "How Charles Leclerc's Chinese GP sprint qualifying issue highlights how complex the power units are",
       "timestamp": "2026-03-13T16:28:23"
     },
     {
       "tokens": [
+        "at",
+        "rear",
+        "rotisserie",
+        "after",
+        "f1",
+        "fp1",
+        "chinese",
         "its",
         "ditched",
-        "ferrari",
         "why",
-        "rear",
-        "fp1",
-        "after",
-        "chinese",
-        "gp",
-        "f1",
-        "rotisserie",
-        "at",
-        "wing"
+        "wing",
+        "ferrari",
+        "gp"
       ],
       "title": "Why Ferrari ditched its \u2018rotisserie\u2019 rear wing after FP1 at F1 Chinese GP",
       "timestamp": "2026-03-13T11:30:25"
     },
     {
       "tokens": [
-        "sprint",
-        "wolff",
-        "explains",
-        "qualifying",
-        "toto",
-        "gap",
-        "field",
-        "to",
-        "f1",
+        "china",
         "mercedes",
-        "china"
+        "gap",
+        "f1",
+        "explains",
+        "wolff",
+        "sprint",
+        "to",
+        "field",
+        "qualifying",
+        "toto"
       ],
       "title": "Toto Wolff explains Mercedes F1 China sprint qualifying gap to field",
       "timestamp": "2026-03-13T10:32:28"
     },
     {
       "tokens": [
-        "sprint",
-        "the",
         "prix",
-        "starting",
         "is",
-        "at",
-        "chinese",
-        "grid",
-        "f1",
-        "for",
         "2026",
+        "for",
+        "at",
         "here",
+        "f1",
+        "chinese",
+        "the",
+        "sprint",
+        "grid",
+        "starting",
         "race",
         "grand"
       ],
@@ -1158,78 +1165,78 @@
     },
     {
       "tokens": [
-        "incident",
-        "in",
-        "sprint",
-        "quali",
-        "second",
-        "after",
-        "chinese",
-        "nfa",
-        "gp",
-        "f1",
-        "antonelli",
-        "norris",
         "on",
+        "antonelli",
+        "second",
+        "nfa",
+        "in",
+        "after",
+        "keeps",
         "lando",
+        "f1",
+        "incident",
+        "chinese",
         "kimi",
-        "keeps"
+        "sprint",
+        "gp",
+        "quali",
+        "norris"
       ],
       "title": "Kimi Antonelli keeps second after NFA on Lando Norris incident in F1 Chinese GP sprint quali",
       "timestamp": "2026-03-13T08:52:01"
     },
     {
       "tokens": [
-        "sprint",
-        "quali",
-        "during",
-        "chinese",
-        "gp",
-        "impeding",
-        "f1",
-        "lando",
         "for",
         "antonelli",
         "norris",
-        "summoned",
-        "kimi"
+        "impeding",
+        "lando",
+        "f1",
+        "during",
+        "chinese",
+        "kimi",
+        "sprint",
+        "gp",
+        "quali",
+        "summoned"
       ],
       "title": "Kimi Antonelli summoned for impeding Lando Norris during F1 Chinese GP sprint quali",
       "timestamp": "2026-03-13T08:52:01"
     },
     {
       "tokens": [
-        "sprint",
-        "qualifying",
-        "chinese",
-        "gp",
         "top",
-        "f1",
-        "ahead",
+        "on",
         "mercedes",
         "of",
-        "on"
+        "chinese",
+        "f1",
+        "ahead",
+        "sprint",
+        "gp",
+        "qualifying"
       ],
       "title": "F1 Chinese GP: Mercedes on top ahead of sprint qualifying",
       "timestamp": "2026-03-13T04:46:55"
     },
     {
       "tokens": [
-        "dan",
-        "reveals",
-        "herta",
-        "towriss",
-        "deal",
-        "cadillac",
-        "nearly",
+        "colton",
         "how",
-        "signed",
-        "red",
+        "towriss",
+        "ceo",
         "f1",
         "a",
+        "herta",
+        "nearly",
+        "signed",
+        "red",
+        "deal",
         "bull",
-        "ceo",
-        "colton"
+        "dan",
+        "cadillac",
+        "reveals"
       ],
       "title": "Cadillac CEO Dan Towriss reveals how Colton Herta nearly signed a Red Bull F1 deal",
       "timestamp": "2026-03-12T15:08:29"
@@ -1237,56 +1244,56 @@
     {
       "tokens": [
         "reckons",
+        "australian",
+        "after",
+        "f1",
+        "tough",
         "its",
+        "showed",
+        "qualifying",
         "form",
         "ferrari",
-        "tough",
-        "qualifying",
-        "after",
+        "race",
         "gp",
-        "australian",
-        "f1",
-        "showed",
-        "true",
-        "race"
+        "true"
       ],
       "title": "Ferrari reckons F1 Australian GP race showed its true form after \"tough\" qualifying",
       "timestamp": "2026-03-09T18:00:03"
     },
     {
       "tokens": [
-        "in",
-        "russell",
-        "ferrari",
-        "wins",
-        "strategy",
+        "mercedes",
         "george",
-        "2",
+        "in",
         "1",
+        "australian",
+        "strategy",
+        "f1",
+        "2",
+        "wins",
         "s",
+        "ferrari",
         "fails",
         "gp",
-        "australian",
-        "f1",
-        "mercedes"
+        "russell"
       ],
       "title": "F1 Australian GP: George Russell wins in Mercedes 1-2, Ferrari\u2019s strategy fails",
       "timestamp": "2026-03-08T05:29:08"
     },
     {
       "tokens": [
-        "reveals",
-        "retire",
-        "from",
-        "when",
-        "gp",
-        "aston",
-        "martin",
-        "should",
-        "alonso",
-        "f1",
         "fernando",
-        "australian"
+        "should",
+        "aston",
+        "australian",
+        "f1",
+        "retire",
+        "when",
+        "martin",
+        "alonso",
+        "gp",
+        "from",
+        "reveals"
       ],
       "title": "Fernando Alonso reveals when Aston Martin should retire from F1 Australian GP",
       "timestamp": "2026-03-07T06:58:59"
@@ -1294,19 +1301,19 @@
     {
       "tokens": [
         "max",
-        "russell",
-        "crashes",
         "takes",
-        "as",
+        "pole",
         "george",
-        "out",
-        "gp",
         "australian",
+        "out",
         "f1",
         "3s",
-        "pole",
-        "verstappen",
         "by",
+        "verstappen",
+        "as",
+        "crashes",
+        "gp",
+        "russell",
         "0"
       ],
       "title": "F1 Australian GP: George Russell takes pole by 0.3s as Max Verstappen crashes out",
@@ -1315,105 +1322,105 @@
     {
       "tokens": [
         "max",
-        "in",
-        "causing",
         "barriers",
-        "crashes",
-        "qualifying",
-        "gp",
+        "into",
+        "in",
         "australian",
         "verstappen",
-        "red",
         "flag",
-        "into"
+        "red",
+        "causing",
+        "crashes",
+        "gp",
+        "qualifying"
       ],
       "title": "Max Verstappen crashes into barriers in Australian GP qualifying causing red flag",
       "timestamp": "2026-03-07T05:34:48"
     },
     {
       "tokens": [
+        "2026",
+        "guidelines",
+        "fia",
         "driver",
-        "reveals",
-        "to",
         "after",
         "f1",
-        "guidelines",
         "meeting",
-        "fia",
-        "2026",
+        "tweaks",
         "qatar",
-        "tweaks"
+        "to",
+        "reveals"
       ],
       "title": "FIA reveals tweaks to F1 2026 driver guidelines after Qatar meeting",
       "timestamp": "2026-03-06T11:56:51"
     },
     {
       "tokens": [
-        "t",
-        "retire",
         "from",
-        "lewis",
-        "the",
         "hamilton",
         "africa",
-        "calendar",
-        "won",
-        "returns",
-        "to",
         "f1",
-        "until"
+        "won",
+        "retire",
+        "calendar",
+        "lewis",
+        "returns",
+        "the",
+        "to",
+        "until",
+        "t"
       ],
       "title": "Lewis Hamilton won't retire from F1 until Africa returns to the calendar",
       "timestamp": "2026-03-05T14:03:54"
     },
     {
       "tokens": [
-        "drop",
-        "bottas",
-        "returnee",
+        "all",
+        "loses",
         "after",
         "f1",
+        "drop",
+        "returnee",
         "grid",
-        "all",
-        "valtteri",
-        "loses"
+        "bottas",
+        "valtteri"
       ],
       "title": "F1 returnee Valtteri Bottas loses grid drop after all",
       "timestamp": "2026-03-05T04:07:14"
     },
     {
       "tokens": [
+        "drops",
+        "2026",
+        "sports",
         "off",
         "danica",
-        "as",
-        "confirms",
+        "broadcast",
         "team",
-        "sky",
-        "drops",
         "f1",
         "patrick",
-        "2026",
-        "broadcast",
-        "up",
+        "confirms",
         "line",
-        "sports"
+        "as",
+        "up",
+        "sky"
       ],
       "title": "Sky Sports F1 confirms 2026 broadcast team as Danica Patrick drops off line-up",
       "timestamp": "2026-03-04T18:30:21"
     },
     {
       "tokens": [
+        "penalty",
+        "2026",
+        "for",
+        "grid",
+        "australian",
+        "a",
+        "already",
         "why",
+        "has",
         "bottas",
         "gp",
-        "australian",
-        "grid",
-        "already",
-        "a",
-        "penalty",
-        "for",
-        "2026",
-        "has",
         "valtteri"
       ],
       "title": "Why Valtteri Bottas has a grid penalty for 2026 Australian GP \u2013 already",
@@ -1421,76 +1428,57 @@
     },
     {
       "tokens": [
-        "unveils",
         "new",
-        "arrows",
-        "adidas",
-        "silver",
+        "mercedes",
+        "unveils",
+        "2026",
         "collection",
         "f1",
-        "mercedes",
-        "2026"
+        "silver",
+        "adidas",
+        "arrows"
       ],
       "title": "Mercedes F1 unveils new adidas 2026 Silver Arrows collection",
       "timestamp": "2026-02-27T22:49:59"
     },
     {
       "tokens": [
-        "russell",
-        "brundle",
+        "handle",
         "takes",
         "2026",
-        "george",
         "pressure",
-        "title",
-        "to",
+        "george",
+        "f1",
         "what",
         "martin",
-        "f1",
         "it",
-        "handle",
-        "has"
+        "to",
+        "has",
+        "brundle",
+        "title",
+        "russell"
       ],
       "title": "Martin Brundle: George Russell has what it takes to handle 2026 F1 title pressure",
       "timestamp": "2026-02-27T15:30:02"
     },
     {
       "tokens": [
+        "partnership",
+        "racing",
+        "2026",
+        "multi",
+        "of",
+        "f1",
+        "season",
+        "ahead",
+        "mclaren",
         "etihad",
         "airways",
-        "season",
-        "year",
-        "racing",
-        "mclaren",
-        "ahead",
-        "partnership",
-        "f1",
-        "multi",
-        "2026",
-        "of",
-        "signs"
+        "signs",
+        "year"
       ],
       "title": "McLaren Racing signs multi-year Etihad Airways partnership ahead of 2026 F1 season",
       "timestamp": "2026-02-27T14:19:28"
-    },
-    {
-      "tokens": [
-        "max",
-        "t",
-        "fighting",
-        "won",
-        "admits",
-        "australian",
-        "gp",
-        "win",
-        "verstappen",
-        "red",
-        "bull",
-        "for",
-        "be"
-      ],
-      "title": "Max Verstappen admits Red Bull won't be fighting for Australian GP win",
-      "timestamp": "2026-02-27T10:18:15"
     }
   ]
 }
