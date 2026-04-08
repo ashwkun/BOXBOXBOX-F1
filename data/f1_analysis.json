@@ -55,7 +55,7 @@
     "publishedAt": "2026-03-29T12:37:06Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "77743",
+    "viewCount": "77745",
     "likeCount": "2516",
     "durationSec": 1447,
     "tags": [
@@ -88,8 +88,8 @@
     "publishedAt": "2026-03-27T18:20:46Z",
     "channelTitle": "Steve'sF1Yapping",
     "channelScore": 0.5,
-    "viewCount": "21603",
-    "likeCount": "775",
+    "viewCount": "21638",
+    "likeCount": "779",
     "durationSec": 1686,
     "tags": [
       "ANALYSIS"
@@ -153,8 +153,8 @@
     "publishedAt": "2026-03-25T13:07:09Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "257073",
-    "likeCount": "9134",
+    "viewCount": "257178",
+    "likeCount": "9140",
     "durationSec": 63,
     "tags": [
       "QUALI"
@@ -185,7 +185,7 @@
     "publishedAt": "2026-03-17T19:00:24Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "296825",
+    "viewCount": "296858",
     "likeCount": "5919",
     "durationSec": 710,
     "tags": [
@@ -202,12 +202,28 @@
     "publishedAt": "2026-03-17T17:26:21Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "321516",
+    "viewCount": "321528",
     "likeCount": "5522",
     "durationSec": 554,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=s31IaqVbleY"
+  },
+  {
+    "id": "9FrkFBlwJ1M",
+    "title": "Verstappen And Red Bull’s Massive Problems Explained | F1 Explainer",
+    "description": "What has happened to Red Bull Racing and McLaren? The teams that once dominated Formula 1 now find themselves in deep trouble. In China, everything went wrong: Max Verstappen had issues and retired, Isack Hadjar spun, the RB22 lacks both speed and reliability, and McLaren did not even make it to the start. Meanwhile, Mercedes and Ferrari simply drove away from the field.\n\nIn this video, we analyse the major technical problems facing Red Bull and McLaren. From Max Verstappen’s disastrous weekend ",
+    "thumbnail": "https://i.ytimg.com/vi/9FrkFBlwJ1M/maxresdefault.jpg",
+    "publishedAt": "2026-03-16T17:30:02Z",
+    "channelTitle": "RacingNews365com",
+    "channelScore": 0.5,
+    "viewCount": "19290",
+    "likeCount": "215",
+    "durationSec": 543,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=9FrkFBlwJ1M"
   }
 ]
