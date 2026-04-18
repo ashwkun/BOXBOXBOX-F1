@@ -7,7 +7,7 @@
     "publishedAt": "2026-04-15T18:26:06Z",
     "channelTitle": "Formula Redline ",
     "channelScore": 0.5,
-    "viewCount": "92",
+    "viewCount": "95",
     "likeCount": "1",
     "durationSec": 908,
     "tags": [
@@ -39,8 +39,8 @@
     "publishedAt": "2026-03-31T15:01:49Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "109924",
-    "likeCount": "2751",
+    "viewCount": "109945",
+    "likeCount": "2750",
     "durationSec": 835,
     "tags": [
       "ANALYSIS"
@@ -55,7 +55,7 @@
     "publishedAt": "2026-03-29T16:47:05Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "15732",
+    "viewCount": "15733",
     "likeCount": "693",
     "durationSec": 1085,
     "tags": [
@@ -71,8 +71,8 @@
     "publishedAt": "2026-03-29T14:07:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "563167",
-    "likeCount": "9954",
+    "viewCount": "563187",
+    "likeCount": "9955",
     "durationSec": 618,
     "tags": [
       "GENERAL"
@@ -120,7 +120,7 @@
     "publishedAt": "2026-03-27T08:51:57Z",
     "channelTitle": "Dirty Side of the Grid",
     "channelScore": 0.5,
-    "viewCount": "72806",
+    "viewCount": "72807",
     "likeCount": "1865",
     "durationSec": 116,
     "tags": [
@@ -169,7 +169,7 @@
     "publishedAt": "2026-03-25T13:07:09Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "260373",
+    "viewCount": "260380",
     "likeCount": "9232",
     "durationSec": 63,
     "tags": [
@@ -185,7 +185,7 @@
     "publishedAt": "2026-03-24T10:01:26Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "634133",
+    "viewCount": "634151",
     "likeCount": "11105",
     "durationSec": 1001,
     "tags": [
@@ -218,12 +218,28 @@
     "publishedAt": "2026-03-17T17:26:21Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "322036",
+    "viewCount": "322041",
     "likeCount": "5526",
     "durationSec": 554,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=s31IaqVbleY"
+  },
+  {
+    "id": "9FrkFBlwJ1M",
+    "title": "Verstappen And Red Bull’s Massive Problems Explained | F1 Explainer",
+    "description": "What has happened to Red Bull Racing and McLaren? The teams that once dominated Formula 1 now find themselves in deep trouble. In China, everything went wrong: Max Verstappen had issues and retired, Isack Hadjar spun, the RB22 lacks both speed and reliability, and McLaren did not even make it to the start. Meanwhile, Mercedes and Ferrari simply drove away from the field.\n\nIn this video, we analyse the major technical problems facing Red Bull and McLaren. From Max Verstappen’s disastrous weekend ",
+    "thumbnail": "https://i.ytimg.com/vi/9FrkFBlwJ1M/maxresdefault.jpg",
+    "publishedAt": "2026-03-16T17:30:02Z",
+    "channelTitle": "RacingNews365com",
+    "channelScore": 0.5,
+    "viewCount": "19467",
+    "likeCount": "215",
+    "durationSec": 543,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=9FrkFBlwJ1M"
   }
 ]
