@@ -7,8 +7,8 @@
     "publishedAt": "2026-04-21T14:38:00Z",
     "channelTitle": "Curious F1 Girl",
     "channelScore": 0.5,
-    "viewCount": "953",
-    "likeCount": "13",
+    "viewCount": "1039",
+    "likeCount": "14",
     "durationSec": 130,
     "tags": [
       "ANALYSIS"
@@ -39,7 +39,7 @@
     "publishedAt": "2026-03-31T15:01:49Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "111661",
+    "viewCount": "111712",
     "likeCount": "2768",
     "durationSec": 835,
     "tags": [
@@ -71,7 +71,7 @@
     "publishedAt": "2026-03-29T14:07:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "564375",
+    "viewCount": "564385",
     "likeCount": "9963",
     "durationSec": 618,
     "tags": [
@@ -153,7 +153,7 @@
     "publishedAt": "2026-03-25T13:07:09Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "260515",
+    "viewCount": "260517",
     "likeCount": "9233",
     "durationSec": 63,
     "tags": [
@@ -169,7 +169,7 @@
     "publishedAt": "2026-03-24T10:01:26Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "635138",
+    "viewCount": "635146",
     "likeCount": "11107",
     "durationSec": 1001,
     "tags": [
@@ -185,7 +185,7 @@
     "publishedAt": "2026-03-17T19:00:24Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "300384",
+    "viewCount": "300410",
     "likeCount": "5927",
     "durationSec": 710,
     "tags": [
@@ -202,12 +202,28 @@
     "publishedAt": "2026-03-17T17:26:21Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "322219",
+    "viewCount": "322223",
     "likeCount": "5529",
     "durationSec": 554,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=s31IaqVbleY"
+  },
+  {
+    "id": "9FrkFBlwJ1M",
+    "title": "Verstappen And Red Bull’s Massive Problems Explained | F1 Explainer",
+    "description": "What has happened to Red Bull Racing and McLaren? The teams that once dominated Formula 1 now find themselves in deep trouble. In China, everything went wrong: Max Verstappen had issues and retired, Isack Hadjar spun, the RB22 lacks both speed and reliability, and McLaren did not even make it to the start. Meanwhile, Mercedes and Ferrari simply drove away from the field.\n\nIn this video, we analyse the major technical problems facing Red Bull and McLaren. From Max Verstappen’s disastrous weekend ",
+    "thumbnail": "https://i.ytimg.com/vi/9FrkFBlwJ1M/maxresdefault.jpg",
+    "publishedAt": "2026-03-16T17:30:02Z",
+    "channelTitle": "RacingNews365com",
+    "channelScore": 0.5,
+    "viewCount": "19526",
+    "likeCount": "215",
+    "durationSec": 543,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=9FrkFBlwJ1M"
   }
 ]
