@@ -23,7 +23,7 @@
     "publishedAt": "2026-04-20T19:39:59Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "437395",
+    "viewCount": "437400",
     "likeCount": "7730",
     "durationSec": 656,
     "tags": [
@@ -39,7 +39,7 @@
     "publishedAt": "2026-04-17T15:00:06Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "156228",
+    "viewCount": "156240",
     "likeCount": "2490",
     "durationSec": 3051,
     "tags": [
@@ -55,7 +55,7 @@
     "publishedAt": "2026-03-31T15:01:49Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "114585",
+    "viewCount": "114581",
     "likeCount": "2790",
     "durationSec": 835,
     "tags": [
@@ -87,13 +87,29 @@
     "publishedAt": "2026-03-29T14:07:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "565785",
+    "viewCount": "565792",
     "likeCount": "9973",
     "durationSec": 618,
     "tags": [
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=VSZYzs5X9q8"
+  },
+  {
+    "id": "4cScmKSQXtI",
+    "title": "2026 F1 Japanese GP RACE analysis by Peter Windsor",
+    "description": "Kimi Antonelli didn't make a great start from the Suzuka pole but he recovered well before taking full advantage of a timely Safety Car on lap 22: back in front at the restart, with Oscar Piastri's McLaren-Mercedes now in his mirrors, the young Italian then disappeared into the Japanese sunset, setting fastest lap as he secured his second win in a row. Oscar duly finished a gritty P2, beating Charles Leclerc's Ferrari to the line by 1.5sec, while George Russell could finish only P4 for Mercedes ",
+    "thumbnail": "https://i.ytimg.com/vi/4cScmKSQXtI/maxresdefault.jpg",
+    "publishedAt": "2026-03-29T12:37:06Z",
+    "channelTitle": "Peter Windsor",
+    "channelScore": 0.5,
+    "viewCount": "78173",
+    "likeCount": "2515",
+    "durationSec": 1447,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=4cScmKSQXtI"
   },
   {
     "id": "EPMGW-Q2pzI",
@@ -169,7 +185,7 @@
     "publishedAt": "2026-03-24T10:01:26Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "636887",
+    "viewCount": "636885",
     "likeCount": "11111",
     "durationSec": 1001,
     "tags": [
@@ -185,7 +201,7 @@
     "publishedAt": "2026-03-17T19:00:24Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "303480",
+    "viewCount": "303500",
     "likeCount": "5938",
     "durationSec": 710,
     "tags": [
@@ -193,21 +209,5 @@
       "NEWS"
     ],
     "url": "https://www.youtube.com/watch?v=PMJcOnSv4uE"
-  },
-  {
-    "id": "s31IaqVbleY",
-    "title": "McLaren’s nightmare start to F1 2026 explained",
-    "description": "Make us your paddock pass for the rest of F1 2026 by joining The Race Members' Club! Get 90% off your first month now: https://www.patreon.com/cw/TheRace/membership\n\nMcLaren’s F1 title defence has started miserably, but it’s facing bigger problems than simply the embarrassment of having to withdraw both its cars before the start of the Chinese Grand Prix. \n\n00:00 McLaren's nightmare start\n00:55 Reliability embarrassment \n02:23 A rude awakening\n05:57 An 'underdeveloped' car\n07:43 Can it close the",
-    "thumbnail": "https://i.ytimg.com/vi/s31IaqVbleY/maxresdefault.jpg",
-    "publishedAt": "2026-03-17T17:26:21Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "322613",
-    "likeCount": "5529",
-    "durationSec": 554,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=s31IaqVbleY"
   }
 ]
