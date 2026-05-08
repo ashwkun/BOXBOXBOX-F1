@@ -7,8 +7,8 @@
     "publishedAt": "2026-05-01T16:00:00Z",
     "channelTitle": "B Sport",
     "channelScore": 0.5,
-    "viewCount": "14251",
-    "likeCount": "795",
+    "viewCount": "14259",
+    "likeCount": "797",
     "durationSec": 383,
     "tags": [
       "ANALYSIS"
@@ -39,7 +39,7 @@
     "publishedAt": "2026-04-20T19:39:59Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "437440",
+    "viewCount": "437444",
     "likeCount": "7730",
     "durationSec": 656,
     "tags": [
@@ -55,7 +55,7 @@
     "publishedAt": "2026-04-17T15:00:06Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "156472",
+    "viewCount": "156562",
     "likeCount": "2490",
     "durationSec": 3051,
     "tags": [
@@ -71,7 +71,7 @@
     "publishedAt": "2026-03-31T15:01:49Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "114630",
+    "viewCount": "114641",
     "likeCount": "2791",
     "durationSec": 835,
     "tags": [
@@ -103,7 +103,7 @@
     "publishedAt": "2026-03-29T14:07:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "565806",
+    "viewCount": "565810",
     "likeCount": "9974",
     "durationSec": 618,
     "tags": [
@@ -152,7 +152,7 @@
     "publishedAt": "2026-03-27T08:51:57Z",
     "channelTitle": "Dirty Side of the Grid",
     "channelScore": 0.5,
-    "viewCount": "72909",
+    "viewCount": "72911",
     "likeCount": "1867",
     "durationSec": 116,
     "tags": [
@@ -176,21 +176,5 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=ZT_xMIZOan4"
-  },
-  {
-    "id": "MmaOeEDEyI0",
-    "title": "Leclerc data reveals F1 qualifying mess 🤯",
-    "description": "F1 2026 has ruined qualifying, and this Charles Leclerc lap data we’ve dug deep into explains why. Don't forget to watch the full analysis, click on the 'related video' link.\n\n#f1 #formulaone #formula1 #f12026 #f1analysis #f1tech #f1engine #ferrari #ferrarif1 #fia #charlesleclerc #china",
-    "thumbnail": "https://i.ytimg.com/vi/MmaOeEDEyI0/maxresdefault.jpg",
-    "publishedAt": "2026-03-25T13:07:09Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "260709",
-    "likeCount": "9232",
-    "durationSec": 63,
-    "tags": [
-      "QUALI"
-    ],
-    "url": "https://www.youtube.com/watch?v=MmaOeEDEyI0"
   }
 ]
