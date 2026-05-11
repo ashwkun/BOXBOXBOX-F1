@@ -7,8 +7,8 @@
     "publishedAt": "2026-05-04T06:14:22Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "336853",
-    "likeCount": "5562",
+    "viewCount": "337039",
+    "likeCount": "5565",
     "durationSec": 647,
     "tags": [
       "GENERAL"
@@ -23,7 +23,7 @@
     "publishedAt": "2026-05-03T20:40:49Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "87278",
+    "viewCount": "87318",
     "likeCount": "2750",
     "durationSec": 1160,
     "tags": [
@@ -87,7 +87,7 @@
     "publishedAt": "2026-04-20T19:39:59Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "437643",
+    "viewCount": "437655",
     "likeCount": "7730",
     "durationSec": 656,
     "tags": [
@@ -103,7 +103,7 @@
     "publishedAt": "2026-04-17T15:00:06Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "157495",
+    "viewCount": "157529",
     "likeCount": "2491",
     "durationSec": 3051,
     "tags": [
@@ -119,7 +119,7 @@
     "publishedAt": "2026-03-31T15:01:49Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "114847",
+    "viewCount": "114860",
     "likeCount": "2793",
     "durationSec": 835,
     "tags": [
@@ -151,7 +151,7 @@
     "publishedAt": "2026-03-29T14:07:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "565896",
+    "viewCount": "565898",
     "likeCount": "9974",
     "durationSec": 618,
     "tags": [
@@ -167,7 +167,7 @@
     "publishedAt": "2026-03-29T12:37:06Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "78178",
+    "viewCount": "78180",
     "likeCount": "2515",
     "durationSec": 1447,
     "tags": [
@@ -191,23 +191,6 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=EPMGW-Q2pzI"
-  },
-  {
-    "id": "PMJcOnSv4uE",
-    "title": "Breaking Down The Battle Between Mercedes & Ferrari | Jolyon Palmer’s F1 TV Analysis",
-    "description": "Jolyon Palmer takes a close look at how the battle between Mercedes and Ferrari unfolded in China. \n\nFor more F1® videos, visit: https://www.Formula1.com\n\nVisit our store: https://f1store.formula1.com/\n\nFollow F1®:\nhttps://www.instagram.com/F1\nhttps://www.facebook.com/Formula1/\nhttps://www.twitter.com/F1\nhttps://www.twitch.tv/formula1\nhttps://www.tiktok.com/@f1\n\n#F1 #ChineseGP",
-    "thumbnail": "https://i.ytimg.com/vi/PMJcOnSv4uE/maxresdefault.jpg",
-    "publishedAt": "2026-03-17T19:00:24Z",
-    "channelTitle": "FORMULA 1",
-    "channelScore": 1,
-    "viewCount": "303856",
-    "likeCount": "5942",
-    "durationSec": 710,
-    "tags": [
-      "ANALYSIS",
-      "NEWS"
-    ],
-    "url": "https://www.youtube.com/watch?v=PMJcOnSv4uE"
   },
   {
     "id": "8k0b-vRWKYs",
@@ -250,12 +233,28 @@
     "publishedAt": "2026-03-25T13:07:09Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "260732",
+    "viewCount": "260733",
     "likeCount": "9234",
     "durationSec": 63,
     "tags": [
       "QUALI"
     ],
     "url": "https://www.youtube.com/watch?v=MmaOeEDEyI0"
+  },
+  {
+    "id": "pWnTFd7wdHo",
+    "title": "The Charles Leclerc lap that's exposed how F1 2026 has ruined qualifying",
+    "description": "Last chance to claim 90% off your paddock pass for F1 2026, with exclusive videos and podcasts in The Race Members' Club: https://www.patreon.com/cw/TheRace/membership\n\nJon and Edd reveal the 'smoking gun' that shows how 2026 has ruined qualifying and why F1 needs to fix it. \n\n00:00 F1 qualifying is broken\n01:30 The smoking gun\n04:15 What's going on\n07:30 No more 'crazy' qualifying laps\n10:50 Impact on racing too\n12:30 Over-complicated rules\n\nGP Tempo: https://www.gp-tempo.com/\n\nSubscribe: http:",
+    "thumbnail": "https://i.ytimg.com/vi/pWnTFd7wdHo/maxresdefault.jpg",
+    "publishedAt": "2026-03-24T10:01:26Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "637141",
+    "likeCount": "11112",
+    "durationSec": 1001,
+    "tags": [
+      "QUALI"
+    ],
+    "url": "https://www.youtube.com/watch?v=pWnTFd7wdHo"
   }
 ]
