@@ -7,8 +7,8 @@
     "publishedAt": "2026-05-04T06:14:22Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "338723",
-    "likeCount": "5587",
+    "viewCount": "338780",
+    "likeCount": "5588",
     "durationSec": 647,
     "tags": [
       "GENERAL"
@@ -23,13 +23,30 @@
     "publishedAt": "2026-05-03T20:40:49Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "87673",
-    "likeCount": "2756",
+    "viewCount": "87675",
+    "likeCount": "2757",
     "durationSec": 1160,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=0EoJVdC92Sg"
+  },
+  {
+    "id": "_zgjo-K9dtI",
+    "title": "Ferrari SF-26 COMPLETELY REBUILT for Miami - Every Upgrade Explained in Detail",
+    "description": "Ferrari SF-26 arrived in Miami with complete rebuild. New front wing end plates, redesigned floor with 3-element separation, fixed Macarena rear wing with rotating pillar, revised diffuser, weight reduction program, and software package Hamilton tested for 884km at Fiorano. This is not an update. This is a different car. Complete technical breakdown of every change.\n\nSubscribe Formula Redline ➡️ https://youtube.com/@FormulaRedline-p3t?si=xbLn1vAsKWZSG2RC\n\n⏱️ CHAPTERS:\n0:00 - SF-26 Miami Package ",
+    "thumbnail": "https://i.ytimg.com/vi/_zgjo-K9dtI/maxresdefault.jpg",
+    "publishedAt": "2026-04-30T17:58:18Z",
+    "channelTitle": "Formula Redline ",
+    "channelScore": 0.5,
+    "viewCount": "1277",
+    "likeCount": "13",
+    "durationSec": 424,
+    "tags": [
+      "ANALYSIS",
+      "TECH"
+    ],
+    "url": "https://www.youtube.com/watch?v=_zgjo-K9dtI"
   },
   {
     "id": "JuAWM7WcDJo",
@@ -87,7 +104,7 @@
     "publishedAt": "2026-04-20T19:39:59Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "437841",
+    "viewCount": "437845",
     "likeCount": "7733",
     "durationSec": 656,
     "tags": [
@@ -103,7 +120,7 @@
     "publishedAt": "2026-04-17T15:00:06Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "158496",
+    "viewCount": "158528",
     "likeCount": "2491",
     "durationSec": 3051,
     "tags": [
@@ -119,7 +136,7 @@
     "publishedAt": "2026-03-31T15:01:49Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "115005",
+    "viewCount": "115013",
     "likeCount": "2794",
     "durationSec": 835,
     "tags": [
@@ -151,7 +168,7 @@
     "publishedAt": "2026-03-29T14:07:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "565984",
+    "viewCount": "565990",
     "likeCount": "9975",
     "durationSec": 618,
     "tags": [
@@ -191,22 +208,5 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=EPMGW-Q2pzI"
-  },
-  {
-    "id": "8k0b-vRWKYs",
-    "title": "Why Qualifying is BROKEN in 2026 - Leclerc's Algorithmic Mess Explained #leclerc #f1technology #f1",
-    "description": "",
-    "thumbnail": "https://i.ytimg.com/vi/8k0b-vRWKYs/maxresdefault.jpg",
-    "publishedAt": "2026-03-27T08:51:57Z",
-    "channelTitle": "Dirty Side of the Grid",
-    "channelScore": 0.5,
-    "viewCount": "72920",
-    "likeCount": "1867",
-    "durationSec": 116,
-    "tags": [
-      "QUALI",
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=8k0b-vRWKYs"
   }
 ]
