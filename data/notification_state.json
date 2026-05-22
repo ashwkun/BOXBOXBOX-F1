@@ -275,18 +275,14 @@
       "score": 75,
       "timestamp": "2026-05-21T17:21:19",
       "image": "https://cdn-7.motorsport.com/images/amp/YE9wWVPY/s6/esteban-ocon-haas-f1-team.jpg"
-    }
-  ],
-  "slot1_remaining": 0,
-  "slot2_remaining": 2,
-  "digest_items": [
+    },
     {
       "id": "15738a8ff0c360e50cfa06bde6114323",
       "title": "Lando Norris reveals special Canadian GP helmet for Sir Jackie Stewart's dementia charity",
       "url": "https://www.motorsport.com/f1/news/lando-norris-reveals-special-canadian-gp-helmet-for-sir-jackie-stewarts-dementia-charity/10822695/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 70,
       "timestamp": "2026-05-21T19:59:40",
-      "image": "https://cdn-3.motorsport.com/images/amp/0rVxgxq0/s6/lando-norris-mclaren.jpg"
+      "image": "https://cdn-1.motorsport.com/images/amp/0rVxgxq0/s6/lando-norris-mclaren.jpg"
     },
     {
       "id": "9da9c9ada7c904f928511096ee6cf6e5",
@@ -295,22 +291,18 @@
       "score": 60,
       "timestamp": "2026-05-19T10:19:34",
       "image": "https://cdn-3.motorsport.com/images/amp/2jEDm4z0/s6/honda-power-unit-launch.jpg"
-    },
+    }
+  ],
+  "slot1_remaining": 0,
+  "slot2_remaining": 0,
+  "digest_items": [
     {
       "id": "06d0013f967cb4535fdcb494f3b0be37",
       "title": "Fernando Alonso admits Aston Martin driveability gains worth only \"half a tenth\"",
       "url": "https://www.motorsport.com/f1/news/alonso-says-aston-martin-driveability-gains-worth-only-half-a-tenth/10822731/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 55,
       "timestamp": "2026-05-21T21:55:51",
-      "image": "https://cdn-6.motorsport.com/images/amp/YMX3G532/s6/fernando-alonso-aston-martin-r.jpg"
-    },
-    {
-      "id": "f077a7db97e708f54395535a72d7cd1e",
-      "title": "Christian Horner explains Monaco E-Prix visit after Red Bull F1 exit",
-      "url": "https://www.motorsport.com/formula-e/news/christian-horner-explains-monaco-e-prix-visit-after-red-bull-f1-exit/10822070/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 50,
-      "timestamp": "2026-05-21T15:21:54",
-      "image": "https://cdn-9.motorsport.com/images/amp/YN7wJ5J6/s6/christian-horner.jpg"
+      "image": "https://cdn-1.motorsport.com/images/amp/YMX3G532/s6/fernando-alonso-aston-martin-r.jpg"
     },
     {
       "id": "af262dcfc3ac97c52b0e373bf298f8d3",
@@ -321,12 +313,28 @@
       "image": "https://cdn-3.motorsport.com/images/amp/0R7wGvE2/s6/oscar-piastri-mclaren.jpg"
     },
     {
+      "id": "f077a7db97e708f54395535a72d7cd1e",
+      "title": "Christian Horner explains Monaco E-Prix visit after Red Bull F1 exit",
+      "url": "https://www.motorsport.com/formula-e/news/christian-horner-explains-monaco-e-prix-visit-after-red-bull-f1-exit/10822070/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 40,
+      "timestamp": "2026-05-21T15:21:54",
+      "image": "https://cdn-6.motorsport.com/images/amp/YN7wJ5J6/s6/christian-horner.jpg"
+    },
+    {
       "id": "21ba76a72cec2e9121c6877332e8fdc9",
       "title": "Red Bull launches $95 Crocs clog with F1 car-inspired design",
       "url": "https://www.motorsport.com/f1/news/red-bull-launches-95-crocs-clog-with-f1-car-inspired-design/10821798/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 37,
       "timestamp": "2026-05-18T07:45:18",
       "image": "https://cdn-1.motorsport.com/images/amp/YK13JQw0/s6/si202605070168.jpg"
+    },
+    {
+      "id": "6c010e3be9289cc6142801c814849dab",
+      "title": "Why Oliver Bearman says he must \u201cearn the right\u201d to follow Max Verstappen\u2019s example",
+      "url": "https://www.motorsport.com/f1/news/why-oliver-bearman-says-he-must-earn-the-right-to-follow-verstappens-example/10822776/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 35,
+      "timestamp": "2026-05-22T13:58:16",
+      "image": "https://cdn-4.motorsport.com/images/amp/0qgPbv4Y/s6/oliver-bearman-haas-f1-team-2.jpg"
     },
     {
       "id": "855905b0cc3d73d61f2a96ec6137e445",
@@ -342,7 +350,7 @@
       "url": "https://www.motorsport.com/f1/news/red-bull-provides-update-on-long-awaited-new-f1-wind-tunnel/10822482/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 32,
       "timestamp": "2026-05-21T08:52:35",
-      "image": "https://cdn-6.motorsport.com/images/amp/YN1e5p32/s6/red-bull-wind-tunnel.jpg"
+      "image": "https://cdn-8.motorsport.com/images/amp/YN1e5p32/s6/red-bull-wind-tunnel.jpg"
     },
     {
       "id": "a083444b784f012c33690ffa82358ef1",
@@ -350,7 +358,7 @@
       "url": "https://www.motorsport.com/f1/news/george-russell-on-20-point-gap-to-kimi-antonelli-it-means-nothing/10822909/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 30,
       "timestamp": "2026-05-22T13:13:43",
-      "image": "https://cdn-7.motorsport.com/images/amp/6Vy7xaLY/s6/george-russell-mercedes.jpg"
+      "image": "https://cdn-6.motorsport.com/images/amp/6Vy7xaLY/s6/george-russell-mercedes.jpg"
     },
     {
       "id": "cefcd6f45117208f998320feec0aa6d1",
@@ -366,7 +374,7 @@
       "url": "https://www.motorsport.com/f1/news/max-verstappen-very-positive-engine-changes-definitely-help-me-stay-in-f1/10822715/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 30,
       "timestamp": "2026-05-21T20:59:34",
-      "image": "https://cdn-7.motorsport.com/images/amp/0qgPEzOY/s6/max-verstappen-red-bull-racing.jpg"
+      "image": "https://cdn-5.motorsport.com/images/amp/0qgPEzOY/s6/max-verstappen-red-bull-racing.jpg"
     },
     {
       "id": "c6269c6d8a8fc6e7e0a788e7640b0e3e",
@@ -374,7 +382,7 @@
       "url": "https://www.motorsport.com/f1/news/carlos-sainz-f1-and-fia-must-be-tough-on-2027-changes/10822699/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 30,
       "timestamp": "2026-05-21T20:12:47",
-      "image": "https://cdn-6.motorsport.com/images/amp/0Ld5BpJ0/s6/carlos-sainz-williams.jpg"
+      "image": "https://cdn-3.motorsport.com/images/amp/0Ld5BpJ0/s6/carlos-sainz-williams.jpg"
     },
     {
       "id": "1989049022b6f5f6e56348e942edaa7b",
@@ -383,14 +391,6 @@
       "score": 30,
       "timestamp": "2026-05-18T07:37:29",
       "image": "https://cdn-1.motorsport.com/images/amp/YK13vbX0/s6/juan-pablo-montoya.jpg"
-    },
-    {
-      "id": "2d42c10186af86dc0612fa59b381b4f3",
-      "title": "Martin Brundle predicts Canadian GP drama as F1 drivers \"are a little bit scared\" of unknown",
-      "url": "https://www.motorsport.com/f1/news/martin-brundle-predicts-canadian-gp-drama-as-drivers-are-a-little-bit-scared-of-f1-unknown/10822623/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 25,
-      "timestamp": "2026-05-21T16:58:34",
-      "image": "https://cdn-1.motorsport.com/images/amp/2y3eBVp6/s6/martin-brundle.jpg"
     }
   ],
   "digest_sent": false,
@@ -1207,117 +1207,155 @@
     "67a6a5cc75494889d11e87a7c062b0d8",
     "9da9c9ada7c904f928511096ee6cf6e5",
     "7c38a57b80830ae4f4b7b7dabe93bac3",
-    "fc9722f9fadfd5259b84a31f2919ff43"
+    "fc9722f9fadfd5259b84a31f2919ff43",
+    "521fae2bf9b5530fa049cd8875192778",
+    "fbef9e31aa9013e3b6c73deef9b29678"
   ],
   "schema_version": 3,
   "sent_urls": [
-    "https://www.motorsport.com/f1/news/lionel-messi-congratulates-kimi-antonelli-after-miami-gp-win/10818004/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/kimi-antonelli-faces-monaco-gp-concern-despite-extending-f1-championship-lead-says-jolyon-palmer/10819506/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/striking-racing-bulls-miami-gp-livery-wins-over-fans-with-calls-to-make-it-permanent/10816686/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/max-verstappen-revisits-super-chaotic-2024-brazil-gp-win-as-one-of-my-best-races/10821659/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/kimi-antonellis-support-system-crucial-to-f1-title-fight-says-david-coulthard/10819686/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/alex-albon-praises-miami-gp-growth-after-williams-points-finish/10819710/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/alex-albon-reveals-williams-weakness-exposed-by-delayed-2026-f1-start/10816551/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/apple-reveals-early-f1-viewership-surge-after-150m-us-broadcast-deal/10816971/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/isack-hadjar-insists-gap-to-max-verstappen-isnt-as-big-as-f1-miami-gp-qualifying-suggests/10817708/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/why-oscar-piastri-ranks-2026-japanese-gp-second-place-above-50-of-his-f1-wins/10815916/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/gabriel-bortoleto-disqualified-from-miami-sprint-race-heres-why/10817491/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-miami-gp-report/10817831/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mclaren-cost-themselves-miami-gp-win-with-hesitant-strategy-call-says-jolyon-palmer/10819500/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/the-lotus-72-was-an-extension-of-my-body-emerson-fittipaldi-reveals/10820966/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/can-george-russell-take-inspiration-from-lando-norris-in-quest-for-f1-title/10820983/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/kimi-antonelli-reflects-on-best-day-after-maiden-f1-gp-win-and-reveals-italy-reaction/10815316/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/cadillac-details-new-f1-upgrade-package-for-canadian-gp/10822214/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/mclaren-strategy-under-fire-after-lando-norris-missed-out-on-miami-gp-victory/10818754/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/the-big-red-bull-upgrade-package-and-its-own-macarena-f1-wing-explained/10816973/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/isack-hadjar-officially-disqualified-from-f1-miami-gp-qualifying/10817731/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/why-mclaren-felt-the-real-picture-was-miami-gp-qualifying-and-not-its-sprint-pole-and-win/10817592/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-miami-gp-tktk/10817356/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/alex-albon-reveals-williams-weakness-exposed-by-delayed-2026-f1-start/10816551/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/honda-reveals-important-target-for-f1-canadian-gp/10822131/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/apple-reveals-early-f1-viewership-surge-after-150m-us-broadcast-deal/10816971/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-miami-gp-report/10817831/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/cadillac-f1-team-reveals-special-miami-gp-livery/10816172/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/ocon-hits-out-at-bullshit-claims-of-komatsu-dispute-and-early-haas-f1-exit/10822634/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/the-unique-f1-record-that-kimi-antonelli-broke-with-his-miami-gp-win/10818399/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/kimi-antonellis-support-system-crucial-to-f1-title-fight-says-david-coulthard/10819686/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/lando-norris-reveals-special-canadian-gp-helmet-for-sir-jackie-stewarts-dementia-charity/10822695/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/williams-f1-confirms-sizeable-upgrade-package-planned-for-canadian-gp/10819708/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/cadillac-details-new-f1-upgrade-package-for-canadian-gp/10822214/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/kimi-antonelli-reflects-on-best-day-after-maiden-f1-gp-win-and-reveals-italy-reaction/10815316/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/alex-albon-issues-honest-williams-verdict-ahead-of-miami-gp-upgrade-package/10815943/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/ollie-bearman-admits-f2-did-not-prepare-him-for-brutal-reality-of-ferrari-f1-debut/10821010/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/gabriel-bortoleto-disqualified-from-miami-sprint-race-heres-why/10817491/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/striking-racing-bulls-miami-gp-livery-wins-over-fans-with-calls-to-make-it-permanent/10816686/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/can-george-russell-take-inspiration-from-lando-norris-in-quest-for-f1-title/10820983/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mclaren-cost-themselves-miami-gp-win-with-hesitant-strategy-call-says-jolyon-palmer/10819500/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/ollie-bearman-reveals-biggest-lesson-from-rookie-f1-season/10819691/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/kimi-antonelli-faces-monaco-gp-concern-despite-extending-f1-championship-lead-says-jolyon-palmer/10819506/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/max-verstappen-revisits-super-chaotic-2024-brazil-gp-win-as-one-of-my-best-races/10821659/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/alex-albon-praises-miami-gp-growth-after-williams-points-finish/10819710/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/guenther-steiner-hits-out-at-miami-gp-stewards-as-he-calls-for-time-limit-on-post-race-penalties/10819493/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/isack-hadjar-insists-gap-to-max-verstappen-isnt-as-big-as-f1-miami-gp-qualifying-suggests/10817708/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/why-oscar-piastri-ranks-2026-japanese-gp-second-place-above-50-of-his-f1-wins/10815916/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/lionel-messi-congratulates-kimi-antonelli-after-miami-gp-win/10818004/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/fia-reveals-latest-tweaks-to-f1-rules-for-2027-season/10819135/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/max-verstappen-handed-time-penalty-for-crossing-pit-exit-at-f1-miami-gp/10817988/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/guenther-steiner-hits-out-at-miami-gp-stewards-as-he-calls-for-time-limit-on-post-race-penalties/10819493/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/kimi-antonellis-f1-title-hopes-assessed-after-historic-championship-lead/10815780/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/why-mclaren-felt-the-real-picture-was-miami-gp-qualifying-and-not-its-sprint-pole-and-win/10817592/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/cadillac-f1-team-reveals-special-miami-gp-livery/10816172/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/ollie-bearman-reveals-biggest-lesson-from-rookie-f1-season/10819691/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/ollie-bearman-admits-f2-did-not-prepare-him-for-brutal-reality-of-ferrari-f1-debut/10821010/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/alex-albon-issues-honest-williams-verdict-ahead-of-miami-gp-upgrade-package/10815943/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/the-unique-f1-record-that-kimi-antonelli-broke-with-his-miami-gp-win/10818399/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/ocon-hits-out-at-bullshit-claims-of-komatsu-dispute-and-early-haas-f1-exit/10822634/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-miami-gp-tktk/10817356/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
+    "https://www.motorsport.com/f1/news/the-lotus-72-was-an-extension-of-my-body-emerson-fittipaldi-reveals/10820966/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/kimi-antonellis-f1-title-hopes-assessed-after-historic-championship-lead/10815780/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
   ],
   "title_fingerprints": [
     {
       "tokens": [
-        "and",
-        "claims",
-        "early",
-        "out",
-        "f1",
-        "at",
-        "of",
-        "dispute",
-        "ayao",
-        "haas",
-        "esteban",
-        "bulls",
-        "hits",
+        "gp",
+        "jackie",
+        "lando",
+        "special",
+        "norris",
+        "s",
+        "stewart",
+        "charity",
+        "canadian",
+        "helmet",
+        "for",
+        "reveals",
+        "sir",
+        "dementia"
+      ],
+      "title": "Lando Norris reveals special Canadian GP helmet for Sir Jackie Stewart's dementia charity",
+      "timestamp": "2026-05-21T19:59:40"
+    },
+    {
+      "tokens": [
         "t",
+        "and",
         "ocon",
+        "bulls",
+        "claims",
+        "of",
+        "komatsu",
+        "haas",
+        "out",
+        "dispute",
+        "at",
+        "esteban",
+        "ayao",
+        "early",
         "exit",
-        "komatsu"
+        "hits",
+        "f1"
       ],
       "title": "Esteban Ocon hits out at \"bulls**t\" claims of Ayao Komatsu dispute and early Haas F1 exit",
       "timestamp": "2026-05-21T17:21:19"
     },
     {
       "tokens": [
-        "gp",
-        "f1",
-        "for",
         "details",
-        "cadillac",
-        "canadian",
+        "gp",
         "upgrade",
         "new",
-        "package"
+        "for",
+        "package",
+        "canadian",
+        "f1",
+        "cadillac"
       ],
       "title": "Cadillac details new F1 upgrade package for Canadian GP",
       "timestamp": "2026-05-19T14:28:28"
     },
     {
       "tokens": [
-        "super",
         "gp",
-        "max",
+        "honda",
+        "target",
+        "canadian",
+        "for",
+        "important",
+        "reveals",
+        "f1"
+      ],
+      "title": "Honda reveals \u201cimportant target\u201d for F1 Canadian GP",
+      "timestamp": "2026-05-19T10:19:34"
+    },
+    {
+      "tokens": [
+        "gp",
         "one",
-        "my",
-        "win",
-        "brazil",
-        "chaotic",
-        "races",
         "of",
-        "verstappen",
         "best",
         "2024",
-        "revisits"
+        "brazil",
+        "max",
+        "verstappen",
+        "chaotic",
+        "races",
+        "super",
+        "revisits",
+        "win",
+        "my"
       ],
       "title": "Max Verstappen revisits \"super chaotic\" 2024 Brazil GP win: \"One of my best races\"",
       "timestamp": "2026-05-17T22:15:54"
     },
     {
       "tokens": [
-        "from",
-        "lando",
-        "title",
-        "f1",
-        "for",
-        "george",
-        "russell",
-        "take",
-        "can",
-        "quest",
-        "norris",
         "inspiration",
+        "f1",
+        "russell",
+        "lando",
+        "norris",
+        "quest",
+        "george",
+        "title",
+        "can",
+        "for",
+        "from",
+        "take",
         "in"
       ],
       "title": "Can George Russell take inspiration from Lando Norris in quest for F1 title?",
@@ -1325,21 +1363,21 @@
     },
     {
       "tokens": [
-        "reality",
-        "not",
-        "ferrari",
-        "debut",
-        "f1",
-        "brutal",
-        "for",
-        "of",
-        "prepare",
         "bearman",
-        "ollie",
-        "admits",
         "f2",
+        "of",
+        "brutal",
+        "debut",
         "him",
-        "did"
+        "reality",
+        "ferrari",
+        "ollie",
+        "for",
+        "prepare",
+        "admits",
+        "f1",
+        "did",
+        "not"
       ],
       "title": "Ollie Bearman admits F2 did not prepare him for brutal reality of Ferrari F1 debut",
       "timestamp": "2026-05-15T18:52:52"
@@ -1347,127 +1385,127 @@
     {
       "tokens": [
         "the",
-        "was",
-        "my",
-        "emerson",
+        "body",
         "of",
         "an",
-        "reveals",
-        "extension",
         "fittipaldi",
+        "was",
+        "72",
+        "emerson",
+        "extension",
+        "reveals",
         "lotus",
-        "body",
-        "72"
+        "my"
       ],
       "title": "The Lotus 72 was \"an extension of my body,\" Emerson Fittipaldi reveals",
       "timestamp": "2026-05-15T12:40:06"
     },
     {
       "tokens": [
-        "the",
-        "after",
+        "why",
         "gp",
-        "finish",
-        "miami",
         "won",
-        "on",
-        "over",
-        "him",
-        "points",
+        "the",
         "alex",
+        "on",
         "albon",
         "has",
+        "finish",
         "williams",
-        "why"
+        "over",
+        "points",
+        "him",
+        "miami",
+        "after"
       ],
       "title": "Alex Albon on why the Miami GP has won him over after Williams points finish",
       "timestamp": "2026-05-13T13:05:02"
     },
     {
       "tokens": [
-        "extending",
         "gp",
-        "monaco",
-        "says",
-        "despite",
-        "f1",
-        "jolyon",
+        "faces",
         "lead",
+        "jolyon",
+        "extending",
+        "championship",
+        "says",
+        "palmer",
         "kimi",
         "concern",
-        "antonelli",
-        "championship",
-        "faces",
-        "palmer"
+        "f1",
+        "despite",
+        "monaco",
+        "antonelli"
       ],
       "title": "Kimi Antonelli faces Monaco GP concern despite extending F1 championship lead, says Jolyon Palmer",
       "timestamp": "2026-05-13T09:39:16"
     },
     {
       "tokens": [
-        "says",
-        "support",
-        "f1",
-        "system",
-        "to",
-        "kimi",
-        "david",
-        "antonelli",
-        "crucial",
         "fight",
         "coulthard",
         "s",
-        "title"
+        "system",
+        "to",
+        "david",
+        "says",
+        "crucial",
+        "kimi",
+        "support",
+        "f1",
+        "title",
+        "antonelli"
       ],
       "title": "Kimi Antonelli's support system crucial to F1 title fight, says David Coulthard",
       "timestamp": "2026-05-12T06:35:02"
     },
     {
       "tokens": [
-        "mclaren",
         "gp",
-        "says",
-        "miami",
-        "hesitant",
-        "call",
-        "jolyon",
-        "with",
         "strategy",
         "themselves",
-        "cost",
+        "jolyon",
+        "hesitant",
+        "with",
+        "says",
+        "mclaren",
+        "palmer",
+        "miami",
+        "call",
         "win",
-        "palmer"
+        "cost"
       ],
       "title": "McLaren \u201ccost themselves\u201d Miami GP win with \"hesitant\" strategy call, says Jolyon Palmer",
       "timestamp": "2026-05-11T11:53:30"
     },
     {
       "tokens": [
-        "from",
-        "f1",
-        "season",
-        "rookie",
-        "reveals",
         "bearman",
-        "ollie",
+        "from",
+        "lesson",
+        "rookie",
         "biggest",
-        "lesson"
+        "season",
+        "ollie",
+        "f1",
+        "reveals"
       ],
       "title": "Ollie Bearman reveals biggest lesson from rookie F1 season",
       "timestamp": "2026-05-10T13:25:20"
     },
     {
       "tokens": [
-        "gp",
         "confirms",
-        "sizeable",
-        "f1",
-        "for",
-        "canadian",
+        "gp",
         "upgrade",
         "planned",
+        "sizeable",
+        "williams",
         "package",
-        "williams"
+        "canadian",
+        "for",
+        "f1"
       ],
       "title": "Williams F1 confirms \u201csizeable\u201d upgrade package planned for Canadian GP",
       "timestamp": "2026-05-10T12:32:35"
@@ -1475,57 +1513,57 @@
     {
       "tokens": [
         "gp",
-        "miami",
-        "he",
-        "steiner",
-        "out",
-        "penalties",
-        "at",
-        "stewards",
-        "for",
-        "on",
-        "post",
-        "as",
         "calls",
-        "guenther",
-        "time",
-        "hits",
         "race",
-        "limit"
+        "steiner",
+        "guenther",
+        "on",
+        "out",
+        "limit",
+        "at",
+        "for",
+        "post",
+        "miami",
+        "stewards",
+        "as",
+        "hits",
+        "he",
+        "penalties",
+        "time"
       ],
       "title": "Guenther Steiner hits out at Miami GP stewards as he calls for time limit on post-race penalties",
       "timestamp": "2026-05-09T17:07:30"
     },
     {
       "tokens": [
-        "fia",
         "to",
-        "f1",
-        "season",
-        "for",
-        "reveals",
+        "tweaks",
         "2027",
-        "latest",
+        "for",
         "rules",
-        "tweaks"
+        "season",
+        "fia",
+        "f1",
+        "reveals",
+        "latest"
       ],
       "title": "FIA reveals latest tweaks to F1 rules for 2027 season",
       "timestamp": "2026-05-08T13:50:10"
     },
     {
       "tokens": [
+        "gp",
+        "strategy",
+        "lando",
+        "under",
+        "norris",
+        "on",
+        "out",
         "mclaren",
+        "victory",
+        "miami",
         "after",
         "fire",
-        "norris",
-        "lando",
-        "miami",
-        "gp",
-        "victory",
-        "out",
-        "on",
-        "under",
-        "strategy",
         "missed"
       ],
       "title": "McLaren strategy under fire after Lando Norris missed out on Miami GP victory",
@@ -1533,217 +1571,217 @@
     },
     {
       "tokens": [
-        "the",
-        "broke",
         "gp",
-        "miami",
-        "his",
-        "f1",
-        "kimi",
-        "unique",
+        "the",
         "record",
-        "with",
-        "antonelli",
         "win",
-        "that"
+        "with",
+        "his",
+        "broke",
+        "kimi",
+        "miami",
+        "unique",
+        "f1",
+        "that",
+        "antonelli"
       ],
       "title": "The unique F1 record that Kimi Antonelli broke with his Miami GP win",
       "timestamp": "2026-05-05T14:30:04"
     },
     {
       "tokens": [
-        "after",
         "gp",
-        "miami",
-        "kimi",
-        "antonelli",
-        "messi",
         "win",
         "congratulates",
-        "lionel"
+        "kimi",
+        "miami",
+        "after",
+        "lionel",
+        "antonelli",
+        "messi"
       ],
       "title": "Lionel Messi congratulates Kimi Antonelli after Miami GP win",
       "timestamp": "2026-05-03T23:01:54"
     },
     {
       "tokens": [
+        "penalty",
         "gp",
+        "given",
+        "at",
+        "pit",
         "max",
         "exit",
         "miami",
-        "f1",
-        "pit",
-        "for",
-        "at",
-        "penalty",
-        "verstappen",
         "crossing",
-        "given"
+        "for",
+        "verstappen",
+        "f1"
       ],
       "title": "Max Verstappen given penalty for crossing pit exit at F1 Miami GP",
       "timestamp": "2026-05-03T22:04:56"
     },
     {
       "tokens": [
-        "gp",
-        "norris",
-        "miami",
-        "lando",
-        "hard",
-        "win",
-        "f1",
-        "to",
         "fought",
+        "gp",
+        "lando",
+        "win",
+        "defeats",
+        "norris",
+        "to",
         "kimi",
+        "miami",
+        "hard",
+        "f1",
         "antonelli",
-        "grab",
-        "defeats"
+        "grab"
       ],
       "title": "F1 Miami GP: Kimi Antonelli defeats Lando Norris to grab hard-fought win",
       "timestamp": "2026-05-03T18:53:53"
     },
     {
       "tokens": [
+        "t",
         "gp",
-        "max",
+        "big",
+        "hadjar",
         "gap",
-        "miami",
-        "suggests",
-        "insists",
-        "to",
         "isack",
-        "f1",
-        "verstappen",
+        "isn",
+        "to",
+        "suggests",
+        "max",
         "qualifying",
         "as",
-        "isn",
-        "t",
-        "hadjar",
-        "big"
+        "miami",
+        "f1",
+        "verstappen",
+        "insists"
       ],
       "title": "Isack Hadjar insists gap to Max Verstappen isn't as big as F1 Miami GP qualifying suggests",
       "timestamp": "2026-05-03T13:00:03"
     },
     {
       "tokens": [
-        "from",
-        "gp",
-        "miami",
         "disqualified",
-        "f1",
-        "isack",
+        "gp",
         "hadjar",
+        "isack",
         "qualifying",
-        "ly"
+        "ly",
+        "miami",
+        "f1",
+        "from"
       ],
       "title": "Isack Hadjar officially disqualified from F1 Miami GP qualifying",
       "timestamp": "2026-05-03T12:01:51"
     },
     {
       "tokens": [
-        "the",
-        "mclaren",
+        "felt",
+        "why",
+        "picture",
         "gp",
-        "was",
-        "miami",
-        "not",
         "and",
+        "the",
         "sprint",
         "its",
-        "pole",
+        "was",
         "real",
-        "picture",
+        "pole",
+        "mclaren",
         "qualifying",
-        "felt",
+        "miami",
         "win",
-        "why"
+        "not"
       ],
       "title": "Why McLaren felt the \u201creal picture\u201d was Miami GP qualifying and not its sprint pole and win",
       "timestamp": "2026-05-02T23:30:08"
     },
     {
       "tokens": [
-        "from",
-        "miami",
-        "sprint",
         "disqualified",
-        "bortoleto",
+        "sprint",
         "here",
+        "why",
         "gabriel",
         "race",
         "s",
-        "why"
+        "miami",
+        "from",
+        "bortoleto"
       ],
       "title": "Gabriel Bortoleto disqualified from Miami sprint race: Here's why",
       "timestamp": "2026-05-02T19:39:29"
     },
     {
       "tokens": [
-        "mclaren",
         "gp",
-        "miami",
-        "lando",
         "sprint",
-        "f1",
+        "lando",
+        "norris",
         "2",
         "wins",
-        "1",
-        "norris",
-        "in"
+        "mclaren",
+        "miami",
+        "f1",
+        "in",
+        "1"
       ],
       "title": "F1 Miami GP: Lando Norris wins sprint in McLaren 1-2",
       "timestamp": "2026-05-02T16:46:13"
     },
     {
       "tokens": [
-        "after",
-        "2026",
-        "early",
-        "f1",
         "viewership",
-        "reveals",
-        "us",
-        "deal",
-        "apple",
-        "rights",
+        "broadcast",
         "surge",
-        "broadcast"
+        "rights",
+        "early",
+        "apple",
+        "deal",
+        "2026",
+        "after",
+        "f1",
+        "reveals",
+        "us"
       ],
       "title": "Apple reveals early F1 2026 viewership surge after US broadcast rights deal",
       "timestamp": "2026-05-01T17:17:45"
     },
     {
       "tokens": [
-        "and",
-        "f1",
-        "its",
-        "macarena",
-        "red",
-        "wing",
-        "upgrade",
         "bull",
+        "big",
+        "upgrade",
+        "and",
+        "its",
         "s",
+        "wing",
         "explained",
         "package",
-        "big"
+        "red",
+        "f1",
+        "macarena"
       ],
       "title": "Red Bull's big upgrade package and its \u2018Macarena\u2019 F1 wing explained",
       "timestamp": "2026-05-01T16:31:40"
     },
     {
       "tokens": [
-        "after",
-        "2026",
-        "early",
-        "f1",
         "viewership",
-        "reveals",
-        "us",
-        "deal",
-        "apple",
-        "rights",
+        "broadcast",
         "surge",
-        "broadcast"
+        "rights",
+        "early",
+        "apple",
+        "deal",
+        "2026",
+        "after",
+        "f1",
+        "reveals",
+        "us"
       ],
       "title": "Apple reveals early F1 2026 viewership surge after US broadcast rights deal",
       "timestamp": "2026-05-01T16:22:47"
@@ -1751,54 +1789,54 @@
     {
       "tokens": [
         "racing",
-        "gp",
-        "miami",
-        "it",
-        "fans",
-        "to",
-        "permanent",
-        "with",
         "striking",
-        "over",
-        "wins",
-        "calls",
+        "gp",
         "livery",
         "bulls",
-        "make"
+        "permanent",
+        "to",
+        "with",
+        "over",
+        "wins",
+        "make",
+        "miami",
+        "calls",
+        "fans",
+        "it"
       ],
       "title": "Striking Racing Bulls Miami GP livery wins over fans with calls to \"make it permanent\"",
       "timestamp": "2026-04-30T19:04:26"
     },
     {
       "tokens": [
-        "2026",
-        "exposed",
-        "f1",
-        "weakness",
         "by",
-        "reveals",
-        "start",
         "delayed",
         "alex",
         "albon",
-        "williams"
+        "williams",
+        "exposed",
+        "weakness",
+        "2026",
+        "f1",
+        "reveals",
+        "start"
       ],
       "title": "Alex Albon reveals Williams weakness exposed by delayed 2026 F1 start",
       "timestamp": "2026-04-30T13:05:35"
     },
     {
       "tokens": [
+        "lead",
+        "assessed",
+        "s",
         "hopes",
+        "championship",
+        "kimi",
         "after",
         "f1",
-        "historic",
-        "lead",
-        "kimi",
+        "title",
         "antonelli",
-        "assessed",
-        "championship",
-        "s",
-        "title"
+        "historic"
       ],
       "title": "Kimi Antonelli's F1 title hopes assessed after historic championship lead",
       "timestamp": "2026-04-29T20:49:49"
@@ -1806,73 +1844,73 @@
     {
       "tokens": [
         "gp",
-        "team",
-        "miami",
+        "livery",
         "special",
-        "f1",
-        "reveals",
+        "team",
         "cadillac",
-        "livery"
+        "miami",
+        "f1",
+        "reveals"
       ],
       "title": "Cadillac F1 team reveals special Miami GP livery",
       "timestamp": "2026-04-28T14:29:24"
     },
     {
       "tokens": [
-        "issues",
-        "honest",
-        "miami",
+        "ahead",
         "gp",
+        "issues",
         "upgrade",
-        "of",
-        "verdict",
         "alex",
+        "of",
         "albon",
-        "package",
+        "honest",
         "williams",
-        "ahead"
+        "package",
+        "miami",
+        "verdict"
       ],
       "title": "Alex Albon issues honest Williams verdict ahead of Miami GP upgrade package",
       "timestamp": "2026-04-27T14:21:41"
     },
     {
       "tokens": [
-        "place",
+        "piastri",
+        "why",
         "gp",
+        "50",
+        "place",
+        "of",
+        "above",
+        "oscar",
+        "second",
+        "his",
+        "wins",
         "ranks",
         "2026",
-        "his",
-        "second",
         "f1",
-        "japanese",
-        "piastri",
-        "above",
-        "of",
-        "wins",
-        "oscar",
-        "why",
-        "50"
+        "japanese"
       ],
       "title": "Why Oscar Piastri ranks 2026 Japanese GP second place above 50% of his F1 wins",
       "timestamp": "2026-04-27T12:57:36"
     },
     {
       "tokens": [
-        "after",
+        "reflects",
         "gp",
-        "and",
         "reaction",
-        "f1",
-        "day",
-        "kimi",
-        "maiden",
+        "and",
+        "win",
+        "italy",
         "on",
         "reveals",
-        "antonelli",
-        "italy",
         "best",
-        "win",
-        "reflects"
+        "day",
+        "kimi",
+        "after",
+        "f1",
+        "maiden",
+        "antonelli"
       ],
       "title": "Kimi Antonelli reflects on \"best day\" after maiden F1 GP win and reveals Italy reaction",
       "timestamp": "2026-04-26T10:16:47"
