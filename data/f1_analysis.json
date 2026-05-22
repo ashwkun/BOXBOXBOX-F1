@@ -7,8 +7,8 @@
     "publishedAt": "2026-05-20T13:30:07Z",
     "channelTitle": "FORMULA girls",
     "channelScore": 0.5,
-    "viewCount": "180",
-    "likeCount": "8",
+    "viewCount": "181",
+    "likeCount": "10",
     "durationSec": 646,
     "tags": [
       "ANALYSIS"
@@ -23,8 +23,8 @@
     "publishedAt": "2026-05-20T05:00:14Z",
     "channelTitle": "High Performance Racing",
     "channelScore": 0.5,
-    "viewCount": "37947",
-    "likeCount": "1825",
+    "viewCount": "38890",
+    "likeCount": "1860",
     "durationSec": 4279,
     "tags": [
       "ANALYSIS",
@@ -56,7 +56,7 @@
     "publishedAt": "2026-05-18T14:59:47Z",
     "channelTitle": "F1 by Iqbal",
     "channelScore": 0.5,
-    "viewCount": "80",
+    "viewCount": "81",
     "likeCount": "12",
     "durationSec": 354,
     "tags": [
@@ -72,8 +72,8 @@
     "publishedAt": "2026-05-04T06:14:22Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "340387",
-    "likeCount": "5603",
+    "viewCount": "340409",
+    "likeCount": "5605",
     "durationSec": 647,
     "tags": [
       "GENERAL"
@@ -88,7 +88,7 @@
     "publishedAt": "2026-05-03T20:40:49Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "88050",
+    "viewCount": "88057",
     "likeCount": "2759",
     "durationSec": 1160,
     "tags": [
@@ -120,7 +120,7 @@
     "publishedAt": "2026-04-20T19:39:59Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "438086",
+    "viewCount": "438090",
     "likeCount": "7737",
     "durationSec": 656,
     "tags": [
@@ -136,7 +136,7 @@
     "publishedAt": "2026-04-17T15:00:06Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "160085",
+    "viewCount": "160282",
     "likeCount": "2490",
     "durationSec": 3051,
     "tags": [
@@ -152,7 +152,7 @@
     "publishedAt": "2026-03-31T15:01:49Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "115311",
+    "viewCount": "115323",
     "likeCount": "2794",
     "durationSec": 835,
     "tags": [
@@ -184,7 +184,7 @@
     "publishedAt": "2026-03-29T14:07:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "566230",
+    "viewCount": "566233",
     "likeCount": "9975",
     "durationSec": 618,
     "tags": [
@@ -240,5 +240,21 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=ZT_xMIZOan4"
+  },
+  {
+    "id": "MmaOeEDEyI0",
+    "title": "Leclerc data reveals F1 qualifying mess 🤯",
+    "description": "F1 2026 has ruined qualifying, and this Charles Leclerc lap data we’ve dug deep into explains why. Don't forget to watch the full analysis, click on the 'related video' link.\n\n#f1 #formulaone #formula1 #f12026 #f1analysis #f1tech #f1engine #ferrari #ferrarif1 #fia #charlesleclerc #china",
+    "thumbnail": "https://i.ytimg.com/vi/MmaOeEDEyI0/maxresdefault.jpg",
+    "publishedAt": "2026-03-25T13:07:09Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "260826",
+    "likeCount": "9231",
+    "durationSec": 63,
+    "tags": [
+      "QUALI"
+    ],
+    "url": "https://www.youtube.com/watch?v=MmaOeEDEyI0"
   }
 ]
