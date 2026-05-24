@@ -7,7 +7,7 @@
     "publishedAt": "2026-05-24T05:45:02Z",
     "channelTitle": "Late Apex F1",
     "channelScore": 0.5,
-    "viewCount": "81",
+    "viewCount": "82",
     "likeCount": "0",
     "durationSec": 287,
     "tags": [
@@ -41,7 +41,7 @@
     "publishedAt": "2026-05-04T06:14:22Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "340702",
+    "viewCount": "340718",
     "likeCount": "5606",
     "durationSec": 647,
     "tags": [
@@ -57,29 +57,13 @@
     "publishedAt": "2026-05-03T20:40:49Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "88176",
+    "viewCount": "88177",
     "likeCount": "2758",
     "durationSec": 1160,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=0EoJVdC92Sg"
-  },
-  {
-    "id": "GasQ0IKOkF4",
-    "title": "William's F1 2026 Collapse Explained",
-    "description": "Williams were supposed to be one of Formula 1’s big success stories in 2026.\n\nAfter a fifth-place finish, a major title sponsor, and a huge hiring drive, this was meant to be the year James Vowles’ rebuild finally paid off. Instead, the FW48 arrived overweight, undertested, and operationally exposed.\n\nIn this video, I break down why Williams’ 2026 collapse was about far more than just one bad car. From the missed Barcelona shakedown, to the team’s reliance on simulation, to manufacturing bottlen",
-    "thumbnail": "https://i.ytimg.com/vi/GasQ0IKOkF4/maxresdefault.jpg",
-    "publishedAt": "2026-04-24T15:00:35Z",
-    "channelTitle": "Grid Logic",
-    "channelScore": 0.5,
-    "viewCount": "275",
-    "likeCount": "1",
-    "durationSec": 1168,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=GasQ0IKOkF4"
   },
   {
     "id": "gID76mhl6TM",
@@ -89,8 +73,8 @@
     "publishedAt": "2026-04-20T19:39:59Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "438145",
-    "likeCount": "7736",
+    "viewCount": "438153",
+    "likeCount": "7737",
     "durationSec": 656,
     "tags": [
       "ANALYSIS"
@@ -153,7 +137,7 @@
     "publishedAt": "2026-03-29T14:07:04Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "566306",
+    "viewCount": "566311",
     "likeCount": "9975",
     "durationSec": 618,
     "tags": [
@@ -210,5 +194,21 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=8k0b-vRWKYs"
+  },
+  {
+    "id": "ZT_xMIZOan4",
+    "title": "2026 F1 Japanese GP FRIDAY Practice  Analysis",
+    "description": "2026 F1 Japanese GP FRIDAY Practice  Analysis. \n\nOscar Piastri tops Friday practice at Suzuka, leading both Mercedes drivers in a session that’s already exposing the circuit’s usual high-speed challenges. McLaren look especially strong through the Esses and into Degner, with Piastri’s balance allowing him to carry consistent minimum speed through the long-direction changes.\n\nGeorge Russell and Kimi Antonelli follow closely behind, with Mercedes showing solid one-lap pace but probably saving perf",
+    "thumbnail": "https://i.ytimg.com/vi/ZT_xMIZOan4/maxresdefault.jpg",
+    "publishedAt": "2026-03-27T08:19:29Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "3953",
+    "likeCount": "177",
+    "durationSec": 1091,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=ZT_xMIZOan4"
   }
 ]
