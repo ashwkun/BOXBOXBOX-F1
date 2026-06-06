@@ -7,8 +7,8 @@
     "publishedAt": "2026-06-04T13:48:15Z",
     "channelTitle": "Racecraft Explained",
     "channelScore": 0.5,
-    "viewCount": "132",
-    "likeCount": "3",
+    "viewCount": "142",
+    "likeCount": "4",
     "durationSec": 299,
     "tags": [
       "ANALYSIS",
@@ -24,7 +24,7 @@
     "publishedAt": "2026-05-25T16:40:27Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "174153",
+    "viewCount": "174178",
     "likeCount": "3099",
     "durationSec": 549,
     "tags": [
@@ -40,7 +40,7 @@
     "publishedAt": "2026-05-25T02:09:55Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "7646",
+    "viewCount": "7650",
     "likeCount": "337",
     "durationSec": 1025,
     "tags": [
@@ -56,7 +56,7 @@
     "publishedAt": "2026-05-25T00:35:08Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "80368",
+    "viewCount": "80394",
     "likeCount": "2578",
     "durationSec": 728,
     "tags": [
@@ -72,8 +72,8 @@
     "publishedAt": "2026-05-04T06:14:22Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "341527",
-    "likeCount": "5610",
+    "viewCount": "341530",
+    "likeCount": "5611",
     "durationSec": 647,
     "tags": [
       "GENERAL"
@@ -88,7 +88,7 @@
     "publishedAt": "2026-05-03T20:40:49Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "88366",
+    "viewCount": "88368",
     "likeCount": "2757",
     "durationSec": 1160,
     "tags": [
@@ -104,7 +104,7 @@
     "publishedAt": "2026-04-17T15:00:06Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "163380",
+    "viewCount": "163386",
     "likeCount": "2492",
     "durationSec": 3051,
     "tags": [
@@ -120,7 +120,7 @@
     "publishedAt": "2026-04-13T11:00:00Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "273928",
+    "viewCount": "273935",
     "likeCount": "3738",
     "durationSec": 699,
     "tags": [
@@ -136,7 +136,7 @@
     "publishedAt": "2026-03-31T15:01:49Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "115835",
+    "viewCount": "115841",
     "likeCount": "2799",
     "durationSec": 835,
     "tags": [
@@ -152,7 +152,7 @@
     "publishedAt": "2026-03-29T16:47:05Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "15933",
+    "viewCount": "15934",
     "likeCount": "695",
     "durationSec": 1085,
     "tags": [
@@ -191,5 +191,22 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=Fqqtl0y8TAY"
+  },
+  {
+    "id": "EPMGW-Q2pzI",
+    "title": "2026 F1 Japanese GP QUALIFYING Analysis",
+    "description": "2026 F1 Japanese GP QUALIFYING Analysis by Martin Villari\n\nKimi Antonelli takes pole for Mercedes in Japan/Suzuka ahead of Tomorrow's Race! The Mclaren boys did well and so did Charles Lec but a mistake on the exit of Spoon cost him 2 tenths on his final run!\n\nWho will win tomorrow!?\n\nCHAPTERS:\n00:00 Introduction\n00:20 Degner 1 and Degner 2 (LiCo V Throttle) Analysis\n06:51 Quali Thoughts\n09:35 Mclaren Telemetry\n11:10 Ferrari Telemetry\n12:05 Your Comments\n-----------------------------------------",
+    "thumbnail": "https://i.ytimg.com/vi/EPMGW-Q2pzI/maxresdefault.jpg",
+    "publishedAt": "2026-03-28T07:52:57Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "4633",
+    "likeCount": "177",
+    "durationSec": 752,
+    "tags": [
+      "QUALI",
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=EPMGW-Q2pzI"
   }
 ]
