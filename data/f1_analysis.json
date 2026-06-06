@@ -7,7 +7,7 @@
     "publishedAt": "2026-06-04T13:48:15Z",
     "channelTitle": "Racecraft Explained",
     "channelScore": 0.5,
-    "viewCount": "108",
+    "viewCount": "111",
     "likeCount": "3",
     "durationSec": 299,
     "tags": [
@@ -24,8 +24,8 @@
     "publishedAt": "2026-05-25T16:40:27Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "173861",
-    "likeCount": "3100",
+    "viewCount": "173978",
+    "likeCount": "3099",
     "durationSec": 549,
     "tags": [
       "GENERAL"
@@ -56,7 +56,7 @@
     "publishedAt": "2026-05-25T00:35:08Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "80326",
+    "viewCount": "80344",
     "likeCount": "2578",
     "durationSec": 728,
     "tags": [
@@ -72,7 +72,7 @@
     "publishedAt": "2026-05-04T06:14:22Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "341505",
+    "viewCount": "341513",
     "likeCount": "5610",
     "durationSec": 647,
     "tags": [
@@ -104,7 +104,7 @@
     "publishedAt": "2026-04-17T15:00:06Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "163355",
+    "viewCount": "163362",
     "likeCount": "2492",
     "durationSec": 3051,
     "tags": [
@@ -120,7 +120,7 @@
     "publishedAt": "2026-04-13T11:00:00Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "273459",
+    "viewCount": "273586",
     "likeCount": "3738",
     "durationSec": 699,
     "tags": [
@@ -175,5 +175,54 @@
       "GENERAL"
     ],
     "url": "https://www.youtube.com/watch?v=VSZYzs5X9q8"
+  },
+  {
+    "id": "Fqqtl0y8TAY",
+    "title": "2026 F1 Japanese GP RACE Analysis",
+    "description": "2026 F1 Japanese GP RACE Analysis by Martin Villari\n\nKimi Antonelli won today's Suzuka Japanese GP for Mercedes ahead of a brilliant drive by Australia's Oscar Piastri, with Charles Leclerc rounding out the podium.\n\nHear all the analysis including the crash at Spoon Curve between Oliver Bearman and Franco Colapinto here.\n\nReferenced Video https://youtu.be/89IaOCjvx0I \n\nCHAPTERS:\n00:00 Introduction\n00:20 Quali Recap - VER v LIN  (VIDEO DESCRIPTION)\n08:45 Race Start\n10:30 Early Laps PIA v RUS and ",
+    "thumbnail": "https://i.ytimg.com/vi/Fqqtl0y8TAY/maxresdefault.jpg",
+    "publishedAt": "2026-03-29T08:44:31Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "7080",
+    "likeCount": "276",
+    "durationSec": 1991,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=Fqqtl0y8TAY"
+  },
+  {
+    "id": "EPMGW-Q2pzI",
+    "title": "2026 F1 Japanese GP QUALIFYING Analysis",
+    "description": "2026 F1 Japanese GP QUALIFYING Analysis by Martin Villari\n\nKimi Antonelli takes pole for Mercedes in Japan/Suzuka ahead of Tomorrow's Race! The Mclaren boys did well and so did Charles Lec but a mistake on the exit of Spoon cost him 2 tenths on his final run!\n\nWho will win tomorrow!?\n\nCHAPTERS:\n00:00 Introduction\n00:20 Degner 1 and Degner 2 (LiCo V Throttle) Analysis\n06:51 Quali Thoughts\n09:35 Mclaren Telemetry\n11:10 Ferrari Telemetry\n12:05 Your Comments\n-----------------------------------------",
+    "thumbnail": "https://i.ytimg.com/vi/EPMGW-Q2pzI/maxresdefault.jpg",
+    "publishedAt": "2026-03-28T07:52:57Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "4632",
+    "likeCount": "177",
+    "durationSec": 752,
+    "tags": [
+      "QUALI",
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=EPMGW-Q2pzI"
+  },
+  {
+    "id": "ZT_xMIZOan4",
+    "title": "2026 F1 Japanese GP FRIDAY Practice  Analysis",
+    "description": "2026 F1 Japanese GP FRIDAY Practice  Analysis. \n\nOscar Piastri tops Friday practice at Suzuka, leading both Mercedes drivers in a session that’s already exposing the circuit’s usual high-speed challenges. McLaren look especially strong through the Esses and into Degner, with Piastri’s balance allowing him to carry consistent minimum speed through the long-direction changes.\n\nGeorge Russell and Kimi Antonelli follow closely behind, with Mercedes showing solid one-lap pace but probably saving perf",
+    "thumbnail": "https://i.ytimg.com/vi/ZT_xMIZOan4/maxresdefault.jpg",
+    "publishedAt": "2026-03-27T08:19:29Z",
+    "channelTitle": "lowerlaptime",
+    "channelScore": 0.5,
+    "viewCount": "3952",
+    "likeCount": "177",
+    "durationSec": 1091,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=ZT_xMIZOan4"
   }
 ]
