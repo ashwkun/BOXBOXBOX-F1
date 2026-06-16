@@ -29,14 +29,6 @@
   "nuclear_queue": [],
   "major_sent": [
     {
-      "id": "b23c1c955b8edada84ac40ec7c1b2887",
-      "title": "Can George Russell take inspiration from Lando Norris in quest for F1 title?",
-      "url": "https://www.motorsport.com/f1/news/can-george-russell-take-inspiration-from-lando-norris-in-quest-for-f1-title/10820983/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 998,
-      "timestamp": "2026-05-17T08:45:13",
-      "image": "https://cdn-9.motorsport.com/images/amp/6lmdmqK0/s6/lando-norris-mclaren-george-ru.jpg"
-    },
-    {
       "id": "14b7a185e7d1fbd11a54cbb8b9774cb1",
       "title": "Max Verstappen revisits \"super chaotic\" 2024 Brazil GP win: \"One of my best races\"",
       "url": "https://www.motorsport.com/f1/news/max-verstappen-revisits-super-chaotic-2024-brazil-gp-win-as-one-of-my-best-races/10821659/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
@@ -350,7 +342,7 @@
       "url": "https://www.motorsport.com/f1/news/lewis-hamilton-win-a-middle-finger-to-doubters-lando-norris/10830413/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 799,
       "timestamp": "2026-06-14T18:11:54",
-      "image": "https://cdn-9.motorsport.com/images/amp/0R7wmGE2/s6/lewis-hamilton-ferrari-lando-n.jpg"
+      "image": "https://cdn-7.motorsport.com/images/amp/0R7wmGE2/s6/lewis-hamilton-ferrari-lando-n.jpg"
     },
     {
       "id": "5ca80caf6ad366ace4db57d9a7b815e6",
@@ -358,7 +350,7 @@
       "url": "https://www.motorsport.com/f1/news/f1-barcelona-gp-race-report/10830256/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 799,
       "timestamp": "2026-06-14T14:45:55",
-      "image": "https://cdn-1.motorsport.com/images/amp/6Vy7qkNY/s6/lewis-hamilton-ferrari-2.jpg"
+      "image": "https://cdn-2.motorsport.com/images/amp/6Vy7qkNY/s6/lewis-hamilton-ferrari-2.jpg"
     },
     {
       "id": "24069d460edab10a6c24405073a5dec7",
@@ -366,7 +358,15 @@
       "url": "https://www.motorsport.com/f1/news/vasseur-hamilton-would-have-won-barcelona-gp-without-vsc-help/10830382/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 699,
       "timestamp": "2026-06-14T17:20:51",
-      "image": "https://cdn-9.motorsport.com/images/amp/0kZAR4V6/s6/frederic-vasseur-ferrari-lewis.jpg"
+      "image": "https://cdn-6.motorsport.com/images/amp/0kZAR4V6/s6/frederic-vasseur-ferrari-lewis.jpg"
+    },
+    {
+      "id": "f47f253cf5def69af5f8db5d8059c11a",
+      "title": "How a Mercedes pit stop error \"compromised\" George Russell\u2019s Barcelona GP",
+      "url": "https://www.motorsport.com/f1/news/f1-russell-backstory-mercedes-had-incorrectly-adjusted-the-front-wing-at-the-pit-stop/10830780/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 80,
+      "timestamp": "2026-06-16T11:25:19",
+      "image": "https://cdn-6.motorsport.com/images/amp/6O7939N6/s6/george-russell-mercedes-2.jpg"
     },
     {
       "id": "a0a3373abd9c4626095db34d03424921",
@@ -401,6 +401,14 @@
       "image": "https://cdn-9.motorsport.com/images/amp/6Vy7q8GY/s6/lewis-hamilton-ferrari.jpg"
     },
     {
+      "id": "7028e4560ad0d4e174399727978d5469",
+      "title": "\"I'm not a machine\": Isack Hadjar blasts Red Bull start procedure",
+      "url": "https://www.motorsport.com/f1/news/im-not-a-machine-isack-hadjar-blasts-red-bull-start-procedure/10830609/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 60,
+      "timestamp": "2026-06-16T09:29:32",
+      "image": "https://cdn-6.motorsport.com/images/amp/25d3A890/s6/isack-hadjar-red-bull-racing.jpg"
+    },
+    {
       "id": "8bc7c58a755cf1c194bb2319b58e49de",
       "title": "Franco Colapinto demoted after 10-second penalty for yellow flag breach in F1 Barcelona GP",
       "url": "https://www.motorsport.com/f1/news/franco-colapinto-demoted-after-yellow-flag-breach-in-f1-barcelona-gp/10830411/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
@@ -414,7 +422,7 @@
       "url": "https://www.motorsport.com/f1/news/championship-hamilton-takes-25-points-back-from-antonelli/10830302/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 60,
       "timestamp": "2026-06-14T15:19:41",
-      "image": "https://cdn-8.motorsport.com/images/amp/6n7AVXM0/s6/andrea-kimi-antonelli-mercedes-2.jpg"
+      "image": "https://cdn-1.motorsport.com/images/amp/6n7AVXM0/s6/andrea-kimi-antonelli-mercedes-2.jpg"
     },
     {
       "id": "6fc1e1346811fd5f00aecdc5009a18d6",
@@ -452,9 +460,9 @@
       "id": "f4ca16b3f627d259f561d639275ffe5b",
       "title": "Mercedes seeks right of review over George Russell\u2019s Monaco GP penalty",
       "url": "https://www.motorsport.com/f1/news/mercedes-seeks-right-of-review-over-george-russells-monaco-gp-penalty/10830531/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 50,
+      "score": 40,
       "timestamp": "2026-06-15T09:00:45",
-      "image": "https://cdn-9.motorsport.com/images/amp/6grBPlGY/s6/george-russell-mercedes.jpg"
+      "image": "https://cdn-6.motorsport.com/images/amp/6grBPlGY/s6/george-russell-mercedes.jpg"
     },
     {
       "id": "5988f2ba0d53bc971c3d5e7fad66098d",
@@ -497,6 +505,14 @@
       "image": "https://cdn-3.motorsport.com/images/amp/2jED9Mp0/s6/lewis-hamilton-ferrari-george--2.jpg"
     },
     {
+      "id": "5567f5d71a08a6677b19862010dd89b6",
+      "title": "Serena Williams celebrates Lewis Hamilton after milestone Ferrari F1 win",
+      "url": "https://www.motorsport.com/f1/news/serena-williams-celebrates-lewis-hamilton-after-milestone-ferrari-f1-win/10830689/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+      "score": 30,
+      "timestamp": "2026-06-16T10:00:03",
+      "image": "https://cdn-4.motorsport.com/images/amp/68VWnxQ2/s6/serena-williams.jpg"
+    },
+    {
       "id": "5b68eba7ebb9cc957d512bf5a671b60f",
       "title": "Nico Rosberg backs Lewis Hamilton momentum after \"historic\" Barcelona F1 win",
       "url": "https://www.motorsport.com/f1/news/nico-rosberg-backs-lewis-hamilton-momentum-after-historic-barcelona-f1-win/10830319/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
@@ -510,7 +526,7 @@
       "url": "https://www.motorsport.com/f1/news/kimi-antonelli-receives-post-race-penalty-despite-retirement-in-barcelona/10830421/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 28,
       "timestamp": "2026-06-14T18:01:08",
-      "image": "https://cdn-6.motorsport.com/images/amp/27NQmEK0/s6/andrea-kimi-antonelli-mercedes-2.jpg"
+      "image": "https://cdn-3.motorsport.com/images/amp/27NQmEK0/s6/andrea-kimi-antonelli-mercedes-2.jpg"
     },
     {
       "id": "c928a67410c21f2a901ce395f61669a8",
@@ -526,7 +542,7 @@
       "url": "https://www.motorsport.com/f1/news/max-verstappen-surprised-as-red-bull-halves-gap-to-mercedes-in-barcelona/10830057/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 27,
       "timestamp": "2026-06-13T18:12:40",
-      "image": "https://cdn-5.motorsport.com/images/amp/6n7AB5M0/s6/max-verstappen-red-bull-racing.jpg"
+      "image": "https://cdn-4.motorsport.com/images/amp/6n7AB5M0/s6/max-verstappen-red-bull-racing.jpg"
     },
     {
       "id": "391a21ab634eeb8677c882163d6b1046",
@@ -534,15 +550,7 @@
       "url": "https://www.motorsport.com/f1/news/f1-2026-qualifying-head-to-head-barcelona-gp/10830000/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
       "score": 27,
       "timestamp": "2026-06-13T16:58:27",
-      "image": "https://cdn-5.motorsport.com/images/amp/YE9wg7KY/s6/lewis-hamilton-ferrari-george-.jpg"
-    },
-    {
-      "id": "a2cac41a2873abee59aba468328c6e39",
-      "title": "Winners and losers from a cathartic Barcelona F1 Grand Prix",
-      "url": "https://www.motorsport.com/f1/news/winners-and-losers-from-a-cathartic-barcelona-f1-grand-prix/10830418/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-      "score": 25,
-      "timestamp": "2026-06-14T18:28:44",
-      "image": "https://cdn-1.motorsport.com/images/amp/2Gdw5rKY/s6/lewis-hamilton-ferrari.jpg"
+      "image": "https://cdn-8.motorsport.com/images/amp/YE9wg7KY/s6/lewis-hamilton-ferrari-george-.jpg"
     }
   ],
   "digest_sent": false,
@@ -1694,141 +1702,145 @@
     "c6395c0a350113237c84cec46b388d3c",
     "fed1c061a47925842bb905be03b4b013",
     "a2cac41a2873abee59aba468328c6e39",
-    "5c3b4dd7f7008ba30452b37839de5cb6"
+    "5c3b4dd7f7008ba30452b37839de5cb6",
+    "13b529ae4bd0830f641ab873b109d11e",
+    "b9ad134b0c0d0ed4e2fb7a3aa6afcccd",
+    "9b33ec5047c25d0ed893630e65025e75",
+    "ac839b8f667c35e940bdf2135e1ab7f3",
+    "de6c5fefe50056a658888fa003c2fc2a"
   ],
   "schema_version": 3,
   "sent_urls": [
-    "https://www.motorsport.com/f1/news/kimi-antonelli-celebrates-monaco-gp-win-with-spectacular-harbour-jump/10828163/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/alex-albons-freak-groundhog-accident-turns-canadian-gp-sprint-into-glorified-test/10823294/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/you-cant-put-a-leash-on-how-the-mercedes-drivers-see-their-f1-championship-fight/10826825/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/lewis-hamilton-risks-canadian-gp-grid-penalty-for-impeding/10823582/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/ollie-bearman-crashes-out-of-monaco-fp3-as-red-flag-halts-session/10827456/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/championship-antonelli-deals-a-blow-to-russell/10823965/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/max-verstappen-revisits-super-chaotic-2024-brazil-gp-win-as-one-of-my-best-races/10821659/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/charles-leclerc-explains-crash-that-cost-shot-at-monaco-f1-pole-position/10827673/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/kimi-antonelli-proved-he-wont-be-bullied-in-mercedes-title-fight-says-naomi-schiff/10824858/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/why-max-verstappen-wont-follow-red-bulls-famous-monaco-gp-swimming-pool-tradition/10827482/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/lando-norris-reveals-special-canadian-gp-helmet-for-sir-jackie-stewarts-dementia-charity/10822695/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/kimi-antonelli-not-thinking-about-f1-title-despite-43-point-lead/10824549/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/williams-f1-boss-admits-canadian-gp-strategy-was-not-right-or-perfect/10825755/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/george-russell-retires-from-f1-canadian-gp/10823910/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mclaren-fined-over-rules-breach-which-halted-monaco-gp-practice/10827283/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/the-crazy-stats-that-cement-hamiltons-success-in-history/10830567/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/lewis-hamilton-risks-canadian-gp-grid-penalty-for-impeding/10823582/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/fia-delivers-verdict-after-esteban-ocon-summoned-to-stewards-after-canada-fp1/10823043/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/ollie-bearman-crashes-out-of-monaco-fp3-as-red-flag-halts-session/10827456/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/cadillac-details-new-f1-upgrade-package-for-canadian-gp/10822214/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/honda-reveals-important-target-for-f1-canadian-gp/10822131/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/toto-wolff-praises-unbelievable-kimi-antonelli-after-f1-monaco-gp-grand-slam-/10828550/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-monaco-gp-kimi-antonelli-takes-dominant-win-in-non-score-for-george-russell/10827976/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-agrees-on-extra-combustion-power-for-2027-and-2028/10828934/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/f1-presenter-explains-why-monaco-remains-the-race-drivers-want-to-win-the-most/10826734/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/max-verstappen-revisits-super-chaotic-2024-brazil-gp-win-as-one-of-my-best-races/10821659/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/aston-martin-gives-update-on-random-downshifts-after-fernando-alonsos-fp1-crash/10827102/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/kimi-antonelli-proved-he-wont-be-bullied-in-mercedes-title-fight-says-naomi-schiff/10824858/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/wednesday-do-penalty-points-still-serve-any-purpose-in-f1/10824575/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/ocon-hits-out-at-bullshit-claims-of-komatsu-dispute-and-early-haas-f1-exit/10822634/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/max-verstappen-reveals-why-daughter-will-not-be-in-f1-paddock-yet-as-he-opens-up-on-parenthood/10825099/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-monaco-grand-prix-without-active-aerodynamics-no-reversible-wings-but-will-there-be-any-surprises/10825064/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/can-george-russell-take-inspiration-from-lando-norris-in-quest-for-f1-title/10820983/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/charles-leclerc-explains-crash-that-cost-shot-at-monaco-f1-pole-position/10827673/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/gasly-happy-but-fatalistic-it-wont-give-me-back-what-i-lost/10829663/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/charles-leclerc-ashamed-of-himself-after-qualifying-crash-at-f1-barcelona-gp/10829973/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/martin-brundle-praises-serene-and-unbeatable-kimi-antonelli-after-monaco-gp-win/10829077/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-canadian-gp-george-russell-wins-sprint-after-kimi-antonelli-clash/10823424/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/championship-antonelli-deals-a-blow-to-russell/10823965/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/mclaren-explains-tyre-gamble-that-wrecked-its-f1-canadian-gp/10824060/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-monaco-gp-tktk-tops-red-flagged-fp1-/10827041/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/toto-wolff-praises-unbelievable-kimi-antonelli-after-f1-monaco-gp-grand-slam-/10828550/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/kimi-antonelli-lucky-to-have-wisdom-of-bono-and-toto-wolff-after-canada-sprint-says-martin-brundle/10824958/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/chris-harris-backs-mclaren-canada-tyre-logic-but-flags-major-strategy-error/10825692/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/george-russell-retires-from-f1-canadian-gp/10823910/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-monaco-grand-prix-without-active-aerodynamics-no-reversible-wings-but-will-there-be-any-surprises/10825064/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
     "https://www.motorsport.com/f1/news/isack-hadjar-crashes-out-of-monaco-gp-fp1-causing-red-flag/10827034/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
-    "https://www.motorsport.com/f1/news/f1-canadian-gp-kimi-antonelli-lands-f1-2026-blow-as-george-russell-retires-from-canada-gp/10823926/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
+    "https://www.motorsport.com/f1/news/f1-monaco-gp-tktk-tops-red-flagged-fp1-/10827041/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-canadian-gp-kimi-antonelli-lands-f1-2026-blow-as-george-russell-retires-from-canada-gp/10823926/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-agrees-on-extra-combustion-power-for-2027-and-2028/10828934/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/honda-reveals-important-target-for-f1-canadian-gp/10822131/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/kimi-antonelli-celebrates-monaco-gp-win-with-spectacular-harbour-jump/10828163/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/aston-martin-gives-update-on-random-downshifts-after-fernando-alonsos-fp1-crash/10827102/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/martin-brundle-praises-serene-and-unbeatable-kimi-antonelli-after-monaco-gp-win/10829077/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/fia-delivers-verdict-after-esteban-ocon-summoned-to-stewards-after-canada-fp1/10823043/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/cadillac-details-new-f1-upgrade-package-for-canadian-gp/10822214/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/gasly-happy-but-fatalistic-it-wont-give-me-back-what-i-lost/10829663/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-canadian-gp-george-russell-wins-sprint-after-kimi-antonelli-clash/10823424/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/ocon-hits-out-at-bullshit-claims-of-komatsu-dispute-and-early-haas-f1-exit/10822634/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/charles-leclerc-ashamed-of-himself-after-qualifying-crash-at-f1-barcelona-gp/10829973/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/you-cant-put-a-leash-on-how-the-mercedes-drivers-see-their-f1-championship-fight/10826825/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/the-crazy-stats-that-cement-hamiltons-success-in-history/10830567/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/alex-albons-freak-groundhog-accident-turns-canadian-gp-sprint-into-glorified-test/10823294/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/kimi-antonelli-not-thinking-about-f1-title-despite-43-point-lead/10824549/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/f1-monaco-gp-kimi-antonelli-takes-dominant-win-in-non-score-for-george-russell/10827976/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/wednesday-do-penalty-points-still-serve-any-purpose-in-f1/10824575/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mclaren-explains-tyre-gamble-that-wrecked-its-f1-canadian-gp/10824060/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/mclaren-fined-over-rules-breach-which-halted-monaco-gp-practice/10827283/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/chris-harris-backs-mclaren-canada-tyre-logic-but-flags-major-strategy-error/10825692/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www",
+    "https://www.motorsport.com/f1/news/williams-f1-boss-admits-canadian-gp-strategy-was-not-right-or-perfect/10825755/?utm_source=RSS&utm_medium=referral&utm_campaign=RSS-F1&utm_term=News&utm_content=www"
   ],
   "title_fingerprints": [
     {
       "tokens": [
-        "lewis",
-        "s",
-        "hamilton",
-        "win",
-        "stats",
-        "barcelona",
-        "first",
-        "triumph",
-        "and",
-        "gp",
-        "his",
-        "from",
-        "crazy",
         "the",
+        "s",
+        "barcelona",
+        "and",
+        "his",
+        "first",
+        "win",
+        "triumph",
+        "hamilton",
+        "from",
+        "gp",
+        "ferrari",
+        "lewis",
+        "stats",
         "for",
-        "ferrari"
+        "crazy"
       ],
       "title": "The crazy stats from Lewis Hamilton's Barcelona GP triumph and his first win for Ferrari",
       "timestamp": "2026-06-15T11:14:14"
     },
     {
       "tokens": [
-        "at",
-        "himself",
-        "charles",
-        "barcelona",
-        "ashamed",
-        "f1",
-        "leclerc",
         "crash",
-        "gp",
-        "qualifying",
+        "barcelona",
+        "f1",
+        "after",
+        "charles",
         "of",
-        "after"
+        "ashamed",
+        "himself",
+        "qualifying",
+        "at",
+        "gp",
+        "leclerc"
       ],
       "title": "Charles Leclerc \"ashamed\" of himself after qualifying crash at F1 Barcelona GP",
       "timestamp": "2026-06-13T16:23:24"
     },
     {
       "tokens": [
-        "what",
-        "t",
-        "restored",
-        "me",
-        "lost",
-        "back",
-        "pierre",
-        "won",
-        "monaco",
-        "gasly",
-        "give",
-        "gp",
-        "admits",
+        "podium",
         "i",
-        "podium"
+        "won",
+        "what",
+        "admits",
+        "me",
+        "restored",
+        "back",
+        "give",
+        "monaco",
+        "pierre",
+        "gp",
+        "t",
+        "lost",
+        "gasly"
       ],
       "title": "Pierre Gasly admits restored Monaco GP podium \"won't give me back what I lost\"",
       "timestamp": "2026-06-12T18:18:54"
     },
     {
       "tokens": [
-        "win",
+        "and",
+        "serene",
         "kimi",
+        "antonelli",
+        "after",
+        "martin",
         "brundle",
         "unbeatable",
-        "serene",
-        "and",
-        "martin",
         "monaco",
-        "antonelli",
         "gp",
         "praises",
-        "after"
+        "win"
       ],
       "title": "Martin Brundle praises \"serene and unbeatable\" Kimi Antonelli after Monaco GP win",
       "timestamp": "2026-06-11T21:05:15"
     },
     {
       "tokens": [
-        "unit",
         "power",
-        "changes",
-        "2028",
         "f1",
-        "announced",
-        "seasons",
         "and",
+        "2028",
+        "seasons",
         "2027",
+        "unit",
+        "changes",
+        "announced",
         "for"
       ],
       "title": "F1 power unit changes announced for 2027 and 2028 seasons",
@@ -1837,142 +1849,142 @@
     {
       "tokens": [
         "kimi",
-        "wolff",
-        "toto",
-        "to",
-        "grand",
-        "claim",
-        "f1",
-        "monaco",
         "antonelli",
-        "gp",
-        "how",
         "surprised",
-        "slam"
+        "f1",
+        "slam",
+        "to",
+        "claim",
+        "toto",
+        "monaco",
+        "gp",
+        "wolff",
+        "grand",
+        "how"
       ],
       "title": "How Kimi Antonelli \u201csurprised\u201d Toto Wolff to claim F1 Monaco GP grand slam",
       "timestamp": "2026-06-09T11:30:04"
     },
     {
       "tokens": [
-        "celebrates",
-        "win",
         "kimi",
-        "spectacular",
-        "harbour",
-        "jump",
-        "monaco",
         "antonelli",
+        "with",
+        "jump",
+        "celebrates",
+        "monaco",
         "gp",
-        "with"
+        "harbour",
+        "spectacular",
+        "win"
       ],
       "title": "Kimi Antonelli celebrates Monaco GP win with spectacular harbour jump",
       "timestamp": "2026-06-07T19:17:57"
     },
     {
       "tokens": [
-        "win",
-        "kimi",
-        "dominant",
         "in",
-        "takes",
+        "kimi",
         "f1",
-        "non",
-        "russell",
-        "george",
-        "monaco",
         "antonelli",
+        "george",
+        "russell",
+        "takes",
+        "non",
+        "dominant",
+        "score",
+        "monaco",
         "gp",
-        "for",
-        "score"
+        "win",
+        "for"
       ],
       "title": "F1 Monaco GP: Kimi Antonelli takes dominant win in non-score for George Russell",
       "timestamp": "2026-06-07T15:53:32"
     },
     {
       "tokens": [
-        "cost",
-        "at",
-        "pole",
-        "position",
-        "charles",
-        "f1",
-        "leclerc",
         "crash",
-        "monaco",
+        "f1",
         "shot",
+        "position",
+        "pole",
+        "explains",
+        "charles",
         "that",
-        "explains"
+        "at",
+        "monaco",
+        "cost",
+        "leclerc"
       ],
       "title": "Charles Leclerc explains crash that cost shot at Monaco F1 pole position",
       "timestamp": "2026-06-06T17:22:13"
     },
     {
       "tokens": [
-        "follow",
-        "t",
-        "max",
         "s",
-        "swimming",
-        "bull",
-        "tradition",
-        "monaco",
-        "red",
-        "pool",
+        "follow",
+        "won",
         "verstappen",
-        "gp",
-        "famous",
+        "max",
+        "red",
         "why",
-        "won"
+        "tradition",
+        "t",
+        "bull",
+        "famous",
+        "monaco",
+        "gp",
+        "swimming",
+        "pool"
       ],
       "title": "Why Max Verstappen won't follow Red Bull's famous Monaco GP swimming pool tradition",
       "timestamp": "2026-06-06T12:30:49"
     },
     {
       "tokens": [
-        "bearman",
-        "fp3",
-        "as",
-        "session",
-        "monaco",
-        "red",
         "flag",
+        "session",
+        "fp3",
+        "bearman",
+        "red",
         "out",
-        "ollie",
+        "as",
         "of",
-        "crashes",
-        "halts"
+        "monaco",
+        "ollie",
+        "halts",
+        "crashes"
       ],
       "title": "Ollie Bearman crashes out of Monaco FP3 as red flag halts session",
       "timestamp": "2026-06-06T11:29:58"
     },
     {
       "tokens": [
+        "30",
+        "mclaren",
+        "flag",
+        "after",
+        "red",
         "causing",
-        "practice",
-        "fined",
         "000",
         "monaco",
-        "red",
-        "flag",
-        "mclaren",
-        "30",
-        "after"
+        "practice",
+        "fined"
       ],
       "title": "McLaren fined \u20ac30,000 after causing Monaco practice red flag",
       "timestamp": "2026-06-05T19:35:21"
     },
     {
       "tokens": [
+        "30",
+        "mclaren",
+        "flag",
+        "after",
+        "red",
         "causing",
-        "fined",
         "000",
         "monaco",
-        "red",
-        "flag",
-        "mclaren",
-        "30",
-        "after"
+        "fined"
       ],
       "title": "McLaren fined \u20ac30,000 after causing Monaco red flag",
       "timestamp": "2026-06-05T19:35:21"
@@ -1980,54 +1992,54 @@
     {
       "tokens": [
         "s",
-        "fernando",
-        "gives",
+        "crash",
+        "aston",
         "fp1",
+        "after",
+        "on",
+        "martin",
+        "downshifts",
+        "gives",
+        "fernando",
         "alonso",
         "update",
-        "crash",
-        "martin",
-        "aston",
-        "on",
-        "random",
-        "after",
-        "downshifts"
+        "random"
       ],
       "title": "Aston Martin gives update on \u201crandom downshifts\u201d after Fernando Alonso\u2019s FP1 crash",
       "timestamp": "2026-06-05T14:49:12"
     },
     {
       "tokens": [
-        "2",
         "in",
-        "charles",
-        "fp1",
-        "f1",
-        "leclerc",
-        "1",
-        "monaco",
         "twice",
+        "f1",
+        "2",
+        "fp1",
         "red",
+        "flagged",
+        "charles",
+        "monaco",
         "gp",
-        "leads",
         "ferrari",
-        "flagged"
+        "1",
+        "leclerc",
+        "leads"
       ],
       "title": "F1 Monaco GP: Charles Leclerc leads Ferrari 1-2 in twice red-flagged FP1\u00a0",
       "timestamp": "2026-06-05T12:44:12"
     },
     {
       "tokens": [
-        "causing",
-        "isack",
-        "fp1",
-        "monaco",
-        "gp",
-        "red",
         "hadjar",
         "flag",
+        "fp1",
+        "isack",
         "out",
+        "causing",
+        "red",
         "of",
+        "monaco",
+        "gp",
         "crashes"
       ],
       "title": "Isack Hadjar crashes out of Monaco GP FP1 causing red flag",
@@ -2035,130 +2047,130 @@
     },
     {
       "tokens": [
-        "growing",
-        "resist",
         "in",
         "f1",
-        "title",
-        "orders",
-        "team",
         "fight",
-        "mercedes",
+        "drivers",
+        "team",
         "why",
-        "drivers"
+        "orders",
+        "resist",
+        "growing",
+        "title",
+        "mercedes"
       ],
       "title": "Why Mercedes drivers resist team orders in growing F1 title fight",
       "timestamp": "2026-06-04T17:47:48"
     },
     {
       "tokens": [
-        "presenter",
-        "to",
-        "win",
-        "remains",
-        "want",
-        "f1",
-        "monaco",
-        "most",
         "the",
+        "f1",
+        "presenter",
+        "remains",
+        "to",
         "race",
+        "drivers",
         "why",
         "explains",
-        "drivers"
+        "want",
+        "monaco",
+        "most",
+        "win"
       ],
       "title": "F1 presenter explains why Monaco remains the race drivers want to win the most",
       "timestamp": "2026-06-04T14:39:18"
     },
     {
       "tokens": [
-        "right",
-        "strategy",
-        "was",
-        "williams",
-        "f1",
-        "perfect",
-        "boss",
-        "or",
         "not",
-        "gp",
+        "f1",
+        "strategy",
+        "boss",
+        "canadian",
+        "williams",
+        "right",
         "admits",
-        "canadian"
+        "or",
+        "perfect",
+        "gp",
+        "was"
       ],
       "title": "Williams F1 boss admits Canadian GP strategy was \"not right or perfect\"",
       "timestamp": "2026-06-04T10:32:28"
     },
     {
       "tokens": [
-        "tyre",
-        "backs",
-        "strategy",
-        "harris",
         "major",
-        "but",
-        "flags",
-        "chris",
-        "logic",
+        "strategy",
         "mclaren",
+        "harris",
+        "chris",
+        "but",
+        "error",
         "canada",
-        "error"
+        "tyre",
+        "logic",
+        "backs",
+        "flags"
       ],
       "title": "Chris Harris backs McLaren Canada tyre logic but flags major strategy error",
       "timestamp": "2026-06-01T02:00:03"
     },
     {
       "tokens": [
-        "max",
         "in",
-        "as",
-        "f1",
-        "reveals",
-        "paddock",
-        "daughter",
-        "yet",
-        "will",
-        "be",
         "not",
-        "up",
-        "he",
+        "daughter",
+        "f1",
+        "yet",
+        "parenthood",
+        "will",
         "verstappen",
+        "max",
         "on",
-        "opens",
+        "reveals",
         "why",
-        "parenthood"
+        "as",
+        "opens",
+        "up",
+        "be",
+        "paddock",
+        "he"
       ],
       "title": "Max Verstappen reveals why daughter will not be in F1 paddock yet as he opens up on parenthood",
       "timestamp": "2026-05-29T13:35:52"
     },
     {
       "tokens": [
-        "at",
-        "active",
-        "f1",
         "aero",
-        "banned",
+        "f1",
         "monaco",
-        "gp"
+        "at",
+        "banned",
+        "gp",
+        "active"
       ],
       "title": "Active aero banned at F1 Monaco GP",
       "timestamp": "2026-05-29T09:18:17"
     },
     {
       "tokens": [
+        "in",
         "proved",
         "kimi",
-        "t",
-        "in",
-        "title",
-        "schiff",
-        "says",
-        "naomi",
-        "be",
         "antonelli",
-        "he",
-        "bullied",
         "fight",
-        "mercedes",
-        "won"
+        "naomi",
+        "schiff",
+        "won",
+        "says",
+        "title",
+        "t",
+        "be",
+        "bullied",
+        "he",
+        "mercedes"
       ],
       "title": "Kimi Antonelli proved he 'won't be bullied' in Mercedes title fight, says Naomi Schiff",
       "timestamp": "2026-05-29T09:00:19"
@@ -2166,38 +2178,38 @@
     {
       "tokens": [
         "kimi",
-        "to",
-        "wolff",
-        "brundle",
-        "says",
-        "bono",
-        "and",
-        "sprint",
-        "martin",
         "antonelli",
-        "lucky",
-        "canada",
-        "toto",
+        "and",
+        "to",
+        "says",
         "after",
+        "have",
+        "martin",
+        "brundle",
+        "lucky",
+        "bono",
+        "canada",
         "of",
-        "wisdom",
-        "have"
+        "toto",
+        "sprint",
+        "wolff",
+        "wisdom"
       ],
       "title": "Kimi Antonelli 'lucky to have wisdom of Bono and Toto Wolff' after Canada sprint, says Martin Brundle",
       "timestamp": "2026-05-28T19:05:02"
     },
     {
       "tokens": [
-        "kimi",
-        "lead",
-        "about",
-        "43",
-        "f1",
-        "title",
         "not",
+        "kimi",
         "antonelli",
-        "point",
+        "f1",
+        "about",
         "despite",
+        "point",
+        "43",
+        "lead",
+        "title",
         "thinking"
       ],
       "title": "Kimi Antonelli not thinking about F1 title despite 43-point lead",
@@ -2205,120 +2217,120 @@
     },
     {
       "tokens": [
-        "s",
-        "disappearance",
-        "in",
-        "f1",
-        "2026",
-        "penalty",
-        "points",
         "the",
-        "of",
-        "mysterious"
+        "s",
+        "mysterious",
+        "f1",
+        "in",
+        "2026",
+        "disappearance",
+        "points",
+        "penalty",
+        "of"
       ],
       "title": "The mysterious disappearance of F1\u2019s penalty points in 2026",
       "timestamp": "2026-05-27T11:01:07"
     },
     {
       "tokens": [
-        "tyre",
-        "f1",
-        "canadian",
-        "gp",
         "gamble",
-        "mclaren",
+        "f1",
         "its",
-        "that",
+        "canadian",
         "wrecked",
-        "explains"
+        "tyre",
+        "explains",
+        "that",
+        "gp",
+        "mclaren"
       ],
       "title": "McLaren explains tyre gamble that wrecked its F1 Canadian GP",
       "timestamp": "2026-05-25T09:01:30"
     },
     {
       "tokens": [
-        "kimi",
         "in",
-        "extends",
-        "lead",
-        "f1",
-        "over",
         "2026",
-        "russell",
-        "george",
-        "gp",
+        "kimi",
+        "f1",
         "antonelli",
+        "george",
+        "russell",
+        "canadian",
         "points",
-        "championship",
+        "over",
+        "lead",
+        "extends",
+        "gp",
         "standings",
-        "canadian"
+        "championship"
       ],
       "title": "2026 F1 championship standings: Kimi Antonelli extends points lead over George Russell in Canadian GP",
       "timestamp": "2026-05-24T22:35:08"
     },
     {
       "tokens": [
-        "win",
         "kimi",
+        "f1",
+        "george",
+        "antonelli",
+        "straight",
+        "russell",
+        "canadian",
+        "takes",
+        "from",
+        "fourth",
         "lead",
         "as",
-        "takes",
-        "straight",
-        "f1",
-        "russell",
-        "retires",
-        "george",
         "gp",
-        "antonelli",
-        "from",
-        "canadian",
-        "fourth"
+        "retires",
+        "win"
       ],
       "title": "George Russell retires from F1 Canadian GP lead as Kimi Antonelli takes fourth straight win",
       "timestamp": "2026-05-24T21:49:27"
     },
     {
       "tokens": [
-        "exit",
-        "suffers",
-        "dramatic",
         "f1",
-        "russell",
+        "exit",
         "george",
-        "gp",
+        "suffers",
+        "russell",
         "from",
-        "canada"
+        "canada",
+        "gp",
+        "dramatic"
       ],
       "title": "George Russell suffers dramatic exit from F1 Canada GP",
       "timestamp": "2026-05-24T21:00:16"
     },
     {
       "tokens": [
-        "lewis",
-        "hamilton",
         "impeding",
-        "update",
-        "penalty",
-        "grid",
-        "for",
-        "gp",
         "canadian",
-        "avoids"
+        "hamilton",
+        "avoids",
+        "grid",
+        "penalty",
+        "gp",
+        "lewis",
+        "update",
+        "for"
       ],
       "title": "Update: Lewis Hamilton avoids Canadian GP grid penalty for impeding",
       "timestamp": "2026-05-23T21:32:20"
     },
     {
       "tokens": [
-        "lewis",
-        "hamilton",
         "impeding",
         "risks",
-        "penalty",
+        "canadian",
+        "hamilton",
         "grid",
-        "for",
+        "penalty",
         "gp",
-        "canadian"
+        "lewis",
+        "for"
       ],
       "title": "Lewis Hamilton risks Canadian GP grid penalty for impeding",
       "timestamp": "2026-05-23T21:32:20"
@@ -2326,16 +2338,16 @@
     {
       "tokens": [
         "kimi",
-        "wins",
         "f1",
-        "russell",
         "george",
-        "sprint",
         "antonelli",
-        "gp",
+        "russell",
+        "wins",
+        "after",
         "canadian",
-        "clash",
-        "after"
+        "gp",
+        "sprint",
+        "clash"
       ],
       "title": "F1 Canadian GP: George Russell wins sprint after Kimi Antonelli clash",
       "timestamp": "2026-05-23T16:42:58"
@@ -2343,94 +2355,94 @@
     {
       "tokens": [
         "s",
+        "glorified",
+        "turns",
         "albon",
         "groundhog",
+        "accident",
+        "canadian",
         "into",
         "test",
-        "freak",
         "gp",
+        "freak",
         "sprint",
-        "accident",
-        "alex",
-        "turns",
-        "canadian",
-        "glorified"
+        "alex"
       ],
       "title": "Alex Albon's \"freak\" groundhog accident turns Canadian GP sprint into glorified test",
       "timestamp": "2026-05-23T10:25:44"
     },
     {
       "tokens": [
-        "to",
-        "ocon",
-        "following",
         "fia",
-        "summoned",
-        "fp1",
-        "esteban",
         "verdict",
-        "canada",
-        "stewards",
         "delivers",
-        "after"
+        "to",
+        "following",
+        "after",
+        "fp1",
+        "ocon",
+        "canada",
+        "esteban",
+        "stewards",
+        "summoned"
       ],
       "title": "FIA delivers verdict after Esteban Ocon summoned to stewards following Canada FP1",
       "timestamp": "2026-05-22T18:55:55"
     },
     {
       "tokens": [
-        "norris",
-        "sir",
         "s",
-        "lando",
-        "special",
-        "jackie",
-        "reveals",
-        "stewart",
+        "charity",
+        "norris",
         "dementia",
-        "for",
-        "gp",
-        "helmet",
         "canadian",
-        "charity"
+        "jackie",
+        "sir",
+        "reveals",
+        "helmet",
+        "stewart",
+        "special",
+        "lando",
+        "gp",
+        "for"
       ],
       "title": "Lando Norris reveals special Canadian GP helmet for Sir Jackie Stewart's dementia charity",
       "timestamp": "2026-05-21T19:59:40"
     },
     {
       "tokens": [
-        "at",
-        "t",
-        "ocon",
-        "bulls",
-        "exit",
-        "dispute",
-        "esteban",
-        "f1",
-        "claims",
-        "komatsu",
-        "and",
-        "early",
-        "hits",
-        "out",
-        "of",
+        "haas",
         "ayao",
-        "haas"
+        "komatsu",
+        "dispute",
+        "and",
+        "f1",
+        "exit",
+        "claims",
+        "early",
+        "ocon",
+        "out",
+        "bulls",
+        "hits",
+        "t",
+        "at",
+        "of",
+        "esteban"
       ],
       "title": "Esteban Ocon hits out at \"bulls**t\" claims of Ayao Komatsu dispute and early Haas F1 exit",
       "timestamp": "2026-05-21T17:21:19"
     },
     {
       "tokens": [
-        "details",
-        "cadillac",
-        "f1",
-        "upgrade",
         "package",
         "new",
+        "cadillac",
+        "f1",
+        "canadian",
+        "upgrade",
+        "details",
         "gp",
-        "for",
-        "canadian"
+        "for"
       ],
       "title": "Cadillac details new F1 upgrade package for Canadian GP",
       "timestamp": "2026-05-19T14:28:28"
@@ -2438,55 +2450,36 @@
     {
       "tokens": [
         "f1",
+        "canadian",
+        "important",
         "reveals",
         "gp",
-        "important",
-        "target",
         "honda",
-        "for",
-        "canadian"
+        "target",
+        "for"
       ],
       "title": "Honda reveals \u201cimportant target\u201d for F1 Canadian GP",
       "timestamp": "2026-05-19T10:19:34"
     },
     {
       "tokens": [
-        "win",
-        "max",
-        "my",
         "brazil",
-        "revisits",
+        "super",
+        "one",
         "races",
         "chaotic",
-        "2024",
-        "super",
         "verstappen",
-        "gp",
-        "one",
+        "revisits",
+        "max",
+        "2024",
+        "my",
         "of",
-        "best"
+        "gp",
+        "best",
+        "win"
       ],
       "title": "Max Verstappen revisits \"super chaotic\" 2024 Brazil GP win: \"One of my best races\"",
       "timestamp": "2026-05-17T22:15:54"
-    },
-    {
-      "tokens": [
-        "norris",
-        "in",
-        "lando",
-        "from",
-        "f1",
-        "take",
-        "title",
-        "russell",
-        "george",
-        "inspiration",
-        "can",
-        "quest",
-        "for"
-      ],
-      "title": "Can George Russell take inspiration from Lando Norris in quest for F1 title?",
-      "timestamp": "2026-05-17T08:45:13"
     }
   ]
 }
