@@ -7,8 +7,8 @@
     "publishedAt": "2026-06-14T18:39:32Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "107613",
-    "likeCount": "4322",
+    "viewCount": "107884",
+    "likeCount": "4323",
     "durationSec": 1394,
     "tags": [
       "ANALYSIS"
@@ -23,13 +23,30 @@
     "publishedAt": "2026-06-14T16:21:20Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "23513",
-    "likeCount": "864",
+    "viewCount": "23552",
+    "likeCount": "866",
     "durationSec": 1214,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=Z0RzAJ4qusA"
+  },
+  {
+    "id": "KP567-axq-E",
+    "title": "Barcelona Ferrari Analysis! (Data + Upgrade Analysis)",
+    "description": "Is the Ferrari comeback on in 2026? With Lewis Hamilton so close to pole in Barcelona, we’ll take a deep dive into Ferrari’s performance, upgrades and cooling ‘secrets’! Can they beat Mercedes in a straight fight soon?!\n\n🔷Formula Insights Website + Channel Membership 🔷\nhttps://formula-insights.com/\n\n🟣Bite-sized insights on Instagram! https://www.instagram.com/formula_insights_/ \n\n🔷Join The Conversation On Discord! https://discord.gg/Y8XnTe22fu 🔷\n\n\n0:00 - Intro \n0:26 -  Ferrari (Hamilton) v ",
+    "thumbnail": "https://i.ytimg.com/vi/KP567-axq-E/maxresdefault.jpg",
+    "publishedAt": "2026-06-14T00:43:51Z",
+    "channelTitle": "Formula Insights",
+    "channelScore": 0.5,
+    "viewCount": "27827",
+    "likeCount": "849",
+    "durationSec": 909,
+    "tags": [
+      "ANALYSIS",
+      "TECH"
+    ],
+    "url": "https://www.youtube.com/watch?v=KP567-axq-E"
   },
   {
     "id": "Ps_6CT2kCDY",
@@ -39,7 +56,7 @@
     "publishedAt": "2026-06-13T16:14:47Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "5772",
+    "viewCount": "5774",
     "likeCount": "259",
     "durationSec": 1003,
     "tags": [
@@ -56,7 +73,7 @@
     "publishedAt": "2026-06-09T18:43:36Z",
     "channelTitle": "Sky Sports F1",
     "channelScore": 0.85,
-    "viewCount": "96519",
+    "viewCount": "96552",
     "likeCount": "1530",
     "durationSec": 3915,
     "tags": [
@@ -72,7 +89,7 @@
     "publishedAt": "2026-06-07T19:54:23Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "76804",
+    "viewCount": "76815",
     "likeCount": "2516",
     "durationSec": 1368,
     "tags": [
@@ -88,7 +105,7 @@
     "publishedAt": "2026-06-07T19:40:37Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "247276",
+    "viewCount": "247292",
     "likeCount": "6710",
     "durationSec": 116,
     "tags": [
@@ -104,7 +121,7 @@
     "publishedAt": "2026-06-07T17:58:00Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "10866",
+    "viewCount": "10867",
     "likeCount": "403",
     "durationSec": 874,
     "tags": [
@@ -120,7 +137,7 @@
     "publishedAt": "2026-06-07T16:47:01Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "7718",
+    "viewCount": "7725",
     "likeCount": "285",
     "durationSec": 1100,
     "tags": [
@@ -136,7 +153,7 @@
     "publishedAt": "2026-06-06T15:55:26Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "9345",
+    "viewCount": "9348",
     "likeCount": "365",
     "durationSec": 1292,
     "tags": [
@@ -169,7 +186,7 @@
     "publishedAt": "2026-06-05T21:39:28Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "257135",
+    "viewCount": "257154",
     "likeCount": "4233",
     "durationSec": 527,
     "tags": [
@@ -185,7 +202,7 @@
     "publishedAt": "2026-06-05T19:41:32Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "319062",
+    "viewCount": "319106",
     "likeCount": "8268",
     "durationSec": 1165,
     "tags": [
@@ -208,21 +225,5 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=GOikYc7W16w"
-  },
-  {
-    "id": "v1uPGZX5tzI",
-    "title": "Machine Learning Metrics Explained | Accuracy, Precision, Recall & F1 Score",
-    "description": "How do you know if a machine learning model is actually good?\n\nIn this lecture, we break down the most important model evaluation metrics used in machine learning and data mining:\n\n✅ Confusion Matrix\n✅ Accuracy and Error Rate\n✅ Class Imbalance Problems\n✅ Sensitivity (Recall) and Specificity\n✅ Precision vs Recall\n✅ F1 Score and F-Measure\n✅ Real-World Cancer Diagnosis Example\n\nYou'll learn why accuracy alone can be misleading and how precision, recall, and F1 score help evaluate models when dealin",
-    "thumbnail": "https://i.ytimg.com/vi/v1uPGZX5tzI/hqdefault.jpg",
-    "publishedAt": "2026-06-04T02:13:43Z",
-    "channelTitle": "Hyper Codes0101",
-    "channelScore": 0.5,
-    "viewCount": "16",
-    "likeCount": "1",
-    "durationSec": 549,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=v1uPGZX5tzI"
   }
 ]
