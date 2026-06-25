@@ -7,7 +7,7 @@
     "publishedAt": "2026-06-25T05:39:09Z",
     "channelTitle": "Racecraft Explained",
     "channelScore": 0.5,
-    "viewCount": "6",
+    "viewCount": "7",
     "likeCount": "2",
     "durationSec": 461,
     "tags": [
@@ -23,7 +23,7 @@
     "publishedAt": "2026-06-23T19:00:02Z",
     "channelTitle": "Racecraft Explained",
     "channelScore": 0.5,
-    "viewCount": "56",
+    "viewCount": "99",
     "likeCount": "1",
     "durationSec": 490,
     "tags": [
@@ -40,8 +40,8 @@
     "publishedAt": "2026-06-16T17:00:21Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "373228",
-    "likeCount": "7628",
+    "viewCount": "373635",
+    "likeCount": "7631",
     "durationSec": 800,
     "tags": [
       "ANALYSIS"
@@ -56,7 +56,7 @@
     "publishedAt": "2026-06-14T21:49:14Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "387980",
+    "viewCount": "388106",
     "likeCount": "8592",
     "durationSec": 570,
     "tags": [
@@ -72,7 +72,7 @@
     "publishedAt": "2026-06-14T18:39:32Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "109558",
+    "viewCount": "109570",
     "likeCount": "4350",
     "durationSec": 1394,
     "tags": [
@@ -104,7 +104,7 @@
     "publishedAt": "2026-06-14T00:43:51Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "28006",
+    "viewCount": "28007",
     "likeCount": "856",
     "durationSec": 909,
     "tags": [
@@ -121,30 +121,13 @@
     "publishedAt": "2026-06-13T21:38:54Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "11886",
+    "viewCount": "11887",
     "likeCount": "379",
     "durationSec": 1215,
     "tags": [
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=q5vQEzSaDAs"
-  },
-  {
-    "id": "Ps_6CT2kCDY",
-    "title": "RUSSELL ON POLE! 2026 F1 Barcelona Catalunya GP QUALIFYING Analysis (Spain)",
-    "description": "RUSSELL STORMS TO POLE! 2026 F1 Barcelona Catalunya GP QUALIFYING Analysis (Spain).\n\nGeorge Russell delivers a stunning pole position lap in Barcelona, edging out teammate Lewis Hamilton as Mercedes lock out the front row. Kimi Antonelli continues to impress with P3, putting three Silver Arrows-powered cars at the sharp end heading into Sunday's race.\n\nMeanwhile, Ferrari's day unravelled when Charles Leclerc crashed at Turn 4 after turning in too early and clipping the inside kerb, ending his qu",
-    "thumbnail": "https://i.ytimg.com/vi/Ps_6CT2kCDY/maxresdefault.jpg",
-    "publishedAt": "2026-06-13T16:14:47Z",
-    "channelTitle": "lowerlaptime",
-    "channelScore": 0.5,
-    "viewCount": "5807",
-    "likeCount": "260",
-    "durationSec": 1003,
-    "tags": [
-      "QUALI",
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=Ps_6CT2kCDY"
   },
   {
     "id": "4Yg4hnTZFlY",
@@ -154,7 +137,7 @@
     "publishedAt": "2026-06-07T19:54:23Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "76904",
+    "viewCount": "76908",
     "likeCount": "2515",
     "durationSec": 1368,
     "tags": [
@@ -170,7 +153,7 @@
     "publishedAt": "2026-06-07T19:40:37Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "247677",
+    "viewCount": "247678",
     "likeCount": "6716",
     "durationSec": 116,
     "tags": [
@@ -186,7 +169,7 @@
     "publishedAt": "2026-06-07T19:23:07Z",
     "channelTitle": "NA James",
     "channelScore": 0.5,
-    "viewCount": "799616",
+    "viewCount": "799633",
     "likeCount": "28152",
     "durationSec": 106,
     "tags": [
@@ -218,7 +201,7 @@
     "publishedAt": "2026-06-07T16:47:01Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "7746",
+    "viewCount": "7747",
     "likeCount": "285",
     "durationSec": 1100,
     "tags": [
@@ -234,7 +217,7 @@
     "publishedAt": "2026-06-06T15:55:26Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "9361",
+    "viewCount": "9365",
     "likeCount": "364",
     "durationSec": 1292,
     "tags": [
@@ -242,6 +225,22 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=B6LCLQIpnko"
+  },
+  {
+    "id": "dtSvSUoHcO8",
+    "title": "Evaluation Metrics Explained | Accuracy, Precision, Recall & F1-Score in 5 Minutes",
+    "description": "Welcome to Learn Along With Maitri! 🎓\n\nIn this video, we'll understand the most important Machine Learning evaluation metrics:\n\n📊 Accuracy\n🎯 Precision\n🔍 Recall\n⚖️ F1-Score\n\nAfter building a Machine Learning model, how do we know if it's performing well?\n\nThat's where evaluation metrics come in.\n\nIn this beginner-friendly visual guide, you'll learn:\n\n✅ What is a Confusion Matrix?\n✅ True Positive, False Positive\n✅ True Negative, False Negative\n✅ Accuracy Explained\n✅ Precision Explained\n✅ Recal",
+    "thumbnail": "https://i.ytimg.com/vi/dtSvSUoHcO8/maxresdefault.jpg",
+    "publishedAt": "2026-06-06T15:10:30Z",
+    "channelTitle": "Learn Along With Maitri",
+    "channelScore": 0.5,
+    "viewCount": "10",
+    "likeCount": "1",
+    "durationSec": 320,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=dtSvSUoHcO8"
   },
   {
     "id": "DD7tdFeqZPE",
@@ -267,8 +266,8 @@
     "publishedAt": "2026-06-05T19:41:32Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "319948",
-    "likeCount": "8284",
+    "viewCount": "319982",
+    "likeCount": "8285",
     "durationSec": 1165,
     "tags": [
       "TECH"
@@ -290,21 +289,5 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=GOikYc7W16w"
-  },
-  {
-    "id": "Tuf7qteyGnc",
-    "title": "Everything we learned from F1’s 2026 Canadian Grand Prix",
-    "description": "Check out the Armor All Podium Series for podium-worthy car cleaning at home: https://www.amazon.com/stores/ArmorAll/page/B37A858A-BC80-44EF-A864-15C280FB7511?lp_asin=B0DK454VS4&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto&bl_grd_status=override\n\nA huge title fight twist, new tensions and some bizarre miscues - here’s everything we learned from a very eventful Canadian Grand Prix.\n\n00:00 Keeping these engines will cost F1 Verstappen \n01:07 Leclerc’s worst weekend in F1?\n01:56 Big upgrades were",
-    "thumbnail": "https://i.ytimg.com/vi/Tuf7qteyGnc/maxresdefault.jpg",
-    "publishedAt": "2026-05-25T16:40:27Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "175228",
-    "likeCount": "3106",
-    "durationSec": 549,
-    "tags": [
-      "GENERAL"
-    ],
-    "url": "https://www.youtube.com/watch?v=Tuf7qteyGnc"
   }
 ]
