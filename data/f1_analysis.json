@@ -7,7 +7,7 @@
     "publishedAt": "2026-06-25T05:39:09Z",
     "channelTitle": "Racecraft Explained",
     "channelScore": 0.5,
-    "viewCount": "14",
+    "viewCount": "16",
     "likeCount": "2",
     "durationSec": 461,
     "tags": [
@@ -23,8 +23,8 @@
     "publishedAt": "2026-06-16T17:00:21Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "376685",
-    "likeCount": "7673",
+    "viewCount": "376927",
+    "likeCount": "7675",
     "durationSec": 800,
     "tags": [
       "ANALYSIS"
@@ -39,7 +39,7 @@
     "publishedAt": "2026-06-14T21:49:14Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "389089",
+    "viewCount": "389110",
     "likeCount": "8602",
     "durationSec": 570,
     "tags": [
@@ -71,7 +71,7 @@
     "publishedAt": "2026-06-14T16:21:20Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "24127",
+    "viewCount": "24130",
     "likeCount": "881",
     "durationSec": 1214,
     "tags": [
@@ -87,7 +87,7 @@
     "publishedAt": "2026-06-14T00:43:51Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "28024",
+    "viewCount": "28028",
     "likeCount": "856",
     "durationSec": 909,
     "tags": [
@@ -120,7 +120,7 @@
     "publishedAt": "2026-06-07T19:54:23Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "76936",
+    "viewCount": "76938",
     "likeCount": "2515",
     "durationSec": 1368,
     "tags": [
@@ -136,7 +136,7 @@
     "publishedAt": "2026-06-07T19:40:37Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "247765",
+    "viewCount": "247767",
     "likeCount": "6716",
     "durationSec": 116,
     "tags": [
@@ -152,8 +152,8 @@
     "publishedAt": "2026-06-07T19:23:07Z",
     "channelTitle": "NA James",
     "channelScore": 0.5,
-    "viewCount": "799901",
-    "likeCount": "28159",
+    "viewCount": "799932",
+    "likeCount": "28160",
     "durationSec": 106,
     "tags": [
       "ANALYSIS"
@@ -200,7 +200,7 @@
     "publishedAt": "2026-06-06T15:55:26Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "9386",
+    "viewCount": "9388",
     "likeCount": "365",
     "durationSec": 1292,
     "tags": [
@@ -224,5 +224,21 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=dtSvSUoHcO8"
+  },
+  {
+    "id": "DD7tdFeqZPE",
+    "title": "McLaren's bizarre penalty and Monaco struggle explained",
+    "description": "A very unusual rules infraction and penalty was an appropriately strange end to McLaren's tough start to the Monaco Grand Prix weekend.\n\nBut it's far from the only team struggling at an event that could provide F1's first big 2026 upset.\n\n00:00 McLaren's weird tape breach\n04:11 McLaren's pace struggle\n05:17 Mercedes off-form too\n06:47 Red Bull's different approach\n\nSubscribe: http://the-race.com/youtube_subscribe\nThe Race Members' Club: https://www.patreon.com/cw/TheRace/membership\nWebsite: http",
+    "thumbnail": "https://i.ytimg.com/vi/DD7tdFeqZPE/maxresdefault.jpg",
+    "publishedAt": "2026-06-05T21:39:28Z",
+    "channelTitle": "THE RACE",
+    "channelScore": 0.85,
+    "viewCount": "257362",
+    "likeCount": "4235",
+    "durationSec": 527,
+    "tags": [
+      "ANALYSIS"
+    ],
+    "url": "https://www.youtube.com/watch?v=DD7tdFeqZPE"
   }
 ]
