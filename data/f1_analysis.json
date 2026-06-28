@@ -7,8 +7,8 @@
     "publishedAt": "2026-06-28T00:02:04Z",
     "channelTitle": "ScuderiaFans",
     "channelScore": 0.5,
-    "viewCount": "943",
-    "likeCount": "21",
+    "viewCount": "975",
+    "likeCount": "22",
     "durationSec": 116,
     "tags": [
       "ANALYSIS"
@@ -23,7 +23,7 @@
     "publishedAt": "2026-06-27T16:18:53Z",
     "channelTitle": "F1Creed",
     "channelScore": 0.5,
-    "viewCount": "6",
+    "viewCount": "17",
     "likeCount": "0",
     "durationSec": 400,
     "tags": [
@@ -39,30 +39,14 @@
     "publishedAt": "2026-06-27T16:04:28Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "7844",
-    "likeCount": "268",
+    "viewCount": "8474",
+    "likeCount": "266",
     "durationSec": 1082,
     "tags": [
       "QUALI",
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=va9VR9aq2n8"
-  },
-  {
-    "id": "BTwUmcMrZY0",
-    "title": "Can Madrid Save F1 Racing? The New Circuit Analysis",
-    "description": "Formula 1 is heading to Madrid, and the new Madring circuit is already generating huge excitement across the paddock.\nIn this video, we break down the layout of F1's newest circuit, explore the famous banked corner, analyze the overtaking opportunities, and compare Madrid with the legendary Barcelona-Catalunya circuit.\nCan Madrid deliver the exciting racing Formula 1 fans have been waiting for? Or will Barcelona remain Spain's true home of Formula 1?\n🏁 In this video: ✅ Complete Madrid circuit a",
-    "thumbnail": "https://i.ytimg.com/vi/BTwUmcMrZY0/maxresdefault.jpg",
-    "publishedAt": "2026-06-25T05:39:09Z",
-    "channelTitle": "Racecraft Explained",
-    "channelScore": 0.5,
-    "viewCount": "17",
-    "likeCount": "2",
-    "durationSec": 461,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=BTwUmcMrZY0"
   },
   {
     "id": "fn-n_xirnFc",
@@ -72,7 +56,7 @@
     "publishedAt": "2026-06-16T17:00:21Z",
     "channelTitle": "FORMULA 1",
     "channelScore": 1,
-    "viewCount": "378046",
+    "viewCount": "378194",
     "likeCount": "7676",
     "durationSec": 800,
     "tags": [
@@ -88,8 +72,8 @@
     "publishedAt": "2026-06-14T21:49:14Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "389520",
-    "likeCount": "8603",
+    "viewCount": "389535",
+    "likeCount": "8604",
     "durationSec": 570,
     "tags": [
       "GENERAL"
@@ -120,7 +104,7 @@
     "publishedAt": "2026-06-14T16:21:20Z",
     "channelTitle": "lowerlaptime",
     "channelScore": 0.5,
-    "viewCount": "24166",
+    "viewCount": "24167",
     "likeCount": "882",
     "durationSec": 1214,
     "tags": [
@@ -136,7 +120,7 @@
     "publishedAt": "2026-06-14T00:43:51Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "28046",
+    "viewCount": "28047",
     "likeCount": "856",
     "durationSec": 909,
     "tags": [
@@ -153,7 +137,7 @@
     "publishedAt": "2026-06-13T21:38:54Z",
     "channelTitle": "Formula Insights",
     "channelScore": 0.5,
-    "viewCount": "11907",
+    "viewCount": "11910",
     "likeCount": "379",
     "durationSec": 1215,
     "tags": [
@@ -169,7 +153,7 @@
     "publishedAt": "2026-06-07T19:54:23Z",
     "channelTitle": "Peter Windsor",
     "channelScore": 0.5,
-    "viewCount": "76960",
+    "viewCount": "76963",
     "likeCount": "2515",
     "durationSec": 1368,
     "tags": [
@@ -185,7 +169,7 @@
     "publishedAt": "2026-06-07T19:40:37Z",
     "channelTitle": "THE RACE",
     "channelScore": 0.85,
-    "viewCount": "247784",
+    "viewCount": "247789",
     "likeCount": "6716",
     "durationSec": 116,
     "tags": [
@@ -201,7 +185,7 @@
     "publishedAt": "2026-06-07T19:23:07Z",
     "channelTitle": "NA James",
     "channelScore": 0.5,
-    "viewCount": "799995",
+    "viewCount": "800003",
     "likeCount": "28158",
     "durationSec": 106,
     "tags": [
@@ -240,37 +224,5 @@
       "ANALYSIS"
     ],
     "url": "https://www.youtube.com/watch?v=Ma6Dg4yKHn4"
-  },
-  {
-    "id": "dtSvSUoHcO8",
-    "title": "Evaluation Metrics Explained | Accuracy, Precision, Recall & F1-Score in 5 Minutes",
-    "description": "Welcome to Learn Along With Maitri! 🎓\n\nIn this video, we'll understand the most important Machine Learning evaluation metrics:\n\n📊 Accuracy\n🎯 Precision\n🔍 Recall\n⚖️ F1-Score\n\nAfter building a Machine Learning model, how do we know if it's performing well?\n\nThat's where evaluation metrics come in.\n\nIn this beginner-friendly visual guide, you'll learn:\n\n✅ What is a Confusion Matrix?\n✅ True Positive, False Positive\n✅ True Negative, False Negative\n✅ Accuracy Explained\n✅ Precision Explained\n✅ Recal",
-    "thumbnail": "https://i.ytimg.com/vi/dtSvSUoHcO8/maxresdefault.jpg",
-    "publishedAt": "2026-06-06T15:10:30Z",
-    "channelTitle": "Learn Along With Maitri",
-    "channelScore": 0.5,
-    "viewCount": "10",
-    "likeCount": "1",
-    "durationSec": 320,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=dtSvSUoHcO8"
-  },
-  {
-    "id": "DD7tdFeqZPE",
-    "title": "McLaren's bizarre penalty and Monaco struggle explained",
-    "description": "A very unusual rules infraction and penalty was an appropriately strange end to McLaren's tough start to the Monaco Grand Prix weekend.\n\nBut it's far from the only team struggling at an event that could provide F1's first big 2026 upset.\n\n00:00 McLaren's weird tape breach\n04:11 McLaren's pace struggle\n05:17 Mercedes off-form too\n06:47 Red Bull's different approach\n\nSubscribe: http://the-race.com/youtube_subscribe\nThe Race Members' Club: https://www.patreon.com/cw/TheRace/membership\nWebsite: http",
-    "thumbnail": "https://i.ytimg.com/vi/DD7tdFeqZPE/maxresdefault.jpg",
-    "publishedAt": "2026-06-05T21:39:28Z",
-    "channelTitle": "THE RACE",
-    "channelScore": 0.85,
-    "viewCount": "257368",
-    "likeCount": "4235",
-    "durationSec": 527,
-    "tags": [
-      "ANALYSIS"
-    ],
-    "url": "https://www.youtube.com/watch?v=DD7tdFeqZPE"
   }
 ]
