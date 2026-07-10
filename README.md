@@ -17,19 +17,7 @@
 
 *Because antigravity is free and I love F1* 🏁
 
----
 
-### 100% built by
-
-<table>
-  <tr>
-    <td align="center"><img src="screenshots/antigravity_logo.png" width="50" alt="Antigravity"/><br/><sub><b></b></sub></td>
-    <td align="center"><img src="screenshots/gemini_logo.png" width="50" alt="Gemini"/><br/><sub><b></b></sub></td>
-    <td align="center"><img src="screenshots/claude_logo.png" width="50" alt="Claude"/><br/><sub><b></b></sub></td>
-  </tr>
-</table>
-
----
 
 [⬇ Download APK](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest/download/boxboxbox.apk) • [Features](#-features) • [Screenshots](#-screenshots) • [Tech Stack](#-tech-stack)
 
