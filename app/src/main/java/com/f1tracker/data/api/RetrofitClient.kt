@@ -41,7 +41,7 @@ object RetrofitClient {
                 val cacheControl = response.header("Cache-Control")
                 
                 // For GitHub Pages JSON (Instagram feeds), use shorter cache to get fresh CDN URLs
-                val isInstagramFeed = chain.request().url.toString().contains("ashwkun.github.io")
+                val isInstagramFeed = chain.request().url.toString().contains("boxcreate.github.io")
                 val maxAge = if (isInstagramFeed) 60 else 300 // 1 min for Instagram, 5 min for others
                 
                 if (cacheControl == null || cacheControl.contains("no-store") || cacheControl.contains("no-cache") ||

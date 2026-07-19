@@ -7,7 +7,7 @@
 *Live timing, streams, news, podcasts, standings & more — all in one app.*
 *Download the APK below and start watching!*
 
-[![Download APK](https://img.shields.io/badge/⬇_DOWNLOAD_APK-Latest_Release-00C853?style=for-the-badge&logo=android&logoColor=white&labelColor=1a1a2e)](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest/download/boxboxbox.apk)
+[![Download APK](https://img.shields.io/badge/⬇_DOWNLOAD_APK-Latest_Release-00C853?style=for-the-badge&logo=android&logoColor=white&labelColor=1a1a2e)](https://github.com/boxcreate/boxboxbox/releases/latest/download/boxboxbox.apk)
 
 [![GPL v3 License](https://img.shields.io/badge/License-GPLv3-ff0080.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Android](https://img.shields.io/badge/Platform-Android-3DDC84.svg)](https://www.android.com/)
@@ -19,7 +19,7 @@
 
 
 
-[⬇ Download APK](https://github.com/ashwkun/BOXBOXBOX-F1/releases/latest/download/boxboxbox.apk) • [Features](#-features) • [Screenshots](#-screenshots) • [Tech Stack](#-tech-stack)
+[⬇ Download APK](https://github.com/boxcreate/boxboxbox/releases/latest/download/boxboxbox.apk) • [Features](#-features) • [Screenshots](#-screenshots) • [Tech Stack](#-tech-stack)
 
 </div>
 
@@ -296,8 +296,8 @@ This app aggregates data from multiple public sources to provide a unified F1 ex
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/BOXBOXBOX-F1.git
-cd BOXBOXBOX-F1
+git clone https://github.com/boxcreate/boxboxbox.git
+cd boxboxbox
 
 # Build the APK
 ./gradlew assembleRelease

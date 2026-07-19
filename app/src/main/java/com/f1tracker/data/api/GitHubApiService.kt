@@ -4,6 +4,6 @@ import com.f1tracker.data.models.GitHubRelease
 import retrofit2.http.GET
 
 interface GitHubApiService {
-    @GET("repos/ashwkun/BOXBOXBOX-F1/releases/latest")
+    @GET("repos/boxcreate/boxboxbox/releases/latest")
     suspend fun getLatestRelease(): GitHubRelease
 }
