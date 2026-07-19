@@ -62,6 +62,7 @@ fun LiveScreen(
     val connectionStatus by liveClient.connectionStatus.collectAsState()
     val currentLap by liveClient.currentLap.collectAsState()
     val totalLaps by liveClient.totalLaps.collectAsState()
+    val feedSource by liveClient.feedSource.collectAsState()
     
     // Lifecycle observer — reconnect when app resumes from background
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -210,8 +211,10 @@ fun LiveScreen(
                         modifier = Modifier.widthIn(max = 120.dp)
                     )
                     
-                    // Lap counter (only for Race/Sprint sessions)
-                    if (sessionType == SessionType.RACE || sessionType == SessionType.SPRINT) {
+                    // Lap counter (only for Race/Sprint sessions with lap data)
+                    if ((sessionType == SessionType.RACE || sessionType == SessionType.SPRINT) &&
+                        (currentLap > 0 || totalLaps > 0)
+                    ) {
                         Spacer(modifier = Modifier.width(12.dp))
                         val lapDisplay = if (totalLaps > 0) "$currentLap/$totalLaps" else "$currentLap"
                         Text(
@@ -224,34 +227,51 @@ fun LiveScreen(
                     }
                 }
                 
-                // Session type badge
-                Box(
-                    modifier = Modifier
-                        .background(
-                            when (sessionType) {
-                                SessionType.RACE -> Color(0xFFE6007E).copy(alpha = 0.2f)
-                                SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> Color(0xFF00BFFF).copy(alpha = 0.2f)
-                                SessionType.SPRINT -> Color(0xFFFF8000).copy(alpha = 0.2f)
-                                SessionType.PRACTICE -> Color(0xFF888888).copy(alpha = 0.2f)
+                Column(horizontalAlignment = Alignment.End) {
+                    // Session type badge
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                when (sessionType) {
+                                    SessionType.RACE -> Color(0xFFE6007E).copy(alpha = 0.2f)
+                                    SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> Color(0xFF00BFFF).copy(alpha = 0.2f)
+                                    SessionType.SPRINT -> Color(0xFFFF6600).copy(alpha = 0.2f)
+                                    SessionType.PRACTICE -> Color(0xFF00FF88).copy(alpha = 0.2f)
+                                },
+                                RoundedCornerShape(4.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        Text(
+                            text = when (sessionType) {
+                                SessionType.RACE -> "RACE"
+                                SessionType.SPRINT -> "SPRINT"
+                                SessionType.QUALIFYING -> "QUALI"
+                                SessionType.SPRINT_QUALIFYING -> "SQ"
+                                SessionType.PRACTICE -> "FP"
                             },
-                            RoundedCornerShape(4.dp)
+                            fontFamily = michromaFont,
+                            fontSize = 8.sp,
+                            color = when (sessionType) {
+                                SessionType.RACE -> Color(0xFFE6007E)
+                                SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> Color(0xFF00BFFF)
+                                SessionType.SPRINT -> Color(0xFFFF6600)
+                                SessionType.PRACTICE -> Color(0xFF00FF88)
+                            },
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp
                         )
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = when (sessionType) {
-                            SessionType.RACE -> "RACE"
-                            SessionType.QUALIFYING -> "QUALI"
-                            SessionType.SPRINT_QUALIFYING -> "SQ"
-                            SessionType.SPRINT -> "SPRINT"
-                            SessionType.PRACTICE -> "FP"
-                        },
-                        fontFamily = michromaFont,
-                        fontSize = 8.sp,
-                        color = Color.White,
-                        letterSpacing = 0.5.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    }
+                    if (feedSource.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = feedSource.uppercase(),
+                            fontFamily = michromaFont,
+                            fontSize = 7.sp,
+                            color = Color.White.copy(alpha = 0.35f),
+                            letterSpacing = 0.5.sp
+                        )
+                    }
                 }
             }
         }
@@ -312,8 +332,10 @@ fun LiveScreen(
             }
         }
         
+        var selectedTab by remember { mutableIntStateOf(0) }
+
         when {
-            // No active session - show countdown
+            // No active session - streams still available via off-weekend UI
             !shouldConnect -> {
                 NoSessionActiveScreen(
                     raceWeekendState = raceWeekendState,
@@ -336,280 +358,11 @@ fun LiveScreen(
                     }
                 )
             }
-            
-            
-            // Loading state - Premium connecting screen
-            !isConnected && connectionError == null -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            Brush.radialGradient(
-                                colors = listOf(
-                                    Color(0xFF1A0A12),
-                                    Color.Black
-                                ),
-                                radius = 800f
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(24.dp)
-                    ) {
-                        // Animated pulsing ring
-                        val infiniteTransition = rememberInfiniteTransition(label = "connecting")
-                        val pulseScale by infiniteTransition.animateFloat(
-                            initialValue = 0.9f,
-                            targetValue = 1.1f,
-                            animationSpec = infiniteRepeatable(
-                                animation = tween(1000, easing = FastOutSlowInEasing),
-                                repeatMode = RepeatMode.Reverse
-                            ),
-                            label = "scale"
-                        )
-                        val pulseAlpha by infiniteTransition.animateFloat(
-                            initialValue = 0.3f,
-                            targetValue = 0.8f,
-                            animationSpec = infiniteRepeatable(
-                                animation = tween(1000, easing = FastOutSlowInEasing),
-                                repeatMode = RepeatMode.Reverse
-                            ),
-                            label = "alpha"
-                        )
-                        
-                        Box(
-                            modifier = Modifier.size(80.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            // Outer pulsing ring
-                            Box(
-                                modifier = Modifier
-                                    .size((70 * pulseScale).dp)
-                                    .border(
-                                        width = 2.dp,
-                                        brush = Brush.sweepGradient(
-                                            listOf(
-                                                Color(0xFFE6007E).copy(alpha = pulseAlpha),
-                                                Color(0xFFE6007E).copy(alpha = 0.1f),
-                                                Color(0xFFE6007E).copy(alpha = pulseAlpha)
-                                            )
-                                        ),
-                                        shape = RoundedCornerShape(35.dp)
-                                    )
-                            )
-                            // Inner progress
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(40.dp),
-                                color = Color(0xFFE6007E),
-                                strokeWidth = 2.dp
-                            )
-                        }
-                        
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = "CONNECTING",
-                                fontFamily = brigendsFont,
-                                fontSize = 14.sp,
-                                color = Color.White,
-                                letterSpacing = 3.sp
-                            )
-                            Text(
-                                text = "Establishing live timing connection",
-                                fontFamily = michromaFont,
-                                fontSize = 10.sp,
-                                color = Color.White.copy(alpha = 0.5f),
-                                letterSpacing = 0.5.sp
-                            )
-                        }
-                    }
-                }
-            }
-            
-            // Error state - Premium error screen
-            connectionError != null && liveDrivers.isEmpty() -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            Brush.radialGradient(
-                                colors = listOf(
-                                    Color(0xFF1A0808),
-                                    Color.Black
-                                ),
-                                radius = 800f
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(20.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(64.dp)
-                                .background(
-                                    Color(0xFFFF0040).copy(alpha = 0.1f),
-                                    RoundedCornerShape(32.dp)
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.WifiOff,
-                                contentDescription = "Error",
-                                tint = Color(0xFFFF0040),
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
-                        
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = "CONNECTION FAILED",
-                                fontFamily = brigendsFont,
-                                fontSize = 14.sp,
-                                color = Color.White,
-                                letterSpacing = 2.sp
-                            )
-                            Text(
-                                text = "Unable to connect to live timing",
-                                fontFamily = michromaFont,
-                                fontSize = 10.sp,
-                                color = Color.White.copy(alpha = 0.5f),
-                                letterSpacing = 0.5.sp
-                            )
-                        }
-                        
-                        Spacer(modifier = Modifier.height(8.dp))
-                        
-                        // Retry button
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    Brush.horizontalGradient(
-                                        listOf(
-                                            Color(0xFFE6007E),
-                                            Color(0xFFFF0080)
-                                        )
-                                    ),
-                                    RoundedCornerShape(6.dp)
-                                )
-                                .clickable { liveClient.connect() }
-                                .padding(horizontal = 24.dp, vertical = 10.dp)
-                        ) {
-                            Text(
-                                text = "RETRY CONNECTION",
-                                fontFamily = michromaFont,
-                                fontSize = 10.sp,
-                                color = Color.White,
-                                letterSpacing = 1.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
-            }
-            
-            // No data but connected - with countdown - Premium waiting screen
-            liveDrivers.isEmpty() && isConnected -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            Brush.radialGradient(
-                                colors = listOf(
-                                    Color(0xFF151008),
-                                    Color.Black
-                                ),
-                                radius = 800f
-                            )
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(20.dp)
-                    ) {
-                        // Animated countdown with ring
-                        val infiniteTransition = rememberInfiniteTransition(label = "waiting")
-                        val rotation by infiniteTransition.animateFloat(
-                            initialValue = 0f,
-                            targetValue = 360f,
-                            animationSpec = infiniteRepeatable(
-                                animation = tween(3000, easing = LinearEasing)
-                            ),
-                            label = "rotation"
-                        )
-                        
-                        Box(
-                            modifier = Modifier.size(80.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            // Rotating accent ring
-                            Box(
-                                modifier = Modifier
-                                    .size(75.dp)
-                                    .border(
-                                        width = 2.dp,
-                                        brush = Brush.sweepGradient(
-                                            0f to Color(0xFFFFAA00).copy(alpha = 0.6f),
-                                            0.5f to Color.Transparent,
-                                            1f to Color(0xFFFFAA00).copy(alpha = 0.6f)
-                                        ),
-                                        shape = RoundedCornerShape(37.5.dp)
-                                    )
-                                    .graphicsLayer { rotationZ = rotation }
-                            )
-                            // Countdown number
-                            Text(
-                                text = if (countdown > 0) "$countdown" else "...",
-                                fontFamily = michromaFont,
-                                fontSize = 22.sp,
-                                color = Color(0xFFFFAA00),
-                                letterSpacing = 1.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = "AWAITING DATA",
-                                fontFamily = brigendsFont,
-                                fontSize = 14.sp,
-                                color = Color.White,
-                                letterSpacing = 3.sp
-                            )
-                            Text(
-                                text = "Session data will appear shortly. If specific data is missing, the session may have ended.",
-                                fontFamily = michromaFont,
-                                fontSize = 10.sp,
-                                color = Color.White.copy(alpha = 0.5f),
-                                letterSpacing = 0.5.sp,
-                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
 
-                            )
-                        }
-                    }
-                }
-            }
-            
-            // Show live data — tabbed interface: Timing | Stream
+            // Live session: tabs always shown. SignalR state only affects Timing tab.
             else -> {
-                var selectedTab by remember { mutableIntStateOf(0) }
                 val tabTitles = listOf("TIMING", "STREAM")
-                
-                Column {
-                    // Tab row
+                Column(modifier = Modifier.fillMaxSize()) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -626,9 +379,7 @@ fun LiveScreen(
                                     .padding(vertical = 10.dp),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     Text(
                                         text = title,
                                         fontFamily = michromaFont,
@@ -654,111 +405,41 @@ fun LiveScreen(
                             }
                         }
                     }
-                    
+
                     when (selectedTab) {
-                        0 -> {
-                            // TIMING tab — Session header + Driver list
-                            SessionHeader(sessionType = sessionType, michromaFont = michromaFont)
-                            
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 8.dp, vertical = 4.dp),
-                                verticalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                itemsIndexed(liveDrivers) { index, driver ->
-                                    when (sessionType) {
-                                        SessionType.RACE, SessionType.SPRINT -> {
-                                            RaceDriverRow(
-                                                driver = driver,
-                                                index = index,
-                                                drivers = liveDrivers,
-                                                michromaFont = michromaFont
-                                            )
-                                        }
-                                        SessionType.QUALIFYING, SessionType.SPRINT_QUALIFYING -> {
-                                            val activeDrivers = liveDrivers.count { !it.knockedOut }
-                                            val currentQSession = when {
-                                                activeDrivers > 16 -> 1
-                                                activeDrivers > 10 -> 2
-                                                else -> 3
-                                            }
-                                            
-                                            val dangerCutoff = when (currentQSession) {
-                                                1 -> 16
-                                                2 -> 10
-                                                else -> -1
-                                            }
-                                            
-                                            val posNum = driver.positionDisplay?.toIntOrNull() ?: 999
-                                            val inDangerZone = !driver.knockedOut && dangerCutoff > 0 && posNum > dangerCutoff
-                                            
-                                            if (inDangerZone && index > 0) {
-                                                val prevPos = liveDrivers[index - 1].positionDisplay?.toIntOrNull() ?: 0
-                                                val prevKO = liveDrivers[index - 1].knockedOut
-                                                if (prevPos <= dangerCutoff && !prevKO) {
-                                                    KnockoutZoneSeparator(
-                                                        michromaFont = michromaFont,
-                                                        label = "Q${currentQSession} DANGER ZONE"
-                                                    )
-                                                }
-                                            }
-                                            
-                                            if (driver.knockedOut && index > 0 && !liveDrivers[index - 1].knockedOut) {
-                                                KnockoutZoneSeparator(
-                                                    michromaFont = michromaFont,
-                                                    label = "ELIMINATED"
-                                                )
-                                            }
-                                            
-                                            QualiDriverRow(
-                                                driver = driver,
-                                                inDangerZone = inDangerZone,
-                                                michromaFont = michromaFont
-                                            )
-                                        }
-                                        SessionType.PRACTICE -> {
-                                            PracticeDriverRow(
-                                                driver = driver,
-                                                index = index,
-                                                drivers = liveDrivers,
-                                                michromaFont = michromaFont
-                                            )
-                                        }
+                        0 -> TimingTabContent(
+                            liveDrivers = liveDrivers,
+                            sessionType = sessionType,
+                            isConnected = isConnected,
+                            connectionError = connectionError,
+                            countdown = countdown,
+                            feedSource = feedSource,
+                            brigendsFont = brigendsFont,
+                            michromaFont = michromaFont,
+                            onRetryConnection = { liveClient.connect() }
+                        )
+                        1 -> Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 8.dp, vertical = 8.dp)
+                        ) {
+                            com.f1tracker.ui.components.AceStreamLiveCard(
+                                raceViewModel = raceViewModel,
+                                michromaFont = michromaFont,
+                                onInstallRequested = {
+                                    try {
+                                        context.startActivity(aceStreamRepo.buildInstallIntent())
+                                    } catch (e: Exception) {
+                                        Toast.makeText(context, "Install Ace Stream from Play Store", Toast.LENGTH_LONG).show()
                                     }
+                                },
+                                onStartEngineRequested = {
+                                    raceViewModel.wakeEngineAndCheckStatus(context, allowUiFallback = true)
+                                },
+                                onManualRefreshRequested = {
+                                    raceViewModel.fetchAceStreams()
                                 }
-                                
-                                item {
-                                    Spacer(modifier = Modifier.height(80.dp))
-                                }
-                            }
-                        }
-                        1 -> {
-                            // STREAM tab — Ace Stream card
-                            // Do NOT add verticalScroll here — AceStreamLiveCard handles its own scrolling internally
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 8.dp, vertical = 8.dp)
-                            ) {
-                                com.f1tracker.ui.components.AceStreamLiveCard(
-                                    raceViewModel = raceViewModel,
-                                    michromaFont = michromaFont,
-                                    onInstallRequested = {
-                                        try {
-                                            context.startActivity(aceStreamRepo.buildInstallIntent())
-                                        } catch (e: Exception) {
-                                            Toast.makeText(context, "Install Ace Stream from Play Store", Toast.LENGTH_LONG).show()
-                                        }
-                                    },
-                                    onStartEngineRequested = {
-                                        raceViewModel.wakeEngineAndCheckStatus(context, allowUiFallback = true)
-                                    },
-                                    onManualRefreshRequested = {
-                                        raceViewModel.fetchAceStreams()
-                                    }
-                                )
-                            }
+                            )
                         }
                     }
                 }
@@ -769,12 +450,279 @@ fun LiveScreen(
     } // Close outer Box
 }
 
+
+@Composable
+private fun TimingTabContent(
+    liveDrivers: List<LiveDriver>,
+    sessionType: SessionType,
+    isConnected: Boolean,
+    connectionError: String?,
+    countdown: Int,
+    feedSource: String,
+    brigendsFont: FontFamily,
+    michromaFont: FontFamily,
+    onRetryConnection: () -> Unit
+) {
+    when {
+        !isConnected && connectionError == null -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Brush.radialGradient(colors = listOf(Color(0xFF1A0A12), Color.Black), radius = 800f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                    CircularProgressIndicator(modifier = Modifier.size(40.dp), color = Color(0xFFE6007E), strokeWidth = 2.dp)
+                    Text(text = "CONNECTING", fontFamily = brigendsFont, fontSize = 14.sp, color = Color.White, letterSpacing = 3.sp)
+                    Text(text = "Connecting to live leaderboard feed", fontFamily = michromaFont, fontSize = 10.sp, color = Color.White.copy(alpha = 0.5f))
+                    Text(text = "Streams are available on the STREAM tab", fontFamily = michromaFont, fontSize = 9.sp, color = Color.White.copy(alpha = 0.35f))
+                }
+            }
+        }
+        connectionError != null && liveDrivers.isEmpty() -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Brush.radialGradient(colors = listOf(Color(0xFF1A0808), Color.Black), radius = 800f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Icon(imageVector = Icons.Filled.WifiOff, contentDescription = null, tint = Color(0xFFFF0040), modifier = Modifier.size(28.dp))
+                    Text(text = "TIMING UNAVAILABLE", fontFamily = brigendsFont, fontSize = 14.sp, color = Color.White, letterSpacing = 2.sp)
+                    Text(text = connectionError, fontFamily = michromaFont, fontSize = 10.sp, color = Color.White.copy(alpha = 0.5f), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                    Text(text = "You can still watch on the STREAM tab", fontFamily = michromaFont, fontSize = 9.sp, color = Color.White.copy(alpha = 0.35f))
+                    Box(
+                        modifier = Modifier
+                            .background(Brush.horizontalGradient(listOf(Color(0xFFE6007E), Color(0xFFFF0080))), RoundedCornerShape(6.dp))
+                            .clickable(onClick = onRetryConnection)
+                            .padding(horizontal = 24.dp, vertical = 10.dp)
+                    ) {
+                        Text(text = "RETRY TIMING", fontFamily = michromaFont, fontSize = 10.sp, color = Color.White, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
+                    }
+                }
+            }
+        }
+        liveDrivers.isEmpty() && isConnected -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Brush.radialGradient(colors = listOf(Color(0xFF151008), Color.Black), radius = 800f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text(text = if (countdown > 0) "$countdown" else "...", fontFamily = michromaFont, fontSize = 22.sp, color = Color(0xFFFFAA00), fontWeight = FontWeight.Bold)
+                    Text(text = "AWAITING DATA", fontFamily = brigendsFont, fontSize = 14.sp, color = Color.White, letterSpacing = 3.sp)
+                    Text(text = "Waiting for leaderboard updates.", fontFamily = michromaFont, fontSize = 10.sp, color = Color.White.copy(alpha = 0.5f))
+                    Text(text = "Streams are available on the STREAM tab", fontFamily = michromaFont, fontSize = 9.sp, color = Color.White.copy(alpha = 0.35f))
+                }
+            }
+        }
+        else -> {
+            val stopsOrLapsLabel = if (sessionType == SessionType.RACE || sessionType == SessionType.SPRINT) "STOPS" else "LAPS"
+            LeaderboardSessionHeader(stopsOrLapsLabel = stopsOrLapsLabel, michromaFont = michromaFont)
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp, vertical = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                itemsIndexed(liveDrivers) { index, driver ->
+                    LeaderboardDriverRow(
+                        driver = driver,
+                        index = index,
+                        showStops = sessionType == SessionType.RACE || sessionType == SessionType.SPRINT,
+                        michromaFont = michromaFont
+                    )
+                }
+                item {
+                    Text(
+                        text = "Leaderboard feed via $feedSource · gaps & classification only",
+                        fontFamily = michromaFont,
+                        fontSize = 8.sp,
+                        color = Color.White.copy(alpha = 0.3f),
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
+            }
+        }
+    }
+}
+
 // Session Type Enum
 enum class SessionType {
     RACE, SPRINT, QUALIFYING, SPRINT_QUALIFYING, PRACTICE
 }
 
-// Session-specific column header
+@Composable
+private fun LeaderboardSessionHeader(
+    stopsOrLapsLabel: String,
+    michromaFont: FontFamily
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Black)
+            .padding(horizontal = 8.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "P",
+            fontFamily = michromaFont,
+            fontSize = 9.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            modifier = Modifier.width(28.dp),
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "DRIVER",
+            fontFamily = michromaFont,
+            fontSize = 9.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            modifier = Modifier.weight(1f),
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "GAP",
+            fontFamily = michromaFont,
+            fontSize = 9.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            modifier = Modifier.width(72.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = stopsOrLapsLabel,
+            fontFamily = michromaFont,
+            fontSize = 9.sp,
+            color = Color.White.copy(alpha = 0.6f),
+            modifier = Modifier.width(40.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+private fun LeaderboardDriverRow(
+    driver: LiveDriver,
+    index: Int,
+    showStops: Boolean,
+    michromaFont: FontFamily
+) {
+    val teamColor = getTeamColor(driver.externalTeam, driver.teamColour)
+    val isRetired = driver.status == 2 || driver.status == 3
+    val positionColor = when (driver.positionDisplay?.toIntOrNull()) {
+        1 -> Color(0xFFFFD700)
+        2 -> Color(0xFFC0C0C0)
+        3 -> Color(0xFFCD7F32)
+        else -> Color(0xFFE6007E)
+    }
+    val gapText = when {
+        driver.positionDisplay == "1" -> driver.raceTime?.takeIf { it.isNotBlank() } ?: "LEADER"
+        !driver.gap.isNullOrBlank() -> {
+            val g = driver.gap.trim()
+            if (g.startsWith("+")) g else "+ $g"
+        }
+        !driver.raceTime.isNullOrBlank() -> driver.raceTime
+        else -> "—"
+    }
+    val stopsOrLaps = if (showStops) {
+        driver.pits?.takeIf { it.isNotBlank() } ?: "0"
+    } else {
+        driver.laps?.takeIf { it.isNotBlank() } ?: "—"
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(44.dp)
+            .background(
+                Brush.horizontalGradient(
+                    listOf(
+                        if (isRetired) Color(0xFFFF0040).copy(alpha = 0.12f) else Color(0xFF161616),
+                        Color(0xFF121212)
+                    )
+                ),
+                RoundedCornerShape(4.dp)
+            )
+            .border(
+                width = 1.dp,
+                brush = Brush.horizontalGradient(
+                    listOf(teamColor.copy(alpha = 0.35f), Color.White.copy(alpha = 0.05f))
+                ),
+                shape = RoundedCornerShape(4.dp)
+            )
+            .padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            modifier = Modifier.width(28.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(3.dp)
+                    .height(16.dp)
+                    .background(positionColor, RoundedCornerShape(1.5.dp))
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = driver.positionDisplay ?: "${index + 1}",
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = if (isRetired) Color.White.copy(alpha = 0.4f) else Color.White,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
+            )
+        }
+
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = driver.lastName?.uppercase() ?: "DRIVER",
+                fontFamily = michromaFont,
+                fontSize = 11.sp,
+                color = if (isRetired) Color.White.copy(alpha = 0.4f) else Color.White,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+            )
+            Text(
+                text = driver.externalTeam ?: "",
+                fontFamily = michromaFont,
+                fontSize = 8.sp,
+                color = teamColor.copy(alpha = 0.85f),
+                maxLines = 1,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+            )
+        }
+
+        Text(
+            text = gapText,
+            fontFamily = michromaFont,
+            fontSize = 10.sp,
+            color = if (isRetired) Color.White.copy(alpha = 0.35f) else Color.White.copy(alpha = 0.85f),
+            modifier = Modifier.width(72.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+            maxLines = 1,
+            overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+        )
+
+        Text(
+            text = stopsOrLaps,
+            fontFamily = michromaFont,
+            fontSize = 10.sp,
+            color = Color.White.copy(alpha = 0.7f),
+            modifier = Modifier.width(40.dp),
+            textAlign = androidx.compose.ui.text.style.TextAlign.End,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1
+        )
+    }
+}
+
+// Session-specific column header (legacy full-timing layout kept for reference)
 @Composable
 private fun SessionHeader(
     sessionType: SessionType,

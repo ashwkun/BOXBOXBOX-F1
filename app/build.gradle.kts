@@ -18,8 +18,8 @@ android {
         applicationId = "com.boxboxbox.f1tracker.live"
         minSdk = 26
         targetSdk = 34
-        versionCode = 48
-        versionName = "2.0.0"
+        versionCode = 49
+        versionName = "2.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -110,6 +110,10 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // ASP.NET Core SignalR (PlanetF1 live leaderboard hub)
+    implementation("com.microsoft.signalr:signalr:8.0.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx3:1.7.3")
     
     // Gson for JSON parsing
     implementation("com.google.code.gson:gson:2.10.1")
